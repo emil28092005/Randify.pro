@@ -1,0 +1,24 @@
+---
+interface Props {
+  size: 'leaderboard' | 'rectangle' | 'tile';
+}
+
+const { size } = Astro.props;
+
+const specs = {
+  leaderboard: { label: '728 × 90',  class: 'w-full h-[90px]' },
+  rectangle:   { label: '300 × 250', class: 'w-full max-w-[300px] h-[250px]' },
+  tile:        { label: '300 × 250', class: 'w-full h-[250px]' },
+};
+
+const { label, class: sizeClass } = specs[size];
+---
+
+<aside aria-label="Advertisement">
+  <div
+    class={`${sizeClass} flex flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-zinc-800 bg-zinc-900/30`}
+  >
+    <span class="text-[10px] font-medium uppercase tracking-widest text-zinc-600">Advertisement</span>
+    <span class="text-[11px] tabular-nums text-zinc-700">{label}</span>
+  </div>
+</aside>

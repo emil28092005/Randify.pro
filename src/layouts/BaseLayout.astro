@@ -1,0 +1,54 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Randify — Random Value Generators',
+  description = 'Simple tools for raffles, games, and everything that needs randomness.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet" />
+    <title>{title}</title>
+  </head>
+  <body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans antialiased">
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  @import "tailwindcss";
+
+  @theme {
+    --font-sans: 'Space Grotesk', sans-serif;
+  }
+
+  :root {
+    --accent: #534AB7;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-image:
+      radial-gradient(ellipse 90% 45% at 50% -5%, rgba(83, 74, 183, 0.2) 0%, transparent 65%),
+      radial-gradient(ellipse 90% 45% at 50% 105%, rgba(83, 74, 183, 0.13) 0%, transparent 65%);
+  }
+
+  input[type="number"] {
+    color-scheme: dark;
+  }
+</style>

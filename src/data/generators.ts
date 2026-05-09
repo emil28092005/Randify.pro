@@ -26,7 +26,7 @@ export const generators: Generator[] = [
     title: 'Password',
     description: 'Create a strong, random password with custom rules.',
     icon: 'lock',
-    status: 'coming-soon',
+    status: 'live',
   },
   {
     slug: 'lottery',

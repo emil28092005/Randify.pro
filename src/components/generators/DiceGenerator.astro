@@ -2,9 +2,57 @@
 import { useT } from '../../i18n/translations';
 const isRu = Astro.url.pathname.startsWith('/ru');
 const T = useT(isRu ? 'ru' : 'en');
+
+const notationLabel       = isRu ? 'Нотация'                                      : 'Notation';
+const notationPlaceholder = isRu ? 'напр. 2d6+3, 1d20, 4d4-1'                    : 'e.g. 2d6+3, 1d20, 4d4-1';
+const modeLabel           = isRu ? 'Режим'                                         : 'Mode';
+const modeNormal          = isRu ? 'Обычный'                                       : 'Normal';
+const modeAdvantage       = isRu ? 'Преимущество'                                  : 'Advantage';
+const modeDisadvantage    = isRu ? 'Помеха'                                        : 'Disadvantage';
+const advOnly             = isRu ? 'Преимущество работает только с одним кубиком' : 'Advantage only works with a single die';
+const historyTitle        = isRu ? 'История бросков'                               : 'Roll history';
+const clearHistory        = isRu ? 'Очистить историю'                              : 'Clear history';
+
+const presets = [
+  { label: isRu ? 'Атака'          : 'Attack',       notation: '1d20', stat: false },
+  { label: isRu ? 'Урон (1d8)'     : 'Damage (1d8)', notation: '1d8+3', stat: false },
+  { label: isRu ? 'Огненный шар'   : 'Fireball',     notation: '8d6',  stat: false },
+  { label: isRu ? 'Скрытая атака'  : 'Sneak Attack', notation: '3d6',  stat: false },
+  { label: isRu ? 'Характеристика' : 'Stat Roll',    notation: '4d6',  stat: true  },
+];
 ---
 
 <div id="dice-generator" class="mt-8">
+
+  <!-- Quick presets -->
+  <div class="flex flex-wrap gap-2 mb-5" role="group" aria-label={isRu ? 'Быстрые пресеты' : 'Quick presets'}>
+    {presets.map((p) => (
+      <button
+        type="button"
+        class="dg-preset px-3 py-1.5 rounded-lg border border-zinc-700 text-sm font-medium text-zinc-400 hover:border-[#534AB7] hover:text-[#534AB7] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] transition-colors cursor-pointer"
+        data-preset={p.notation}
+        data-stat-roll={p.stat ? '1' : undefined}
+      >
+        {p.label}
+      </button>
+    ))}
+  </div>
+
+  <!-- Notation input -->
+  <div class="mb-4">
+    <label for="dg-notation" class="block text-sm font-medium text-zinc-400 mb-1">{notationLabel}</label>
+    <input
+      id="dg-notation"
+      type="text"
+      placeholder={notationPlaceholder}
+      autocomplete="off"
+      spellcheck="false"
+      class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base font-mono focus:outline-none focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] transition-colors"
+    />
+    <p id="dg-notation-err" class="mt-1 text-xs text-red-500 hidden"></p>
+  </div>
+
+  <!-- Count + Sides -->
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
     <div>
       <label for="dg-count" class="block text-sm font-medium text-zinc-400 mb-1">{T.numberOfDice}</label>
@@ -33,26 +81,43 @@ const T = useT(isRu ? 'ru' : 'en');
     </div>
   </div>
 
-  <p
-    id="dg-error"
-    role="alert"
-    aria-live="polite"
-    class="mt-3 text-sm text-red-500 hidden"
-  ></p>
-
-  <div class="my-10 min-h-28 flex flex-col items-center justify-center gap-4">
+  <!-- Advantage / Disadvantage toggle -->
+  <div class="mt-4">
+    <label class="block text-sm font-medium text-zinc-400 mb-1.5">{modeLabel}</label>
     <div
-      id="dg-dice"
-      class="flex flex-wrap justify-center gap-2"
-      aria-live="polite"
-      aria-label="Dice results"
-    ></div>
+      id="dg-mode-wrap"
+      class="inline-flex rounded-lg border border-zinc-700 overflow-hidden transition-opacity"
+      role="radiogroup"
+      aria-label={modeLabel}
+    >
+      {[
+        { value: 'normal',      label: modeNormal },
+        { value: 'advantage',   label: modeAdvantage },
+        { value: 'disadvantage',label: modeDisadvantage },
+      ].map(({ value, label }, i) => (
+        <label class="cursor-pointer">
+          <input type="radio" name="dg-mode" value={value} class="sr-only peer" checked={value === 'normal'} />
+          <span class={`inline-flex items-center justify-center px-3 sm:px-4 h-9 text-sm font-medium text-zinc-400 peer-checked:text-[#534AB7] peer-checked:bg-[#534AB7]/10 hover:text-zinc-200 transition-colors select-none whitespace-nowrap${i < 2 ? ' border-r border-zinc-700' : ''}`}>
+            {label}
+          </span>
+        </label>
+      ))}
+    </div>
+    <p id="dg-adv-hint" class="mt-1 text-xs text-zinc-600 hidden">{advOnly}</p>
+  </div>
 
+  <!-- Roll error -->
+  <p id="dg-error" role="alert" aria-live="polite" class="mt-3 text-sm text-red-500 hidden"></p>
+
+  <!-- Results -->
+  <div class="my-10 min-h-28 flex flex-col items-center justify-center gap-3">
+    <div id="dg-dice" class="flex flex-wrap justify-center gap-2" aria-live="polite" aria-label="Dice results"></div>
+    <div id="dg-adv-info" class="hidden text-sm font-mono text-zinc-400 text-center px-2"></div>
+    <div id="dg-modifier-line" class="hidden text-sm text-zinc-500 tabular-nums"></div>
     <div id="dg-total-wrap" class="hidden flex items-center gap-2">
-      <span id="dg-total-label" class="text-sm text-zinc-500">{T.total}</span>
+      <span class="text-sm text-zinc-500">{T.total}</span>
       <span id="dg-total" class="text-2xl font-bold tabular-nums text-zinc-100"></span>
     </div>
-
     <button
       id="dg-copy-btn"
       type="button"
@@ -74,6 +139,7 @@ const T = useT(isRu ? 'ru' : 'en');
     </button>
   </div>
 
+  <!-- Roll button -->
   <div class="flex justify-center">
     <button
       id="dg-btn"
@@ -83,80 +149,323 @@ const T = useT(isRu ? 'ru' : 'en');
       {T.roll}
     </button>
   </div>
+
+  <!-- Roll history -->
+  <div id="dg-history-panel" class="hidden mt-10 pt-6 border-t border-zinc-800">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-xs font-semibold uppercase tracking-widest text-zinc-600">{historyTitle}</h3>
+      <button
+        id="dg-clear-btn"
+        type="button"
+        class="text-xs text-zinc-600 hover:text-zinc-300 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[#534AB7] rounded"
+      >
+        {clearHistory}
+      </button>
+    </div>
+    <div id="dg-history-list" class="space-y-1"></div>
+  </div>
+
 </div>
 
 <script>
   const isRu = document.documentElement.lang === 'ru';
-  const COPY_LABEL   = isRu ? 'Копировать' : 'Copy';
+
+  const COPY_LABEL   = isRu ? 'Копировать'  : 'Copy';
   const COPIED_LABEL = isRu ? 'Скопировано' : 'Copied';
-  const ERR_AT_LEAST = isRu ? 'Количество кубиков должно быть не менее 1.' : 'Number of dice must be at least 1.';
-  const ERR_MAX      = isRu ? 'Максимум 20 кубиков одновременно.' : 'Maximum 20 dice at once.';
+  const ERR_COUNT    = isRu ? 'Количество кубиков должно быть не менее 1.' : 'Number of dice must be at least 1.';
+  const ERR_MAX      = isRu ? 'Максимум 20 кубиков одновременно.'          : 'Maximum 20 dice at once.';
+  const ERR_NOTATION = isRu ? 'Неверный формат — попробуйте 2d6+3'         : 'Invalid notation — try 2d6+3';
+  const ADV_WORD     = isRu ? 'Преимущество' : 'Advantage';
+  const DIS_WORD     = isRu ? 'Помеха'       : 'Disadvantage';
+  const DROPPED_WORD = isRu ? 'сброшено'     : 'dropped';
 
-  const countInput  = document.getElementById('dg-count')      as HTMLInputElement;
-  const btn         = document.getElementById('dg-btn')        as HTMLButtonElement;
-  const copyBtn     = document.getElementById('dg-copy-btn')   as HTMLButtonElement;
-  const diceEl      = document.getElementById('dg-dice')       as HTMLDivElement;
-  const totalWrap   = document.getElementById('dg-total-wrap') as HTMLDivElement;
-  const totalEl     = document.getElementById('dg-total')      as HTMLSpanElement;
-  const errorEl     = document.getElementById('dg-error')      as HTMLParagraphElement;
-  const copyLabel   = document.getElementById('dg-copy-label') as HTMLSpanElement;
-  const copyIcon    = document.getElementById('dg-copy-icon')  as HTMLSpanElement;
-  const checkIcon   = document.getElementById('dg-check-icon') as HTMLSpanElement;
+  // ── DOM refs ────────────────────────────────────────────────────────────────
+  const notationInput  = document.getElementById('dg-notation')      as HTMLInputElement;
+  const notationErr    = document.getElementById('dg-notation-err')  as HTMLParagraphElement;
+  const countInput     = document.getElementById('dg-count')         as HTMLInputElement;
+  const btn            = document.getElementById('dg-btn')           as HTMLButtonElement;
+  const copyBtn        = document.getElementById('dg-copy-btn')      as HTMLButtonElement;
+  const diceEl         = document.getElementById('dg-dice')          as HTMLDivElement;
+  const advInfoEl      = document.getElementById('dg-adv-info')      as HTMLDivElement;
+  const modifierLine   = document.getElementById('dg-modifier-line') as HTMLDivElement;
+  const totalWrap      = document.getElementById('dg-total-wrap')    as HTMLDivElement;
+  const totalEl        = document.getElementById('dg-total')         as HTMLSpanElement;
+  const errorEl        = document.getElementById('dg-error')         as HTMLParagraphElement;
+  const copyLabel      = document.getElementById('dg-copy-label')    as HTMLSpanElement;
+  const copyIcon       = document.getElementById('dg-copy-icon')     as HTMLSpanElement;
+  const checkIcon      = document.getElementById('dg-check-icon')    as HTMLSpanElement;
+  const modeWrap       = document.getElementById('dg-mode-wrap')     as HTMLDivElement;
+  const advHint        = document.getElementById('dg-adv-hint')      as HTMLParagraphElement;
+  const historyPanel   = document.getElementById('dg-history-panel') as HTMLDivElement;
+  const historyList    = document.getElementById('dg-history-list')  as HTMLDivElement;
+  const clearBtn       = document.getElementById('dg-clear-btn')     as HTMLButtonElement;
 
+  // ── State ───────────────────────────────────────────────────────────────────
+  let suppressSync   = false;
+  let statRollMode   = false;
+  let lastCopyText   = '';
   let copyRevertTimer: ReturnType<typeof setTimeout> | null = null;
-  let lastRolls: number[] = [];
 
-  function getSelectedSides(): number {
-    const radio = document.querySelector('input[name="dg-sides"]:checked') as HTMLInputElement;
-    return parseInt(radio?.value ?? '6', 10);
+  const HISTORY_KEY = 'dg-history';
+
+  interface HistoryEntry {
+    notation:     string;
+    rolls:        number[];
+    sides:        number;
+    modifier:     number;
+    total:        number;
+    isStatRoll:   boolean;
+    droppedValue?: number;
+    keptRolls?:   number[];
+    isAdvantage:  boolean;
+    isDisadvantage: boolean;
+    advRolls?:    [number, number];
   }
 
-  function showError(msg: string) { errorEl.textContent = msg; errorEl.classList.remove('hidden'); }
-  function clearError()           { errorEl.textContent = '';  errorEl.classList.add('hidden');    }
+  // ── Notation ────────────────────────────────────────────────────────────────
+  function parseNotation(raw: string): { count: number; sides: number; modifier: number } | null {
+    const s = raw.replace(/\s+/g, '').toLowerCase();
+    const m = s.match(/^(\d*)d(\d+)((?:[+-]\d+)*)$/);
+    if (!m) return null;
+    const count    = m[1] === '' ? 1 : parseInt(m[1], 10);
+    const sides    = parseInt(m[2], 10);
+    if (count < 1 || count > 20 || sides < 1) return null;
+    const parts    = (m[3] || '').match(/[+-]\d+/g) ?? [];
+    const modifier = parts.reduce((sum, p) => sum + parseInt(p, 10), 0);
+    if (Math.abs(modifier) > 999) return null;
+    return { count, sides, modifier };
+  }
 
-  function roll() {
+  function buildNotation(count: number, sides: number, modifier: number): string {
+    let s = `${count}d${sides}`;
+    if (modifier > 0) s += `+${modifier}`;
+    else if (modifier < 0) s += modifier;
+    return s;
+  }
+
+  // ── Control helpers ─────────────────────────────────────────────────────────
+  function getSelectedSides(): number {
+    const r = document.querySelector('input[name="dg-sides"]:checked') as HTMLInputElement | null;
+    return r ? parseInt(r.value, 10) : 6;
+  }
+
+  function setSelectedSides(sides: number): void {
+    (document.querySelectorAll('input[name="dg-sides"]') as NodeListOf<HTMLInputElement>)
+      .forEach(r => { r.checked = parseInt(r.value, 10) === sides; });
+  }
+
+  function getMode(): 'normal' | 'advantage' | 'disadvantage' {
+    const r = document.querySelector('input[name="dg-mode"]:checked') as HTMLInputElement | null;
+    return (r?.value ?? 'normal') as 'normal' | 'advantage' | 'disadvantage';
+  }
+
+  function getCurrentModifier(): number {
+    const raw = notationInput.value.trim();
+    if (!raw) return 0;
+    const parsed = parseNotation(raw);
+    return parsed?.modifier ?? 0;
+  }
+
+  function updateModeToggle(): void {
+    const count    = parseInt(countInput.value, 10);
+    const disabled = !isNaN(count) && count > 1;
+    modeWrap.classList.toggle('opacity-40', disabled);
+    modeWrap.classList.toggle('pointer-events-none', disabled);
+    advHint.classList.toggle('hidden', !disabled);
+  }
+
+  // ── Errors ──────────────────────────────────────────────────────────────────
+  function showError(msg: string)       { errorEl.textContent    = msg; errorEl.classList.remove('hidden');    }
+  function clearError()                  { errorEl.textContent    = '';  errorEl.classList.add('hidden');       }
+  function showNotationErr(msg: string)  { notationErr.textContent = msg; notationErr.classList.remove('hidden'); }
+  function clearNotationErr()            { notationErr.textContent = '';  notationErr.classList.add('hidden');    }
+
+  // ── Die chip ────────────────────────────────────────────────────────────────
+  function makeDieChip(val: number, sides: number, extra = ''): HTMLSpanElement {
+    const el = document.createElement('span');
+    el.textContent = String(val);
+    const color = val === sides ? 'border-[#534AB7] text-[#534AB7] bg-[#534AB7]/10'
+                : val === 1     ? 'border-red-700/50 text-red-400 bg-red-900/10'
+                :                  'border-zinc-700 text-zinc-100 bg-zinc-900';
+    el.className = `inline-flex items-center justify-center min-w-[2.75rem] h-11 px-2 rounded-lg border text-sm font-bold tabular-nums ${color} ${extra}`.trim();
+    return el;
+  }
+
+  // Colored HTML span for use in history (innerHTML safe — values are numbers)
+  function dieHtml(val: number, sides: number): string {
+    const cls = val === sides ? 'text-[#534AB7] font-bold'
+              : val === 1     ? 'text-red-400 font-bold'
+              :                  'text-zinc-300';
+    return `<span class="${cls}">${val}</span>`;
+  }
+
+  // ── History ─────────────────────────────────────────────────────────────────
+  function loadHistory(): HistoryEntry[] {
+    try { return JSON.parse(sessionStorage.getItem(HISTORY_KEY) ?? '[]'); } catch { return []; }
+  }
+
+  function saveHistory(h: HistoryEntry[]): void {
+    sessionStorage.setItem(HISTORY_KEY, JSON.stringify(h.slice(0, 10)));
+  }
+
+  function entryHtml(e: HistoryEntry): string {
+    const left = `<span class="text-zinc-500 shrink-0 mr-1">`;
+
+    if (e.isStatRoll && e.keptRolls !== undefined && e.droppedValue !== undefined) {
+      const keptStr = e.keptRolls.map(v => dieHtml(v, e.sides)).join('+');
+      return `${left}[${DROPPED_WORD}: <span class="text-red-400">${e.droppedValue}</span>]</span>`
+           + ` <span class="text-zinc-400">${keptStr} = ${e.total}</span>`;
+    }
+
+    if (e.isAdvantage || e.isDisadvantage) {
+      const [r1, r2] = e.advRolls ?? [0, 0];
+      const prefix   = e.isAdvantage ? ADV_WORD : DIS_WORD;
+      const winner   = e.isAdvantage ? Math.max(r1, r2) : Math.min(r1, r2);
+      const modStr   = e.modifier !== 0
+        ? ` ${e.modifier > 0 ? '+' : ''}${e.modifier} = ${e.total}`
+        : '';
+      return `${left}${prefix}</span>`
+           + ` <span class="text-zinc-400">[${dieHtml(r1, e.sides)}, ${dieHtml(r2, e.sides)}] → ${dieHtml(winner, e.sides)}${modStr}</span>`;
+    }
+
+    // Normal
+    const rollsStr = `[${e.rolls.map(v => dieHtml(v, e.sides)).join(', ')}]`;
+    const modStr   = e.modifier > 0 ? ` +${e.modifier}` : e.modifier < 0 ? ` ${e.modifier}` : '';
+    return `${left}${e.notation}</span>`
+         + ` <span class="text-zinc-600">→</span>`
+         + ` <span class="text-zinc-400">${rollsStr}${modStr} = ${e.total}</span>`;
+  }
+
+  function renderHistory(): void {
+    const h = loadHistory();
+    if (h.length === 0) { historyPanel.classList.add('hidden'); return; }
+    historyPanel.classList.remove('hidden');
+    historyList.innerHTML = h.map(e =>
+      `<div class="flex items-center gap-1.5 text-xs font-mono py-1 border-b border-zinc-800/40 last:border-b-0">${entryHtml(e)}</div>`
+    ).join('');
+  }
+
+  function addToHistory(entry: HistoryEntry): void {
+    const h = loadHistory();
+    h.unshift(entry);
+    saveHistory(h);
+    renderHistory();
+  }
+
+  // ── Get roll params ─────────────────────────────────────────────────────────
+  function getRollParams(): { count: number; sides: number; modifier: number } | null {
+    const raw = notationInput.value.trim();
+    if (raw) {
+      const parsed = parseNotation(raw);
+      if (!parsed) { showNotationErr(ERR_NOTATION); return null; }
+      clearNotationErr();
+      return parsed;
+    }
     const count = parseInt(countInput.value, 10);
     const sides = getSelectedSides();
+    if (!Number.isInteger(count) || count < 1) { showError(ERR_COUNT); return null; }
+    if (count > 20) { showError(ERR_MAX); return null; }
+    return { count, sides, modifier: 0 };
+  }
 
-    if (!Number.isInteger(count) || count < 1) { showError(ERR_AT_LEAST); return; }
-    if (count > 20) { showError(ERR_MAX); return; }
-
+  // ── Roll ────────────────────────────────────────────────────────────────────
+  function roll(): void {
     clearError();
+    const params = getRollParams();
+    if (!params) return;
+    const { count, sides, modifier } = params;
+    const mode     = getMode();
+    const notation = buildNotation(count, sides, modifier);
 
-    lastRolls = Array.from({ length: count }, () => Math.floor(Math.random() * sides) + 1);
-    const total = lastRolls.reduce((s, n) => s + n, 0);
-
+    // Reset secondary display elements
+    advInfoEl.classList.add('hidden');
+    advInfoEl.innerHTML = '';
+    modifierLine.classList.add('hidden');
+    totalWrap.classList.add('hidden');
     diceEl.innerHTML = '';
-    lastRolls.forEach((val) => {
-      const die = document.createElement('span');
-      die.textContent = String(val);
-      const isMax = val === sides;
-      const isMin = val === 1;
-      die.className = [
-        'inline-flex items-center justify-center min-w-[2.75rem] h-11 px-2 rounded-lg border text-sm font-bold tabular-nums transition-colors',
-        isMax ? 'border-[#534AB7] text-[#534AB7] bg-[#534AB7]/10' :
-        isMin ? 'border-red-700/50 text-red-400 bg-red-900/10' :
-                'border-zinc-700 text-zinc-100 bg-zinc-900',
-      ].join(' ');
-      diceEl.appendChild(die);
-    });
 
-    totalEl.textContent = String(total);
-    totalWrap.classList.remove('hidden');
+    // ── Stat Roll: 4d6 drop lowest ──────────────────────────────────────────
+    if (statRollMode) {
+      const allRolls   = Array.from({ length: 4 }, () => Math.floor(Math.random() * sides) + 1);
+      const sorted     = [...allRolls].sort((a, b) => a - b);
+      const droppedValue = sorted[0];
+      const keptRolls  = sorted.slice(1);
+      const total      = keptRolls.reduce((s, n) => s + n, 0);
+
+      let droppedUsed = false;
+      allRolls.forEach(v => {
+        const isDrop = v === droppedValue && !droppedUsed;
+        if (isDrop) droppedUsed = true;
+        diceEl.appendChild(makeDieChip(v, sides, isDrop ? 'opacity-40' : ''));
+      });
+
+      advInfoEl.innerHTML = `[${DROPPED_WORD}: <span class="text-red-400">${droppedValue}</span>] ${keptRolls.join('+')} = ${total}`;
+      advInfoEl.classList.remove('hidden');
+
+      lastCopyText = `${keptRolls.join('+')} = ${total}`;
+      addToHistory({ notation: '4d6', rolls: allRolls, sides, modifier: 0, total, isStatRoll: true, droppedValue, keptRolls, isAdvantage: false, isDisadvantage: false });
+
+    // ── Advantage / Disadvantage ────────────────────────────────────────────
+    } else if (mode !== 'normal' && count === 1) {
+      const r1    = Math.floor(Math.random() * sides) + 1;
+      const r2    = Math.floor(Math.random() * sides) + 1;
+      const kept  = mode === 'advantage' ? Math.max(r1, r2) : Math.min(r1, r2);
+      const total = kept + modifier;
+      const prefix = mode === 'advantage' ? ADV_WORD : DIS_WORD;
+
+      let winnerUsed = false;
+      [r1, r2].forEach(v => {
+        const isWinner = v === kept && !winnerUsed;
+        if (isWinner) winnerUsed = true;
+        diceEl.appendChild(makeDieChip(v, sides, isWinner ? '' : 'opacity-40'));
+      });
+
+      const modStr = modifier !== 0
+        ? ` ${modifier > 0 ? '+' : ''}${modifier} = ${total}`
+        : '';
+      advInfoEl.textContent = `${prefix}: [${r1}, ${r2}] → ${kept}${modStr}`;
+      advInfoEl.classList.remove('hidden');
+
+      if (modifier !== 0) {
+        totalEl.textContent = String(total);
+        totalWrap.classList.remove('hidden');
+      }
+
+      lastCopyText = `${prefix}: [${r1}, ${r2}] → ${kept}${modStr}`;
+      addToHistory({ notation, rolls: [kept], sides, modifier, total, isStatRoll: false, isAdvantage: mode === 'advantage', isDisadvantage: mode === 'disadvantage', advRolls: [r1, r2] });
+
+    // ── Normal roll ─────────────────────────────────────────────────────────
+    } else {
+      const rolls   = Array.from({ length: count }, () => Math.floor(Math.random() * sides) + 1);
+      const rollSum = rolls.reduce((s, n) => s + n, 0);
+      const total   = rollSum + modifier;
+
+      rolls.forEach(v => diceEl.appendChild(makeDieChip(v, sides)));
+
+      if (modifier !== 0) {
+        modifierLine.textContent = modifier > 0 ? `+${modifier}` : String(modifier);
+        modifierLine.classList.remove('hidden');
+      }
+
+      totalEl.textContent = String(total);
+      totalWrap.classList.remove('hidden');
+
+      const modStr = modifier > 0 ? ` +${modifier}` : modifier < 0 ? ` ${modifier}` : '';
+      lastCopyText = `${rolls.join(', ')}${modStr} = ${total}`;
+      addToHistory({ notation, rolls, sides, modifier, total, isStatRoll: false, isAdvantage: false, isDisadvantage: false });
+    }
+
     copyBtn.classList.remove('invisible');
     copyLabel.textContent = COPY_LABEL;
   }
 
-  async function copyResults() {
-    if (!lastRolls.length) return;
-    const sides = getSelectedSides();
-    const text = `${lastRolls.join(', ')} (${lastRolls.length}d${sides} = ${lastRolls.reduce((s, n) => s + n, 0)})`;
-    await navigator.clipboard.writeText(text);
-
+  // ── Copy ────────────────────────────────────────────────────────────────────
+  async function copyResults(): Promise<void> {
+    if (!lastCopyText) return;
+    await navigator.clipboard.writeText(lastCopyText);
     copyIcon.classList.add('hidden');
     checkIcon.classList.remove('hidden');
     copyLabel.textContent = COPIED_LABEL;
-
     if (copyRevertTimer) clearTimeout(copyRevertTimer);
     copyRevertTimer = setTimeout(() => {
       checkIcon.classList.add('hidden');
@@ -165,7 +474,83 @@ const T = useT(isRu ? 'ru' : 'en');
     }, 1500);
   }
 
+  // ── Sync: notation → controls ───────────────────────────────────────────────
+  notationInput.addEventListener('input', () => {
+    const raw = notationInput.value.trim();
+    if (!raw) { clearNotationErr(); statRollMode = false; return; }
+    const parsed = parseNotation(raw);
+    if (!parsed) { showNotationErr(ERR_NOTATION); return; }
+    clearNotationErr();
+    suppressSync = true;
+    countInput.value = String(parsed.count);
+    setSelectedSides(parsed.sides);
+    statRollMode = false;
+    suppressSync = false;
+    updateModeToggle();
+  });
+
+  notationInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); roll(); }
+  });
+
+  // ── Sync: controls → notation ───────────────────────────────────────────────
+  countInput.addEventListener('input', () => {
+    if (suppressSync) return;
+    statRollMode = false;
+    const count    = parseInt(countInput.value, 10);
+    const sides    = getSelectedSides();
+    const modifier = getCurrentModifier();
+    if (!isNaN(count) && count > 0) {
+      notationInput.value = buildNotation(count, sides, modifier);
+      clearNotationErr();
+    }
+    updateModeToggle();
+  });
+
+  countInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') roll(); });
+
+  document.querySelectorAll('input[name="dg-sides"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      if (suppressSync) return;
+      statRollMode = false;
+      const count    = parseInt(countInput.value, 10) || 1;
+      const sides    = getSelectedSides();
+      const modifier = getCurrentModifier();
+      notationInput.value = buildNotation(count, sides, modifier);
+      clearNotationErr();
+    });
+  });
+
+  // ── Presets ─────────────────────────────────────────────────────────────────
+  document.querySelectorAll('.dg-preset').forEach(el => {
+    el.addEventListener('click', () => {
+      const notation = el.getAttribute('data-preset')!;
+      const isStat   = el.getAttribute('data-stat-roll') === '1';
+      notationInput.value = notation;
+      clearNotationErr();
+      const parsed = parseNotation(notation);
+      if (parsed) {
+        suppressSync = true;
+        countInput.value = String(parsed.count);
+        setSelectedSides(parsed.sides);
+        suppressSync = false;
+      }
+      statRollMode = isStat;
+      updateModeToggle();
+      roll();
+    });
+  });
+
+  // ── Buttons ─────────────────────────────────────────────────────────────────
   btn.addEventListener('click', roll);
   copyBtn.addEventListener('click', copyResults);
-  countInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') roll(); });
+  clearBtn.addEventListener('click', () => {
+    sessionStorage.removeItem(HISTORY_KEY);
+    renderHistory();
+  });
+
+  // ── Init ────────────────────────────────────────────────────────────────────
+  notationInput.value = buildNotation(parseInt(countInput.value, 10), getSelectedSides(), 0);
+  updateModeToggle();
+  renderHistory();
 </script>

@@ -8,8 +8,8 @@ const generator = generators.find((g) => g.slug === 'dice')!;
 ---
 
 <BaseLayout
-  title={`${generator.title} Generator — Randify`}
-  description={generator.description}
+  title={generator.seoTitle}
+  description={generator.seoDescription}
 >
   <div class="max-w-2xl mx-auto px-4 py-12 sm:py-20">
     <nav aria-label="Breadcrumb" class="mb-10">

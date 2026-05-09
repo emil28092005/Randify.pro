@@ -55,6 +55,10 @@ const generator = generators.find((g) => g.slug === 'dice')!;
       <DiceGenerator />
     </main>
 
+    <div class="mt-12 flex justify-center">
+      <AdBanner size="tile" />
+    </div>
+
     <SeoBlock
       howTo={[
         'Select the die type: d4, d6, d8, d10, d12, d20, or d100.',
@@ -69,9 +73,5 @@ const generator = generators.find((g) => g.slug === 'dice')!;
         'Settling disputes with a fair digital dice roll.',
       ]}
     />
-
-    <div class="mt-12 flex justify-center">
-      <AdBanner size="tile" />
-    </div>
   </div>
 </BaseLayout>

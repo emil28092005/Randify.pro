@@ -55,6 +55,10 @@ const generator = generators.find((g) => g.slug === 'numbers')!;
       <NumberGenerator />
     </main>
 
+    <div class="mt-12 flex justify-center">
+      <AdBanner size="tile" />
+    </div>
+
     <SeoBlock
       howTo={[
         'Enter the minimum value in the From field.',
@@ -69,9 +73,5 @@ const generator = generators.find((g) => g.slug === 'numbers')!;
         'Generating test data with values in a specific range.',
       ]}
     />
-
-    <div class="mt-12 flex justify-center">
-      <AdBanner size="tile" />
-    </div>
   </div>
 </BaseLayout>

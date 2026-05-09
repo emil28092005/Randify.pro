@@ -34,6 +34,10 @@ const generator = generators.find((g) => g.slug === 'coin')!;
       <p class="mt-2 text-base text-zinc-400">{generator.description}</p>
     </header>
     <main><CoinGenerator /></main>
+    <div class="mt-12 flex justify-center">
+      <AdBanner size="tile" />
+    </div>
+
     <SeoBlock
       howTo={[
         'Drag the slider to choose how many coins to flip (1–20).',
@@ -48,9 +52,5 @@ const generator = generators.find((g) => g.slug === 'coin')!;
         'Settling a fair 50/50 choice between two options.',
       ]}
     />
-
-    <div class="mt-12 flex justify-center">
-      <AdBanner size="tile" />
-    </div>
   </div>
 </BaseLayout>

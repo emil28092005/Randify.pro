@@ -55,6 +55,10 @@ const generator = generators.find((g) => g.slug === 'colors')!;
       <ColorGenerator />
     </main>
 
+    <div class="mt-12 flex justify-center">
+      <AdBanner size="tile" />
+    </div>
+
     <SeoBlock
       howTo={[
         'Click Generate to produce a random color.',
@@ -68,9 +72,5 @@ const generator = generators.find((g) => g.slug === 'colors')!;
         'Teaching or exploring color theory and formats.',
       ]}
     />
-
-    <div class="mt-12 flex justify-center">
-      <AdBanner size="tile" />
-    </div>
   </div>
 </BaseLayout>

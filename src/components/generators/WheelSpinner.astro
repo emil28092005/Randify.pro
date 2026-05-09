@@ -205,9 +205,17 @@ Frank</textarea>
   function showError(msg: string) { errorEl.textContent = msg; errorEl.classList.remove('hidden'); }
   function clearError()           { errorEl.textContent = '';  errorEl.classList.add('hidden');    }
 
-  updateBtn.addEventListener('click', () => {
+  function applyItems() {
     const parsed = parseItems();
     if (parsed) { items = parsed; draw(currentRotation); }
+  }
+
+  updateBtn.addEventListener('click', applyItems);
+
+  let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+  textarea.addEventListener('input', () => {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(applyItems, 300);
   });
 
   // ── Spin ─────────────────────────────────────────────────────────

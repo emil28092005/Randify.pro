@@ -40,7 +40,7 @@ export const generators: Generator[] = [
     title: 'Dice',
     description: 'Roll one or more dice with any number of sides.',
     icon: 'dice-6',
-    status: 'coming-soon',
+    status: 'live',
   },
   {
     slug: 'cards',

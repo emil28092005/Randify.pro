@@ -290,10 +290,10 @@ Frank</textarea>
 
   // ── Confetti ─────────────────────────────────────────────────────
   function spawnConfetti() {
+    // Use viewport coordinates + position:fixed so confetti never affects page layout
     const cr = canvas.getBoundingClientRect();
-    const wr = wheelWrap.getBoundingClientRect();
-    const cx = cr.left - wr.left + cr.width / 2;
-    const cy = cr.top  - wr.top  + cr.height / 2;
+    const cx = cr.left + cr.width / 2;
+    const cy = cr.top  + cr.height / 2;
 
     type Particle = { el: HTMLDivElement; x: number; y: number; vx: number; vy: number };
     const particles: Particle[] = [];
@@ -302,10 +302,10 @@ Frank</textarea>
       const el = document.createElement('div');
       const w = 4 + Math.random() * 6;
       const h = 4 + Math.random() * 6;
-      el.style.cssText = `position:absolute;width:${w}px;height:${h}px;` +
+      el.style.cssText = `position:fixed;width:${w}px;height:${h}px;` +
         `background:${COLORS[i % COLORS.length]};border-radius:1px;` +
-        `pointer-events:none;left:${cx}px;top:${cy}px;will-change:transform,opacity;`;
-      wheelWrap.appendChild(el);
+        `pointer-events:none;left:${cx}px;top:${cy}px;will-change:transform,opacity;z-index:9999;`;
+      document.body.appendChild(el);
 
       const angle = Math.random() * TAU;
       const speed = 4 + Math.random() * 7;

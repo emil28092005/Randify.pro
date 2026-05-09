@@ -33,7 +33,7 @@ export const generators: Generator[] = [
     title: 'Lottery',
     description: 'Draw a set of unique numbers for lottery-style picks.',
     icon: 'ticket',
-    status: 'coming-soon',
+    status: 'live',
   },
   {
     slug: 'dice',

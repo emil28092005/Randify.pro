@@ -33,20 +33,20 @@ export const generators: Generator[] = [
     title: 'Lottery',
     description: 'Draw a set of unique numbers for lottery-style picks.',
     icon: 'ticket',
-    status: 'coming-soon',
+    status: 'live',
   },
   {
     slug: 'dice',
     title: 'Dice',
     description: 'Roll one or more dice with any number of sides.',
     icon: 'dice-6',
-    status: 'coming-soon',
+    status: 'live',
   },
   {
     slug: 'cards',
     title: 'Card',
     description: 'Draw a random playing card from a standard deck.',
     icon: 'square-stack',
-    status: 'coming-soon',
+    status: 'live',
   },
 ];

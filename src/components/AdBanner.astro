@@ -5,12 +5,29 @@ interface Props {
 
 const { size } = Astro.props;
 
-const href = 'https://redirect.appmetrica.yandex.com/serve/29835370459904648?clid=15006577&appmetrica_js_redirect=0';
+const ads = [
+  {
+    href: 'https://redirect.appmetrica.yandex.com/serve/29835370459904648?clid=15006577&appmetrica_js_redirect=0',
+    label: 'Яндекс с Алисой — скачать бесплатно',
+    sublabel: 'Голосовой ИИ-помощник для Android и iOS',
+    cta: 'Установить',
+    ctaMobile: 'Установить бесплатно',
+  },
+  {
+    href: 'https://yandex.ru/project/browser/bonus/multioffer/affiliate_4prod?source=pWRP8eS1VsC2X59560&partner_string=P89XvN11U6RuE47077&cliddbro=15006579&clidmbro=15006578&cliddefault=15006570&clidpp=15006567',
+    label: 'Яндекс Браузер — быстрый и безопасный',
+    sublabel: 'Браузер с Алисой и защитой от угроз',
+    cta: 'Скачать',
+    ctaMobile: 'Скачать бесплатно',
+  },
+];
+
+const ad = ads[Math.floor(Math.random() * ads.length)];
 
 const specs = {
-  leaderboard: { class: 'w-full h-[90px]',              horizontal: true  },
+  leaderboard: { class: 'w-full h-[90px]',               horizontal: true  },
   rectangle:   { class: 'w-full max-w-[300px] h-[250px]', horizontal: false },
-  tile:        { class: 'w-full h-[250px]',              horizontal: false },
+  tile:        { class: 'w-full h-[250px]',               horizontal: false },
 };
 
 const { class: sizeClass, horizontal } = specs[size];
@@ -18,12 +35,11 @@ const { class: sizeClass, horizontal } = specs[size];
 
 <aside aria-label="Реклама">
   <a
-    href={href}
+    href={ad.href}
     target="_blank"
     rel="noopener sponsored"
     class={`${sizeClass} flex ${horizontal ? 'flex-row items-center gap-4 px-6' : 'flex-col items-center justify-center gap-3 px-4'} rounded-xl border border-zinc-800 bg-zinc-900/50 hover:border-[#534AB7]/50 hover:bg-zinc-900 transition-colors duration-200 group`}
   >
-    <!-- Yandex logo -->
     <svg class="shrink-0 text-[#FC3F1D]" width={horizontal ? '32' : '40'} height={horizontal ? '32' : '40'} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <circle cx="20" cy="20" r="20" fill="currentColor"/>
       <path d="M22.44 10H19.1c-3.78 0-6.1 2.02-6.1 5.32 0 2.66 1.26 4.24 3.64 5.8L13.5 30h3.38l3.4-8.38-.96-.58c-1.84-1.12-2.72-2.08-2.72-3.92 0-1.94 1.3-3.08 3.44-3.08h1.4V30h3V10z" fill="white"/>
@@ -33,24 +49,24 @@ const { class: sizeClass, horizontal } = specs[size];
       <div class="flex-1 min-w-0">
         <div class="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-0.5">Реклама</div>
         <div class="text-sm font-semibold text-zinc-100 group-hover:text-[#534AB7] transition-colors leading-tight">
-          Яндекс с Алисой — скачать бесплатно
+          {ad.label}
         </div>
-        <div class="text-xs text-zinc-500 mt-0.5">Голосовой ИИ-помощник для Android и iOS</div>
+        <div class="text-xs text-zinc-500 mt-0.5">{ad.sublabel}</div>
       </div>
       <span class="shrink-0 text-xs font-semibold text-white bg-[#FC3F1D] px-3 py-1.5 rounded-lg group-hover:bg-[#e03518] transition-colors whitespace-nowrap">
-        Установить
+        {ad.cta}
       </span>
     ) : (
       <>
         <div class="text-center">
           <div class="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-2">Реклама</div>
           <div class="text-base font-semibold text-zinc-100 group-hover:text-[#534AB7] transition-colors leading-snug">
-            Яндекс с Алисой
+            {ad.label}
           </div>
-          <div class="text-xs text-zinc-500 mt-1">Голосовой ИИ-помощник</div>
+          <div class="text-xs text-zinc-500 mt-1">{ad.sublabel}</div>
         </div>
         <span class="text-xs font-semibold text-white bg-[#FC3F1D] px-4 py-2 rounded-lg group-hover:bg-[#e03518] transition-colors">
-          Установить бесплатно
+          {ad.ctaMobile}
         </span>
       </>
     )}

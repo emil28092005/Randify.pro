@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import CardGenerator from '../../components/generators/CardGenerator.astro';
 import AdBanner from '../../components/AdBanner.astro';
 import { generators } from '../../data/generators';
+import SeoBlock from '../../components/SeoBlock.astro';
 
 const generator = generators.find((g) => g.slug === 'cards')!;
 ---
@@ -53,6 +54,21 @@ const generator = generators.find((g) => g.slug === 'cards')!;
     <main>
       <CardGenerator />
     </main>
+
+    <SeoBlock
+      howTo={[
+        'Set how many cards to draw (1–52).',
+        'Toggle Allow duplicates if you want cards to repeat.',
+        'Click Draw — cards are shown as mini card tiles.',
+        'Click Copy to copy the result (e.g. A♠, K♥) to your clipboard.',
+      ]}
+      whenTo={[
+        'Drawing a random hand for card games.',
+        'Practising card probability and statistics.',
+        'Simulating a random card pull for magic tricks or puzzles.',
+        'Running fair draws without a physical deck.',
+      ]}
+    />
 
     <div class="mt-12 flex justify-center">
       <AdBanner size="tile" />

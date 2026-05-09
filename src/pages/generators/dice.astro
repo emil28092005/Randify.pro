@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import DiceGenerator from '../../components/generators/DiceGenerator.astro';
 import AdBanner from '../../components/AdBanner.astro';
 import { generators } from '../../data/generators';
+import SeoBlock from '../../components/SeoBlock.astro';
 
 const generator = generators.find((g) => g.slug === 'dice')!;
 ---
@@ -53,6 +54,21 @@ const generator = generators.find((g) => g.slug === 'dice')!;
     <main>
       <DiceGenerator />
     </main>
+
+    <SeoBlock
+      howTo={[
+        'Select the die type: d4, d6, d8, d10, d12, d20, or d100.',
+        'Set how many dice to roll (1–20).',
+        'Click Roll — each die result appears with the total sum.',
+        'Maximum rolls are highlighted in purple; ones are highlighted in red.',
+      ]}
+      whenTo={[
+        'Rolling dice for D&D, Pathfinder, or any tabletop RPG.',
+        'Replacing physical dice in board games.',
+        'Simulating probability outcomes in statistics or education.',
+        'Settling disputes with a fair digital dice roll.',
+      ]}
+    />
 
     <div class="mt-12 flex justify-center">
       <AdBanner size="tile" />

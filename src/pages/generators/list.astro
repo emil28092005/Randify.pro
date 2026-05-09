@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ListGenerator from '../../components/generators/ListGenerator.astro';
 import AdBanner from '../../components/AdBanner.astro';
 import { generators } from '../../data/generators';
+import SeoBlock from '../../components/SeoBlock.astro';
 
 const generator = generators.find((g) => g.slug === 'list')!;
 ---
@@ -33,6 +34,21 @@ const generator = generators.find((g) => g.slug === 'list')!;
       <p class="mt-2 text-base text-zinc-400">{generator.description}</p>
     </header>
     <main><ListGenerator /></main>
+    <SeoBlock
+      howTo={[
+        'Type or paste your items into the text area — one item per line.',
+        'Set how many items to pick in the Pick field.',
+        'Toggle Allow duplicates if the same item can be chosen more than once.',
+        'Click Pick (or press Ctrl+Enter) — the selected items appear as chips.',
+      ]}
+      whenTo={[
+        'Choosing a random winner for a giveaway or contest.',
+        'Picking who presents first in a meeting or class.',
+        'Organising a Secret Santa or gift exchange draw.',
+        'Selecting a random movie, restaurant, or activity from a list.',
+      ]}
+    />
+
     <div class="mt-12 flex justify-center">
       <AdBanner size="tile" />
     </div>

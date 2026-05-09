@@ -1,0 +1,23 @@
+---
+interface Props {
+  howTo: string[];
+  whenTo: string[];
+}
+
+const { howTo, whenTo } = Astro.props;
+---
+
+<section class="mt-12 border-t border-zinc-800/60 pt-8 text-sm text-zinc-500 space-y-4">
+  <div>
+    <h2 class="text-xs font-semibold uppercase tracking-widest text-zinc-600 mb-2">How to use</h2>
+    <ol class="space-y-1 list-decimal list-inside">
+      {howTo.map((step) => <li>{step}</li>)}
+    </ol>
+  </div>
+  <div>
+    <h2 class="text-xs font-semibold uppercase tracking-widest text-zinc-600 mb-2">When to use</h2>
+    <ul class="space-y-1 list-disc list-inside">
+      {whenTo.map((item) => <li>{item}</li>)}
+    </ul>
+  </div>
+</section>

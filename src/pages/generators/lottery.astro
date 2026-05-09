@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import LotteryGenerator from '../../components/generators/LotteryGenerator.astro';
 import AdBanner from '../../components/AdBanner.astro';
 import { generators } from '../../data/generators';
+import SeoBlock from '../../components/SeoBlock.astro';
 
 const generator = generators.find((g) => g.slug === 'lottery')!;
 ---
@@ -53,6 +54,21 @@ const generator = generators.find((g) => g.slug === 'lottery')!;
     <main>
       <LotteryGenerator />
     </main>
+
+    <SeoBlock
+      howTo={[
+        'Set the From and To fields to define your number range (e.g. 1 to 49).',
+        'Enter how many numbers to pick in the Pick field.',
+        'Click Draw — a sorted set of unique numbers appears.',
+        'Click Copy to copy all numbers to the clipboard.',
+      ]}
+      whenTo={[
+        'Generating lottery or lotto ticket numbers.',
+        'Running a fair raffle draw with unique entries.',
+        'Selecting a random sample from a numbered list.',
+        'Choosing lottery numbers for Powerball, EuroMillions, or local draws.',
+      ]}
+    />
 
     <div class="mt-12 flex justify-center">
       <AdBanner size="tile" />

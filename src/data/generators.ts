@@ -49,4 +49,25 @@ export const generators: Generator[] = [
     icon: 'square-stack',
     status: 'live',
   },
+  {
+    slug: 'coin',
+    title: 'Coin Flip',
+    description: 'Flip one or more coins and see heads or tails.',
+    icon: 'circle-dollar-sign',
+    status: 'live',
+  },
+  {
+    slug: 'list',
+    title: 'List Picker',
+    description: 'Paste a list of items and pick random winners.',
+    icon: 'list',
+    status: 'live',
+  },
+  {
+    slug: 'uuid',
+    title: 'UUID / Token',
+    description: 'Generate UUIDs, hex tokens, or random base64 strings.',
+    icon: 'fingerprint',
+    status: 'live',
+  },
 ];

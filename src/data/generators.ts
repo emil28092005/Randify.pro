@@ -90,4 +90,13 @@ export const generators: Generator[] = [
     seoTitle: 'UUID Generator — UUID v4, Hex & Base64 Tokens | Randify',
     seoDescription: 'Generate random UUID v4, hex tokens, or base64 strings online. Cryptographically secure, runs in your browser. Free UUID and token generator.',
   },
+  {
+    slug: 'wheel',
+    title: 'Spin the Wheel',
+    description: 'Add your items, spin the wheel, and let chance decide.',
+    icon: 'pie-chart',
+    status: 'live',
+    seoTitle: 'Spin the Wheel — Random Picker | Randify',
+    seoDescription: 'Spin a customizable wheel of fortune to pick a random winner, choice, or option. Add your own items and let the wheel decide.',
+  },
 ];

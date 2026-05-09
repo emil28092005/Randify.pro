@@ -33,8 +33,8 @@ const generator = generators.find((g) => g.slug === 'uuid')!;
       <p class="mt-2 text-base text-zinc-400">{generator.description}</p>
     </header>
     <main><UuidGenerator /></main>
-    <div class="mt-12 grid grid-cols-3 gap-3">
-      <AdBanner size="tile" /><AdBanner size="tile" /><AdBanner size="tile" />
+    <div class="mt-12 flex justify-center">
+      <AdBanner size="tile" />
     </div>
   </div>
 </BaseLayout>

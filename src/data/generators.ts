@@ -19,7 +19,7 @@ export const generators: Generator[] = [
     title: 'Color',
     description: 'Generate a random color in HEX, RGB, or HSL format.',
     icon: 'palette',
-    status: 'coming-soon',
+    status: 'live',
   },
   {
     slug: 'password',

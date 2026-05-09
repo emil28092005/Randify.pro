@@ -1,17 +1,30 @@
 ---
+import LanguageSwitcher from '../components/LanguageSwitcher.astro';
+import { useT } from '../i18n/translations';
+import type { Lang } from '../i18n/translations';
+
 interface Props {
   title?: string;
   description?: string;
+  lang?: Lang;
 }
 
+const { lang = 'en' } = Astro.props;
+const T = useT(lang);
+
 const {
-  title = 'Randify — Random Value Generators',
-  description = 'Simple tools for raffles, games, and everything that needs randomness.',
+  title = T.defaultTitle,
+  description = T.defaultDesc,
 } = Astro.props;
+
+const currentPath = Astro.url.pathname;
+const alternatePath = lang === 'ru'
+  ? (currentPath.replace(/^\/ru/, '') || '/')
+  : ('/ru' + currentPath);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,6 +33,8 @@ const {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet" />
+    <link rel="alternate" hreflang="en" href={`https://randify.pro${lang === 'ru' ? alternatePath : currentPath}`} />
+    <link rel="alternate" hreflang="ru" href={`https://randify.pro${lang === 'ru' ? currentPath : alternatePath}`} />
     <meta name="verification" content="er9ndnv9ih7agmh8" />
     <title>{title}</title>
     <!-- Yandex.Metrika counter -->
@@ -36,9 +51,20 @@ const {
     <!-- /Yandex.Metrika counter -->
   </head>
   <body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans antialiased">
+    <LanguageSwitcher lang={lang} alternatePath={alternatePath} />
     <slot />
   </body>
 </html>
+
+<!-- Auto-detect language on first visit -->
+<script>
+  if (!localStorage.getItem('lang-pref')) {
+    const browserLang = (navigator.language || '').toLowerCase();
+    if (browserLang.startsWith('ru') && !location.pathname.startsWith('/ru')) {
+      location.replace('/ru' + location.pathname);
+    }
+  }
+</script>
 
 <style is:global>
   @import "tailwindcss";

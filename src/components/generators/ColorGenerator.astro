@@ -1,4 +1,7 @@
 ---
+import { useT } from '../../i18n/translations';
+const isRu = Astro.url.pathname.startsWith('/ru');
+const T = useT(isRu ? 'ru' : 'en');
 ---
 
 <div id="color-generator" class="mt-8">
@@ -58,7 +61,7 @@
       type="button"
       class="w-full sm:w-auto px-8 py-3 bg-[#534AB7] text-white font-semibold rounded-lg hover:bg-[#4740a0] active:bg-[#3d3990] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
     >
-      Generate
+      {T.generate}
     </button>
   </div>
 </div>

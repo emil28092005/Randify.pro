@@ -1,33 +1,35 @@
 ---
-// Interactive card generator — runs on the client via inline script
+import { useT } from '../../i18n/translations';
+const isRu = Astro.url.pathname.startsWith('/ru');
+const T = useT(isRu ? 'ru' : 'en');
 ---
 
 <div id="card-generator" class="mt-8">
   <div class="flex flex-col sm:flex-row gap-4 items-end">
     <div class="flex-1">
-      <label for="cg-count" class="block text-sm font-medium text-zinc-400 mb-1">Cards to draw</label>
+      <label for="crd-count" class="block text-sm font-medium text-zinc-400 mb-1">{T.cardsToDraw}</label>
       <input
-        id="cg-count"
+        id="crd-count"
         type="number"
         value="1"
         min="1"
         max="52"
         class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base focus:outline-none focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] transition-colors"
-        aria-label="Number of cards to draw"
+        aria-label={T.cardsToDraw}
       />
     </div>
     <label class="flex items-center gap-2.5 cursor-pointer select-none group pb-2">
       <input
-        id="cg-replace"
+        id="crd-replace"
         type="checkbox"
         class="w-4 h-4 rounded accent-[#534AB7] cursor-pointer"
       />
-      <span class="text-sm text-zinc-400 group-hover:text-zinc-200 transition-colors">Allow duplicates</span>
+      <span class="text-sm text-zinc-400 group-hover:text-zinc-200 transition-colors">{T.allowDuplicates}</span>
     </label>
   </div>
 
   <p
-    id="cg-error"
+    id="crd-error"
     role="alert"
     aria-live="polite"
     class="mt-3 text-sm text-red-500 hidden"
@@ -35,26 +37,26 @@
 
   <div class="my-10 min-h-32 flex flex-col items-center justify-center gap-4">
     <div
-      id="cg-cards"
+      id="crd-cards"
       class="flex flex-wrap justify-center gap-2"
       aria-live="polite"
       aria-label="Drawn cards"
     ></div>
 
     <button
-      id="cg-copy-btn"
+      id="crd-copy-btn"
       type="button"
       aria-label="Copy cards to clipboard"
       class="invisible inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] rounded"
     >
-      <span id="cg-copy-label">Copy</span>
-      <span id="cg-copy-icon" aria-hidden="true">
+      <span id="crd-copy-label">{T.copy}</span>
+      <span id="crd-copy-icon" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
           <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
         </svg>
       </span>
-      <span id="cg-check-icon" class="hidden text-[#534AB7]" aria-hidden="true">
+      <span id="crd-check-icon" class="hidden text-[#534AB7]" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 6 9 17l-5-5"/>
         </svg>
@@ -64,25 +66,32 @@
 
   <div class="flex justify-center">
     <button
-      id="cg-btn"
+      id="crd-btn"
       type="button"
       class="w-full sm:w-auto px-8 py-3 bg-[#534AB7] text-white font-semibold rounded-lg hover:bg-[#4740a0] active:bg-[#3d3990] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
     >
-      Draw
+      {T.draw}
     </button>
   </div>
 </div>
 
 <script>
-  const countInput = document.getElementById('cg-count')    as HTMLInputElement;
-  const replaceCb  = document.getElementById('cg-replace')  as HTMLInputElement;
-  const btn        = document.getElementById('cg-btn')      as HTMLButtonElement;
-  const copyBtn    = document.getElementById('cg-copy-btn') as HTMLButtonElement;
-  const cardsEl    = document.getElementById('cg-cards')    as HTMLDivElement;
-  const errorEl    = document.getElementById('cg-error')    as HTMLParagraphElement;
-  const copyLabel  = document.getElementById('cg-copy-label') as HTMLSpanElement;
-  const copyIcon   = document.getElementById('cg-copy-icon')  as HTMLSpanElement;
-  const checkIcon  = document.getElementById('cg-check-icon') as HTMLSpanElement;
+  const isRu = document.documentElement.lang === 'ru';
+  const COPY_LABEL    = isRu ? 'Копировать' : 'Copy';
+  const COPIED_LABEL  = isRu ? 'Скопировано' : 'Copied';
+  const ERR_AT_LEAST  = isRu ? 'Вытащите хотя бы 1 карту.' : 'Draw at least 1 card.';
+  const ERR_UNIQUE    = isRu ? 'Нельзя вытащить более 52 уникальных карт.' : 'Cannot draw more than 52 unique cards.';
+  const ERR_MAX52     = isRu ? 'Максимум 52 карты одновременно.' : 'Maximum 52 cards at once.';
+
+  const countInput = document.getElementById('crd-count')    as HTMLInputElement;
+  const replaceCb  = document.getElementById('crd-replace')  as HTMLInputElement;
+  const btn        = document.getElementById('crd-btn')      as HTMLButtonElement;
+  const copyBtn    = document.getElementById('crd-copy-btn') as HTMLButtonElement;
+  const cardsEl    = document.getElementById('crd-cards')    as HTMLDivElement;
+  const errorEl    = document.getElementById('crd-error')    as HTMLParagraphElement;
+  const copyLabel  = document.getElementById('crd-copy-label') as HTMLSpanElement;
+  const copyIcon   = document.getElementById('crd-copy-icon')  as HTMLSpanElement;
+  const checkIcon  = document.getElementById('crd-check-icon') as HTMLSpanElement;
 
   const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
   const SUITS = [
@@ -99,30 +108,22 @@
   let lastCards: { rank: string; suit: typeof SUITS[number] }[] = [];
   let copyRevertTimer: ReturnType<typeof setTimeout> | null = null;
 
-  function showError(msg: string) {
-    errorEl.textContent = msg;
-    errorEl.classList.remove('hidden');
-  }
-
-  function clearError() {
-    errorEl.textContent = '';
-    errorEl.classList.add('hidden');
-  }
+  function showError(msg: string) { errorEl.textContent = msg; errorEl.classList.remove('hidden'); }
+  function clearError()           { errorEl.textContent = '';  errorEl.classList.add('hidden');    }
 
   function draw() {
     const count = parseInt(countInput.value, 10);
     const withReplacement = replaceCb.checked;
 
-    if (!Number.isInteger(count) || count < 1) { showError('Draw at least 1 card.'); return; }
-    if (!withReplacement && count > 52)        { showError('Cannot draw more than 52 unique cards.'); return; }
-    if (count > 52)                             { showError('Maximum 52 cards at once.'); return; }
+    if (!Number.isInteger(count) || count < 1) { showError(ERR_AT_LEAST); return; }
+    if (!withReplacement && count > 52)        { showError(ERR_UNIQUE); return; }
+    if (count > 52)                             { showError(ERR_MAX52); return; }
 
     clearError();
 
     if (withReplacement) {
       lastCards = Array.from({ length: count }, () => DECK[Math.floor(Math.random() * DECK.length)]);
     } else {
-      // Fisher-Yates partial shuffle
       const deck = [...DECK];
       for (let i = 0; i < count; i++) {
         const j = i + Math.floor(Math.random() * (deck.length - i));
@@ -133,7 +134,7 @@
 
     renderCards();
     copyBtn.classList.remove('invisible');
-    copyLabel.textContent = 'Copy';
+    copyLabel.textContent = COPY_LABEL;
   }
 
   function renderCards() {
@@ -171,13 +172,13 @@
 
     copyIcon.classList.add('hidden');
     checkIcon.classList.remove('hidden');
-    copyLabel.textContent = 'Copied';
+    copyLabel.textContent = COPIED_LABEL;
 
     if (copyRevertTimer) clearTimeout(copyRevertTimer);
     copyRevertTimer = setTimeout(() => {
       checkIcon.classList.add('hidden');
       copyIcon.classList.remove('hidden');
-      copyLabel.textContent = 'Copy';
+      copyLabel.textContent = COPY_LABEL;
     }, 1500);
   }
 

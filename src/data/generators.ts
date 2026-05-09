@@ -6,6 +6,10 @@ export interface Generator {
   status: 'live' | 'coming-soon';
   seoTitle: string;
   seoDescription: string;
+  ruTitle: string;
+  ruDescription: string;
+  ruSeoTitle: string;
+  ruSeoDescription: string;
 }
 
 export const generators: Generator[] = [
@@ -17,6 +21,10 @@ export const generators: Generator[] = [
     status: 'live',
     seoTitle: 'Random Number Generator | Randify',
     seoDescription: 'Generate a random number between any two values instantly. Free online random number picker — perfect for giveaways, games, and decisions.',
+    ruTitle: 'Число',
+    ruDescription: 'Выберите случайное число в любом диапазоне.',
+    ruSeoTitle: 'Генератор случайных чисел | Randify',
+    ruSeoDescription: 'Генерируйте случайное число в любом диапазоне мгновенно. Идеально для розыгрышей, игр и принятия решений.',
   },
   {
     slug: 'colors',
@@ -26,6 +34,10 @@ export const generators: Generator[] = [
     status: 'live',
     seoTitle: 'Random Color Generator — HEX, RGB, HSL | Randify',
     seoDescription: 'Get a random color in HEX, RGB or HSL format with one click. Free online color randomizer for designers and developers.',
+    ruTitle: 'Цвет',
+    ruDescription: 'Генерируйте случайный цвет в форматах HEX, RGB или HSL.',
+    ruSeoTitle: 'Генератор случайных цветов — HEX, RGB, HSL | Randify',
+    ruSeoDescription: 'Получайте случайные цвета в форматах HEX, RGB и HSL одним нажатием. Бесплатный рандомайзер цветов для дизайнеров.',
   },
   {
     slug: 'password',
@@ -35,6 +47,10 @@ export const generators: Generator[] = [
     status: 'live',
     seoTitle: 'Random Password Generator | Randify',
     seoDescription: 'Create a strong random password with custom length, uppercase, lowercase, digits and symbols. Free and secure — runs entirely in your browser.',
+    ruTitle: 'Пароль',
+    ruDescription: 'Создайте надёжный случайный пароль с настраиваемыми правилами.',
+    ruSeoTitle: 'Генератор случайных паролей | Randify',
+    ruSeoDescription: 'Создавайте надёжные пароли с заглавными буквами, цифрами и символами. Бесплатно и безопасно — работает прямо в браузере.',
   },
   {
     slug: 'lottery',
@@ -44,6 +60,10 @@ export const generators: Generator[] = [
     status: 'live',
     seoTitle: 'Lottery Number Generator — Random Pick | Randify',
     seoDescription: 'Draw a set of unique random lottery numbers from any range. Perfect for lotteries, raffles, and lucky draws. Free online lottery picker.',
+    ruTitle: 'Лотерея',
+    ruDescription: 'Вытащите набор уникальных чисел в стиле лотереи.',
+    ruSeoTitle: 'Генератор лотерейных номеров | Randify',
+    ruSeoDescription: 'Тяните уникальные случайные числа для лотереи, розыгрыша или жеребьёвки. Бесплатный онлайн-генератор лотерейных номеров.',
   },
   {
     slug: 'dice',
@@ -53,6 +73,10 @@ export const generators: Generator[] = [
     status: 'live',
     seoTitle: 'Online Dice Roller — d4, d6, d20 and more | Randify',
     seoDescription: 'Roll virtual dice online. Supports d4, d6, d8, d10, d12, d20 and d100. Roll multiple dice at once — great for D&D, board games and tabletop RPGs.',
+    ruTitle: 'Кубик',
+    ruDescription: 'Бросьте один или несколько кубиков с любым числом граней.',
+    ruSeoTitle: 'Бросить кубик онлайн — d4, d6, d20 | Randify',
+    ruSeoDescription: 'Бросайте виртуальные кубики онлайн. Поддержка d4, d6, d8, d10, d12, d20, d100. Отлично для D&D и настольных RPG.',
   },
   {
     slug: 'cards',
@@ -62,6 +86,10 @@ export const generators: Generator[] = [
     status: 'live',
     seoTitle: 'Random Card Generator — Draw from a Deck | Randify',
     seoDescription: 'Draw random playing cards from a standard 52-card deck. Pick any number of cards, with or without replacement. Free online card picker.',
+    ruTitle: 'Карта',
+    ruDescription: 'Вытащите случайную карту из стандартной колоды.',
+    ruSeoTitle: 'Генератор случайных карт | Randify',
+    ruSeoDescription: 'Тяните случайные карты из колоды 52 карт. С повторениями или без. Бесплатный онлайн-генератор карт.',
   },
   {
     slug: 'coin',
@@ -71,6 +99,10 @@ export const generators: Generator[] = [
     status: 'live',
     seoTitle: 'Coin Flip Online — Heads or Tails | Randify',
     seoDescription: 'Flip a virtual coin online. Flip multiple coins at once and see how many heads and tails you get. Free random coin toss simulator.',
+    ruTitle: 'Монетка',
+    ruDescription: 'Подбросьте одну или несколько монет — орёл или решка.',
+    ruSeoTitle: 'Подбросить монетку онлайн — орёл или решка | Randify',
+    ruSeoDescription: 'Подбрасывайте виртуальную монету онлайн. Одну или несколько сразу. Бесплатный симулятор подбрасывания монеты.',
   },
   {
     slug: 'list',
@@ -80,6 +112,10 @@ export const generators: Generator[] = [
     status: 'live',
     seoTitle: 'Random List Picker — Pick a Random Winner | Randify',
     seoDescription: 'Paste any list of names or items and pick random winners instantly. Great for giveaways, choosing who goes first, or any random selection.',
+    ruTitle: 'Список',
+    ruDescription: 'Вставьте список элементов и выберите случайных победителей.',
+    ruSeoTitle: 'Случайный выбор из списка | Randify',
+    ruSeoDescription: 'Вставьте список имён или вариантов и выберите случайных победителей мгновенно. Идеально для розыгрышей и жеребьёвок.',
   },
   {
     slug: 'uuid',
@@ -89,6 +125,10 @@ export const generators: Generator[] = [
     status: 'live',
     seoTitle: 'UUID Generator — UUID v4, Hex & Base64 Tokens | Randify',
     seoDescription: 'Generate random UUID v4, hex tokens, or base64 strings online. Cryptographically secure, runs in your browser. Free UUID and token generator.',
+    ruTitle: 'UUID / Токен',
+    ruDescription: 'Генерируйте UUID, hex-токены или случайные Base64-строки.',
+    ruSeoTitle: 'Генератор UUID и токенов | Randify',
+    ruSeoDescription: 'Генерируйте UUID v4, hex-токены и Base64-строки онлайн. Криптографически безопасно, работает в браузере.',
   },
   {
     slug: 'wheel',
@@ -98,5 +138,9 @@ export const generators: Generator[] = [
     status: 'live',
     seoTitle: 'Spin the Wheel — Random Picker | Randify',
     seoDescription: 'Spin a customizable wheel of fortune to pick a random winner, choice, or option. Add your own items and let the wheel decide.',
+    ruTitle: 'Колесо фортуны',
+    ruDescription: 'Добавьте элементы, крутите колесо и пусть случай решит.',
+    ruSeoTitle: 'Колесо фортуны онлайн — случайный выбор | Randify',
+    ruSeoDescription: 'Крутите колесо фортуны онлайн. Добавьте свои варианты и пусть случай решит победителя.',
   },
 ];

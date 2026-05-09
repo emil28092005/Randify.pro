@@ -21,16 +21,7 @@ Dave
 Eve
 Frank</textarea>
     </div>
-    <div class="flex items-center gap-3">
-      <button
-        id="ws-update-btn"
-        type="button"
-        class="px-4 py-2 text-sm font-semibold border border-zinc-700 text-zinc-300 rounded-lg hover:border-[#534AB7] hover:text-zinc-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] cursor-pointer"
-      >
-        Update wheel
-      </button>
-      <p id="ws-error" role="alert" aria-live="polite" class="text-sm text-red-500 hidden"></p>
-    </div>
+    <p id="ws-error" role="alert" aria-live="polite" class="text-sm text-red-500 hidden"></p>
   </div>
 
   <!-- Wheel area -->
@@ -98,7 +89,6 @@ Frank</textarea>
   const TAU = 2 * Math.PI;
 
   const textarea   = document.getElementById('ws-items')       as HTMLTextAreaElement;
-  const updateBtn  = document.getElementById('ws-update-btn')  as HTMLButtonElement;
   const errorEl    = document.getElementById('ws-error')       as HTMLParagraphElement;
   const canvas     = document.getElementById('ws-canvas')      as HTMLCanvasElement;
   const spinBtn    = document.getElementById('ws-spin-btn')    as HTMLButtonElement;
@@ -209,8 +199,6 @@ Frank</textarea>
     const parsed = parseItems();
     if (parsed) { items = parsed; draw(currentRotation); }
   }
-
-  updateBtn.addEventListener('click', applyItems);
 
   let debounceTimer: ReturnType<typeof setTimeout> | null = null;
   textarea.addEventListener('input', () => {

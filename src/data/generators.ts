@@ -47,6 +47,6 @@ export const generators: Generator[] = [
     title: 'Card',
     description: 'Draw a random playing card from a standard deck.',
     icon: 'square-stack',
-    status: 'coming-soon',
+    status: 'live',
   },
 ];

@@ -18,6 +18,16 @@ const { title = T.defaultTitle, description = T.defaultDesc } = Astro.props;
 const pathWithoutLocale = Astro.url.pathname.replace(/^\/ru/, "") || "/";
 const enUrl = `https://randify.pro${getRelativeLocaleUrl("en", pathWithoutLocale)}`;
 const ruUrl = `https://randify.pro${getRelativeLocaleUrl("ru", pathWithoutLocale)}`;
+const canonicalUrl = `https://randify.pro${Astro.url.pathname}`;
+
+const webPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description: description,
+  url: canonicalUrl,
+  inLanguage: lang,
+};
 ---
 
 <!doctype html>
@@ -33,12 +43,18 @@ const ruUrl = `https://randify.pro${getRelativeLocaleUrl("ru", pathWithoutLocale
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap"
       rel="stylesheet"
     />
+    <link rel="canonical" href={canonicalUrl} />
     <link rel="alternate" hreflang="en" href={enUrl} />
     <link rel="alternate" hreflang="ru" href={ruUrl} />
     <meta name="verification" content="er9ndnv9ih7agmh8" />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(webPageSchema)}
+    />
     <meta name="theme-color" content="#534AB7" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <slot name="head" />
     <title>{title}</title>
     <Analytics />
     <script>

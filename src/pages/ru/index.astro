@@ -8,9 +8,23 @@ import type { Lang } from "@/i18n/translations";
 
 const lang = (Astro.currentLocale as Lang) || "en";
 const T = useT(lang);
+
+const webSiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Randify.pro",
+  url: "https://randify.pro/",
+  description: T.defaultDesc,
+  inLanguage: lang,
+};
 ---
 
 <BaseLayout>
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(webSiteSchema)}
+    slot="head"
+  />
   <div class="max-w-4xl mx-auto px-4 py-12 sm:py-20">
     <header class="mb-12">
       <div class="flex items-center gap-2 mb-6">

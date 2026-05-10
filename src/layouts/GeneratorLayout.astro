@@ -14,12 +14,56 @@ const { generator } = Astro.props;
 const lang = (Astro.currentLocale as Lang) || "en";
 const T = useT(lang);
 const isRu = lang === "ru";
+
+const canonicalUrl = `https://randify.pro${Astro.url.pathname}`;
+
+const appSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: isRu ? generator.ruTitle : generator.title,
+  applicationCategory: "UtilityApplication",
+  operatingSystem: "Any",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+  inLanguage: ["en", "ru"],
+  description: isRu ? generator.ruDescription : generator.description,
+  url: canonicalUrl,
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Randify.pro",
+      item: "https://randify.pro/",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: isRu ? generator.ruTitle : generator.title,
+      item: canonicalUrl,
+    },
+  ],
+};
 ---
 
 <BaseLayout
   title={isRu ? generator.ruSeoTitle : generator.seoTitle}
   description={isRu ? generator.ruSeoDescription : generator.seoDescription}
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(appSchema)} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(breadcrumbSchema)}
+    />
+  </Fragment>
   <div class="max-w-2xl mx-auto px-4 py-12 sm:py-20">
     <nav aria-label="Breadcrumb" class="mb-10">
       <a

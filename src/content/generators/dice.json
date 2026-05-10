@@ -1,0 +1,43 @@
+{
+  "slug": "dice",
+  "title": "Dice",
+  "description": "Roll one or more dice with any number of sides.",
+  "icon": "dice-6",
+  "status": "live",
+  "seoTitle": "Dice Roller — d4 d6 d20 + Full Notation | D&D Dice | Randify",
+  "seoDescription": "Free online dice roller with full XdY+Z notation, keep/drop (4d6dl1), exploding dice (3d6!), reroll, advantage/disadvantage, and roll history. Perfect for D&D, Pathfinder, and Savage Worlds.",
+  "ruTitle": "Кубик",
+  "ruDescription": "Бросьте один или несколько кубиков с любым числом граней.",
+  "ruSeoTitle": "Бросить кубик онлайн — d4 d6 d8 d10 d12 d20 | D&D | Randify",
+  "ruSeoDescription": "Бесплатный онлайн-бросок кубиков с полной нотацией XdY+Z, keep/drop (4d6dl1), взрывающимися кубиками (3d6!), перебросом, преимуществом/помехой и историей. Для D&D, Pathfinder и Savage Worlds.",
+  "pageTitle": "Dice Generator",
+  "ruPageTitle": "Бросить кубик онлайн",
+  "howTo": [
+    "Type a notation like 2d6+3 or 1d20 — or use the die buttons and count.",
+    "Pick a mode: Normal, Advantage, or Disadvantage (single die only).",
+    "Click Roll — each die result appears with the total sum.",
+    "Maximum rolls are highlighted in purple; ones are highlighted in red."
+  ],
+  "whenTo": [
+    "Rolling dice for D&D, Pathfinder, or any tabletop RPG.",
+    "Using dice notation shortcuts like 2d6+3 or 1d20 for fast rolling.",
+    "Rolling with advantage or disadvantage for D&D 5e mechanics.",
+    "Generating character stats with 4d6 drop-lowest method.",
+    "Rolling exploding dice for Savage Worlds or house rules (e.g. 3d6!).",
+    "Using keep/drop modifiers like 4d6kh3 to keep highest rolls."
+  ],
+  "ruHowTo": [
+    "Введите нотацию, например 2d6+3 или 1d20 — или настройте кубики вручную.",
+    "Выберите режим: Обычный, Преимущество или Помеха (только для одного кубика).",
+    "Нажмите «Бросить» — результаты отобразятся мгновенно.",
+    "Максимумы подсвечены фиолетовым, единицы — красным."
+  ],
+  "ruWhenTo": [
+    "Броски в настольных ролевых играх (D&D и другие).",
+    "Быстрые броски через нотацию: 2d6+3, 1d20 и любые другие.",
+    "Преимущество и помеха для механик D&D 5e.",
+    "Бросок характеристик: 4d6, отбросить наименьший (4d6dl1).",
+    "Взрывающиеся кубики для Savage Worlds или хаус-рулов (например, 3d6!).",
+    "Использование keep/drop модификаторов типа 4d6kh3 (оставить три лучших)."
+  ]
+}

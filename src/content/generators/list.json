@@ -1,0 +1,38 @@
+{
+  "slug": "list",
+  "title": "List Picker",
+  "description": "Paste a list of items and pick random winners.",
+  "icon": "list",
+  "status": "live",
+  "seoTitle": "Random List Picker — Pick a Random Winner | Randify",
+  "seoDescription": "Paste any list of names or items and pick random winners instantly. Great for giveaways, choosing who goes first, or any random selection.",
+  "ruTitle": "Список",
+  "ruDescription": "Вставьте список элементов и выберите случайных победителей.",
+  "ruSeoTitle": "Случайный выбор из списка | Randify",
+  "ruSeoDescription": "Вставьте список имён или вариантов и выберите случайных победителей мгновенно. Идеально для розыгрышей и жеребьёвок.",
+  "pageTitle": "List Picker",
+  "ruPageTitle": "Случайный выбор из списка",
+  "howTo": [
+    "Type or paste your items into the text area — one item per line.",
+    "Set how many items to pick in the Pick field.",
+    "Toggle Allow duplicates if the same item can be chosen more than once.",
+    "Click Pick (or press Ctrl+Enter) — the selected items appear as chips."
+  ],
+  "whenTo": [
+    "Choosing a random winner for a giveaway or contest.",
+    "Picking who presents first in a meeting or class.",
+    "Organising a Secret Santa or gift exchange draw.",
+    "Selecting a random movie, restaurant, or activity from a list."
+  ],
+  "ruHowTo": [
+    "Введите список элементов — по одному на строку.",
+    "Укажите, сколько элементов выбрать.",
+    "При необходимости разрешите повторения.",
+    "Нажмите «Выбрать» — результаты появятся на экране."
+  ],
+  "ruWhenTo": [
+    "Розыгрыш победителей конкурса.",
+    "Случайное распределение задач между участниками команды.",
+    "Выбор случайного варианта из списка."
+  ]
+}

@@ -1,77 +1,11 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import NumberGenerator from '../../components/generators/NumberGenerator.astro';
-import AdBanner from '../../components/AdBanner.astro';
-import { generators } from '../../data/generators';
-import SeoBlock from '../../components/SeoBlock.astro';
+import GeneratorLayout from "@/layouts/GeneratorLayout.astro";
+import NumberGenerator from "@/components/generators/NumberGenerator.astro";
+import { generators } from "@/data/generators";
 
-const generator = generators.find((g) => g.slug === 'numbers')!;
+const generator = generators.find((g) => g.slug === "numbers")!;
 ---
 
-<BaseLayout lang="en"
-  title={generator.seoTitle}
-  description={generator.seoDescription}
->
-  <div class="max-w-2xl mx-auto px-4 py-12 sm:py-20">
-    <nav aria-label="Breadcrumb" class="mb-10">
-      <a
-        href="/"
-        class="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] rounded"
-        aria-label="Back to all generators"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="m15 18-6-6 6-6"/>
-        </svg>
-        All generators
-      </a>
-    </nav>
-
-    <header class="mb-2">
-      <div class="flex items-center gap-2 mb-4">
-        <span
-          class="inline-block w-2.5 h-2.5 rounded-full bg-[#534AB7]"
-          aria-hidden="true"
-        ></span>
-        <span class="text-sm font-medium text-zinc-400 uppercase tracking-widest">randify</span>
-      </div>
-      <h1 class="text-3xl sm:text-4xl font-bold text-zinc-100">
-        {generator.title} Generator
-      </h1>
-      <p class="mt-2 text-base text-zinc-400">{generator.description}</p>
-    </header>
-
-    <main>
-      <NumberGenerator />
-    </main>
-
-    <div class="mt-12 flex justify-center">
-      <AdBanner size="tile" />
-    </div>
-
-    <SeoBlock
-      howTo={[
-        'Enter the minimum value in the From field.',
-        'Enter the maximum value in the To field.',
-        'Click Generate — a random number within your range appears instantly.',
-        'Click the number to copy it to the clipboard.',
-      ]}
-      whenTo={[
-        'Picking a winner in a giveaway or raffle.',
-        'Choosing a random starting player in a board game.',
-        'Making a quick decision between numbered options.',
-        'Generating test data with values in a specific range.',
-      ]}
-    />
-  </div>
-</BaseLayout>
+<GeneratorLayout generator={generator}>
+    <NumberGenerator />
+</GeneratorLayout>

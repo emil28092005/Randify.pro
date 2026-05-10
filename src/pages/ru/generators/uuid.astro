@@ -1,40 +1,11 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import UuidGenerator from '../../../components/generators/UuidGenerator.astro';
-import AdBanner from '../../../components/AdBanner.astro';
-import SeoBlock from '../../../components/SeoBlock.astro';
-import { generators } from '../../../data/generators';
+import GeneratorLayout from "@/layouts/GeneratorLayout.astro";
+import UuidGenerator from "@/components/generators/UuidGenerator.astro";
+import { generators } from "@/data/generators";
 
-const generator = generators.find((g) => g.slug === 'uuid')!;
+const generator = generators.find((g) => g.slug === "uuid")!;
 ---
 
-<BaseLayout title={generator.ruSeoTitle} description={generator.ruSeoDescription} lang="ru">
-  <div class="max-w-2xl mx-auto px-4 py-12 sm:py-20">
-    <nav aria-label="Breadcrumb" class="mb-10">
-      <a href="/ru/" class="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] rounded" aria-label="Все генераторы">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-        Все генераторы
-      </a>
-    </nav>
-    <header class="mb-2">
-      <div class="flex items-center gap-2 mb-4">
-        <span class="inline-block w-2.5 h-2.5 rounded-full bg-[#534AB7]" aria-hidden="true"></span>
-        <span class="text-sm font-medium text-zinc-400 uppercase tracking-widest">randify</span>
-      </div>
-      <h1 class="text-3xl sm:text-4xl font-bold text-zinc-100">Генератор UUID и токенов</h1>
-      <p class="mt-2 text-base text-zinc-400">{generator.ruDescription}</p>
-    </header>
-    <main><UuidGenerator /></main>
-    <div class="mt-12 flex justify-center"><AdBanner size="tile" /></div>
-    <SeoBlock lang="ru" howTo={[
-      'Выберите тип: UUID v4, Hex или Base64.',
-      'Для Hex и Base64 задайте длину в байтах.',
-      'Укажите количество токенов.',
-      'Нажмите «Сгенерировать» и скопируйте результат.',
-    ]} whenTo={[
-      'Генерация уникальных идентификаторов для баз данных.',
-      'Создание токенов для API и сессий.',
-      'Генерация случайных ключей шифрования.',
-    ]} />
-  </div>
-</BaseLayout>
+<GeneratorLayout generator={generator}>
+    <UuidGenerator />
+</GeneratorLayout>

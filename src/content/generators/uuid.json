@@ -1,0 +1,38 @@
+{
+  "slug": "uuid",
+  "title": "UUID / Token",
+  "description": "Generate UUIDs, hex tokens, or random base64 strings.",
+  "icon": "fingerprint",
+  "status": "live",
+  "seoTitle": "UUID Generator — UUID v4, Hex & Base64 Tokens | Randify",
+  "seoDescription": "Generate random UUID v4, hex tokens, or base64 strings online. Cryptographically secure, runs in your browser. Free UUID and token generator.",
+  "ruTitle": "UUID / Токен",
+  "ruDescription": "Генерируйте UUID, hex-токены или случайные Base64-строки.",
+  "ruSeoTitle": "Генератор UUID и токенов | Randify",
+  "ruSeoDescription": "Генерируйте UUID v4, hex-токены и Base64-строки онлайн. Криптографически безопасно, работает в браузере.",
+  "pageTitle": "UUID / Token",
+  "ruPageTitle": "Генератор UUID и токенов",
+  "howTo": [
+    "Choose a token type: UUID v4, Hex, or Base64.",
+    "For Hex and Base64, set the byte length (4–64 bytes).",
+    "Enter how many tokens to generate (1–20).",
+    "Click Generate, then Copy all to copy every token to the clipboard."
+  ],
+  "whenTo": [
+    "Generating unique IDs for database records or API resources.",
+    "Creating random session tokens or API keys during development.",
+    "Producing test data with realistic-looking identifiers.",
+    "Generating a one-time secret for environment variables or config files."
+  ],
+  "ruHowTo": [
+    "Выберите тип: UUID v4, Hex или Base64.",
+    "Для Hex и Base64 задайте длину в байтах.",
+    "Укажите количество токенов.",
+    "Нажмите «Сгенерировать» и скопируйте результат."
+  ],
+  "ruWhenTo": [
+    "Генерация уникальных идентификаторов для баз данных.",
+    "Создание токенов для API и сессий.",
+    "Генерация случайных ключей шифрования."
+  ]
+}

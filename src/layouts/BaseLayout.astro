@@ -1,107 +1,93 @@
 ---
-import LanguageSwitcher from '../components/LanguageSwitcher.astro';
-import { useT } from '../i18n/translations';
-import type { Lang } from '../i18n/translations';
+import { getRelativeLocaleUrl } from "astro:i18n";
+import LanguageSwitcher from "../components/LanguageSwitcher.astro";
+import Analytics from "../components/Analytics.astro";
+import { useT } from "../i18n/translations";
+import type { Lang } from "../i18n/translations";
 
 interface Props {
-  title?: string;
-  description?: string;
-  lang?: Lang;
+    title?: string;
+    description?: string;
 }
 
-const { lang = 'en' } = Astro.props;
+const lang = (Astro.currentLocale as Lang) || "en";
 const T = useT(lang);
 
-const {
-  title = T.defaultTitle,
-  description = T.defaultDesc,
-} = Astro.props;
+const { title = T.defaultTitle, description = T.defaultDesc } = Astro.props;
 
-const currentPath = Astro.url.pathname;
-const alternatePath = lang === 'ru'
-  ? (currentPath.replace(/^\/ru/, '') || '/')
-  : ('/ru' + currentPath);
+const pathWithoutLocale = Astro.url.pathname.replace(/^\/ru/, "") || "/";
+const enUrl = `https://randify.pro${getRelativeLocaleUrl("en", pathWithoutLocale)}`;
+const ruUrl = `https://randify.pro${getRelativeLocaleUrl("ru", pathWithoutLocale)}`;
 ---
 
 <!doctype html>
 <html lang={lang}>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet" />
-    <link rel="alternate" hreflang="en" href={`https://randify.pro${lang === 'ru' ? alternatePath : currentPath}`} />
-    <link rel="alternate" hreflang="ru" href={`https://randify.pro${lang === 'ru' ? currentPath : alternatePath}`} />
-    <meta name="verification" content="er9ndnv9ih7agmh8" />
-    <title>{title}</title>
-    <!-- Yandex.Metrika counter -->
-    <script type="text/javascript">
-      (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-      })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=109130319', 'ym');
-      ym(109130319, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
-    </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/109130319" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <!-- /Yandex.Metrika counter -->
-    <!-- Top.Mail.Ru counter -->
-    <script type="text/javascript">
-      var _tmr = window._tmr || (window._tmr = []);
-      _tmr.push({id: "3765043", type: "pageView", start: (new Date()).getTime()});
-      (function (d, w, id) {
-        if (d.getElementById(id)) return;
-        var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id;
-        ts.src = "https://top-fwz1.mail.ru/js/code.js";
-        var f = function () {var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s);};
-        if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); }
-      })(document, window, "tmr-code");
-    </script>
-    <noscript><div><img src="https://top-fwz1.mail.ru/counter?id=3765043;js=na" style="position:absolute;left:-9999px;" alt="Top.Mail.Ru" /></div></noscript>
-    <!-- /Top.Mail.Ru counter -->
-  </head>
-  <body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans antialiased">
-    <LanguageSwitcher lang={lang} alternatePath={alternatePath} />
-    <slot />
-  </body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content={description} />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="alternate" hreflang="en" href={enUrl} />
+        <link rel="alternate" hreflang="ru" href={ruUrl} />
+        <meta name="verification" content="er9ndnv9ih7agmh8" />
+        <title>{title}</title>
+        <Analytics />
+    </head>
+    <body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans antialiased">
+        <LanguageSwitcher />
+        <slot />
+    </body>
 </html>
 
 <!-- Auto-detect language on first visit -->
 <script>
-  if (!localStorage.getItem('lang-pref')) {
-    const browserLang = (navigator.language || '').toLowerCase();
-    if (browserLang.startsWith('ru') && !location.pathname.startsWith('/ru')) {
-      location.replace('/ru' + location.pathname);
+    if (!localStorage.getItem("lang-pref")) {
+        const browserLang = (navigator.language || "").toLowerCase();
+        if (
+            browserLang.startsWith("ru") &&
+            !location.pathname.startsWith("/ru")
+        ) {
+            location.replace("/ru" + location.pathname);
+        }
     }
-  }
 </script>
 
 <style is:global>
-  @import "tailwindcss";
+    @import "tailwindcss";
 
-  @theme {
-    --font-sans: 'Space Grotesk', sans-serif;
-  }
+    @theme {
+        --font-sans: "Space Grotesk", sans-serif;
+    }
 
-  :root {
-    --accent: #534AB7;
-  }
+    :root {
+        --accent: #534ab7;
+    }
 
-  * {
-    box-sizing: border-box;
-  }
+    * {
+        box-sizing: border-box;
+    }
 
-  body {
-    background-image:
-      radial-gradient(ellipse 90% 45% at 50% -5%, rgba(83, 74, 183, 0.2) 0%, transparent 65%),
-      radial-gradient(ellipse 90% 45% at 50% 105%, rgba(83, 74, 183, 0.13) 0%, transparent 65%);
-  }
+    body {
+        background-image:
+            radial-gradient(
+                ellipse 90% 45% at 50% -5%,
+                rgba(83, 74, 183, 0.2) 0%,
+                transparent 65%
+            ),
+            radial-gradient(
+                ellipse 90% 45% at 50% 105%,
+                rgba(83, 74, 183, 0.13) 0%,
+                transparent 65%
+            );
+    }
 
-  input[type="number"] {
-    color-scheme: dark;
-  }
+    input[type="number"] {
+        color-scheme: dark;
+    }
 </style>

@@ -1,0 +1,38 @@
+{
+  "slug": "coin",
+  "title": "Coin Flip",
+  "description": "Flip one or more coins and see heads or tails.",
+  "icon": "circle-dollar-sign",
+  "status": "live",
+  "seoTitle": "Coin Flip Online — Heads or Tails | Randify",
+  "seoDescription": "Flip a virtual coin online. Flip multiple coins at once and see how many heads and tails you get. Free random coin toss simulator.",
+  "ruTitle": "Монетка",
+  "ruDescription": "Подбросьте одну или несколько монет — орёл или решка.",
+  "ruSeoTitle": "Подбросить монетку онлайн — орёл или решка | Randify",
+  "ruSeoDescription": "Подбрасывайте виртуальную монету онлайн. Одну или несколько сразу. Бесплатный симулятор подбрасывания монеты.",
+  "pageTitle": "Coin Flip",
+  "ruPageTitle": "Подбросить монетку",
+  "howTo": [
+    "Drag the slider to choose how many coins to flip (1–20).",
+    "Click Flip — each coin shows H for heads or T for tails.",
+    "When flipping more than one coin, the heads/tails count is shown below.",
+    "Click Copy to copy all results to the clipboard."
+  ],
+  "whenTo": [
+    "Making a quick heads-or-tails decision.",
+    "Simulating a coin toss for a sports match or game.",
+    "Demonstrating probability and the law of large numbers.",
+    "Settling a fair 50/50 choice between two options."
+  ],
+  "ruHowTo": [
+    "Выберите количество монет с помощью ползунка.",
+    "Нажмите «Подбросить» — орёл или решка.",
+    "При нескольких монетах отображается итоговый счёт.",
+    "Нажмите «Копировать», чтобы сохранить результат."
+  ],
+  "ruWhenTo": [
+    "Принятие решений по принципу «орёл или решка».",
+    "Определение очерёдности в игре.",
+    "Симуляция случайных событий с равной вероятностью."
+  ]
+}

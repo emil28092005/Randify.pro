@@ -1,0 +1,39 @@
+{
+  "slug": "numbers",
+  "title": "Number",
+  "description": "Pick a random number within any range you choose.",
+  "icon": "hash",
+  "status": "live",
+  "seoTitle": "Random Number Generator | Randify",
+  "seoDescription": "Generate a random number between any two values instantly. Free online random number picker — perfect for giveaways, games, and decisions.",
+  "ruTitle": "Число",
+  "ruDescription": "Выберите случайное число в любом диапазоне.",
+  "ruSeoTitle": "Генератор случайных чисел | Randify",
+  "ruSeoDescription": "Генерируйте случайное число в любом диапазоне мгновенно. Идеально для розыгрышей, игр и принятия решений.",
+  "pageTitle": "Number Generator",
+  "ruPageTitle": "Генератор чисел",
+  "howTo": [
+    "Enter the minimum value in the From field.",
+    "Enter the maximum value in the To field.",
+    "Click Generate — a random number within your range appears instantly.",
+    "Click the number to copy it to the clipboard."
+  ],
+  "whenTo": [
+    "Picking a winner in a giveaway or raffle.",
+    "Choosing a random starting player in a board game.",
+    "Making a quick decision between numbered options.",
+    "Generating test data with values in a specific range."
+  ],
+  "ruHowTo": [
+    "Введите минимальное значение в поле «От».",
+    "Введите максимальное значение в поле «До».",
+    "Нажмите «Сгенерировать» — случайное число появится мгновенно.",
+    "Нажмите на число, чтобы скопировать его в буфер обмена."
+  ],
+  "ruWhenTo": [
+    "Выбор победителя в розыгрыше или конкурсе.",
+    "Определение случайного первого игрока в настольной игре.",
+    "Быстрое принятие решения между пронумерованными вариантами.",
+    "Генерация тестовых данных с числами в заданном диапазоне."
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "slug": "colors",
+  "title": "Color",
+  "description": "Generate a random color in HEX, RGB, or HSL format.",
+  "icon": "palette",
+  "status": "live",
+  "seoTitle": "Random Color Generator — HEX, RGB, HSL | Randify",
+  "seoDescription": "Get a random color in HEX, RGB or HSL format with one click. Free online color randomizer for designers and developers.",
+  "ruTitle": "Цвет",
+  "ruDescription": "Генерируйте случайный цвет в форматах HEX, RGB или HSL.",
+  "ruSeoTitle": "Генератор случайных цветов — HEX, RGB, HSL | Randify",
+  "ruSeoDescription": "Получайте случайные цвета в форматах HEX, RGB и HSL одним нажатием. Бесплатный рандомайзер цветов для дизайнеров.",
+  "pageTitle": "Color Generator",
+  "ruPageTitle": "Генератор цветов",
+  "howTo": [
+    "Click Generate to produce a random color.",
+    "Switch between HEX, RGB, and HSL tabs to see the value in your preferred format.",
+    "Click the color value or the copy icon to copy it to the clipboard."
+  ],
+  "whenTo": [
+    "Finding inspiration for a new design palette.",
+    "Picking a placeholder color while prototyping.",
+    "Selecting a random theme color for a project or presentation.",
+    "Teaching or exploring color theory and formats."
+  ],
+  "ruHowTo": [
+    "Нажмите «Сгенерировать», чтобы получить случайный цвет.",
+    "Цвет отображается в форматах HEX, RGB и HSL одновременно.",
+    "Нажмите на иконку копирования рядом с нужным форматом."
+  ],
+  "ruWhenTo": [
+    "Поиск вдохновения для цветовой палитры.",
+    "Случайный выбор цвета для дизайна или иллюстрации.",
+    "Генерация тестовых данных с цветовыми значениями."
+  ]
+}

@@ -2,7 +2,7 @@
 // Supports: XdY±Z, kh/kl/dh/dl, ! exploding, r reroll, advantage/disadvantage
 // Caps: explode chain ≤100, reroll recursion ≤1000
 
-type KeepDrop = { type: 'kh' | 'kl' | 'dh' | 'dl'; count: number } | null;
+type KeepDrop = { type: "kh" | "kl" | "dh" | "dl"; count: number } | null;
 
 type Explode = {
   active: boolean;
@@ -14,7 +14,7 @@ type Reroll = {
   active: boolean;
   values: Set<number>;
   once: boolean; // "ro" = once only; "r" = recursive
-  operator: 'eq' | 'lt' | 'gt';
+  operator: "eq" | "lt" | "gt";
 };
 
 export interface Parsed {
@@ -32,7 +32,7 @@ export interface DieResult {
   value: number;
   original: number;
   exploded: boolean;
-  explosions: number[];   // chained explosion rolls
+  explosions: number[]; // chained explosion rolls
   rerolledFrom: number | null;
   dropped: boolean;
 }
@@ -52,7 +52,7 @@ const REROLL_CAP = 1000;
 
 /** Remove all whitespace and lowercase for parsing */
 function normalize(raw: string): string {
-  return raw.replace(/\s+/g, '').toLowerCase();
+  return raw.replace(/\s+/g, "").toLowerCase();
 }
 
 /**
@@ -67,7 +67,7 @@ export function parseDiceNotation(raw: string): Parsed | null {
   const main = s.match(/^(\d*)d(\d+)(.*)$/);
   if (!main) return null;
 
-  const count = main[1] === '' ? 1 : parseInt(main[1], 10);
+  const count = main[1] === "" ? 1 : parseInt(main[1], 10);
   const sides = parseInt(main[2], 10);
   const rest = main[3];
 
@@ -81,7 +81,10 @@ export function parseDiceNotation(raw: string): Parsed | null {
   if (kdMatch) {
     const countKD = parseInt(kdMatch[2], 10);
     if (countKD < 1 || countKD >= count) return null;
-    keepDrop = { type: kdMatch[1] as 'kh' | 'kl' | 'dh' | 'dl', count: countKD };
+    keepDrop = {
+      type: kdMatch[1] as "kh" | "kl" | "dh" | "dl",
+      count: countKD,
+    };
     remaining = remaining.slice(kdMatch[0].length);
   }
 
@@ -90,8 +93,8 @@ export function parseDiceNotation(raw: string): Parsed | null {
   const expMatch = remaining.match(/^(!p|!)(>?)(\d*)/);
   if (expMatch) {
     explode.active = true;
-    explode.penetrating = expMatch[1] === '!p';
-    if (expMatch[2] === '>' && expMatch[3]) {
+    explode.penetrating = expMatch[1] === "!p";
+    if (expMatch[2] === ">" && expMatch[3]) {
       explode.threshold = parseInt(expMatch[3], 10);
       if (explode.threshold < 2 || explode.threshold > sides) return null;
     } else {
@@ -101,21 +104,26 @@ export function parseDiceNotation(raw: string): Parsed | null {
   }
 
   // Reroll: rN, roN, r<N, ro<N
-  let reroll: Reroll = { active: false, values: new Set(), once: false, operator: 'eq' };
+  let reroll: Reroll = {
+    active: false,
+    values: new Set(),
+    once: false,
+    operator: "eq",
+  };
   const rrMatch = remaining.match(/^(ro|r)([<>]?)(\d+)/);
   if (rrMatch) {
     reroll.active = true;
-    reroll.once = rrMatch[1] === 'ro';
-    const op = rrMatch[2] as '' | '<' | '>';
+    reroll.once = rrMatch[1] === "ro";
+    const op = rrMatch[2] as "" | "<" | ">";
     const val = parseInt(rrMatch[3], 10);
-    if (op === '<') {
-      reroll.operator = 'lt';
+    if (op === "<") {
+      reroll.operator = "lt";
       for (let i = 1; i < val && i < sides; i++) reroll.values.add(i);
-    } else if (op === '>') {
-      reroll.operator = 'gt';
+    } else if (op === ">") {
+      reroll.operator = "gt";
       for (let i = val + 1; i <= sides; i++) reroll.values.add(i);
     } else {
-      reroll.operator = 'eq';
+      reroll.operator = "eq";
       reroll.values.add(val);
     }
     remaining = remaining.slice(rrMatch[0].length);
@@ -133,7 +141,16 @@ export function parseDiceNotation(raw: string): Parsed | null {
   // If anything remains unparsed, it's invalid
   if (remaining.length > 0) return null;
 
-  return { count, sides, modifier, keepDrop, explode, reroll, advantage: false, disadvantage: false };
+  return {
+    count,
+    sides,
+    modifier,
+    keepDrop,
+    explode,
+    reroll,
+    advantage: false,
+    disadvantage: false,
+  };
 }
 
 /** Roll a single die with optional reroll and explode logic */
@@ -194,34 +211,47 @@ export function rollDice(parsed: Parsed): RollResult {
 
   if (parsed.keepDrop) {
     const sorted = [...dice].map((d, i) => ({ die: d, idx: i }));
-    if (parsed.keepDrop.type === 'kh') {
+    if (parsed.keepDrop.type === "kh") {
       sorted.sort((a, b) => b.die.value - a.die.value);
-      const keepIndices = new Set(sorted.slice(0, parsed.keepDrop.count).map(x => x.idx));
+      const keepIndices = new Set(
+        sorted.slice(0, parsed.keepDrop.count).map((x) => x.idx),
+      );
       kept = dice.filter((_, i) => keepIndices.has(i));
       dropped = dice.filter((_, i) => !keepIndices.has(i));
-    } else if (parsed.keepDrop.type === 'kl') {
+    } else if (parsed.keepDrop.type === "kl") {
       sorted.sort((a, b) => a.die.value - b.die.value);
-      const keepIndices = new Set(sorted.slice(0, parsed.keepDrop.count).map(x => x.idx));
+      const keepIndices = new Set(
+        sorted.slice(0, parsed.keepDrop.count).map((x) => x.idx),
+      );
       kept = dice.filter((_, i) => keepIndices.has(i));
       dropped = dice.filter((_, i) => !keepIndices.has(i));
-    } else if (parsed.keepDrop.type === 'dh') {
+    } else if (parsed.keepDrop.type === "dh") {
       sorted.sort((a, b) => b.die.value - a.die.value);
-      const dropIndices = new Set(sorted.slice(0, parsed.keepDrop.count).map(x => x.idx));
+      const dropIndices = new Set(
+        sorted.slice(0, parsed.keepDrop.count).map((x) => x.idx),
+      );
       kept = dice.filter((_, i) => !dropIndices.has(i));
       dropped = dice.filter((_, i) => dropIndices.has(i));
-    } else if (parsed.keepDrop.type === 'dl') {
+    } else if (parsed.keepDrop.type === "dl") {
       sorted.sort((a, b) => a.die.value - b.die.value);
-      const dropIndices = new Set(sorted.slice(0, parsed.keepDrop.count).map(x => x.idx));
+      const dropIndices = new Set(
+        sorted.slice(0, parsed.keepDrop.count).map((x) => x.idx),
+      );
       kept = dice.filter((_, i) => !dropIndices.has(i));
       dropped = dice.filter((_, i) => dropIndices.has(i));
     }
   }
 
-  dropped.forEach(d => { d.dropped = true; });
+  dropped.forEach((d) => {
+    d.dropped = true;
+  });
 
   // Calculate total
   let total = kept.reduce((sum, d) => sum + d.value, 0);
-  total += kept.reduce((sum, d) => sum + d.explosions.reduce((s, v) => s + v, 0), 0);
+  total += kept.reduce(
+    (sum, d) => sum + d.explosions.reduce((s, v) => s + v, 0),
+    0,
+  );
   total += parsed.modifier;
 
   return {
@@ -230,30 +260,56 @@ export function rollDice(parsed: Parsed): RollResult {
     dropped,
     modifier: parsed.modifier,
     total,
-    notation: '', // filled by caller
+    notation: "", // filled by caller
     advantageRolls: null,
   };
 }
 
 /** Roll with advantage or disadvantage (2dX keep highest/lowest) */
-export function rollAdvantage(sides: number, modifier: number, advantage: boolean): RollResult {
+export function rollAdvantage(
+  sides: number,
+  modifier: number,
+  advantage: boolean,
+): RollResult {
   const r1 = Math.floor(Math.random() * sides) + 1;
   const r2 = Math.floor(Math.random() * sides) + 1;
   const keptVal = advantage ? Math.max(r1, r2) : Math.min(r1, r2);
 
   return {
-    dice: [{ value: keptVal, original: keptVal, exploded: false, explosions: [], rerolledFrom: null, dropped: false }],
-    kept: [{ value: keptVal, original: keptVal, exploded: false, explosions: [], rerolledFrom: null, dropped: false }],
+    dice: [
+      {
+        value: keptVal,
+        original: keptVal,
+        exploded: false,
+        explosions: [],
+        rerolledFrom: null,
+        dropped: false,
+      },
+    ],
+    kept: [
+      {
+        value: keptVal,
+        original: keptVal,
+        exploded: false,
+        explosions: [],
+        rerolledFrom: null,
+        dropped: false,
+      },
+    ],
     dropped: [],
     modifier,
     total: keptVal + modifier,
-    notation: '',
+    notation: "",
     advantageRolls: [r1, r2],
   };
 }
 
 /** Build notation string from parsed object (basic only, for simple sync) */
-export function buildNotation(count: number, sides: number, modifier: number): string {
+export function buildNotation(
+  count: number,
+  sides: number,
+  modifier: number,
+): string {
   let s = `${count}d${sides}`;
   if (modifier > 0) s += `+${modifier}`;
   else if (modifier < 0) s += modifier;
@@ -263,5 +319,5 @@ export function buildNotation(count: number, sides: number, modifier: number): s
 /** Check if notation contains advanced features beyond basic XdY±Z */
 export function isAdvancedNotation(raw: string): boolean {
   const s = normalize(raw);
-  return /(kh|kl|dh|dl|!|[<>]?r\d)/.test(s);
+  return /(kh|kl|dh|dl|!|ro?[<>]?\d)/.test(s);
 }

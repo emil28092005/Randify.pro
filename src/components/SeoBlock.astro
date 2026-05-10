@@ -1,6 +1,6 @@
 ---
-import { useT } from '../i18n/translations';
-import type { Lang } from '../i18n/translations';
+import { useT } from "../i18n/translations";
+import type { Lang } from "../i18n/translations";
 
 interface Props {
   howTo: string[];
@@ -8,19 +8,29 @@ interface Props {
   lang?: Lang;
 }
 
-const { howTo, whenTo, lang = 'en' } = Astro.props;
+const { howTo, whenTo, lang = "en" } = Astro.props;
 const T = useT(lang);
 ---
 
-<section class="mt-12 border-t border-zinc-800/60 pt-8 text-sm text-zinc-500 space-y-4">
+<section
+  class="mt-12 border-t border-zinc-800/60 pt-8 text-sm text-zinc-500 space-y-4"
+>
   <div>
-    <h2 class="text-xs font-semibold uppercase tracking-widest text-zinc-600 mb-2">{T.howToUse}</h2>
+    <h2
+      class="text-xs font-semibold uppercase tracking-widest text-zinc-600 mb-2"
+    >
+      {T.howToUse}
+    </h2>
     <ol class="space-y-1 list-decimal list-inside">
       {howTo.map((step) => <li>{step}</li>)}
     </ol>
   </div>
   <div>
-    <h2 class="text-xs font-semibold uppercase tracking-widest text-zinc-600 mb-2">{T.whenToUse}</h2>
+    <h2
+      class="text-xs font-semibold uppercase tracking-widest text-zinc-600 mb-2"
+    >
+      {T.whenToUse}
+    </h2>
     <ul class="space-y-1 list-disc list-inside">
       {whenTo.map((item) => <li>{item}</li>)}
     </ul>

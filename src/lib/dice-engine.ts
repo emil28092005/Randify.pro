@@ -89,7 +89,11 @@ export function parseDiceNotation(raw: string): Parsed | null {
   }
 
   // Exploding: ! or !>N or !p or !p>N
-  let explode: Explode = { active: false, threshold: null, penetrating: false };
+  const explode: Explode = {
+    active: false,
+    threshold: null,
+    penetrating: false,
+  };
   const expMatch = remaining.match(/^(!p|!)(>?)(\d*)/);
   if (expMatch) {
     explode.active = true;
@@ -104,7 +108,7 @@ export function parseDiceNotation(raw: string): Parsed | null {
   }
 
   // Reroll: rN, roN, r<N, ro<N
-  let reroll: Reroll = {
+  const reroll: Reroll = {
     active: false,
     values: new Set(),
     once: false,
@@ -158,7 +162,7 @@ function rollDie(sides: number, explode: Explode, reroll: Reroll): DieResult {
   let value = Math.floor(Math.random() * sides) + 1;
   const original = value;
   let rerolledFrom: number | null = null;
-  let explosions: number[] = [];
+  const explosions: number[] = [];
   let exploded = false;
 
   // Handle reroll

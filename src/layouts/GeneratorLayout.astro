@@ -1,19 +1,19 @@
 ---
-import BaseLayout from './BaseLayout.astro';
-import AdBanner from '../components/AdBanner.astro';
-import SeoBlock from '../components/SeoBlock.astro';
-import { useT } from '../i18n/translations';
-import type { Lang } from '../i18n/translations';
-import type { Generator } from '../data/generators';
+import BaseLayout from "./BaseLayout.astro";
+import AdBanner from "../components/AdBanner.astro";
+import SeoBlock from "../components/SeoBlock.astro";
+import { useT } from "../i18n/translations";
+import type { Lang } from "../i18n/translations";
+import type { Generator } from "../data/generators";
 
 interface Props {
   generator: Generator;
 }
 
 const { generator } = Astro.props;
-const lang = (Astro.currentLocale as Lang) || 'en';
+const lang = (Astro.currentLocale as Lang) || "en";
 const T = useT(lang);
-const isRu = lang === 'ru';
+const isRu = lang === "ru";
 ---
 
 <BaseLayout
@@ -23,7 +23,7 @@ const isRu = lang === 'ru';
   <div class="max-w-2xl mx-auto px-4 py-12 sm:py-20">
     <nav aria-label="Breadcrumb" class="mb-10">
       <a
-        href={isRu ? '/ru/' : '/'}
+        href={isRu ? "/ru/" : "/"}
         class="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] rounded"
         aria-label={T.backToAll}
       >
@@ -39,7 +39,7 @@ const isRu = lang === 'ru';
           stroke-linejoin="round"
           aria-hidden="true"
         >
-          <path d="m15 18-6-6 6-6"/>
+          <path d="m15 18-6-6 6-6"></path>
         </svg>
         {T.backToAll}
       </a>
@@ -49,14 +49,18 @@ const isRu = lang === 'ru';
       <div class="flex items-center gap-2 mb-4">
         <span
           class="inline-block w-2.5 h-2.5 rounded-full bg-[#534AB7]"
-          aria-hidden="true"
-        ></span>
-        <span class="text-sm font-medium text-zinc-400 uppercase tracking-widest">randify</span>
+          aria-hidden="true"></span>
+        <span
+          class="text-sm font-medium text-zinc-400 uppercase tracking-widest"
+          >randify</span
+        >
       </div>
       <h1 class="text-3xl sm:text-4xl font-bold text-zinc-100">
         {isRu ? generator.ruPageTitle : generator.pageTitle}
       </h1>
-      <p class="mt-2 text-base text-zinc-400">{isRu ? generator.ruDescription : generator.description}</p>
+      <p class="mt-2 text-base text-zinc-400">
+        {isRu ? generator.ruDescription : generator.description}
+      </p>
     </header>
 
     <main>

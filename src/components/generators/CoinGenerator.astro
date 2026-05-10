@@ -5,196 +5,181 @@ const T = useT(isRu ? "ru" : "en");
 ---
 
 <div id="coin-generator" class="mt-8">
-    <div>
-        <div class="flex items-center justify-between mb-1">
-            <label for="coin-count" class="text-sm font-medium text-zinc-400"
-                >{T.numberOfCoins}</label
-            >
-            <span
-                id="coin-count-val"
-                class="text-sm font-semibold tabular-nums text-zinc-100">1</span
-            >
-        </div>
-        <input
-            id="coin-count"
-            type="range"
-            min="1"
-            max="20"
-            value="1"
-            class="w-full accent-[#534AB7] cursor-pointer"
-            aria-label={T.numberOfCoins}
-        />
-        <div
-            class="flex justify-between text-xs text-zinc-600 mt-1 select-none"
-        >
-            <span>1</span><span>20</span>
-        </div>
+  <div>
+    <div class="flex items-center justify-between mb-1">
+      <label for="coin-count" class="text-sm font-medium text-zinc-400"
+        >{T.numberOfCoins}</label
+      >
+      <span
+        id="coin-count-val"
+        class="text-sm font-semibold tabular-nums text-zinc-100">1</span
+      >
+    </div>
+    <input
+      id="coin-count"
+      type="range"
+      min="1"
+      max="20"
+      value="1"
+      class="w-full accent-[#534AB7] cursor-pointer"
+      aria-label={T.numberOfCoins}
+    />
+    <div class="flex justify-between text-xs text-zinc-600 mt-1 select-none">
+      <span>1</span><span>20</span>
+    </div>
+  </div>
+
+  <div class="my-10 min-h-28 flex flex-col items-center justify-center gap-4">
+    <div
+      id="coin-coins"
+      class="flex flex-wrap justify-center gap-2"
+      aria-live="polite"
+      aria-label="Coin results"
+    >
     </div>
 
-    <div class="my-10 min-h-28 flex flex-col items-center justify-center gap-4">
-        <div
-            id="coin-coins"
-            class="flex flex-wrap justify-center gap-2"
-            aria-live="polite"
-            aria-label="Coin results"
-        >
-        </div>
-
-        <div
-            id="coin-summary"
-            class="hidden text-sm text-zinc-500 tabular-nums"
-        >
-        </div>
-
-        <button
-            id="coin-copy-btn"
-            type="button"
-            aria-label="Copy results to clipboard"
-            class="invisible inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] rounded"
-        >
-            <span id="coin-copy-label">{T.copy}</span>
-            <span id="coin-copy-icon" aria-hidden="true">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"
-                    ></rect>
-                    <path
-                        d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
-                    ></path>
-                </svg>
-            </span>
-            <span
-                id="coin-check-icon"
-                class="hidden text-[#534AB7]"
-                aria-hidden="true"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <path d="M20 6 9 17l-5-5"></path>
-                </svg>
-            </span>
-        </button>
+    <div id="coin-summary" class="hidden text-sm text-zinc-500 tabular-nums">
     </div>
 
-    <div class="flex justify-center">
-        <button
-            id="coin-btn"
-            type="button"
-            class="w-full sm:w-auto px-8 py-3 bg-[#534AB7] text-white font-semibold rounded-lg hover:bg-[#4740a0] active:bg-[#3d3990] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
+    <button
+      id="coin-copy-btn"
+      type="button"
+      aria-label="Copy results to clipboard"
+      class="invisible inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] rounded"
+    >
+      <span id="coin-copy-label">{T.copy}</span>
+      <span id="coin-copy-icon" aria-hidden="true">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
         >
-            {T.flip}
-        </button>
-    </div>
+          <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+          <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+          ></path>
+        </svg>
+      </span>
+      <span
+        id="coin-check-icon"
+        class="hidden text-[#534AB7]"
+        aria-hidden="true"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20 6 9 17l-5-5"></path>
+        </svg>
+      </span>
+    </button>
+  </div>
+
+  <div class="flex justify-center">
+    <button
+      id="coin-btn"
+      type="button"
+      class="w-full sm:w-auto px-8 py-3 bg-[#534AB7] text-white font-semibold rounded-lg hover:bg-[#4740a0] active:bg-[#3d3990] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
+    >
+      {T.flip}
+    </button>
+  </div>
 </div>
 
 <script>
-    import { CopyFeedback } from "@/lib/client/clipboard";
+  import { CopyFeedback } from "@/lib/client/clipboard";
 
-    const isRu = document.documentElement.lang === "ru";
-    const COPY_LABEL = isRu ? "Копировать" : "Copy";
-    const COPIED_LABEL = isRu ? "Скопировано" : "Copied";
-    const HEADS_LABEL = isRu ? "О" : "H";
-    const TAILS_LABEL = isRu ? "Р" : "T";
-    const HEADS_WORD = isRu ? "орёл" : "Heads";
-    const TAILS_WORD = isRu ? "решка" : "Tails";
-    const HEADS_SUMMARY = isRu ? "орёл" : "heads";
-    const TAILS_SUMMARY = isRu ? "решка" : "tails";
+  const isRu = document.documentElement.lang === "ru";
+  const COPY_LABEL = isRu ? "Копировать" : "Copy";
+  const COPIED_LABEL = isRu ? "Скопировано" : "Copied";
+  const HEADS_LABEL = isRu ? "О" : "H";
+  const TAILS_LABEL = isRu ? "Р" : "T";
+  const HEADS_WORD = isRu ? "орёл" : "Heads";
+  const TAILS_WORD = isRu ? "решка" : "Tails";
+  const HEADS_SUMMARY = isRu ? "орёл" : "heads";
+  const TAILS_SUMMARY = isRu ? "решка" : "tails";
 
-    const countInput = document.getElementById(
-        "coin-count",
-    ) as HTMLInputElement;
-    const countVal = document.getElementById(
-        "coin-count-val",
-    ) as HTMLSpanElement;
-    const btn = document.getElementById("coin-btn") as HTMLButtonElement;
-    const copyBtn = document.getElementById(
-        "coin-copy-btn",
-    ) as HTMLButtonElement;
-    const coinsEl = document.getElementById("coin-coins") as HTMLDivElement;
-    const summaryEl = document.getElementById("coin-summary") as HTMLDivElement;
-    const copyLabel = document.getElementById(
-        "coin-copy-label",
-    ) as HTMLSpanElement;
-    const copyIcon = document.getElementById(
-        "coin-copy-icon",
-    ) as HTMLSpanElement;
-    const checkIcon = document.getElementById(
-        "coin-check-icon",
-    ) as HTMLSpanElement;
+  const countInput = document.getElementById("coin-count") as HTMLInputElement;
+  const countVal = document.getElementById("coin-count-val") as HTMLSpanElement;
+  const btn = document.getElementById("coin-btn") as HTMLButtonElement;
+  const copyBtn = document.getElementById("coin-copy-btn") as HTMLButtonElement;
+  const coinsEl = document.getElementById("coin-coins") as HTMLDivElement;
+  const summaryEl = document.getElementById("coin-summary") as HTMLDivElement;
+  const copyLabel = document.getElementById(
+    "coin-copy-label",
+  ) as HTMLSpanElement;
+  const copyIcon = document.getElementById("coin-copy-icon") as HTMLSpanElement;
+  const checkIcon = document.getElementById(
+    "coin-check-icon",
+  ) as HTMLSpanElement;
 
-    let lastResults: boolean[] = [];
+  let lastResults: boolean[] = [];
 
-    const clipboard = new CopyFeedback(copyIcon, checkIcon);
+  const clipboard = new CopyFeedback(copyIcon, checkIcon);
 
-    countInput.addEventListener("input", () => {
-        countVal.textContent = countInput.value;
+  countInput.addEventListener("input", () => {
+    countVal.textContent = countInput.value;
+  });
+
+  function flip() {
+    const count = parseInt(countInput.value, 10);
+    lastResults = Array.from({ length: count }, () => Math.random() < 0.5);
+
+    const heads = lastResults.filter(Boolean).length;
+    const tails = count - heads;
+
+    coinsEl.innerHTML = "";
+    lastResults.forEach((isHeads) => {
+      const coin = document.createElement("div");
+      coin.setAttribute("aria-label", isHeads ? HEADS_WORD : TAILS_WORD);
+      coin.className = [
+        "flex flex-col items-center justify-center w-14 h-14 rounded-full border-2 font-bold text-xs select-none",
+        isHeads
+          ? "border-[#534AB7] bg-[#534AB7]/10 text-[#534AB7]"
+          : "border-zinc-600 bg-zinc-800 text-zinc-400",
+      ].join(" ");
+      coin.textContent = isHeads ? HEADS_LABEL : TAILS_LABEL;
+      coinsEl.appendChild(coin);
     });
 
-    function flip() {
-        const count = parseInt(countInput.value, 10);
-        lastResults = Array.from({ length: count }, () => Math.random() < 0.5);
-
-        const heads = lastResults.filter(Boolean).length;
-        const tails = count - heads;
-
-        coinsEl.innerHTML = "";
-        lastResults.forEach((isHeads) => {
-            const coin = document.createElement("div");
-            coin.setAttribute("aria-label", isHeads ? HEADS_WORD : TAILS_WORD);
-            coin.className = [
-                "flex flex-col items-center justify-center w-14 h-14 rounded-full border-2 font-bold text-xs select-none",
-                isHeads
-                    ? "border-[#534AB7] bg-[#534AB7]/10 text-[#534AB7]"
-                    : "border-zinc-600 bg-zinc-800 text-zinc-400",
-            ].join(" ");
-            coin.textContent = isHeads ? HEADS_LABEL : TAILS_LABEL;
-            coinsEl.appendChild(coin);
-        });
-
-        if (count > 1) {
-            summaryEl.textContent = `${heads} ${HEADS_SUMMARY} · ${tails} ${TAILS_SUMMARY}`;
-            summaryEl.classList.remove("hidden");
-        } else {
-            summaryEl.classList.add("hidden");
-        }
-
-        copyBtn.classList.remove("invisible");
-        copyLabel.textContent = COPY_LABEL;
+    if (count > 1) {
+      summaryEl.textContent = `${heads} ${HEADS_SUMMARY} · ${tails} ${TAILS_SUMMARY}`;
+      summaryEl.classList.remove("hidden");
+    } else {
+      summaryEl.classList.add("hidden");
     }
 
-    async function copyResults() {
-        if (!lastResults.length) return;
-        const text = lastResults
-            .map((h) => (h ? HEADS_WORD : TAILS_WORD))
-            .join(", ");
-        await navigator.clipboard.writeText(text);
+    copyBtn.classList.remove("invisible");
+    copyLabel.textContent = COPY_LABEL;
+  }
 
-        clipboard.showCopied();
-        copyLabel.textContent = COPIED_LABEL;
+  async function copyResults() {
+    if (!lastResults.length) return;
+    const text = lastResults
+      .map((h) => (h ? HEADS_WORD : TAILS_WORD))
+      .join(", ");
+    await navigator.clipboard.writeText(text);
 
-        setTimeout(() => {
-            copyLabel.textContent = COPY_LABEL;
-        }, 1500);
-    }
+    clipboard.showCopied();
+    copyLabel.textContent = COPIED_LABEL;
 
-    btn.addEventListener("click", flip);
-    copyBtn.addEventListener("click", copyResults);
+    setTimeout(() => {
+      copyLabel.textContent = COPY_LABEL;
+    }, 1500);
+  }
+
+  btn.addEventListener("click", flip);
+  copyBtn.addEventListener("click", copyResults);
 </script>

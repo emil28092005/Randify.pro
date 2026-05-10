@@ -1,39 +1,43 @@
 ---
 const currentPath = Astro.url.pathname;
-const isRu = currentPath.startsWith('/ru');
+const isRu = currentPath.startsWith("/ru");
 const alternatePath = isRu
-  ? (currentPath.replace(/^\/ru/, '') || '/')
-  : ('/ru' + currentPath);
+  ? currentPath.replace(/^\/ru/, "") || "/"
+  : "/ru" + currentPath;
 ---
 
-<div class="fixed top-3 right-3 z-50 flex items-center gap-1 bg-zinc-900/80 border border-zinc-800 rounded-lg px-1 py-1 backdrop-blur-sm text-xs font-semibold">
+<div
+  class="fixed top-3 right-3 z-50 flex items-center gap-1 bg-zinc-900/80 border border-zinc-800 rounded-lg px-1 py-1 backdrop-blur-sm text-xs font-semibold"
+>
   <a
-    href={isRu ? alternatePath : '#'}
+    href={isRu ? alternatePath : "#"}
     id="lang-en"
-    class={`px-2 py-1 rounded-md transition-colors ${isRu ? 'text-zinc-400 hover:text-zinc-200' : 'bg-[#534AB7] text-white'}`}
-    aria-current={isRu ? undefined : 'true'}
+    class={`px-2 py-1 rounded-md transition-colors ${isRu ? "text-zinc-400 hover:text-zinc-200" : "bg-[#534AB7] text-white"}`}
+    aria-current={isRu ? undefined : "true"}
     data-target-lang="en"
-    data-alternate={isRu ? alternatePath : ''}
-  >EN</a>
+    data-alternate={isRu ? alternatePath : ""}>EN</a
+  >
   <a
-    href={isRu ? '#' : alternatePath}
+    href={isRu ? "#" : alternatePath}
     id="lang-ru"
-    class={`px-2 py-1 rounded-md transition-colors ${isRu ? 'bg-[#534AB7] text-white' : 'text-zinc-400 hover:text-zinc-200'}`}
-    aria-current={isRu ? 'true' : undefined}
+    class={`px-2 py-1 rounded-md transition-colors ${isRu ? "bg-[#534AB7] text-white" : "text-zinc-400 hover:text-zinc-200"}`}
+    aria-current={isRu ? "true" : undefined}
     data-target-lang="ru"
-    data-alternate={isRu ? '' : alternatePath}
-  >RU</a>
+    data-alternate={isRu ? "" : alternatePath}>RU</a
+  >
 </div>
 
 <script>
-  document.querySelectorAll<HTMLAnchorElement>('#lang-en, #lang-ru').forEach((el) => {
-    el.addEventListener('click', (e) => {
-      const targetLang = el.dataset.targetLang!;
-      const alternate = el.dataset.alternate!;
-      if (!alternate || alternate === '#') return;
-      e.preventDefault();
-      localStorage.setItem('lang-pref', targetLang);
-      location.href = alternate;
+  document
+    .querySelectorAll<HTMLAnchorElement>("#lang-en, #lang-ru")
+    .forEach((el) => {
+      el.addEventListener("click", (e) => {
+        const targetLang = el.dataset.targetLang!;
+        const alternate = el.dataset.alternate!;
+        if (!alternate || alternate === "#") return;
+        e.preventDefault();
+        localStorage.setItem("lang-pref", targetLang);
+        location.href = alternate;
+      });
     });
-  });
 </script>

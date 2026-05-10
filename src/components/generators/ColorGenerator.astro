@@ -1,11 +1,10 @@
 ---
-import { useT } from '../../i18n/translations';
-const isRu = Astro.url.pathname.startsWith('/ru');
-const T = useT(isRu ? 'ru' : 'en');
+import { useT } from "../../i18n/translations";
+const isRu = Astro.url.pathname.startsWith("/ru");
+const T = useT(isRu ? "ru" : "en");
 ---
 
 <div id="color-generator" class="mt-8">
-
   <!-- Swatch -->
   <div class="flex justify-center mb-8">
     <div
@@ -13,7 +12,8 @@ const T = useT(isRu ? 'ru' : 'en');
       class="w-44 h-44 rounded-2xl border border-zinc-800"
       style="background-color: #1f1f22; transition: background-color 0.35s cubic-bezier(0.4,0,0.2,1);"
       aria-hidden="true"
-    ></div>
+    >
+    </div>
   </div>
 
   <!-- Format rows -->
@@ -23,35 +23,60 @@ const T = useT(isRu ? 'ru' : 'en');
     style="transition: opacity 0.25s ease;"
     aria-live="polite"
   >
-    {[
-      { id: 'cg-hex', label: 'HEX' },
-      { id: 'cg-rgb', label: 'RGB' },
-      { id: 'cg-hsl', label: 'HSL' },
-    ].map(({ id, label }) => (
-      <div class="flex items-center gap-3 px-4 py-3 bg-zinc-900/40">
-        <span class="w-10 text-xs font-semibold uppercase tracking-widest text-zinc-500 shrink-0">
-          {label}
-        </span>
-        <span
-          id={id}
-          class="flex-1 font-mono text-sm text-zinc-100 tabular-nums select-all"
-        ></span>
-        <button
-          id={`${id}-copy`}
-          type="button"
-          aria-label={`Copy ${label} value`}
-          class="group shrink-0 p-1 rounded text-zinc-600 hover:text-zinc-300 focus:outline-none focus-visible:ring-1 focus-visible:ring-[#534AB7] transition-colors cursor-pointer"
-        >
-          <svg id={`${id}-copy-icon`} xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
-            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
-          </svg>
-          <svg id={`${id}-check-icon`} class="hidden text-[#534AB7]" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 6 9 17l-5-5"/>
-          </svg>
-        </button>
-      </div>
-    ))}
+    {
+      [
+        { id: "cg-hex", label: "HEX" },
+        { id: "cg-rgb", label: "RGB" },
+        { id: "cg-hsl", label: "HSL" },
+      ].map(({ id, label }) => (
+        <div class="flex items-center gap-3 px-4 py-3 bg-zinc-900/40">
+          <span class="w-10 text-xs font-semibold uppercase tracking-widest text-zinc-500 shrink-0">
+            {label}
+          </span>
+          <span
+            id={id}
+            class="flex-1 font-mono text-sm text-zinc-100 tabular-nums select-all"
+          />
+          <button
+            id={`${id}-copy`}
+            type="button"
+            aria-label={`Copy ${label} value`}
+            class="group shrink-0 p-1 rounded text-zinc-600 hover:text-zinc-300 focus:outline-none focus-visible:ring-1 focus-visible:ring-[#534AB7] transition-colors cursor-pointer"
+          >
+            <svg
+              id={`${id}-copy-icon`}
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+            </svg>
+            <svg
+              id={`${id}-check-icon`}
+              class="hidden text-[#534AB7]"
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+          </button>
+        </div>
+      ))
+    }
   </div>
 
   <!-- Generate button -->
@@ -67,21 +92,24 @@ const T = useT(isRu ? 'ru' : 'en');
 </div>
 
 <script>
-  const swatch   = document.getElementById('cg-swatch') as HTMLDivElement;
-  const valuesEl = document.getElementById('cg-values') as HTMLDivElement;
-  const hexEl    = document.getElementById('cg-hex') as HTMLSpanElement;
-  const rgbEl    = document.getElementById('cg-rgb') as HTMLSpanElement;
-  const hslEl    = document.getElementById('cg-hsl') as HTMLSpanElement;
-  const btn      = document.getElementById('cg-btn') as HTMLButtonElement;
+  const swatch = document.getElementById("cg-swatch") as HTMLDivElement;
+  const valuesEl = document.getElementById("cg-values") as HTMLDivElement;
+  const hexEl = document.getElementById("cg-hex") as HTMLSpanElement;
+  const rgbEl = document.getElementById("cg-rgb") as HTMLSpanElement;
+  const hslEl = document.getElementById("cg-hsl") as HTMLSpanElement;
+  const btn = document.getElementById("cg-btn") as HTMLButtonElement;
 
   function rgbToHsl(r: number, g: number, b: number): [number, number, number] {
-    const rn = r / 255, gn = g / 255, bn = b / 255;
-    const max = Math.max(rn, gn, bn), min = Math.min(rn, gn, bn);
+    const rn = r / 255,
+      gn = g / 255,
+      bn = b / 255;
+    const max = Math.max(rn, gn, bn),
+      min = Math.min(rn, gn, bn);
     const l = (max + min) / 2;
     if (max === min) return [0, 0, Math.round(l * 100)];
     const d = max - min;
     const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    let h = 0;
+    let h;
     if (max === rn) h = ((gn - bn) / d + (gn < bn ? 6 : 0)) / 6;
     else if (max === gn) h = ((bn - rn) / d + 2) / 6;
     else h = ((rn - gn) / d + 4) / 6;
@@ -89,11 +117,15 @@ const T = useT(isRu ? 'ru' : 'en');
   }
 
   function toHex(n: number) {
-    return n.toString(16).padStart(2, '0');
+    return n.toString(16).padStart(2, "0");
   }
 
-  function makeCopyHandler(el: HTMLSpanElement, copyIconId: string, checkIconId: string) {
-    const copyIcon  = document.getElementById(copyIconId)!;
+  function makeCopyHandler(
+    el: HTMLSpanElement,
+    copyIconId: string,
+    checkIconId: string,
+  ) {
+    const copyIcon = document.getElementById(copyIconId)!;
     const checkIcon = document.getElementById(checkIconId)!;
     let timer: ReturnType<typeof setTimeout> | null = null;
 
@@ -101,22 +133,34 @@ const T = useT(isRu ? 'ru' : 'en');
       const value = el.textContent?.trim();
       if (!value) return;
       await navigator.clipboard.writeText(value);
-      copyIcon.classList.add('hidden');
-      checkIcon.classList.remove('hidden');
+      copyIcon.classList.add("hidden");
+      checkIcon.classList.remove("hidden");
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => {
-        checkIcon.classList.add('hidden');
-        copyIcon.classList.remove('hidden');
+        checkIcon.classList.add("hidden");
+        copyIcon.classList.remove("hidden");
       }, 1500);
     };
   }
 
-  document.getElementById('cg-hex-copy')!
-    .addEventListener('click', makeCopyHandler(hexEl, 'cg-hex-copy-icon', 'cg-hex-check-icon'));
-  document.getElementById('cg-rgb-copy')!
-    .addEventListener('click', makeCopyHandler(rgbEl, 'cg-rgb-copy-icon', 'cg-rgb-check-icon'));
-  document.getElementById('cg-hsl-copy')!
-    .addEventListener('click', makeCopyHandler(hslEl, 'cg-hsl-copy-icon', 'cg-hsl-check-icon'));
+  document
+    .getElementById("cg-hex-copy")!
+    .addEventListener(
+      "click",
+      makeCopyHandler(hexEl, "cg-hex-copy-icon", "cg-hex-check-icon"),
+    );
+  document
+    .getElementById("cg-rgb-copy")!
+    .addEventListener(
+      "click",
+      makeCopyHandler(rgbEl, "cg-rgb-copy-icon", "cg-rgb-check-icon"),
+    );
+  document
+    .getElementById("cg-hsl-copy")!
+    .addEventListener(
+      "click",
+      makeCopyHandler(hslEl, "cg-hsl-copy-icon", "cg-hsl-check-icon"),
+    );
 
   function generate() {
     const r = Math.floor(Math.random() * 256);
@@ -130,8 +174,8 @@ const T = useT(isRu ? 'ru' : 'en');
     hexEl.textContent = hex;
     rgbEl.textContent = `rgb(${r}, ${g}, ${b})`;
     hslEl.textContent = `hsl(${h}, ${s}%, ${l}%)`;
-    valuesEl.style.opacity = '1';
+    valuesEl.style.opacity = "1";
   }
 
-  btn.addEventListener('click', generate);
+  btn.addEventListener("click", generate);
 </script>

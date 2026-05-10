@@ -2,11 +2,11 @@ export function createErrorDisplay(errorEl: HTMLElement) {
   return {
     show(msg: string) {
       errorEl.textContent = msg;
-      errorEl.classList.remove('hidden');
+      errorEl.classList.remove("hidden");
     },
     clear() {
-      errorEl.textContent = '';
-      errorEl.classList.add('hidden');
+      errorEl.textContent = "";
+      errorEl.classList.add("hidden");
     },
   };
 }

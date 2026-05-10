@@ -6,8 +6,8 @@ import { useT } from "../i18n/translations";
 import type { Lang } from "../i18n/translations";
 
 interface Props {
-    title?: string;
-    description?: string;
+  title?: string;
+  description?: string;
 }
 
 const lang = (Astro.currentLocale as Lang) || "en";
@@ -22,80 +22,77 @@ const ruUrl = `https://randify.pro${getRelativeLocaleUrl("ru", pathWithoutLocale
 
 <!doctype html>
 <html lang={lang}>
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content={description} />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap"
-            rel="stylesheet"
-        />
-        <link rel="alternate" hreflang="en" href={enUrl} />
-        <link rel="alternate" hreflang="ru" href={ruUrl} />
-        <meta name="verification" content="er9ndnv9ih7agmh8" />
-        <meta name="theme-color" content="#534AB7" />
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <title>{title}</title>
-        <Analytics />
-        <script>
-            if ("serviceWorker" in navigator) {
-                navigator.serviceWorker.register("/sw.js");
-            }
-        </script>
-    </head>
-    <body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans antialiased">
-        <LanguageSwitcher />
-        <slot />
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="ru" href={ruUrl} />
+    <meta name="verification" content="er9ndnv9ih7agmh8" />
+    <meta name="theme-color" content="#534AB7" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <title>{title}</title>
+    <Analytics />
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/sw.js");
+      }
+    </script>
+  </head>
+  <body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans antialiased">
+    <LanguageSwitcher />
+    <slot />
+  </body>
 </html>
 
 <!-- Auto-detect language on first visit -->
 <script>
-    if (!localStorage.getItem("lang-pref")) {
-        const browserLang = (navigator.language || "").toLowerCase();
-        if (
-            browserLang.startsWith("ru") &&
-            !location.pathname.startsWith("/ru")
-        ) {
-            location.replace("/ru" + location.pathname);
-        }
+  if (!localStorage.getItem("lang-pref")) {
+    const browserLang = (navigator.language || "").toLowerCase();
+    if (browserLang.startsWith("ru") && !location.pathname.startsWith("/ru")) {
+      location.replace("/ru" + location.pathname);
     }
+  }
 </script>
 
 <style is:global>
-    @import "tailwindcss";
+  @import "tailwindcss";
 
-    @theme {
-        --font-sans: "Space Grotesk", sans-serif;
-    }
+  @theme {
+    --font-sans: "Space Grotesk", sans-serif;
+  }
 
-    :root {
-        --accent: #534ab7;
-    }
+  :root {
+    --accent: #534ab7;
+  }
 
-    * {
-        box-sizing: border-box;
-    }
+  * {
+    box-sizing: border-box;
+  }
 
-    body {
-        background-image:
-            radial-gradient(
-                ellipse 90% 45% at 50% -5%,
-                rgba(83, 74, 183, 0.2) 0%,
-                transparent 65%
-            ),
-            radial-gradient(
-                ellipse 90% 45% at 50% 105%,
-                rgba(83, 74, 183, 0.13) 0%,
-                transparent 65%
-            );
-    }
+  body {
+    background-image:
+      radial-gradient(
+        ellipse 90% 45% at 50% -5%,
+        rgba(83, 74, 183, 0.2) 0%,
+        transparent 65%
+      ),
+      radial-gradient(
+        ellipse 90% 45% at 50% 105%,
+        rgba(83, 74, 183, 0.13) 0%,
+        transparent 65%
+      );
+  }
 
-    input[type="number"] {
-        color-scheme: dark;
-    }
+  input[type="number"] {
+    color-scheme: dark;
+  }
 </style>

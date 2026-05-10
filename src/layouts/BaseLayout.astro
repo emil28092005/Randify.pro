@@ -36,8 +36,16 @@ const ruUrl = `https://randify.pro${getRelativeLocaleUrl("ru", pathWithoutLocale
         <link rel="alternate" hreflang="en" href={enUrl} />
         <link rel="alternate" hreflang="ru" href={ruUrl} />
         <meta name="verification" content="er9ndnv9ih7agmh8" />
+        <meta name="theme-color" content="#534AB7" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <title>{title}</title>
         <Analytics />
+        <script>
+            if ("serviceWorker" in navigator) {
+                navigator.serviceWorker.register("/sw.js");
+            }
+        </script>
     </head>
     <body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans antialiased">
         <LanguageSwitcher />

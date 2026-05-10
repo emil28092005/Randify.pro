@@ -27,12 +27,13 @@ const presets = [
 ---
 
 <div id="dice-generator" class="mt-8">
+  <div class="rounded-xl bg-zinc-900/50 border border-zinc-800/60 p-5">
   <!-- Presets toggle -->
   <div class="mb-2">
     <button
       id="dg-presets-toggle"
       type="button"
-      class="inline-flex items-center gap-1 text-sm font-medium text-zinc-500 hover:text-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] rounded transition-colors cursor-pointer"
+      class="inline-flex items-center gap-1 text-sm font-medium text-zinc-500 hover:text-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded transition-colors cursor-pointer"
     >
       <span>{presetsLabel}</span>
       <svg
@@ -60,7 +61,7 @@ const presets = [
           presets.map((p) => (
             <button
               type="button"
-              class="dg-preset px-3 py-1.5 rounded-lg border border-zinc-700 text-sm font-medium text-zinc-400 hover:border-[#534AB7] hover:text-[#534AB7] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] transition-colors cursor-pointer"
+              class="dg-preset px-3 py-1.5 rounded-lg border border-zinc-700 text-sm font-medium text-zinc-400 hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors cursor-pointer"
               data-preset={p.notation}
             >
               {p.label}
@@ -79,7 +80,7 @@ const presets = [
       placeholder={notationPlaceholder}
       autocomplete="off"
       spellcheck="false"
-      class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base font-mono focus:outline-none focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] transition-colors"
+      class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base font-mono focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
     />
     <p id="dg-notation-err" class="mt-1 text-xs text-red-500 hidden"></p>
   </div>
@@ -96,7 +97,7 @@ const presets = [
         value="2"
         min="1"
         max="20"
-        class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base focus:outline-none focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] transition-colors"
+        class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
         aria-label={T.numberOfDice}
       />
     </div>
@@ -115,7 +116,7 @@ const presets = [
                 class="sr-only peer"
                 checked={s === "6"}
               />
-              <span class="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-zinc-700 text-sm font-semibold text-zinc-400 peer-checked:border-[#534AB7] peer-checked:text-[#534AB7] peer-checked:bg-[#534AB7]/10 hover:border-zinc-500 transition-colors select-none">
+              <span class="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-zinc-700 text-sm font-semibold text-zinc-400 peer-checked:border-accent peer-checked:text-accent peer-checked:bg-accent/10 hover:border-zinc-500 transition-colors select-none">
                 d{s}
               </span>
             </label>
@@ -151,7 +152,7 @@ const presets = [
               checked={value === "normal"}
             />
             <span
-              class={`inline-flex items-center justify-center px-3 sm:px-4 h-9 text-sm font-medium text-zinc-400 peer-checked:text-[#534AB7] peer-checked:bg-[#534AB7]/10 hover:text-zinc-200 transition-colors select-none whitespace-nowrap${i < 2 ? " border-r border-zinc-700" : ""}`}
+              class={`inline-flex items-center justify-center px-3 sm:px-4 h-9 text-sm font-medium text-zinc-400 peer-checked:text-accent peer-checked:bg-accent/10 hover:text-zinc-200 transition-colors select-none whitespace-nowrap${i < 2 ? " border-r border-zinc-700" : ""}`}
             >
               {label}
             </span>
@@ -170,9 +171,10 @@ const presets = [
     class="mt-3 text-sm text-red-500 hidden"
   >
   </p>
+  </div>
 
   <!-- Results -->
-  <div class="my-10 min-h-28 flex flex-col items-center justify-center gap-3">
+  <div class="my-6 h-52 overflow-hidden flex flex-col items-center justify-center gap-3 rounded-2xl bg-zinc-900/80 border border-zinc-800/80 p-8">
     <div
       id="dg-dice"
       class="flex flex-wrap justify-center gap-2"
@@ -199,7 +201,7 @@ const presets = [
       id="dg-copy-btn"
       type="button"
       aria-label="Copy results to clipboard"
-      class="invisible inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] rounded"
+      class="invisible inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
     >
       <span id="dg-copy-label">{T.copy}</span>
       <span id="dg-copy-icon" aria-hidden="true">
@@ -219,7 +221,7 @@ const presets = [
           ></path>
         </svg>
       </span>
-      <span id="dg-check-icon" class="hidden text-[#534AB7]" aria-hidden="true">
+      <span id="dg-check-icon" class="hidden text-accent" aria-hidden="true">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="14"
@@ -242,7 +244,7 @@ const presets = [
     <button
       id="dg-btn"
       type="button"
-      class="w-full sm:w-auto px-8 py-3 bg-[#534AB7] text-white font-semibold rounded-lg hover:bg-[#4740a0] active:bg-[#3d3990] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
+      class="w-full sm:w-auto px-8 py-3 bg-accent text-white font-semibold rounded-xl shadow-lg shadow-accent/25 hover:bg-accent-hover active:bg-accent-active focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
     >
       {T.roll}
     </button>
@@ -257,7 +259,7 @@ const presets = [
       <button
         id="dg-clear-btn"
         type="button"
-        class="text-xs text-zinc-600 hover:text-zinc-300 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[#534AB7] rounded"
+        class="text-xs text-zinc-600 hover:text-zinc-300 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
       >
         {clearHistory}
       </button>
@@ -563,7 +565,7 @@ const presets = [
     const text = String(v);
     const color =
       v === sides
-        ? "border-[#534AB7] text-[#534AB7] bg-[#534AB7]/10"
+        ? "border-accent text-accent bg-accent/10"
         : v === 1
           ? "border-red-700/50 text-red-400 bg-red-900/10"
           : "border-zinc-700 text-zinc-100 bg-zinc-900";
@@ -576,7 +578,7 @@ const presets = [
   function dieHtml(v, sides) {
     const cls =
       v === sides
-        ? "text-[#534AB7] font-bold"
+        ? "text-accent font-bold"
         : v === 1
           ? "text-red-400 font-bold"
           : "text-zinc-300";
@@ -632,7 +634,7 @@ const presets = [
     }
     let color =
       d.value === sides
-        ? "text-[#534AB7]"
+        ? "text-accent"
         : d.value === 1
           ? "text-red-400"
           : "text-zinc-100";

@@ -36,31 +36,31 @@ const icons: Record<string, string> = {
   isLive ? (
     <a
       href={href}
-      class="group block border border-zinc-800 rounded-xl p-5 hover:border-[#534AB7] transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7]"
+      class="group block h-full border border-zinc-800 rounded-xl p-5 shadow-lg shadow-black/20 hover:border-accent hover:shadow-xl hover:shadow-black/30 hover:-translate-y-0.5 transition-colors transition-shadow transition-transform duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
     >
       <div class="flex items-start justify-between gap-3">
         <div
-          class="text-[#534AB7]"
+          class="inline-flex w-8 h-8 rounded-lg bg-accent/10 items-center justify-center text-accent shrink-0"
           aria-hidden="true"
           set:html={icons[icon] ?? icons["hash"]}
         />
-        <span class="text-xs font-medium text-[#534AB7] bg-[#534AB7]/10 px-2 py-0.5 rounded-full">
+        <span class="text-xs font-medium text-accent bg-accent/10 px-2 py-0.5 rounded-full">
           {T.live}
         </span>
       </div>
-      <h2 class="mt-3 text-base font-semibold text-zinc-100 group-hover:text-[#534AB7] transition-colors duration-150">
+      <h2 class="mt-3 text-base font-semibold text-zinc-100 group-hover:text-accent transition-colors duration-150">
         {title}
       </h2>
       <p class="mt-1 text-sm text-zinc-400 leading-relaxed">{description}</p>
     </a>
   ) : (
     <div
-      class="block border border-zinc-800/50 rounded-xl p-5 opacity-40 cursor-default"
+      class="block h-full border border-zinc-800/50 rounded-xl p-5 shadow-lg shadow-black/10 opacity-40 cursor-default"
       aria-label={`${title} — ${T.comingSoon}`}
     >
       <div class="flex items-start justify-between gap-3">
         <div
-          class="text-zinc-500"
+          class="inline-flex w-8 h-8 rounded-lg bg-zinc-800 items-center justify-center text-zinc-500 shrink-0"
           aria-hidden="true"
           set:html={icons[icon] ?? icons["hash"]}
         />

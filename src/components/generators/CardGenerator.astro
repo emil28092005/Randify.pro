@@ -5,6 +5,7 @@ const T = useT(isRu ? "ru" : "en");
 ---
 
 <div id="card-generator" class="mt-8">
+  <div class="rounded-xl bg-zinc-900/50 border border-zinc-800/60 p-5">
   <div class="flex flex-col sm:flex-row gap-4 items-end">
     <div class="flex-1">
       <label
@@ -18,7 +19,7 @@ const T = useT(isRu ? "ru" : "en");
         value="1"
         min="1"
         max="52"
-        class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base focus:outline-none focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] transition-colors"
+        class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
         aria-label={T.cardsToDraw}
       />
     </div>
@@ -28,13 +29,14 @@ const T = useT(isRu ? "ru" : "en");
       <input
         id="crd-replace"
         type="checkbox"
-        class="w-4 h-4 rounded accent-[#534AB7] cursor-pointer"
+        class="w-4 h-4 rounded accent-accent cursor-pointer"
       />
       <span
         class="text-sm text-zinc-400 group-hover:text-zinc-200 transition-colors"
         >{T.allowDuplicates}</span
       >
     </label>
+  </div>
   </div>
 
   <p
@@ -45,7 +47,7 @@ const T = useT(isRu ? "ru" : "en");
   >
   </p>
 
-  <div class="my-10 min-h-32 flex flex-col items-center justify-center gap-4">
+  <div class="my-6 rounded-2xl bg-zinc-900/80 border border-zinc-800/80 p-8 h-52 overflow-hidden flex flex-col items-center justify-center gap-4">
     <div
       id="crd-cards"
       class="flex flex-wrap justify-center gap-2"
@@ -58,7 +60,7 @@ const T = useT(isRu ? "ru" : "en");
       id="crd-copy-btn"
       type="button"
       aria-label="Copy cards to clipboard"
-      class="invisible inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] rounded"
+      class="invisible inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
     >
       <span id="crd-copy-label">{T.copy}</span>
       <span id="crd-copy-icon" aria-hidden="true">
@@ -80,7 +82,7 @@ const T = useT(isRu ? "ru" : "en");
       </span>
       <span
         id="crd-check-icon"
-        class="hidden text-[#534AB7]"
+        class="hidden text-accent"
         aria-hidden="true"
       >
         <svg
@@ -104,7 +106,7 @@ const T = useT(isRu ? "ru" : "en");
     <button
       id="crd-btn"
       type="button"
-      class="w-full sm:w-auto px-8 py-3 bg-[#534AB7] text-white font-semibold rounded-lg hover:bg-[#4740a0] active:bg-[#3d3990] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
+      class="w-full sm:w-auto px-8 py-3 bg-accent text-white font-semibold rounded-xl shadow-lg shadow-accent/25 hover:bg-accent-hover active:bg-accent-active focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
     >
       {T.draw}
     </button>

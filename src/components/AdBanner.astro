@@ -38,10 +38,10 @@ const { class: sizeClass, horizontal } = specs[size];
     href={ad.href}
     target="_blank"
     rel="noopener sponsored"
-    class={`${sizeClass} flex ${horizontal ? "flex-row items-center gap-4 px-6" : "flex-col items-center justify-center gap-3 px-4"} rounded-xl border border-zinc-800 bg-zinc-900/50 hover:border-[#534AB7]/50 hover:bg-zinc-900 transition-colors duration-200 group`}
+    class={`${sizeClass} flex ${horizontal ? "flex-row items-center gap-4 px-6" : "flex-col items-center justify-center gap-3 px-4"} rounded-xl border border-zinc-800 bg-zinc-900/50 hover:border-accent/50 hover:bg-zinc-900 transition-colors duration-200 group`}
   >
     <svg
-      class="shrink-0 text-[#FC3F1D]"
+      class="shrink-0 text-yandex"
       width={horizontal ? "32" : "40"}
       height={horizontal ? "32" : "40"}
       viewBox="0 0 40 40"
@@ -62,12 +62,12 @@ const { class: sizeClass, horizontal } = specs[size];
             <div class="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-0.5">
               Реклама
             </div>
-            <div class="text-sm font-semibold text-zinc-100 group-hover:text-[#534AB7] transition-colors leading-tight">
+            <div class="text-sm font-semibold text-zinc-100 group-hover:text-accent transition-colors leading-tight">
               {ad.label}
             </div>
             <div class="text-xs text-zinc-500 mt-0.5">{ad.sublabel}</div>
           </div>
-          <span class="shrink-0 text-xs font-semibold text-white bg-[#FC3F1D] px-3 py-1.5 rounded-lg group-hover:bg-[#e03518] transition-colors whitespace-nowrap">
+          <span class="shrink-0 text-xs font-semibold text-white bg-yandex px-3 py-1.5 rounded-lg group-hover:bg-yandex-hover transition-colors whitespace-nowrap">
             {ad.cta}
           </span>
         </>
@@ -77,12 +77,12 @@ const { class: sizeClass, horizontal } = specs[size];
             <div class="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-2">
               Реклама
             </div>
-            <div class="text-base font-semibold text-zinc-100 group-hover:text-[#534AB7] transition-colors leading-snug">
+            <div class="text-base font-semibold text-zinc-100 group-hover:text-accent transition-colors leading-snug">
               {ad.label}
             </div>
             <div class="text-xs text-zinc-500 mt-1">{ad.sublabel}</div>
           </div>
-          <span class="text-xs font-semibold text-white bg-[#FC3F1D] px-4 py-2 rounded-lg group-hover:bg-[#e03518] transition-colors">
+          <span class="text-xs font-semibold text-white bg-yandex px-4 py-2 rounded-lg group-hover:bg-yandex-hover transition-colors">
             {ad.ctaMobile}
           </span>
         </>

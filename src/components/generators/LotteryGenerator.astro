@@ -5,6 +5,7 @@ const T = useT(isRu ? "ru" : "en");
 ---
 
 <div id="lottery-generator" class="mt-8">
+  <div class="rounded-xl bg-zinc-900/50 border border-zinc-800/60 p-5">
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
     <div>
       <label for="lg-from" class="block text-sm font-medium text-zinc-400 mb-1"
@@ -14,7 +15,7 @@ const T = useT(isRu ? "ru" : "en");
         id="lg-from"
         type="number"
         value="1"
-        class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base focus:outline-none focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] transition-colors"
+        class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
       />
     </div>
     <div>
@@ -25,7 +26,7 @@ const T = useT(isRu ? "ru" : "en");
         id="lg-to"
         type="number"
         value="49"
-        class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base focus:outline-none focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] transition-colors"
+        class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
       />
     </div>
     <div>
@@ -37,7 +38,7 @@ const T = useT(isRu ? "ru" : "en");
         type="number"
         value="6"
         min="1"
-        class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base focus:outline-none focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] transition-colors"
+        class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
       />
     </div>
   </div>
@@ -49,8 +50,9 @@ const T = useT(isRu ? "ru" : "en");
     class="mt-3 text-sm text-red-500 hidden"
   >
   </p>
+  </div>
 
-  <div class="my-10 min-h-24 flex flex-col items-center justify-center gap-4">
+  <div class="my-6 h-52 overflow-hidden flex flex-col items-center justify-center gap-4 rounded-2xl bg-zinc-900/80 border border-zinc-800/80 p-8">
     <div
       id="lg-result"
       class="flex flex-wrap justify-center gap-2"
@@ -60,7 +62,7 @@ const T = useT(isRu ? "ru" : "en");
     <button
       id="lg-copy-btn"
       type="button"
-      class="invisible inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] rounded"
+      class="invisible inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
     >
       <span id="lg-copy-label">{T.copy}</span>
       <span id="lg-copy-icon" aria-hidden="true"
@@ -79,7 +81,7 @@ const T = useT(isRu ? "ru" : "en");
           ></path></svg
         ></span
       >
-      <span id="lg-check-icon" class="hidden text-[#534AB7]" aria-hidden="true"
+      <span id="lg-check-icon" class="hidden text-accent" aria-hidden="true"
         ><svg
           xmlns="http://www.w3.org/2000/svg"
           width="14"
@@ -99,7 +101,7 @@ const T = useT(isRu ? "ru" : "en");
     <button
       id="lg-btn"
       type="button"
-      class="w-full sm:w-auto px-8 py-3 bg-[#534AB7] text-white font-semibold rounded-lg hover:bg-[#4740a0] active:bg-[#3d3990] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
+      class="w-full sm:w-auto px-8 py-3 bg-accent text-white font-semibold rounded-xl shadow-lg shadow-accent/25 hover:bg-accent-hover active:bg-accent-active focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
     >
       {T.draw}
     </button>
@@ -178,7 +180,7 @@ const T = useT(isRu ? "ru" : "en");
       const ball = document.createElement("span");
       ball.textContent = String(n);
       ball.className =
-        "inline-flex items-center justify-center min-w-[2.5rem] h-10 px-2 rounded-full bg-[#534AB7]/15 border border-[#534AB7]/40 text-zinc-100 font-bold tabular-nums text-sm";
+        "inline-flex items-center justify-center min-w-[2.5rem] h-10 px-2 rounded-full bg-accent/15 border border-accent/40 text-zinc-100 font-bold tabular-nums text-sm";
       resultEl.appendChild(ball);
     });
     copyBtn.classList.remove("invisible");

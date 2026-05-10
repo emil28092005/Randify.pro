@@ -5,6 +5,7 @@ const T = useT(isRu ? "ru" : "en");
 ---
 
 <div id="color-generator" class="mt-8">
+  <div class="my-6 rounded-2xl bg-zinc-900/80 border border-zinc-800/80 p-8">
   <!-- Swatch -->
   <div class="flex justify-center mb-8">
     <div
@@ -41,7 +42,7 @@ const T = useT(isRu ? "ru" : "en");
             id={`${id}-copy`}
             type="button"
             aria-label={`Copy ${label} value`}
-            class="group shrink-0 p-1 rounded text-zinc-600 hover:text-zinc-300 focus:outline-none focus-visible:ring-1 focus-visible:ring-[#534AB7] transition-colors cursor-pointer"
+            class="group shrink-0 p-1 rounded text-zinc-600 hover:text-zinc-300 focus:outline-none focus-visible:ring-1 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors cursor-pointer"
           >
             <svg
               id={`${id}-copy-icon`}
@@ -60,7 +61,7 @@ const T = useT(isRu ? "ru" : "en");
             </svg>
             <svg
               id={`${id}-check-icon`}
-              class="hidden text-[#534AB7]"
+              class="hidden text-accent"
               xmlns="http://www.w3.org/2000/svg"
               width="14"
               height="14"
@@ -79,12 +80,14 @@ const T = useT(isRu ? "ru" : "en");
     }
   </div>
 
+  </div>
+
   <!-- Generate button -->
   <div class="flex justify-center">
     <button
       id="cg-btn"
       type="button"
-      class="w-full sm:w-auto px-8 py-3 bg-[#534AB7] text-white font-semibold rounded-lg hover:bg-[#4740a0] active:bg-[#3d3990] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
+      class="w-full sm:w-auto px-8 py-3 bg-accent text-white font-semibold rounded-xl shadow-lg shadow-accent/25 hover:bg-accent-hover active:bg-accent-active focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
     >
       {T.generate}
     </button>

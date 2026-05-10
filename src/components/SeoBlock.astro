@@ -13,22 +13,24 @@ const T = useT(lang);
 ---
 
 <section
-  class="mt-12 border-t border-zinc-800/60 pt-8 text-sm text-zinc-500 space-y-4"
+  class="mt-12 border-t border-zinc-800/60 pt-8 text-sm text-zinc-500 flex flex-col gap-4"
 >
-  <div>
+  <div class="rounded-xl bg-zinc-900/50 border border-zinc-800/60 p-5">
     <h2
-      class="text-xs font-semibold uppercase tracking-widest text-zinc-600 mb-2"
+      class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-2"
     >
+      <span class="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true"></span>
       {T.howToUse}
     </h2>
     <ol class="space-y-1 list-decimal list-inside">
       {howTo.map((step) => <li>{step}</li>)}
     </ol>
   </div>
-  <div>
+  <div class="rounded-xl bg-zinc-900/50 border border-zinc-800/60 p-5">
     <h2
-      class="text-xs font-semibold uppercase tracking-widest text-zinc-600 mb-2"
+      class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-2"
     >
+      <span class="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true"></span>
       {T.whenToUse}
     </h2>
     <ul class="space-y-1 list-disc list-inside">

@@ -12,7 +12,7 @@ const alternatePath = isRu
   <a
     href={isRu ? alternatePath : "#"}
     id="lang-en"
-    class={`px-2 py-1 rounded-md transition-colors ${isRu ? "text-zinc-400 hover:text-zinc-200" : "bg-[#534AB7] text-white"}`}
+    class={`px-2 py-1 rounded-md transition-colors ${isRu ? "text-zinc-400 hover:text-zinc-200" : "bg-accent text-white"}`}
     aria-current={isRu ? undefined : "true"}
     data-target-lang="en"
     data-alternate={isRu ? alternatePath : ""}>EN</a
@@ -20,7 +20,7 @@ const alternatePath = isRu
   <a
     href={isRu ? "#" : alternatePath}
     id="lang-ru"
-    class={`px-2 py-1 rounded-md transition-colors ${isRu ? "bg-[#534AB7] text-white" : "text-zinc-400 hover:text-zinc-200"}`}
+    class={`px-2 py-1 rounded-md transition-colors ${isRu ? "bg-accent text-white" : "text-zinc-400 hover:text-zinc-200"}`}
     aria-current={isRu ? "true" : undefined}
     data-target-lang="ru"
     data-alternate={isRu ? "" : alternatePath}>RU</a

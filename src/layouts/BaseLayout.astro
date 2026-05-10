@@ -1,6 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
 import LanguageSwitcher from "../components/LanguageSwitcher.astro";
+import Starfield from "../components/Starfield.astro";
 import Analytics from "../components/Analytics.astro";
 import { useT } from "../i18n/translations";
 import type { Lang } from "../i18n/translations";
@@ -31,7 +32,7 @@ const webPageSchema = {
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={lang} style="scroll-behavior:smooth;scrollbar-gutter:stable">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -51,7 +52,7 @@ const webPageSchema = {
       type="application/ld+json"
       set:html={JSON.stringify(webPageSchema)}
     />
-    <meta name="theme-color" content="#534AB7" />
+    <meta name="theme-color" content="#534ab7" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <slot name="head" />
@@ -64,8 +65,11 @@ const webPageSchema = {
     </script>
   </head>
   <body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans antialiased">
-    <LanguageSwitcher />
-    <slot />
+    <Starfield />
+    <div class="relative z-10">
+      <LanguageSwitcher />
+      <slot />
+    </div>
   </body>
 </html>
 
@@ -84,6 +88,11 @@ const webPageSchema = {
 
   @theme {
     --font-sans: "Space Grotesk", sans-serif;
+    --color-accent: #534ab7;
+    --color-accent-hover: #4740a0;
+    --color-accent-active: #3d3990;
+    --color-yandex: #fc3f1d;
+    --color-yandex-hover: #e03518;
   }
 
   :root {
@@ -106,6 +115,7 @@ const webPageSchema = {
         rgba(83, 74, 183, 0.13) 0%,
         transparent 65%
       );
+    background-size: auto, auto;
   }
 
   input[type="number"] {

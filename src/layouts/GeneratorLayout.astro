@@ -68,7 +68,7 @@ const breadcrumbSchema = {
     <nav aria-label="Breadcrumb" class="mb-10">
       <a
         href={isRu ? "/ru/" : "/"}
-        class="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#534AB7] rounded"
+        class="inline-flex items-center gap-1.5 text-sm text-zinc-600 hover:text-zinc-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
         aria-label={T.backToAll}
       >
         <svg
@@ -92,7 +92,7 @@ const breadcrumbSchema = {
     <header class="mb-2">
       <div class="flex items-center gap-2 mb-4">
         <span
-          class="inline-block w-2.5 h-2.5 rounded-full bg-[#534AB7]"
+          class="inline-block w-2.5 h-2.5 rounded-full bg-accent"
           aria-hidden="true"></span>
         <span
           class="text-sm font-medium text-zinc-400 uppercase tracking-widest"
@@ -102,14 +102,17 @@ const breadcrumbSchema = {
       <h1 class="text-3xl sm:text-4xl font-bold text-zinc-100">
         {isRu ? generator.ruPageTitle : generator.pageTitle}
       </h1>
+      <div class="w-16 h-0.5 bg-accent/60 rounded-full mt-4" aria-hidden="true"></div>
       <p class="mt-2 text-base text-zinc-400">
         {isRu ? generator.ruDescription : generator.description}
       </p>
     </header>
 
+    <div class="border-t border-zinc-800/60 pt-8 mt-8">
     <main>
       <slot />
     </main>
+    </div>
 
     <div class="mt-12 flex justify-center">
       <AdBanner size="tile" />

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import GeneratorCard from "@/components/GeneratorCard.astro";
-import AdBanner from "@/components/AdBanner.astro";
+import YandexRTB from "@/components/YandexRTB.astro";
 import { generators } from "@/data/generators";
 import { useT } from "@/i18n/translations";
 import type { Lang } from "@/i18n/translations";
@@ -47,7 +47,7 @@ const webSiteSchema = {
       </p>
     </header>
 
-    <AdBanner size="leaderboard" />
+    <YandexRTB />
 
     <main class="mt-8">
       <div

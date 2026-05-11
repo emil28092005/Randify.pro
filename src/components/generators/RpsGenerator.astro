@@ -1,0 +1,145 @@
+---
+import { useT } from "../../i18n/translations";
+const isRu = Astro.url.pathname.startsWith("/ru");
+const T = useT(isRu ? "ru" : "en");
+---
+
+<div id="rps-generator" class="mt-8" data-ru={isRu ? "1" : "0"}>
+  <div class="rounded-xl bg-zinc-900/50 border border-zinc-800/60 p-5">
+    <p class="text-sm font-medium text-zinc-400 mb-3 text-center">
+      {isRu ? "Выберите ваш вариант:" : "Pick your move:"}
+    </p>
+    <div class="flex justify-center gap-3">
+      <button
+        id="rps-rock"
+        type="button"
+        data-move="rock"
+        class="rps-choice flex-1 sm:flex-none px-4 py-3 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-100 font-medium hover:bg-zinc-700 hover:border-zinc-600 active:bg-zinc-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer flex flex-col items-center gap-1"
+      >
+        <span class="text-2xl" aria-hidden="true">✊</span>
+        <span class="text-sm">{isRu ? "Камень" : "Rock"}</span>
+      </button>
+      <button
+        id="rps-paper"
+        type="button"
+        data-move="paper"
+        class="rps-choice flex-1 sm:flex-none px-4 py-3 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-100 font-medium hover:bg-zinc-700 hover:border-zinc-600 active:bg-zinc-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer flex flex-col items-center gap-1"
+      >
+        <span class="text-2xl" aria-hidden="true">✋</span>
+        <span class="text-sm">{isRu ? "Бумага" : "Paper"}</span>
+      </button>
+      <button
+        id="rps-scissors"
+        type="button"
+        data-move="scissors"
+        class="rps-choice flex-1 sm:flex-none px-4 py-3 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-100 font-medium hover:bg-zinc-700 hover:border-zinc-600 active:bg-zinc-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer flex flex-col items-center gap-1"
+      >
+        <span class="text-2xl" aria-hidden="true">✌️</span>
+        <span class="text-sm">{isRu ? "Ножницы" : "Scissors"}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="my-6 rounded-2xl bg-zinc-900/80 border border-zinc-800/80 p-8 h-52 overflow-hidden">
+    <div id="rps-result-area" class="h-full flex flex-col items-center justify-center gap-3">
+      <p id="rps-placeholder" class="text-zinc-500 text-center">
+        {isRu ? "Выберите ход, чтобы начать игру" : "Pick a move to start the game"}
+      </p>
+
+      <div id="rps-game-result" class="hidden w-full flex flex-col items-center justify-center gap-4">
+        <div class="flex items-center gap-4 sm:gap-6">
+          <div class="flex flex-col items-center gap-1">
+            <span class="text-xs text-zinc-500">{isRu ? "Вы" : "You"}</span>
+            <span id="rps-player-move" class="text-4xl"></span>
+            <span id="rps-player-label" class="text-sm text-zinc-300"></span>
+          </div>
+          <span class="text-xl text-zinc-600 font-bold">VS</span>
+          <div class="flex flex-col items-center gap-1">
+            <span class="text-xs text-zinc-500">{isRu ? "Бот" : "Bot"}</span>
+            <span id="rps-bot-move" class="text-4xl"></span>
+            <span id="rps-bot-label" class="text-sm text-zinc-300"></span>
+          </div>
+        </div>
+        <p id="rps-outcome" class="text-2xl font-bold"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const isRu = document.documentElement.lang === "ru";
+
+  const LABELS: Record<string, { name: string; emoji: string }> = isRu
+    ? {
+        rock: { name: "Камень", emoji: "✊" },
+        paper: { name: "Бумага", emoji: "✋" },
+        scissors: { name: "Ножницы", emoji: "✌️" },
+      }
+    : {
+        rock: { name: "Rock", emoji: "✊" },
+        paper: { name: "Paper", emoji: "✋" },
+        scissors: { name: "Scissors", emoji: "✌️" },
+      };
+
+  const OUTCOMES = {
+    win: { text: isRu ? "Победа!" : "You win!", color: "text-emerald-400" },
+    lose: { text: isRu ? "Поражение" : "You lose", color: "text-red-400" },
+    draw: { text: isRu ? "Ничья" : "Draw", color: "text-yellow-400" },
+  };
+
+  const MOVES = ["rock", "paper", "scissors"] as const;
+
+  const choices = document.querySelectorAll<HTMLButtonElement>(".rps-choice");
+  const placeholder = document.getElementById("rps-placeholder") as HTMLParagraphElement;
+  const gameResult = document.getElementById("rps-game-result") as HTMLDivElement;
+  const playerMoveEl = document.getElementById("rps-player-move") as HTMLSpanElement;
+  const playerLabelEl = document.getElementById("rps-player-label") as HTMLSpanElement;
+  const botMoveEl = document.getElementById("rps-bot-move") as HTMLSpanElement;
+  const botLabelEl = document.getElementById("rps-bot-label") as HTMLSpanElement;
+  const outcomeEl = document.getElementById("rps-outcome") as HTMLParagraphElement;
+
+  function getWinner(player: string, bot: string): "win" | "lose" | "draw" {
+    if (player === bot) return "draw";
+    if (
+      (player === "rock" && bot === "scissors") ||
+      (player === "paper" && bot === "rock") ||
+      (player === "scissors" && bot === "paper")
+    ) {
+      return "win";
+    }
+    return "lose";
+  }
+
+  function play(playerMove: string) {
+    const botMove = MOVES[Math.floor(Math.random() * MOVES.length)];
+    const result = getWinner(playerMove, botMove);
+
+    choices.forEach((btn) => {
+      btn.classList.remove("border-accent", "bg-zinc-700");
+      btn.classList.add("border-zinc-700", "bg-zinc-800");
+      if (btn.dataset.move === playerMove) {
+        btn.classList.remove("border-zinc-700", "bg-zinc-800");
+        btn.classList.add("border-accent", "bg-zinc-700");
+      }
+    });
+
+    playerMoveEl.textContent = LABELS[playerMove].emoji;
+    playerLabelEl.textContent = LABELS[playerMove].name;
+    botMoveEl.textContent = LABELS[botMove].emoji;
+    botLabelEl.textContent = LABELS[botMove].name;
+
+    const outcome = OUTCOMES[result];
+    outcomeEl.textContent = outcome.text;
+    outcomeEl.className = `text-2xl font-bold ${outcome.color}`;
+
+    placeholder.classList.add("hidden");
+    gameResult.classList.remove("hidden");
+  }
+
+  choices.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const move = btn.dataset.move;
+      if (move) play(move);
+    });
+  });
+</script>

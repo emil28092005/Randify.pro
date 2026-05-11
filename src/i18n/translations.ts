@@ -80,6 +80,20 @@ export const translations = {
       "Have a suggestion, found a bug, or just want to say hello? Drop us a line at hello@randify.pro — we read every message.",
     aboutCta:
       "Ready to give it a spin? Explore the generators and let chance do the work.",
+
+    privacyTitle: "Privacy Policy",
+    privacyIntro:
+      "This Privacy Policy explains how Randify handles information when you use our website. We believe in transparency: we collect as little data as possible and never ask for personal information.",
+    privacyData:
+      "Randify does not collect, store, or process any personal data. All random values — numbers, passwords, dice rolls, card draws, and every other result — are generated entirely inside your browser. Nothing you enter or generate is sent to our servers. We do not require registration, we do not ask for your name or email to use the generators, and we have no access to your inputs or outputs.",
+    privacyCookies:
+      "We do not use tracking cookies. The only information stored on your device is your language preference (English or Russian), which is saved in localStorage so the site remembers your choice on future visits. This data never leaves your browser and is not shared with anyone.",
+    privacyThirdParty:
+      "We use two third-party services to keep Randify free and improve the experience:\n\n• Yandex.RTB — displays advertisements on some pages. Yandex may use cookies and similar technologies to show relevant ads. You can manage ad preferences through your browser settings or Yandex's opt-out tools.\n\n• Yandex.Metrika — helps us understand how visitors use the site (for example, which generators are most popular). This is anonymous aggregate data: we cannot identify individual users.",
+    privacyContact:
+      "If you have any questions about this policy or how we handle data, please contact us at hello@randify.pro.",
+    privacyChanges:
+      "We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated date. Since we do not collect contact information, we cannot notify users individually — please check this page occasionally for updates.",
   },
   ru: {
     allGenerators: "Все генераторы",
@@ -160,6 +174,20 @@ export const translations = {
       "Есть предложение, нашли ошибку или просто хотите поздороваться? Напишите нам на hello@randify.pro — мы читаем каждое сообщение.",
     aboutCta:
       "Готовы попробовать? Откройте генераторы и позвольте случайности сделать выбор за вас.",
+
+    privacyTitle: "Политика конфиденциальности",
+    privacyIntro:
+      "Настоящая Политика конфиденциальности объясняет, как Randify работает с информацией при использовании сайта. Мы верим в прозрачность: собираем минимум данных и никогда не запрашиваем персональную информацию.",
+    privacyData:
+      "Randify не собирает, не хранит и не обрабатывает персональные данные. Все случайные значения — числа, пароли, броски кубиков, вытягивание карт и любые другие результаты — генерируются полностью внутри вашего браузера. Ничто из того, что вы вводите или генерируете, не отправляется на наши серверы. Мы не требуем регистрации, не просим имя или email для использования генераторов и не имеем доступа к вашим данным.",
+    privacyCookies:
+      "Мы не используем cookies для отслеживания. Единственная информация, которая сохраняется на вашем устройстве, — это предпочитаемый язык (английский или русский) в localStorage, чтобы сайт запоминал ваш выбор при следующем посещении. Эти данные не покидают браузер и никому не передаются.",
+    privacyThirdParty:
+      "Мы используем два сторонних сервиса, чтобы Randify оставался бесплатным и удобным:\n\n• Yandex.RTB — показывает рекламу на некоторых страницах. Яндекс может использовать cookies и аналогичные технологии для показа релевантной рекламы. Вы можете управлять настройками рекламы через параметры браузера или инструменты отказа Яндекса.\n\n• Яндекс.Метрика — помогает нам понимать, как посетители используют сайт (например, какие генераторы самые популярные). Это анонимные агрегированные данные: мы не можем идентифицировать отдельных пользователей.",
+    privacyContact:
+      "Если у вас есть вопросы об этой политике или о том, как мы работаем с данными, напишите нам на hello@randify.pro.",
+    privacyChanges:
+      "Мы можем обновлять эту Политику конфиденциальности время от времени. Любые изменения будут опубликованы на этой странице с обновлённой датой. Поскольку мы не собираем контактную информацию, мы не можем уведомлять пользователей индивидуально — пожалуйста, проверяйте эту страницу время от времени.",
   },
 } as const;
 

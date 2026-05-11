@@ -1,0 +1,11 @@
+---
+import GeneratorLayout from '@/layouts/GeneratorLayout.astro';
+import TeamsGenerator from '@/components/generators/TeamsGenerator.astro';
+import { generators } from '@/data/generators';
+
+const generator = generators.find((g) => g.slug === 'teams')!;
+---
+
+<GeneratorLayout generator={generator}>
+  <TeamsGenerator />
+</GeneratorLayout>

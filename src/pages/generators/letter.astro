@@ -1,0 +1,11 @@
+---
+import GeneratorLayout from '@/layouts/GeneratorLayout.astro';
+import LetterGenerator from '@/components/generators/LetterGenerator.astro';
+import { generators } from '@/data/generators';
+
+const generator = generators.find((g) => g.slug === 'letter')!;
+---
+
+<GeneratorLayout generator={generator}>
+  <LetterGenerator />
+</GeneratorLayout>

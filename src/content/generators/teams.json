@@ -1,0 +1,47 @@
+{
+  "slug": "teams",
+  "title": "Team Splitter",
+  "description": "Split a list of people into random teams or groups.",
+  "icon": "users",
+  "status": "live",
+  "seoTitle": "Random Team Generator — Split into Groups | Randify",
+  "seoDescription": "Split any list of names into random teams instantly. Perfect for sports, workshops, classrooms, and party games.",
+  "ruTitle": "Разделение на команды",
+  "ruDescription": "Разделите список людей на случайные команды или группы.",
+  "ruSeoTitle": "Генератор случайных команд — разделение на группы | Randify",
+  "ruSeoDescription": "Разделите любой список имён на случайные команды мгновенно. Для спорта, занятий, воркшопов и вечеринок.",
+  "pageTitle": "Random Team Generator",
+  "ruPageTitle": "Генератор случайных команд",
+  "howTo": [
+    "Enter the list of participants — one name per line.",
+    "Set the number of teams you want to create.",
+    "Click Generate — the tool shuffles and splits the list evenly.",
+    "Review the teams and copy or share the results."
+  ],
+  "whenTo": [
+    "Organising random teams for a sports match or tournament.",
+    "Splitting a class or workshop into balanced groups.",
+    "Creating teams for a party game or team-building activity."
+  ],
+  "ruHowTo": [
+    "Введите список участников — по одному имени на строку.",
+    "Укажите количество команд, которые нужно создать.",
+    "Нажмите «Сгенерировать» — инструмент перемешает и равномерно разделит список.",
+    "Просмотрите команды и скопируйте или поделитесь результатами."
+  ],
+  "ruWhenTo": [
+    "Формирование случайных команд для спортивной игры или турнира.",
+    "Разделение класса или воркшопа на сбалансированные группы.",
+    "Создание команд для игры на вечеринке или тимбилдинга."
+  ],
+  "faq": [
+    { "q": "What happens if the list cannot be divided evenly?", "a": "Teams are created as evenly as possible. If there is a remainder, some teams will have one extra member." },
+    { "q": "Is there a limit to the number of participants?", "a": "You can add up to 500 names. For most events and activities, this limit is more than sufficient." },
+    { "q": "Can I use this for non-name lists?", "a": "Yes. You can split any text items — tasks, topics, or objects — into random groups." }
+  ],
+  "ruFaq": [
+    { "q": "Что если список нельзя разделить поровну?", "a": "Команды формируются максимально равномерно. Если остаётся остаток, некоторые команды будут на одного участника больше." },
+    { "q": "Есть ли ограничение на количество участников?", "a": "Можно добавить до 500 имён. Для большинства мероприятий и активностей этого более чем достаточно." },
+    { "q": "Можно ли использовать не только для имён?", "a": "Да. Вы можете разделить на группы любые текстовые элементы — задачи, темы или предметы." }
+  ]
+}

@@ -34,5 +34,15 @@
     "Случайный выбор победителя розыгрыша.",
     "Принятие решений в команде.",
     "Распределение ролей или задач между участниками."
+  ],
+  "faq": [
+    { "q": "How many items can I add?", "a": "Between 2 and 24 items. The wheel automatically resizes to fit all segments." },
+    { "q": "Is the spin truly random?", "a": "Yes. The stopping position is determined by a cryptographically secure random value." },
+    { "q": "Can I save my wheel?", "a": "Not yet. You can bookmark the page or copy your item list to reuse it later." }
+  ],
+  "ruFaq": [
+    { "q": "Сколько элементов можно добавить?", "a": "От 2 до 24. Колесо автоматически подстраивается под количество сегментов." },
+    { "q": "Вращение действительно случайное?", "a": "Да. Конечная позиция определяется криптографически стойким случайным значением." },
+    { "q": "Можно ли сохранить колесо?", "a": "Пока нет. Можно добавить страницу в закладки или скопировать список элементов для повторного использования." }
   ]
 }

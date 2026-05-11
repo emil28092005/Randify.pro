@@ -1,0 +1,95 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { useT } from "@/i18n/translations";
+import type { Lang } from "@/i18n/translations";
+
+const lang = (Astro.currentLocale as Lang) || "en";
+const T = useT(lang);
+
+const aboutSchema = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: T.aboutTitle,
+  description: T.aboutMission,
+  url: "https://randify.pro/ru/about/",
+  inLanguage: lang,
+};
+---
+
+<BaseLayout title={`${T.aboutTitle} | Randify`} description={T.aboutMission}>
+  <script type="application/ld+json" set:html={JSON.stringify(aboutSchema)} slot="head" />
+  <div class="max-w-2xl mx-auto px-4 py-12 sm:py-20">
+    <nav aria-label="Breadcrumb" class="mb-10">
+      <a
+        href="/ru/"
+        class="inline-flex items-center gap-1.5 text-sm text-zinc-600 hover:text-zinc-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
+        aria-label={T.backToAll}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m15 18-6-6 6-6"></path>
+        </svg>
+        {T.backToAll}
+      </a>
+    </nav>
+
+    <header class="mb-2">
+      <div class="flex items-center gap-2 mb-4">
+        <span
+          class="inline-block w-2.5 h-2.5 rounded-full bg-accent"
+          aria-hidden="true"></span>
+        <span
+          class="text-sm font-medium text-zinc-400 uppercase tracking-widest"
+          >randify</span
+        >
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold text-zinc-100">
+        {T.aboutTitle}
+      </h1>
+      <div class="w-16 h-0.5 bg-accent/60 rounded-full mt-4" aria-hidden="true"></div>
+    </header>
+
+    <div class="border-t border-zinc-800/60 pt-8 mt-8 space-y-8">
+      <section>
+        <h2 class="text-lg font-semibold text-zinc-100 mb-2">Миссия</h2>
+        <p class="text-zinc-400 leading-relaxed">{T.aboutMission}</p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-zinc-100 mb-2">История</h2>
+        {T.aboutHistory.split("\n\n").map((paragraph) => (
+          <p class="text-zinc-400 leading-relaxed mb-4 last:mb-0">{paragraph}</p>
+        ))}
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-zinc-100 mb-2">Как это работает</h2>
+        <p class="text-zinc-400 leading-relaxed">{T.aboutHowItWorks}</p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-zinc-100 mb-2">Контакты</h2>
+        <p class="text-zinc-400 leading-relaxed">{T.aboutContact}</p>
+      </section>
+
+      <section class="pt-4">
+        <a
+          href="/ru/"
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-accent text-white font-medium hover:bg-accent-hover active:bg-accent-active transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+        >
+          {T.aboutCta}
+        </a>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

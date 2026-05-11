@@ -34,5 +34,15 @@
     "Розыгрыш лотерейных номеров.",
     "Жеребьёвка участников конкурса.",
     "Случайный выбор нескольких уникальных чисел."
+  ],
+  "faq": [
+    { "q": "Are the numbers guaranteed to be unique?", "a": "Yes. The lottery generator always picks unique numbers within your chosen range." },
+    { "q": "Can I use this for real lottery tickets?", "a": "Yes, but remember that no generator can improve your odds — each combination has the same chance." },
+    { "q": "What is the maximum range?", "a": "You can set any range where the difference between From and To is at least as large as the number of picks." }
+  ],
+  "ruFaq": [
+    { "q": "Числа гарантированно уникальны?", "a": "Да. Генератор лотереи всегда выбирает уникальные числа в заданном диапазоне." },
+    { "q": "Можно ли использовать для реальных лотерей?", "a": "Да, но помните: генератор не улучшает шансы — каждая комбинация имеет равную вероятность." },
+    { "q": "Какой максимальный диапазон?", "a": "Любой диапазон, где разница между «От» и «До» не меньше количества выбираемых чисел." }
   ]
 }

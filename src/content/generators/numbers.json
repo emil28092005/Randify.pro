@@ -22,7 +22,8 @@
     "Picking a winner in a giveaway or raffle.",
     "Choosing a random starting player in a board game.",
     "Making a quick decision between numbered options.",
-    "Generating test data with values in a specific range."
+    "Generating test data with values in a specific range.",
+    "Assigning random IDs or order numbers to items."
   ],
   "ruHowTo": [
     "Введите минимальное значение в поле «От».",
@@ -34,6 +35,17 @@
     "Выбор победителя в розыгрыше или конкурсе.",
     "Определение случайного первого игрока в настольной игре.",
     "Быстрое принятие решения между пронумерованными вариантами.",
-    "Генерация тестовых данных с числами в заданном диапазоне."
+    "Генерация тестовых данных с числами в заданном диапазоне.",
+    "Назначение случайных номеров или порядковых идентификаторов."
+  ],
+  "faq": [
+    { "q": "Is the number truly random?", "a": "Yes. Randify uses your browser's built-in random function, which produces unpredictable results every time." },
+    { "q": "Can I generate negative numbers?", "a": "Absolutely. Just enter a negative value in the From field and a positive or negative value in the To field." },
+    { "q": "Is there a limit to the range?", "a": "You can use any whole numbers that JavaScript supports — safely up to about 9 quadrillion." }
+  ],
+  "ruFaq": [
+    { "q": "Число действительно случайное?", "a": "Да. Randify использует встроенную функцию случайности браузера, которая каждый раз выдаёт непредсказуемый результат." },
+    { "q": "Можно ли генерировать отрицательные числа?", "a": "Конечно. Введите отрицательное значение в поле «От» и любое значение в поле «До»." },
+    { "q": "Есть ли ограничение на диапазон?", "a": "Можно использовать любые целые числа, которые поддерживает JavaScript — безопасно до примерно 9 квадриллионов." }
   ]
 }

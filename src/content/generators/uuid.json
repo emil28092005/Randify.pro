@@ -34,5 +34,15 @@
     "Генерация уникальных идентификаторов для баз данных.",
     "Создание токенов для API и сессий.",
     "Генерация случайных ключей шифрования."
+  ],
+  "faq": [
+    { "q": "Are these UUIDs cryptographically secure?", "a": "Yes. UUID v4 is generated using the browser's crypto.getRandomValues, which is cryptographically secure." },
+    { "q": "What is the difference between UUID, Hex, and Base64?", "a": "UUID v4 is a 128-bit standard format. Hex is raw random bytes in hexadecimal. Base64 is the same bytes encoded for compactness." },
+    { "q": "Can I use these tokens in production?", "a": "UUID v4 tokens are safe for production. For Hex and Base64, the security depends on the byte length you choose." }
+  ],
+  "ruFaq": [
+    { "q": "UUID криптографически безопасны?", "a": "Да. UUID v4 генерируется через crypto.getRandomValues браузера, что обеспечивает криптографическую стойкость." },
+    { "q": "В чём разница между UUID, Hex и Base64?", "a": "UUID v4 — стандартный 128-битный формат. Hex — сырые случайные байты в шестнадцатеричном виде. Base64 — те же байты в компактном кодировании." },
+    { "q": "Можно ли использовать токены в продакшене?", "a": "UUID v4 безопасны для продакшена. Для Hex и Base64 безопасность зависит от выбранной длины в байтах." }
   ]
 }

@@ -16,7 +16,8 @@
     "Drag the slider to choose how many coins to flip (1–20).",
     "Click Flip — each coin shows H for heads or T for tails.",
     "When flipping more than one coin, the heads/tails count is shown below.",
-    "Click Copy to copy all results to the clipboard."
+    "Click Copy to copy all results to the clipboard.",
+    "Use a single coin for a classic 50/50 decision."
   ],
   "whenTo": [
     "Making a quick heads-or-tails decision.",
@@ -28,7 +29,18 @@
     "Выберите количество монет с помощью ползунка.",
     "Нажмите «Подбросить» — орёл или решка.",
     "При нескольких монетах отображается итоговый счёт.",
-    "Нажмите «Копировать», чтобы сохранить результат."
+    "Нажмите «Копировать», чтобы сохранить результат.",
+    "Одна монетка — классическое решение «орёл или решка»."
+  ],
+  "faq": [
+    { "q": "Is the coin flip fair?", "a": "Yes. Each flip uses your browser's random function, giving a true 50/50 chance for heads or tails." },
+    { "q": "Can I flip multiple coins at once?", "a": "Yes. Use the slider to choose up to 20 coins, and see the total heads and tails count." },
+    { "q": "What do H and T stand for?", "a": "H means Heads and T means Tails — the two sides of a coin." }
+  ],
+  "ruFaq": [
+    { "q": "Подбрасывание честное?", "a": "Да. Каждый бросок использует функцию случайности браузера, давая истинный шанс 50/50 на орла или решку." },
+    { "q": "Можно подбросить несколько монет сразу?", "a": "Да. С помощью ползунка выберите до 20 монет и увидите общий счёт орлов и решек." },
+    { "q": "Что означают О и Р?", "a": "О — орёл, Р — решка. Это две стороны монеты." }
   ],
   "ruWhenTo": [
     "Принятие решений по принципу «орёл или решка».",

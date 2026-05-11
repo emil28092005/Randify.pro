@@ -25,6 +25,13 @@ const alternatePath = isRu
     data-target-lang="ru"
     data-alternate={isRu ? "" : alternatePath}>RU</a
   >
+  <span class="w-px h-3 bg-zinc-700 mx-0.5" aria-hidden="true"></span>
+  <a
+    href={isRu ? "/ru/about/" : "/about/"}
+    class="px-2 py-1 rounded-md transition-colors text-zinc-400 hover:text-zinc-200"
+  >
+    {isRu ? "О проекте" : "About"}
+  </a>
 </div>
 
 <script>

@@ -19,6 +19,8 @@ export const generatorSchema = z
     whenTo: z.array(z.string()),
     ruHowTo: z.array(z.string()),
     ruWhenTo: z.array(z.string()),
+    faq: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
+    ruFaq: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
   })
   .strict();
 

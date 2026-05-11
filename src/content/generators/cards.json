@@ -34,5 +34,15 @@
     "Случайная раздача карт для карточных игр.",
     "Выбор случайных карт для гаданий.",
     "Генерация случайных комбинаций карт для тестирования."
+  ],
+  "faq": [
+    { "q": "What deck is used?", "a": "A standard 52-card deck with four suits: spades ♠, hearts ♥, diamonds ♦, and clubs ♣." },
+    { "q": "Can I draw the same card twice?", "a": "Only if Allow duplicates is enabled. By default, each card is drawn at most once." },
+    { "q": "Are jokers included?", "a": "No. Only the standard 52 playing cards are used." }
+  ],
+  "ruFaq": [
+    { "q": "Какая колода используется?", "a": "Стандартная колода из 52 карт четырёх мастей: пики ♠, червы ♥, бубны ♦, трефы ♣." },
+    { "q": "Можно вытащить одну карту дважды?", "a": "Только если включены повторения. По умолчанию каждая карта вытаскивается не более одного раза." },
+    { "q": "Есть ли джокеры?", "a": "Нет. Используется только стандартная колода из 52 карт." }
   ]
 }

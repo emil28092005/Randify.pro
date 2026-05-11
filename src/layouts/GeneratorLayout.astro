@@ -2,6 +2,7 @@
 import BaseLayout from "./BaseLayout.astro";
 import YandexRTB from "../components/YandexRTB.astro";
 import SeoBlock from "../components/SeoBlock.astro";
+import FaqBlock from "../components/FaqBlock.astro";
 import { useT } from "../i18n/translations";
 import type { Lang } from "../i18n/translations";
 import type { Generator } from "../data/generators";
@@ -123,5 +124,14 @@ const breadcrumbSchema = {
       howTo={isRu ? generator.ruHowTo : generator.howTo}
       whenTo={isRu ? generator.ruWhenTo : generator.whenTo}
     />
+
+    {
+      (isRu ? generator.ruFaq : generator.faq) && (
+        <FaqBlock
+          lang={lang}
+          questions={(isRu ? generator.ruFaq : generator.faq) || []}
+        />
+      )
+    }
   </div>
 </BaseLayout>

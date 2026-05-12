@@ -1,0 +1,49 @@
+{
+  "slug": "country",
+  "title": "Country",
+  "description": "Generate a random country with flag, capital, region, and population.",
+  "icon": "user",
+  "status": "live",
+  "seoTitle": "Random Country Generator — Flag, Capital, Region | Randify",
+  "seoDescription": "Get a random country with flag emoji, capital, region, and population. Free online country randomizer for games, quizzes, and travel inspiration.",
+  "ruTitle": "Страна",
+  "ruDescription": "Генерируйте случайную страну с флагом, столицей, регионом и населением.",
+  "ruSeoTitle": "Генератор случайных стран — флаг, столица, регион | Randify",
+  "ruSeoDescription": "Получайте случайную страну с эмодзи флага, столицей, регионом и населением. Бесплатный рандомайзер стран для игр, викторин и вдохновения.",
+  "pageTitle": "Random Country Generator",
+  "ruPageTitle": "Генератор случайных стран",
+  "howTo": [
+    "Select a region filter or leave it on All to include every country.",
+    "Click Generate to pick a random country from the filtered list.",
+    "View the result card with flag, name, capital, region, and population.",
+    "Click Copy to copy the country details to your clipboard."
+  ],
+  "whenTo": [
+    "Choosing a random destination for a travel challenge or game.",
+    "Creating quiz questions about capitals, flags, or geography.",
+    "Picking a random country for a school project or presentation.",
+    "Settling a friendly debate with a random geographic draw."
+  ],
+  "ruHowTo": [
+    "Выберите фильтр по региону или оставьте «Все», чтобы включить все страны.",
+    "Нажмите «Сгенерировать», чтобы выбрать случайную страну из отфильтрованного списка.",
+    "Посмотрите карточку результата с флагом, названием, столицей, регионом и населением.",
+    "Нажмите «Копировать», чтобы скопировать данные о стране в буфер обмена."
+  ],
+  "ruWhenTo": [
+    "Выбор случайного направления для путешественнического челленджа или игры.",
+    "Создание вопросов для викторин о столицах, флагах или географии.",
+    "Выбор случайной страны для школьного проекта или презентации.",
+    "Решение спора случайным географическим выбором."
+  ],
+  "faq": [
+    { "q": "How many countries are in the generator?", "a": "The generator includes 40 countries from all inhabited continents, covering a wide range of regions, populations, and cultures." },
+    { "q": "Can I filter by region?", "a": "Yes. You can filter by Europe, Asia, Americas, Africa, or Oceania, or choose All to include every country." },
+    { "q": "Is the population data accurate?", "a": "Population figures are approximate and based on recent estimates. They are intended for casual use rather than precise research." }
+  ],
+  "ruFaq": [
+    { "q": "Сколько стран в генераторе?", "a": "Генератор включает 40 стран со всех обитаемых континентов, охватывая широкий спектр регионов, населения и культур." },
+    { "q": "Можно ли фильтровать по региону?", "a": "Да. Вы можете фильтровать по Европе, Азии, Америке, Африке или Океании, либо выбрать «Все», чтобы включить все страны." },
+    { "q": "Данные о населении актуальны?", "a": "Численность населения приблизительная и основана на недавних оценках. Она предназначена для повседневного использования, а не для точных исследований." }
+  ]
+}

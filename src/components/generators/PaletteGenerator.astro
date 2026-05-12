@@ -1,0 +1,346 @@
+---
+import { useT } from "../../i18n/translations";
+const isRu = Astro.url.pathname.startsWith("/ru");
+const T = useT(isRu ? "ru" : "en");
+
+const i18n = {
+  harmonyLabel: isRu ? "Гармония" : "Harmony",
+  countLabel: isRu ? "Количество цветов" : "Number of colors",
+  copyAll: T.copyAll,
+  generate: T.generate,
+  copied: T.copied,
+  copy: T.copy,
+  modes: {
+    random: isRu ? "Случайная" : "Random",
+    analogous: isRu ? "Аналоговая" : "Analogous",
+    complementary: isRu ? "Комплементарная" : "Complementary",
+    triadic: isRu ? "Триадная" : "Triadic",
+    monochromatic: isRu ? "Монохромная" : "Monochromatic",
+    splitComplementary: isRu ? "Сплит-комплементарная" : "Split-Complementary",
+    tetradic: isRu ? "Тетрадная" : "Tetradic",
+  },
+};
+---
+
+<div id="palette-generator" class="mt-8">
+  <!-- Controls -->
+  <div class="flex flex-col sm:flex-row gap-4 mb-6">
+    <div class="flex-1">
+      <label for="pg-harmony" class="block text-sm font-medium text-zinc-400 mb-2">
+        {i18n.harmonyLabel}
+      </label>
+      <select
+        id="pg-harmony"
+        class="w-full px-4 py-2.5 bg-zinc-900/80 border border-zinc-800/80 rounded-xl text-zinc-100 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 cursor-pointer"
+      >
+        <option value="random">{i18n.modes.random}</option>
+        <option value="analogous">{i18n.modes.analogous}</option>
+        <option value="complementary">{i18n.modes.complementary}</option>
+        <option value="triadic">{i18n.modes.triadic}</option>
+        <option value="monochromatic">{i18n.modes.monochromatic}</option>
+        <option value="split-complementary">{i18n.modes.splitComplementary}</option>
+        <option value="tetradic">{i18n.modes.tetradic}</option>
+      </select>
+    </div>
+    <div class="flex-1">
+      <label for="pg-count" class="block text-sm font-medium text-zinc-400 mb-2">
+        {i18n.countLabel}
+      </label>
+      <select
+        id="pg-count"
+        class="w-full px-4 py-2.5 bg-zinc-900/80 border border-zinc-800/80 rounded-xl text-zinc-100 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 cursor-pointer"
+      >
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5" selected>5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Result container -->
+  <div
+    id="pg-result"
+    class="rounded-2xl bg-zinc-900/80 border border-zinc-800/80 p-8 opacity-0"
+    style="transition: opacity 0.25s ease;"
+    aria-live="polite"
+  >
+    <div id="pg-swatches" class="flex flex-wrap gap-4 justify-center mb-6">
+      <!-- Swatches injected by JS -->
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+      <button
+        id="pg-copy-all"
+        type="button"
+        class="w-full sm:w-auto px-6 py-2.5 bg-zinc-800 text-zinc-200 font-medium rounded-xl border border-zinc-700 hover:bg-zinc-700 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
+      >
+        {i18n.copyAll}
+      </button>
+    </div>
+  </div>
+
+  <!-- Error display -->
+  <div id="pg-error" class="hidden mt-4 text-sm text-red-400 text-center" role="alert"></div>
+
+  <!-- Generate button -->
+  <div class="flex justify-center mt-6">
+    <button
+      id="pg-btn"
+      type="button"
+      class="w-full sm:w-auto px-8 py-3 bg-accent text-white font-semibold rounded-xl shadow-lg shadow-accent/25 hover:bg-accent-hover active:bg-accent-active focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
+    >
+      {i18n.generate}
+    </button>
+  </div>
+</div>
+
+<script>
+  import { createErrorDisplay } from "@/lib/client/validation";
+
+  const isRu = document.documentElement.lang === "ru";
+
+  const harmonySelect = document.getElementById("pg-harmony") as HTMLSelectElement;
+  const countSelect = document.getElementById("pg-count") as HTMLSelectElement;
+  const resultEl = document.getElementById("pg-result") as HTMLDivElement;
+  const swatchesEl = document.getElementById("pg-swatches") as HTMLDivElement;
+  const copyAllBtn = document.getElementById("pg-copy-all") as HTMLButtonElement;
+  const generateBtn = document.getElementById("pg-btn") as HTMLButtonElement;
+  const errorEl = document.getElementById("pg-error") as HTMLDivElement;
+  const errorDisplay = createErrorDisplay(errorEl);
+
+  // Copy icon SVGs
+  const copyIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
+  const checkIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><path d="M20 6 9 17l-5-5"/></svg>`;
+
+  function randomInt(max: number): number {
+    return Math.floor(Math.random() * max);
+  }
+
+  function hslToHex(h: number, s: number, l: number): string {
+    s /= 100;
+    l /= 100;
+    const k = (n: number) => (n + h / 30) % 12;
+    const a = s * Math.min(l, 1 - l);
+    const f = (n: number) => {
+      const color = l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+      return Math.round(color * 255)
+        .toString(16)
+        .padStart(2, "0");
+    };
+    return `#${f(0)}${f(8)}${f(4)}`.toUpperCase();
+  }
+
+  function generateRandomColors(count: number): string[] {
+    const colors: string[] = [];
+    for (let i = 0; i < count; i++) {
+      const h = randomInt(360);
+      const s = 50 + randomInt(51);
+      const l = 40 + randomInt(41);
+      colors.push(hslToHex(h, s, l));
+    }
+    return colors;
+  }
+
+  function generateAnalogousColors(count: number): string[] {
+    const baseH = randomInt(360);
+    const s = 55 + randomInt(41);
+    const l = 40 + randomInt(31);
+    const colors: string[] = [];
+    const step = 30;
+    const start = baseH - ((count - 1) * step) / 2;
+    for (let i = 0; i < count; i++) {
+      const h = (start + i * step + 360) % 360;
+      colors.push(hslToHex(h, s, l));
+    }
+    return colors;
+  }
+
+  function generateComplementaryColors(count: number): string[] {
+    const baseH = randomInt(360);
+    const s = 55 + randomInt(41);
+    const l = 40 + randomInt(31);
+    const colors: string[] = [];
+    const compH = (baseH + 180) % 360;
+    if (count <= 2) {
+      colors.push(hslToHex(baseH, s, l));
+      colors.push(hslToHex(compH, s, l));
+    } else {
+      colors.push(hslToHex(baseH, s, l));
+      colors.push(hslToHex((baseH + 30) % 360, s, l));
+      for (let i = 2; i < count; i++) {
+        colors.push(hslToHex(compH, s, l + (i - 2) * 10));
+      }
+    }
+    return colors.slice(0, count);
+  }
+
+  function generateTriadicColors(count: number): string[] {
+    const baseH = randomInt(360);
+    const s = 55 + randomInt(41);
+    const l = 40 + randomInt(31);
+    const colors: string[] = [];
+    const triad = [baseH, (baseH + 120) % 360, (baseH + 240) % 360];
+    for (let i = 0; i < count; i++) {
+      const h = triad[i % 3];
+      const lightness = l + Math.floor(i / 3) * 12;
+      colors.push(hslToHex(h, s, Math.min(lightness, 90)));
+    }
+    return colors;
+  }
+
+  function generateMonochromaticColors(count: number): string[] {
+    const baseH = randomInt(360);
+    const s = 55 + randomInt(41);
+    const colors: string[] = [];
+    const startL = 25;
+    const endL = 75;
+    for (let i = 0; i < count; i++) {
+      const l = startL + ((endL - startL) * i) / Math.max(count - 1, 1);
+      colors.push(hslToHex(baseH, s, Math.round(l)));
+    }
+    return colors;
+  }
+
+  function generateSplitComplementaryColors(count: number): string[] {
+    const baseH = randomInt(360);
+    const s = 55 + randomInt(41);
+    const l = 40 + randomInt(31);
+    const colors: string[] = [];
+    const hues = [baseH, (baseH + 150) % 360, (baseH + 210) % 360];
+    for (let i = 0; i < count; i++) {
+      const h = hues[i % 3];
+      const lightness = l + Math.floor(i / 3) * 12;
+      colors.push(hslToHex(h, s, Math.min(lightness, 90)));
+    }
+    return colors;
+  }
+
+  function generateTetradicColors(count: number): string[] {
+    const baseH = randomInt(360);
+    const s = 55 + randomInt(41);
+    const l = 40 + randomInt(31);
+    const colors: string[] = [];
+    const rectHues = [baseH, (baseH + 60) % 360, (baseH + 180) % 360, (baseH + 240) % 360];
+    for (let i = 0; i < count; i++) {
+      const h = rectHues[i % 4];
+      const lightness = l + Math.floor(i / 4) * 12;
+      colors.push(hslToHex(h, s, Math.min(lightness, 90)));
+    }
+    return colors;
+  }
+
+  function generatePalette(mode: string, count: number): string[] {
+    switch (mode) {
+      case "analogous":
+        return generateAnalogousColors(count);
+      case "complementary":
+        return generateComplementaryColors(count);
+      case "triadic":
+        return generateTriadicColors(count);
+      case "monochromatic":
+        return generateMonochromaticColors(count);
+      case "split-complementary":
+        return generateSplitComplementaryColors(count);
+      case "tetradic":
+        return generateTetradicColors(count);
+      default:
+        return generateRandomColors(count);
+    }
+  }
+
+  let currentColors: string[] = [];
+  const copyTimers = new Map<number, ReturnType<typeof setTimeout>>();
+
+  function renderSwatches(colors: string[]) {
+    currentColors = colors;
+    swatchesEl.innerHTML = "";
+    copyTimers.clear();
+
+    colors.forEach((hex, index) => {
+      const swatch = document.createElement("div");
+      swatch.className = "flex flex-col items-center gap-2";
+
+      const colorBox = document.createElement("button");
+      colorBox.type = "button";
+      colorBox.className =
+        "group relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border border-zinc-800 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-transform duration-150 hover:scale-105";
+      colorBox.style.backgroundColor = hex;
+      colorBox.setAttribute("aria-label", isRu ? `Скопировать ${hex}` : `Copy ${hex}`);
+      colorBox.dataset.hex = hex;
+
+      // Copy overlay icon
+      const overlay = document.createElement("div");
+      overlay.className =
+        "absolute inset-0 flex items-center justify-center rounded-2xl bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-150";
+      overlay.innerHTML = `<span class="text-white">${copyIconSvg}</span>`;
+      colorBox.appendChild(overlay);
+
+      // Attach click handler directly to the button
+      colorBox.addEventListener("click", async () => {
+        await navigator.clipboard.writeText(hex);
+        overlay.innerHTML = `<span class="text-white">${checkIconSvg}</span>`;
+        overlay.classList.remove("opacity-0", "group-hover:opacity-100");
+        overlay.classList.add("opacity-100");
+        const existing = copyTimers.get(index);
+        if (existing) clearTimeout(existing);
+        copyTimers.set(
+          index,
+          setTimeout(() => {
+            overlay.innerHTML = `<span class="text-white">${copyIconSvg}</span>`;
+            overlay.classList.remove("opacity-100");
+            overlay.classList.add("opacity-0", "group-hover:opacity-100");
+            copyTimers.delete(index);
+          }, 1500),
+        );
+      });
+
+      // HEX label
+      const label = document.createElement("span");
+      label.className = "font-mono text-sm text-zinc-300 tabular-nums select-all cursor-pointer hover:text-zinc-100 transition-colors";
+      label.textContent = hex;
+
+      // Attach click handler directly to the label
+      label.addEventListener("click", () => {
+        navigator.clipboard.writeText(hex);
+      });
+
+      swatch.appendChild(colorBox);
+      swatch.appendChild(label);
+      swatchesEl.appendChild(swatch);
+    });
+
+    resultEl.style.opacity = "1";
+    errorDisplay.clear();
+  }
+
+  copyAllBtn.addEventListener("click", async () => {
+    if (currentColors.length === 0) return;
+    const text = currentColors.join(", ");
+    await navigator.clipboard.writeText(text);
+
+    const originalText = copyAllBtn.textContent;
+    copyAllBtn.textContent = isRu ? "Скопировано!" : "Copied!";
+    setTimeout(() => {
+      copyAllBtn.textContent = originalText;
+    }, 1500);
+  });
+
+  function generate() {
+    const mode = harmonySelect.value;
+    const count = parseInt(countSelect.value, 10);
+    try {
+      const colors = generatePalette(mode, count);
+      renderSwatches(colors);
+    } catch {
+      errorDisplay.show(isRu ? "Не удалось сгенерировать палитру." : "Failed to generate palette.");
+    }
+  }
+
+  generateBtn.addEventListener("click", generate);
+
+  // Generate on load
+  generate();
+</script>

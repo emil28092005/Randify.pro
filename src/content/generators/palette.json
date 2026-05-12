@@ -1,0 +1,47 @@
+{
+  "slug": "palette",
+  "title": "Color Palette",
+  "description": "Generate harmonious color palettes with one click.",
+  "icon": "palette",
+  "status": "live",
+  "seoTitle": "Color Palette Generator — Random & Harmonic Palettes | Randify",
+  "seoDescription": "Generate beautiful color palettes instantly. Choose from Random, Analogous, Complementary, Triadic, and Monochromatic harmony modes. Free online tool for designers.",
+  "ruTitle": "Палитра цветов",
+  "ruDescription": "Генерируйте гармоничные палитры цветов одним нажатием.",
+  "ruSeoTitle": "Генератор палитры цветов — случайные и гармоничные палитры | Randify",
+  "ruSeoDescription": "Создавайте красивые палитры цветов мгновенно. Выбирайте режимы гармонии: случайный, аналоговый, комплементарный, триадный, монохромный. Бесплатный онлайн-инструмент для дизайнеров.",
+  "pageTitle": "Color Palette Generator",
+  "ruPageTitle": "Генератор палитры цветов",
+  "howTo": [
+    "Select the number of colors and a harmony mode.",
+    "Click Generate to create a new palette.",
+    "Click any color swatch to copy its HEX code, or use Copy All to copy the entire palette."
+  ],
+  "whenTo": [
+    "Designing a brand identity or logo color scheme.",
+    "Choosing colors for a website or app UI.",
+    "Creating illustrations, presentations, or social media graphics.",
+    "Exploring color theory and harmony relationships."
+  ],
+  "ruHowTo": [
+    "Выберите количество цветов и режим гармонии.",
+    "Нажмите «Сгенерировать», чтобы создать новую палитру.",
+    "Нажмите на любой цвет, чтобы скопировать его HEX-код, или используйте «Копировать всё»."
+  ],
+  "ruWhenTo": [
+    "Разработка фирменного стиля или цветовой схемы логотипа.",
+    "Выбор цветов для дизайна сайта или приложения.",
+    "Создание иллюстраций, презентаций или графики для соцсетей.",
+    "Изучение теории цвета и цветовых гармоний."
+  ],
+  "faq": [
+    { "q": "What harmony modes are available?", "a": "Random, Analogous, Complementary, Triadic, and Monochromatic. Each mode creates colors based on a different relationship on the color wheel." },
+    { "q": "Can I copy the whole palette at once?", "a": "Yes. Click the Copy All button to copy all HEX codes separated by commas to your clipboard." },
+    { "q": "How many colors can I generate?", "a": "You can generate palettes from 3 to 8 colors using the count selector." }
+  ],
+  "ruFaq": [
+    { "q": "Какие режимы гармонии доступны?", "a": "Случайный, аналоговый, комплементарный, триадный и монохромный. Каждый режим создаёт цвета на основе разных отношений на цветовом круге." },
+    { "q": "Можно ли скопировать всю палитру сразу?", "a": "Да. Нажмите кнопку «Копировать всё», чтобы скопировать все HEX-коды через запятую в буфер обмена." },
+    { "q": "Сколько цветов можно сгенерировать?", "a": "Вы можете создавать палитры от 3 до 8 цветов с помощью селектора количества." }
+  ]
+}

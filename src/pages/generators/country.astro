@@ -1,0 +1,11 @@
+---
+import GeneratorLayout from "@/layouts/GeneratorLayout.astro";
+import CountryGenerator from "@/components/generators/CountryGenerator.astro";
+import { generators } from "@/data/generators";
+
+const generator = generators.find((g) => g.slug === "country")!;
+---
+
+<GeneratorLayout generator={generator}>
+  <CountryGenerator />
+</GeneratorLayout>

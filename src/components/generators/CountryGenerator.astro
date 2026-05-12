@@ -1,0 +1,249 @@
+---
+import { useT } from "../../i18n/translations";
+const isRu = Astro.url.pathname.startsWith("/ru");
+const T = useT(isRu ? "ru" : "en");
+
+const regions = isRu
+  ? [
+      { value: "all", label: "Все" },
+      { value: "europe", label: "Европа" },
+      { value: "asia", label: "Азия" },
+      { value: "americas", label: "Америка" },
+      { value: "africa", label: "Африка" },
+      { value: "oceania", label: "Океания" },
+    ]
+  : [
+      { value: "all", label: "All" },
+      { value: "europe", label: "Europe" },
+      { value: "asia", label: "Asia" },
+      { value: "americas", label: "Americas" },
+      { value: "africa", label: "Africa" },
+      { value: "oceania", label: "Oceania" },
+    ];
+---
+
+<div id="country-generator" class="mt-8">
+  <!-- Filter -->
+  <div class="mb-6 flex flex-wrap items-center gap-3">
+    <label for="cg-region" class="text-sm font-medium text-zinc-300">
+      {isRu ? "Регион" : "Region"}
+    </label>
+    <select
+      id="cg-region"
+      class="px-3 py-2 rounded-lg bg-zinc-900 border border-zinc-800 text-sm text-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 cursor-pointer"
+    >
+      {regions.map((r) => <option value={r.value}>{r.label}</option>)}
+    </select>
+  </div>
+
+  <!-- Result card -->
+  <div
+    id="cg-result"
+    class="rounded-2xl bg-zinc-900/80 border border-zinc-800/80 p-8 opacity-0"
+    style="transition: opacity 0.25s ease;"
+    aria-live="polite"
+  >
+    <div class="flex flex-col items-center text-center">
+      <div
+        id="cg-flag"
+        class="text-7xl leading-none mb-4"
+        aria-hidden="true"
+      />
+      <h3
+        id="cg-name"
+        class="text-2xl font-bold text-zinc-100 mb-1"
+      />
+      <div class="flex flex-wrap items-center justify-center gap-2 text-sm text-zinc-400 mt-2">
+        <span id="cg-capital-label" class="text-zinc-500">
+          {isRu ? "Столица:" : "Capital:"}
+        </span>
+        <span id="cg-capital" class="text-zinc-200 font-medium" />
+        <span class="text-zinc-600">•</span>
+        <span id="cg-region-label" class="text-zinc-500">
+          {isRu ? "Регион:" : "Region:"}
+        </span>
+        <span id="cg-region-display" class="text-zinc-200 font-medium" />
+        <span class="text-zinc-600">•</span>
+        <span id="cg-population-label" class="text-zinc-500">
+          {isRu ? "Население:" : "Population:"}
+        </span>
+        <span id="cg-population" class="text-zinc-200 font-medium" />
+      </div>
+
+      <!-- Copy button -->
+      <button
+        id="cg-copy"
+        type="button"
+        class="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-zinc-800 text-zinc-300 hover:text-zinc-100 hover:bg-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors cursor-pointer"
+      >
+        <svg
+          id="cg-copy-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+          <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+        </svg>
+        <svg
+          id="cg-check-icon"
+          class="hidden text-accent"
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+        <span id="cg-copy-text">{T.copy}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Generate button -->
+  <div class="flex justify-center mt-8">
+    <button
+      id="cg-btn"
+      type="button"
+      class="w-full sm:w-auto px-8 py-3 bg-accent text-white font-semibold rounded-xl shadow-lg shadow-accent/25 hover:bg-accent-hover active:bg-accent-active focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
+    >
+      {T.generate}
+    </button>
+  </div>
+</div>
+
+<script>
+  interface Country {
+    name: string;
+    ruName: string;
+    capital: string;
+    ruCapital: string;
+    region: string;
+    ruRegion: string;
+    population: number;
+    flagEmoji: string;
+  }
+
+  const countries: Country[] = [
+    { name: "France", ruName: "Франция", capital: "Paris", ruCapital: "Париж", region: "europe", ruRegion: "Европа", population: 68000000, flagEmoji: "🇫🇷" },
+    { name: "Germany", ruName: "Германия", capital: "Berlin", ruCapital: "Берлин", region: "europe", ruRegion: "Европа", population: 83000000, flagEmoji: "🇩🇪" },
+    { name: "Italy", ruName: "Италия", capital: "Rome", ruCapital: "Рим", region: "europe", ruRegion: "Европа", population: 59000000, flagEmoji: "🇮🇹" },
+    { name: "Spain", ruName: "Испания", capital: "Madrid", ruCapital: "Мадрид", region: "europe", ruRegion: "Европа", population: 47000000, flagEmoji: "🇪🇸" },
+    { name: "United Kingdom", ruName: "Великобритания", capital: "London", ruCapital: "Лондон", region: "europe", ruRegion: "Европа", population: 67000000, flagEmoji: "🇬🇧" },
+    { name: "Japan", ruName: "Япония", capital: "Tokyo", ruCapital: "Токио", region: "asia", ruRegion: "Азия", population: 125000000, flagEmoji: "🇯🇵" },
+    { name: "China", ruName: "Китай", capital: "Beijing", ruCapital: "Пекин", region: "asia", ruRegion: "Азия", population: 1410000000, flagEmoji: "🇨🇳" },
+    { name: "India", ruName: "Индия", capital: "New Delhi", ruCapital: "Нью-Дели", region: "asia", ruRegion: "Азия", population: 1380000000, flagEmoji: "🇮🇳" },
+    { name: "South Korea", ruName: "Южная Корея", capital: "Seoul", ruCapital: "Сеул", region: "asia", ruRegion: "Азия", population: 52000000, flagEmoji: "🇰🇷" },
+    { name: "Thailand", ruName: "Таиланд", capital: "Bangkok", ruCapital: "Бангкок", region: "asia", ruRegion: "Азия", population: 70000000, flagEmoji: "🇹🇭" },
+    { name: "United States", ruName: "США", capital: "Washington, D.C.", ruCapital: "Вашингтон", region: "americas", ruRegion: "Америка", population: 331000000, flagEmoji: "🇺🇸" },
+    { name: "Brazil", ruName: "Бразилия", capital: "Brasília", ruCapital: "Бразилиа", region: "americas", ruRegion: "Америка", population: 213000000, flagEmoji: "🇧🇷" },
+    { name: "Canada", ruName: "Канада", capital: "Ottawa", ruCapital: "Оттава", region: "americas", ruRegion: "Америка", population: 38000000, flagEmoji: "🇨🇦" },
+    { name: "Mexico", ruName: "Мексика", capital: "Mexico City", ruCapital: "Мехико", region: "americas", ruRegion: "Америка", population: 126000000, flagEmoji: "🇲🇽" },
+    { name: "Argentina", ruName: "Аргентина", capital: "Buenos Aires", ruCapital: "Буэнос-Айрес", region: "americas", ruRegion: "Америка", population: 45000000, flagEmoji: "🇦🇷" },
+    { name: "Egypt", ruName: "Египет", capital: "Cairo", ruCapital: "Каир", region: "africa", ruRegion: "Африка", population: 102000000, flagEmoji: "🇪🇬" },
+    { name: "South Africa", ruName: "ЮАР", capital: "Pretoria", ruCapital: "Претория", region: "africa", ruRegion: "Африка", population: 59000000, flagEmoji: "🇿🇦" },
+    { name: "Nigeria", ruName: "Нигерия", capital: "Abuja", ruCapital: "Абуджа", region: "africa", ruRegion: "Африка", population: 206000000, flagEmoji: "🇳🇬" },
+    { name: "Kenya", ruName: "Кения", capital: "Nairobi", ruCapital: "Найроби", region: "africa", ruRegion: "Африка", population: 54000000, flagEmoji: "🇰🇪" },
+    { name: "Morocco", ruName: "Марокко", capital: "Rabat", ruCapital: "Рабат", region: "africa", ruRegion: "Африка", population: 37000000, flagEmoji: "🇲🇦" },
+    { name: "Australia", ruName: "Австралия", capital: "Canberra", ruCapital: "Канберра", region: "oceania", ruRegion: "Океания", population: 26000000, flagEmoji: "🇦🇺" },
+    { name: "New Zealand", ruName: "Новая Зеландия", capital: "Wellington", ruCapital: "Веллингтон", region: "oceania", ruRegion: "Океания", population: 5000000, flagEmoji: "🇳🇿" },
+    { name: "Russia", ruName: "Россия", capital: "Moscow", ruCapital: "Москва", region: "europe", ruRegion: "Европа", population: 146000000, flagEmoji: "🇷🇺" },
+    { name: "Turkey", ruName: "Турция", capital: "Ankara", ruCapital: "Анкара", region: "asia", ruRegion: "Азия", population: 84000000, flagEmoji: "🇹🇷" },
+    { name: "Saudi Arabia", ruName: "Саудовская Аравия", capital: "Riyadh", ruCapital: "Эр-Рияд", region: "asia", ruRegion: "Азия", population: 35000000, flagEmoji: "🇸🇦" },
+    { name: "Indonesia", ruName: "Индонезия", capital: "Jakarta", ruCapital: "Джакарта", region: "asia", ruRegion: "Азия", population: 274000000, flagEmoji: "🇮🇩" },
+    { name: "Vietnam", ruName: "Вьетнам", capital: "Hanoi", ruCapital: "Ханой", region: "asia", ruRegion: "Азия", population: 97000000, flagEmoji: "🇻🇳" },
+    { name: "Colombia", ruName: "Колумбия", capital: "Bogotá", ruCapital: "Богота", region: "americas", ruRegion: "Америка", population: 50000000, flagEmoji: "🇨🇴" },
+    { name: "Peru", ruName: "Перу", capital: "Lima", ruCapital: "Лима", region: "americas", ruRegion: "Америка", population: 33000000, flagEmoji: "🇵🇪" },
+    { name: "Chile", ruName: "Чили", capital: "Santiago", ruCapital: "Сантьяго", region: "americas", ruRegion: "Америка", population: 19000000, flagEmoji: "🇨🇱" },
+    { name: "Ethiopia", ruName: "Эфиопия", capital: "Addis Ababa", ruCapital: "Аддис-Абеба", region: "africa", ruRegion: "Африка", population: 115000000, flagEmoji: "🇪🇹" },
+    { name: "Ghana", ruName: "Гана", capital: "Accra", ruCapital: "Аккра", region: "africa", ruRegion: "Африка", population: 31000000, flagEmoji: "🇬🇭" },
+    { name: "Tanzania", ruName: "Танзания", capital: "Dodoma", ruCapital: "Додома", region: "africa", ruRegion: "Африка", population: 61000000, flagEmoji: "🇹🇿" },
+    { name: "Sweden", ruName: "Швеция", capital: "Stockholm", ruCapital: "Стокгольм", region: "europe", ruRegion: "Европа", population: 10000000, flagEmoji: "🇸🇪" },
+    { name: "Norway", ruName: "Норвегия", capital: "Oslo", ruCapital: "Осло", region: "europe", ruRegion: "Европа", population: 5400000, flagEmoji: "🇳🇴" },
+    { name: "Netherlands", ruName: "Нидерланды", capital: "Amsterdam", ruCapital: "Амстердам", region: "europe", ruRegion: "Европа", population: 17400000, flagEmoji: "🇳🇱" },
+    { name: "Poland", ruName: "Польша", capital: "Warsaw", ruCapital: "Варшава", region: "europe", ruRegion: "Европа", population: 38000000, flagEmoji: "🇵🇱" },
+    { name: "Greece", ruName: "Греция", capital: "Athens", ruCapital: "Афины", region: "europe", ruRegion: "Европа", population: 10700000, flagEmoji: "🇬🇷" },
+    { name: "Portugal", ruName: "Португалия", capital: "Lisbon", ruCapital: "Лиссабон", region: "europe", ruRegion: "Европа", population: 10300000, flagEmoji: "🇵🇹" },
+  ];
+
+  const regionSelect = document.getElementById("cg-region") as HTMLSelectElement;
+  const resultEl = document.getElementById("cg-result") as HTMLDivElement;
+  const flagEl = document.getElementById("cg-flag") as HTMLDivElement;
+  const nameEl = document.getElementById("cg-name") as HTMLHeadingElement;
+  const capitalEl = document.getElementById("cg-capital") as HTMLSpanElement;
+  const regionEl = document.getElementById("cg-region-display") as HTMLSpanElement;
+  const populationEl = document.getElementById("cg-population") as HTMLSpanElement;
+  const btn = document.getElementById("cg-btn") as HTMLButtonElement;
+  const copyBtn = document.getElementById("cg-copy") as HTMLButtonElement;
+  const copyIcon = document.getElementById("cg-copy-icon") as SVGElement;
+  const checkIcon = document.getElementById("cg-check-icon") as SVGElement;
+  const copyText = document.getElementById("cg-copy-text") as HTMLSpanElement;
+
+  const isRu = document.documentElement.lang === "ru";
+
+  function formatPopulation(n: number): string {
+    if (n >= 1_000_000_000) return (n / 1_000_000_000).toFixed(1).replace(/\.0$/, "") + "B";
+    if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
+    if (n >= 1_000) return (n / 1_000).toFixed(1).replace(/\.0$/, "") + "K";
+    return n.toString();
+  }
+
+  function getFilteredCountries(): Country[] {
+    const region = regionSelect.value;
+    if (region === "all") return countries;
+    return countries.filter((c) => c.region === region);
+  }
+
+  function generate() {
+    const list = getFilteredCountries();
+    if (list.length === 0) return;
+    const country = list[Math.floor(Math.random() * list.length)];
+
+    flagEl.textContent = country.flagEmoji;
+    nameEl.textContent = isRu ? country.ruName : country.name;
+    capitalEl.textContent = isRu ? country.ruCapital : country.capital;
+    regionEl.textContent = isRu ? country.ruRegion : country.region.charAt(0).toUpperCase() + country.region.slice(1);
+    populationEl.textContent = formatPopulation(country.population);
+
+    resultEl.style.opacity = "1";
+  }
+
+  let copyTimer: ReturnType<typeof setTimeout> | null = null;
+
+  copyBtn.addEventListener("click", async () => {
+    const flag = flagEl.textContent?.trim() || "";
+    const name = nameEl.textContent?.trim() || "";
+    const capital = capitalEl.textContent?.trim() || "";
+    const region = regionEl.textContent?.trim() || "";
+    const population = populationEl.textContent?.trim() || "";
+
+    if (!name) return;
+
+    const text = `${flag} ${name} — ${capital} — ${region} — ${population} ${isRu ? "чел." : "people"}`;
+    await navigator.clipboard.writeText(text);
+
+    copyIcon.classList.add("hidden");
+    checkIcon.classList.remove("hidden");
+    copyText.textContent = isRu ? "Скопировано" : "Copied";
+
+    if (copyTimer) clearTimeout(copyTimer);
+    copyTimer = setTimeout(() => {
+      checkIcon.classList.add("hidden");
+      copyIcon.classList.remove("hidden");
+      copyText.textContent = isRu ? "Копировать" : "Copy";
+    }, 1500);
+  });
+
+  btn.addEventListener("click", generate);
+</script>

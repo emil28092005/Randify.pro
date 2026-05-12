@@ -1,0 +1,11 @@
+---
+import GeneratorLayout from "@/layouts/GeneratorLayout.astro";
+import WeightedGenerator from "@/components/generators/WeightedGenerator.astro";
+import { generators } from "@/data/generators";
+
+const generator = generators.find((g) => g.slug === "weighted")!;
+---
+
+<GeneratorLayout generator={generator}>
+  <WeightedGenerator />
+</GeneratorLayout>

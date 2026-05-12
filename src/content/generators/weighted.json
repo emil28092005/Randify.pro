@@ -1,0 +1,47 @@
+{
+  "slug": "weighted",
+  "title": "Weighted Random",
+  "description": "Pick a random item from a list using custom weights for each option.",
+  "icon": "list",
+  "status": "live",
+  "seoTitle": "Weighted Random Generator — Weighted Choice Picker | Randify",
+  "seoDescription": "Pick random items with custom weights. Perfect for raffles, weighted decisions, and probability experiments. Free online weighted random selector.",
+  "ruTitle": "Взвешенный случайный выбор",
+  "ruDescription": "Выбирайте случайный элемент из списка с учётом заданных весов для каждого варианта.",
+  "ruSeoTitle": "Генератор взвешенного случайного выбора | Randify",
+  "ruSeoDescription": "Выбирайте случайные элементы с заданными весами. Идеально для розыгрышей, взвешенных решений и экспериментов с вероятностями.",
+  "pageTitle": "Weighted Random Generator",
+  "ruPageTitle": "Генератор взвешенного случайного выбора",
+  "howTo": [
+    "Add items to the list and assign a weight to each one. Higher weight means higher chance of being picked.",
+    "Click Pick to select one random item based on the weights.",
+    "Use Pick N times to run multiple trials and see the distribution statistics."
+  ],
+  "whenTo": [
+    "Running a raffle where some participants have more entries than others.",
+    "Making weighted decisions when options have different priorities.",
+    "Simulating probability distributions or testing randomness.",
+    "Creating balanced teams or assignments with different skill weights."
+  ],
+  "ruHowTo": [
+    "Добавьте элементы в список и назначьте каждому вес. Чем выше вес, тем больше шанс быть выбранным.",
+    "Нажмите «Выбрать», чтобы случайно выбрать один элемент с учётом весов.",
+    "Используйте «Выбрать N раз» для множественных испытаний и просмотра статистики распределения."
+  ],
+  "ruWhenTo": [
+    "Проведение розыгрыша, где у некоторых участников больше шансов, чем у других.",
+    "Принятие взвешенных решений, когда у вариантов разные приоритеты.",
+    "Моделирование распределений вероятностей или тестирование случайности.",
+    "Создание сбалансированных команд или назначений с разными весами навыков."
+  ],
+  "faq": [
+    { "q": "How does weighted random selection work?", "a": "Each item's chance of being picked is proportional to its weight. If item A has weight 2 and item B has weight 8, B is 4 times more likely to be selected than A." },
+    { "q": "Can I use decimal weights?", "a": "Yes, you can use any positive number as a weight, including decimals. The generator normalizes all weights automatically." },
+    { "q": "Is the result truly random?", "a": "Yes. The generator uses a cryptographically secure random number generator to ensure fair and unpredictable results every time." }
+  ],
+  "ruFaq": [
+    { "q": "Как работает взвешенный случайный выбор?", "a": "Шанс выбора каждого элемента пропорционален его весу. Если у элемента А вес 2, а у элемента Б вес 8, то Б в 4 раза чаще будет выбран, чем А." },
+    { "q": "Можно ли использовать дробные веса?", "a": "Да, весом может быть любое положительное число, включая десятичные дроби. Генератор автоматически нормализует все веса." },
+    { "q": "Результат действительно случайный?", "a": "Да. Генератор использует криптографически стойкий генератор случайных чисел, чтобы гарантировать честный и непредсказуемый результат каждый раз." }
+  ]
+}

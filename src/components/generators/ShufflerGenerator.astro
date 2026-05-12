@@ -1,0 +1,225 @@
+---
+import { useT } from "../../i18n/translations";
+const isRu = Astro.url.pathname.startsWith("/ru");
+const T = useT(isRu ? "ru" : "en");
+---
+
+<div id="shuffler-generator" class="mt-8">
+  <div class="rounded-2xl bg-zinc-900/80 border border-zinc-800/80 p-8">
+    <div class="flex flex-col gap-4">
+      <div>
+        <label
+          for="shf-items"
+          class="block text-sm font-medium text-zinc-400 mb-1"
+        >
+          {T.items}
+          <span class="text-zinc-600">({T.itemsOneLine})</span>
+        </label>
+        <textarea
+          id="shf-items"
+          rows="8"
+          placeholder={isRu
+            ? "Введите элементы, по одному на строку"
+            : "Enter items, one per line"}
+          class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-100 text-sm font-mono focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors resize-y"
+          aria-label={T.items}></textarea>
+      </div>
+    </div>
+
+    <p
+      id="shf-error"
+      role="alert"
+      aria-live="polite"
+      class="mt-3 text-sm text-red-500 hidden"
+    >
+    </p>
+  </div>
+
+  <div class="flex justify-center mt-6">
+    <button
+      id="shf-btn"
+      type="button"
+      class="w-full sm:w-auto px-8 py-3 bg-accent text-white font-semibold rounded-xl shadow-lg shadow-accent/25 hover:bg-accent-hover active:bg-accent-active focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
+    >
+      {isRu ? "Перемешать" : "Shuffle"}
+    </button>
+  </div>
+
+  <div
+    id="shf-result-area"
+    class="mt-6 rounded-2xl bg-zinc-900/80 border border-zinc-800/80 p-8 hidden"
+  >
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-sm font-medium text-zinc-400">
+        {isRu ? "Результат" : "Result"}
+      </h3>
+      <button
+        id="shf-copy-btn"
+        type="button"
+        aria-label={isRu ? "Скопировать результат" : "Copy shuffled items to clipboard"}
+        class="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
+      >
+        <span id="shf-copy-label">{T.copy}</span>
+        <span id="shf-copy-icon" aria-hidden="true">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+            ></path>
+          </svg>
+        </span>
+        <span
+          id="shf-check-icon"
+          class="hidden text-accent"
+          aria-hidden="true"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 6 9 17l-5-5"></path>
+          </svg>
+        </span>
+      </button>
+    </div>
+
+    <ol
+      id="shf-result"
+      class="flex flex-col gap-2"
+      aria-live="polite"
+      aria-label={isRu ? "Перемешанные элементы" : "Shuffled items"}
+    >
+    </ol>
+  </div>
+</div>
+
+<script>
+  import { CopyFeedback } from "@/lib/client/clipboard";
+  import { createErrorDisplay } from "@/lib/client/validation";
+
+  const isRu = document.documentElement.lang === "ru";
+  const COPY_LABEL = isRu ? "Копировать" : "Copy";
+  const COPIED_LABEL = isRu ? "Скопировано" : "Copied";
+  const ERR_MIN_TWO = isRu
+    ? "Добавьте хотя бы 2 элемента."
+    : "Add at least 2 items.";
+
+  const itemsInput = document.getElementById(
+    "shf-items",
+  ) as HTMLTextAreaElement;
+  const btn = document.getElementById("shf-btn") as HTMLButtonElement;
+  const copyBtn = document.getElementById("shf-copy-btn") as HTMLButtonElement;
+  const resultEl = document.getElementById("shf-result") as HTMLOListElement;
+  const resultArea = document.getElementById(
+    "shf-result-area",
+  ) as HTMLDivElement;
+  const errorEl = document.getElementById("shf-error") as HTMLParagraphElement;
+  const copyLabel = document.getElementById(
+    "shf-copy-label",
+  ) as HTMLSpanElement;
+  const copyIcon = document.getElementById("shf-copy-icon") as HTMLSpanElement;
+  const checkIcon = document.getElementById(
+    "shf-check-icon",
+  ) as HTMLSpanElement;
+
+  let lastShuffled: string[] = [];
+
+  const errors = createErrorDisplay(errorEl);
+  const clipboard = new CopyFeedback(copyIcon, checkIcon);
+
+  function fisherYatesShuffle<T>(array: T[]): T[] {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function shuffle() {
+    const items = itemsInput.value
+      .split("\n")
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    if (items.length < 2) {
+      errors.show(ERR_MIN_TWO);
+      return;
+    }
+
+    errors.clear();
+    lastShuffled = fisherYatesShuffle(items);
+
+    resultEl.innerHTML = "";
+    lastShuffled.forEach((item, index) => {
+      const li = document.createElement("li");
+      li.className =
+        "flex items-center gap-3 rounded-xl bg-zinc-950 border border-zinc-800 px-4 py-3 opacity-0 translate-y-2";
+      li.style.animation = `shfFadeSlideIn 0.3s ease ${index * 0.05}s forwards`;
+
+      const number = document.createElement("span");
+      number.className =
+        "flex-shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-lg bg-accent/15 text-accent text-xs font-bold";
+      number.textContent = String(index + 1);
+
+      const text = document.createElement("span");
+      text.className = "text-zinc-100 text-sm break-all";
+      text.textContent = item;
+
+      li.appendChild(number);
+      li.appendChild(text);
+      resultEl.appendChild(li);
+    });
+
+    resultArea.classList.remove("hidden");
+    copyLabel.textContent = COPY_LABEL;
+    clipboard.revert();
+  }
+
+  async function copyShuffled() {
+    if (!lastShuffled.length) return;
+    await navigator.clipboard.writeText(lastShuffled.join("\n"));
+
+    clipboard.showCopied();
+    copyLabel.textContent = COPIED_LABEL;
+
+    setTimeout(() => {
+      copyLabel.textContent = COPY_LABEL;
+    }, 1500);
+  }
+
+  btn.addEventListener("click", shuffle);
+  copyBtn.addEventListener("click", copyShuffled);
+  itemsInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && e.ctrlKey) shuffle();
+  });
+</script>
+
+<style is:inline>
+  @keyframes shfFadeSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

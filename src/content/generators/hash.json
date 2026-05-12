@@ -1,0 +1,87 @@
+{
+  "slug": "hash",
+  "title": "Hash Generator",
+  "description": "Generate MD5, SHA-1, SHA-256, or SHA-512 hashes from any text or random string.",
+  "icon": "hash",
+  "status": "live",
+  "seoTitle": "Hash Generator — MD5, SHA-1, SHA-256, SHA-512 Online | Randify",
+  "seoDescription": "Free online hash generator. Compute MD5, SHA-1, SHA-256, and SHA-512 hashes from any text or random string. Secure, browser-side processing.",
+  "ruTitle": "Генератор хешей",
+  "ruDescription": "Генерируйте хеши MD5, SHA-1, SHA-256 или SHA-512 из любого текста или случайной строки.",
+  "ruSeoTitle": "Генератор хешей — MD5, SHA-1, SHA-256, SHA-512 онлайн | Randify",
+  "ruSeoDescription": "Бесплатный онлайн-генератор хешей. Вычисляйте хеши MD5, SHA-1, SHA-256 и SHA-512 из любого текста или случайной строки. Безопасная обработка в браузере.",
+  "pageTitle": "Hash Generator",
+  "ruPageTitle": "Генератор хешей",
+  "howTo": [
+    "Choose input mode: type your own text or generate a random string.",
+    "Select one or more hash algorithms (MD5, SHA-1, SHA-256, SHA-512).",
+    "Click Generate to compute the hashes instantly in your browser.",
+    "Use the Compare field to check if a given hash matches any result.",
+    "Toggle uppercase/lowercase output format as needed."
+  ],
+  "whenTo": [
+    "Verifying file integrity or data checksums.",
+    "Testing and debugging authentication or hashing logic.",
+    "Generating quick hash values for development workflows.",
+    "Comparing hashes to confirm data matches expected values.",
+    "Learning about different hash algorithms and their outputs."
+  ],
+  "ruHowTo": [
+    "Выберите режим ввода: введите свой текст или сгенерируйте случайную строку.",
+    "Выберите один или несколько алгоритмов хеширования (MD5, SHA-1, SHA-256, SHA-512).",
+    "Нажмите «Сгенерировать» для мгновенного вычисления хешей в браузере.",
+    "Используйте поле сравнения, чтобы проверить, совпадает ли заданный хеш с результатом.",
+    "Переключайте формат вывода: заглавные или строчные буквы."
+  ],
+  "ruWhenTo": [
+    "Проверка целостности файлов или контрольных сумм данных.",
+    "Тестирование и отладка логики аутентификации или хеширования.",
+    "Быстрое генерирование хешей для рабочих процессов разработки.",
+    "Сравнение хешей для подтверждения совпадения данных с ожидаемыми значениями.",
+    "Изучение различных алгоритмов хеширования и их результатов."
+  ],
+  "faq": [
+    {
+      "q": "What is a hash function?",
+      "a": "A hash function is a mathematical algorithm that converts input data of any size into a fixed-size string of characters. It is deterministic (same input always produces the same output) and designed to be a one-way function."
+    },
+    {
+      "q": "Is hashing reversible?",
+      "a": "No, hashing is a one-way process. You cannot recover the original input from its hash value. This is what makes hashing suitable for password storage and data integrity verification."
+    },
+    {
+      "q": "Are my inputs sent to a server?",
+      "a": "No. All hash computations are performed entirely within your browser using the Web Crypto API. Your text never leaves your device, ensuring complete privacy and security."
+    },
+    {
+      "q": "What is the difference between MD5 and SHA-256?",
+      "a": "MD5 produces a 128-bit hash and is considered cryptographically broken — suitable for checksums but not security. SHA-256 produces a 256-bit hash and is currently considered secure for cryptographic purposes."
+    },
+    {
+      "q": "Why would I compare hashes?",
+      "a": "Hash comparison is commonly used to verify data integrity — for example, confirming a downloaded file matches the publisher's checksum, or verifying that a password matches a stored hash."
+    }
+  ],
+  "ruFaq": [
+    {
+      "q": "Что такое хеш-функция?",
+      "a": "Хеш-функция — это математический алгоритм, который преобразует входные данные любого размера в строку фиксированной длины. Она детерминирована (одинаковый вход всегда даёт одинаковый выход) и работает только в одну сторону."
+    },
+    {
+      "q": "Можно ли расшифровать хеш?",
+      "a": "Нет, хеширование — это односторонний процесс. Невозможно восстановить исходные данные из хеш-значения. Именно поэтому хеширование используется для хранения паролей и проверки целостности данных."
+    },
+    {
+      "q": "Отправляются ли мои данные на сервер?",
+      "a": "Нет. Все вычисления хешей выполняются полностью в вашем браузере с помощью Web Crypto API. Ваш текст никогда не покидает устройство, что гарантирует полную конфиденциальность и безопасность."
+    },
+    {
+      "q": "В чём разница между MD5 и SHA-256?",
+      "a": "MD5 генерирует 128-битный хеш и считается криптографически взломанным — подходит для контрольных сумм, но не для безопасности. SHA-256 генерирует 256-битный хеш и в настоящее время считается криптографически стойким."
+    },
+    {
+      "q": "Зачем сравнивать хеши?",
+      "a": "Сравнение хешей обычно используется для проверки целостности данных — например, чтобы убедиться, что загруженный файл совпадает с контрольной суммой издателя, или чтобы проверить совпадение пароля с сохранённым хешем."
+    }
+  ]
+}

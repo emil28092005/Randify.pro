@@ -1,0 +1,11 @@
+---
+import GeneratorLayout from '@/layouts/GeneratorLayout.astro';
+import Magic8BallGenerator from '@/components/generators/Magic8BallGenerator.astro';
+import { findGenerator } from '@/data/generators';
+
+const generator = findGenerator('magic8ball');
+---
+
+<GeneratorLayout generator={generator}>
+  <Magic8BallGenerator />
+</GeneratorLayout>

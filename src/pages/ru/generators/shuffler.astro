@@ -1,0 +1,11 @@
+---
+import GeneratorLayout from "@/layouts/GeneratorLayout.astro";
+import ShufflerGenerator from "@/components/generators/ShufflerGenerator.astro";
+import { findGenerator } from "@/data/generators";
+
+const generator = findGenerator("shuffler");
+---
+
+<GeneratorLayout generator={generator}>
+  <ShufflerGenerator />
+</GeneratorLayout>

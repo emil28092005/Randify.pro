@@ -1,0 +1,93 @@
+---
+import { analytics } from "@/data/config";
+
+const yandexId = analytics.yandexMetrikaId;
+const mailRuId = analytics.topMailRuId;
+---
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" define:vars={{ yandexId }}>
+  /* eslint-disable */
+  (function (m, e, t, r, i, k, a) {
+    m[i] =
+      m[i] ||
+      function () {
+        (m[i].a = m[i].a || []).push(arguments);
+      };
+    m[i].l = 1 * new Date();
+    for (let j = 0; j < document.scripts.length; j++) {
+      if (document.scripts[j].src === r) {
+        return;
+      }
+    }
+    ((k = e.createElement(t)),
+      (a = e.getElementsByTagName(t)[0]),
+      (k.async = 1),
+      (k.src = r),
+      a.parentNode.insertBefore(k, a));
+  })(
+    window,
+    document,
+    "script",
+    "https://mc.yandex.ru/metrika/tag.js?id=" + String(yandexId),
+    "ym",
+  );
+  ym(Number(yandexId), "init", {
+    ssr: true,
+    webvisor: true,
+    clickmap: true,
+    ecommerce: "dataLayer",
+    referrer: document.referrer,
+    url: location.href,
+    accurateTrackBounce: true,
+    trackLinks: true,
+  });
+  /* eslint-enable */
+</script>
+<noscript
+  ><div>
+    <img
+      src={`https://mc.yandex.ru/watch/${yandexId}`}
+      style="position:absolute; left:-9999px;"
+      alt=""
+    />
+  </div></noscript
+>
+<!-- /Yandex.Metrika counter -->
+
+<!-- Top.Mail.Ru counter -->
+<script type="text/javascript" define:vars={{ mailRuId }}>
+  const _tmr = window._tmr || (window._tmr = []);
+  _tmr.push({
+    id: String(mailRuId),
+    type: "pageView",
+    start: new Date().getTime(),
+  });
+  (function (d, w, id) {
+    if (d.getElementById(id)) return;
+    const ts = d.createElement("script");
+    ts.type = "text/javascript";
+    ts.async = true;
+    ts.id = id;
+    ts.src = "https://top-fwz1.mail.ru/js/code.js";
+    const f = function () {
+      const s = d.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(ts, s);
+    };
+    if (w.opera == "[object Opera]") {
+      d.addEventListener("DOMContentLoaded", f, false);
+    } else {
+      f();
+    }
+  })(document, window, "tmr-code");
+</script>
+<noscript
+  ><div>
+    <img
+      src={`https://top-fwz1.mail.ru/counter?id=${mailRuId};js=na`}
+      style="position:absolute;left:-9999px;"
+      alt="Top.Mail.Ru"
+    />
+  </div></noscript
+>
+<!-- /Top.Mail.Ru counter -->

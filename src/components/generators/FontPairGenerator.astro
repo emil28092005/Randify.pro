@@ -1,0 +1,483 @@
+---
+import { useT } from "../../i18n/translations";
+const isRu = Astro.url.pathname.startsWith("/ru");
+const T = useT(isRu ? "ru" : "en");
+
+const i18n = {
+  generate: T.generate,
+  copied: T.copied,
+  copy: T.copy,
+  headingLabel: isRu ? "Заголовок" : "Heading",
+  bodyLabel: isRu ? "Основной текст" : "Body Text",
+  copyHtmlCss: isRu ? "Копировать HTML и CSS" : "Copy HTML & CSS",
+  shuffleHeading: isRu ? "Перемешать заголовок" : "Shuffle heading",
+  shuffleBody: isRu ? "Перемешать текст" : "Shuffle body",
+  lockHeading: isRu ? "Закрепить заголовок" : "Lock heading",
+  lockBody: isRu ? "Закрепить текст" : "Lock body",
+  unlockHeading: isRu ? "Открепить заголовок" : "Unlock heading",
+  unlockBody: isRu ? "Открепить текст" : "Unlock body",
+  googleFonts: isRu ? "Открыть в Google Fonts" : "Open in Google Fonts",
+  previewHeading: isRu ? "Быстрая коричневая лиса прыгает через ленивого пса" : "The quick brown fox jumps over the lazy dog",
+  previewBody: isRu
+    ? "Lorem ipsum — это текст-рыба, часто используемый в печати и веб-дизайне. Он демонстрирует, как выглядит шрифт в реальном абзаце."
+    : "Lorem ipspsum dolor sit amet, consectetur adipiscing elit. This sample text shows how the body font looks in a real paragraph with multiple lines of content.",
+  categories: {
+    serif: isRu ? "С засечками" : "Serif",
+    sans: isRu ? "Без засечек" : "Sans-Serif",
+    display: isRu ? "Декоративный" : "Display",
+    handwriting: isRu ? "Рукописный" : "Handwriting",
+    monospace: isRu ? "Моноширинный" : "Monospace",
+  },
+};
+---
+
+<div id="fontpair-generator" class="mt-8">
+  <!-- Controls -->
+  <div class="flex flex-col sm:flex-row gap-4 mb-6 items-center justify-center">
+    <button
+      id="fp-shuffle-heading"
+      type="button"
+      class="px-5 py-2.5 bg-zinc-800 text-zinc-200 font-medium rounded-xl border border-zinc-700 hover:bg-zinc-700 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer text-sm"
+      title={i18n.shuffleHeading}
+    >
+      <span class="inline-flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l14.4-12.6"/><path d="M22 6h-1.4c-1.3 0-2.5.6-3.3 1.7L7.7 18"/><path d="m16 3 6 3-3 6"/><path d="m8 21-6-3 3-6"/></svg>
+        {i18n.headingLabel}
+      </span>
+    </button>
+    <button
+      id="fp-shuffle-body"
+      type="button"
+      class="px-5 py-2.5 bg-zinc-800 text-zinc-200 font-medium rounded-xl border border-zinc-700 hover:bg-zinc-700 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer text-sm"
+      title={i18n.shuffleBody}
+    >
+      <span class="inline-flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l14.4-12.6"/><path d="M22 6h-1.4c-1.3 0-2.5.6-3.3 1.7L7.7 18"/><path d="m16 3 6 3-3 6"/><path d="m8 21-6-3 3-6"/></svg>
+        {i18n.bodyLabel}
+      </span>
+    </button>
+  </div>
+
+  <!-- Result container -->
+  <div
+    id="fp-result"
+    class="rounded-2xl bg-zinc-900/80 border border-zinc-800/80 p-6 sm:p-8 opacity-0"
+    style="transition: opacity 0.25s ease;"
+    aria-live="polite"
+  >
+    <!-- Font info row -->
+    <div class="flex flex-col sm:flex-row gap-4 mb-6 justify-between items-start">
+      <!-- Heading font info -->
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">{i18n.headingLabel}</span>
+          <button
+            id="fp-lock-heading"
+            type="button"
+            class="p-1 rounded-lg hover:bg-zinc-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors cursor-pointer"
+            title={i18n.lockHeading}
+            aria-pressed="false"
+          >
+            <svg id="fp-lock-heading-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-zinc-500"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/><circle cx="12" cy="16" r="1"/></svg>
+          </button>
+        </div>
+        <a
+          id="fp-heading-link"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-lg font-semibold text-accent hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
+        >
+          <span id="fp-heading-name">—</span>
+        </a>
+        <span id="fp-heading-tag" class="ml-2 inline-block px-2 py-0.5 text-xs font-medium bg-zinc-800 text-zinc-400 rounded-full border border-zinc-700/50">—</span>
+      </div>
+
+      <!-- Body font info -->
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">{i18n.bodyLabel}</span>
+          <button
+            id="fp-lock-body"
+            type="button"
+            class="p-1 rounded-lg hover:bg-zinc-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors cursor-pointer"
+            title={i18n.lockBody}
+            aria-pressed="false"
+          >
+            <svg id="fp-lock-body-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-zinc-500"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/><circle cx="12" cy="16" r="1"/></svg>
+          </button>
+        </div>
+        <a
+          id="fp-body-link"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-lg font-semibold text-accent hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
+        >
+          <span id="fp-body-name">—</span>
+        </a>
+        <span id="fp-body-tag" class="ml-2 inline-block px-2 py-0.5 text-xs font-medium bg-zinc-800 text-zinc-400 rounded-full border border-zinc-700/50">—</span>
+      </div>
+    </div>
+
+    <!-- Preview card -->
+    <div class="rounded-xl bg-zinc-950/60 border border-zinc-800/60 p-6 sm:p-8 mb-6">
+      <p
+        id="fp-preview-heading"
+        class="text-2xl sm:text-3xl font-bold text-zinc-100 mb-4 leading-tight"
+        style="font-family: serif;"
+      >
+        {i18n.previewHeading}
+      </p>
+      <p
+        id="fp-preview-body"
+        class="text-base text-zinc-300 leading-relaxed"
+        style="font-family: sans-serif;"
+      >
+        {i18n.previewBody}
+      </p>
+    </div>
+
+    <!-- Copy button -->
+    <div class="flex justify-center">
+      <button
+        id="fp-copy"
+        type="button"
+        class="w-full sm:w-auto px-6 py-2.5 bg-zinc-800 text-zinc-200 font-medium rounded-xl border border-zinc-700 hover:bg-zinc-700 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
+      >
+        <span class="inline-flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+          {i18n.copyHtmlCss}
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Error display -->
+  <div id="fp-error" class="hidden mt-4 text-sm text-red-400 text-center" role="alert"></div>
+
+  <!-- Generate button -->
+  <div class="flex justify-center mt-6">
+    <button
+      id="fp-btn"
+      type="button"
+      class="w-full sm:w-auto px-8 py-3 bg-accent text-white font-semibold rounded-xl shadow-lg shadow-accent/25 hover:bg-accent-hover active:bg-accent-active focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
+    >
+      {i18n.generate}
+    </button>
+  </div>
+</div>
+
+<script>
+  import { createErrorDisplay } from "@/lib/client/validation";
+
+  const isRu = document.documentElement.lang === "ru";
+
+  const generateBtn = document.getElementById("fp-btn") as HTMLButtonElement;
+  const shuffleHeadingBtn = document.getElementById("fp-shuffle-heading") as HTMLButtonElement;
+  const shuffleBodyBtn = document.getElementById("fp-shuffle-body") as HTMLButtonElement;
+  const resultEl = document.getElementById("fp-result") as HTMLDivElement;
+  const copyBtn = document.getElementById("fp-copy") as HTMLButtonElement;
+  const errorEl = document.getElementById("fp-error") as HTMLDivElement;
+  const errorDisplay = createErrorDisplay(errorEl);
+
+  const headingNameEl = document.getElementById("fp-heading-name") as HTMLSpanElement;
+  const headingLinkEl = document.getElementById("fp-heading-link") as HTMLAnchorElement;
+  const headingTagEl = document.getElementById("fp-heading-tag") as HTMLSpanElement;
+  const previewHeadingEl = document.getElementById("fp-preview-heading") as HTMLParagraphElement;
+  const lockHeadingBtn = document.getElementById("fp-lock-heading") as HTMLButtonElement;
+  const lockHeadingIcon = document.getElementById("fp-lock-heading-icon") as SVGElement;
+
+  const bodyNameEl = document.getElementById("fp-body-name") as HTMLSpanElement;
+  const bodyLinkEl = document.getElementById("fp-body-link") as HTMLAnchorElement;
+  const bodyTagEl = document.getElementById("fp-body-tag") as HTMLSpanElement;
+  const previewBodyEl = document.getElementById("fp-preview-body") as HTMLParagraphElement;
+  const lockBodyBtn = document.getElementById("fp-lock-body") as HTMLButtonElement;
+  const lockBodyIcon = document.getElementById("fp-lock-body-icon") as SVGElement;
+
+  // Category labels
+  const categoryLabels: Record<string, string> = isRu
+    ? { serif: "С засечками", sans: "Без засечек", display: "Декоративный", handwriting: "Рукописный", monospace: "Моноширинный" }
+    : { serif: "Serif", sans: "Sans-Serif", display: "Display", handwriting: "Handwriting", monospace: "Monospace" };
+
+  // Font database
+  interface Font {
+    name: string;
+    apiName: string;
+    category: string;
+  }
+
+  const headingFonts: Font[] = [
+    { name: "Playfair Display", apiName: "Playfair+Display:wght@400;700;900&display=swap", category: "serif" },
+    { name: "Montserrat", apiName: "Montserrat:wght@400;600;700;800;900&display=swap", category: "sans" },
+    { name: "Oswald", apiName: "Oswald:wght@400;500;700&display=swap", category: "sans" },
+    { name: "Raleway", apiName: "Raleway:wght@400;600;700;800;900&display=swap", category: "sans" },
+    { name: "Bebas Neue", apiName: "Bebas+Neue&display=swap", category: "display" },
+    { name: "Lora", apiName: "Lora:wght@400;600;700&display=swap", category: "serif" },
+    { name: "Merriweather", apiName: "Merriweather:wght@400;700;900&display=swap", category: "serif" },
+    { name: "Poppins", apiName: "Poppins:wght@400;600;700;800;900&display=swap", category: "sans" },
+    { name: "Roboto Slab", apiName: "Roboto+Slab:wght@400;700&display=swap", category: "serif" },
+    { name: "Nunito", apiName: "Nunito:wght@400;600;700;800;900&display=swap", category: "sans" },
+    { name: "Quicksand", apiName: "Quicksand:wght@400;600;700&display=swap", category: "sans" },
+    { name: "Work Sans", apiName: "Work+Sans:wght@400;600;700;800;900&display=swap", category: "sans" },
+    { name: "Inter", apiName: "Inter:wght@400;600;700;800;900&display=swap", category: "sans" },
+    { name: "Fira Sans", apiName: "Fira+Sans:wght@400;600;700&display=swap", category: "sans" },
+    { name: "Source Sans Pro", apiName: "Source+Sans+3:wght@400;600;700;900&display=swap", category: "sans" },
+    { name: "Open Sans", apiName: "Open+Sans:wght@400;600;700;800&display=swap", category: "sans" },
+    { name: "Lato", apiName: "Lato:wght@400;700;900&display=swap", category: "sans" },
+    { name: "Space Grotesk", apiName: "Space+Grotesk:wght@400;600;700&display=swap", category: "sans" },
+    { name: "DM Sans", apiName: "DM+Sans:wght@400;600;700&display=swap", category: "sans" },
+    { name: "Rubik", apiName: "Rubik:wght@400;600;700;800;900&display=swap", category: "sans" },
+    { name: "Barlow", apiName: "Barlow:wght@400;600;700;800;900&display=swap", category: "sans" },
+    { name: "Karla", apiName: "Karla:wght@400;600;700;800&display=swap", category: "sans" },
+    { name: "Josefin Sans", apiName: "Josefin+Sans:wght@400;600;700&display=swap", category: "sans" },
+    { name: "Outfit", apiName: "Outfit:wght@400;600;700;800;900&display=swap", category: "sans" },
+    { name: "Syne", apiName: "Syne:wght@400;600;700;800&display=swap", category: "display" },
+    { name: "Kanit", apiName: "Kanit:wght@400;600;700;800;900&display=swap", category: "sans" },
+    { name: "Archivo", apiName: "Archivo:wght@400;600;700;800;900&display=swap", category: "sans" },
+    { name: "Teko", apiName: "Teko:wght@400;600;700&display=swap", category: "sans" },
+    { name: "Anton", apiName: "Anton&display=swap", category: "display" },
+    { name: "Righteous", apiName: "Righteous&display=swap", category: "display" },
+    { name: "Fredoka", apiName: "Fredoka:wght@400;600;700&display=swap", category: "display" },
+    { name: "Pacifico", apiName: "Pacifico&display=swap", category: "handwriting" },
+    { name: "Amatic SC", apiName: "Amatic+SC:wght@400;700&display=swap", category: "handwriting" },
+    { name: "Caveat", apiName: "Caveat:wght@400;600;700&display=swap", category: "handwriting" },
+    { name: "Dancing Script", apiName: "Dancing+Script:wght@400;600;700&display=swap", category: "handwriting" },
+    { name: "Great Vibes", apiName: "Great+Vibes&display=swap", category: "handwriting" },
+    { name: "Lobster", apiName: "Lobster&display=swap", category: "display" },
+    { name: "Satisfy", apiName: "Satisfy&display=swap", category: "handwriting" },
+    { name: "Sacramento", apiName: "Sacramento&display=swap", category: "handwriting" },
+    { name: "Allura", apiName: "Allura&display=swap", category: "handwriting" },
+    { name: "Cookie", apiName: "Cookie&display=swap", category: "handwriting" },
+  ];
+
+  const bodyFonts: Font[] = [
+    { name: "Inter", apiName: "Inter:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Roboto", apiName: "Roboto:wght@400;500;700&display=swap", category: "sans" },
+    { name: "Open Sans", apiName: "Open+Sans:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Lato", apiName: "Lato:wght@400;700&display=swap", category: "sans" },
+    { name: "Source Sans Pro", apiName: "Source+Sans+3:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Noto Sans", apiName: "Noto+Sans:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Nunito", apiName: "Nunito:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Work Sans", apiName: "Work+Sans:wght@400;500;600&display=swap", category: "sans" },
+    { name: "DM Sans", apiName: "DM+Sans:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Karla", apiName: "Karla:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Barlow", apiName: "Barlow:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Nunito Sans", apiName: "Nunito+Sans:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Noto Serif", apiName: "Noto+Serif:wght@400;500;600&display=swap", category: "serif" },
+    { name: "Merriweather", apiName: "Merriweather:wght@400;700&display=swap", category: "serif" },
+    { name: "Lora", apiName: "Lora:wght@400;500;600&display=swap", category: "serif" },
+    { name: "Crimson Text", apiName: "Crimson+Text:wght@400;600;700&display=swap", category: "serif" },
+    { name: "Quicksand", apiName: "Quicksand:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Space Grotesk", apiName: "Space+Grotesk:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Rubik", apiName: "Rubik:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Outfit", apiName: "Outfit:wght@400;500;600&display=swap", category: "sans" },
+    { name: "IBM Plex Sans", apiName: "IBM+Plex+Sans:wght@400;500;600&display=swap", category: "sans" },
+    { name: "IBM Plex Serif", apiName: "IBM+Plex+Serif:wght@400;500;600&display=swap", category: "serif" },
+    { name: "PT Sans", apiName: "PT+Sans:wght@400;700&display=swap", category: "sans" },
+    { name: "PT Serif", apiName: "PT+Serif:wght@400;700&display=swap", category: "serif" },
+    { name: "Cantarell", apiName: "Cantarell:wght@400;700&display=swap", category: "sans" },
+    { name: "Fira Sans", apiName: "Fira+Sans:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Oxygen", apiName: "Oxygen:wght@400;700&display=swap", category: "sans" },
+    { name: "Ubuntu", apiName: "Ubuntu:wght@400;500;700&display=swap", category: "sans" },
+    { name: "Libre Franklin", apiName: "Libre+Franklin:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Libre Baskerville", apiName: "Libre+Baskerville:wght@400;700&display=swap", category: "serif" },
+    { name: "Spectral", apiName: "Spectral:wght@400;500;600&display=swap", category: "serif" },
+    { name: "Literata", apiName: "Literata:wght@400;500;600&display=swap", category: "serif" },
+    { name: "Public Sans", apiName: "Public+Sans:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Sen", apiName: "Sen:wght@400;700&display=swap", category: "sans" },
+    { name: "Mulish", apiName: "Mulish:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Manrope", apiName: "Manrope:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Sora", apiName: "Sora:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Plus Jakarta Sans", apiName: "Plus+Jakarta+Sans:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Geist", apiName: "Geist:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Onest", apiName: "Onest:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Instrument Sans", apiName: "Instrument+Sans:wght@400;500;600;700&display=swap", category: "sans" },
+    { name: "Familjen Grotesk", apiName: "Familjen+Grotesk:wght@400;500;600;700&display=swap", category: "sans" },
+    { name: "Readex Pro", apiName: "Readex+Pro:wght@400;500;600;700&display=swap", category: "sans" },
+    { name: "Markazi Text", apiName: "Markazi+Text:wght@400;500;600;700&display=swap", category: "serif" },
+    { name: "Exo 2", apiName: "Exo+2:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Cabin", apiName: "Cabin:wght@400;500;600;700&display=swap", category: "sans" },
+    { name: "Raleway", apiName: "Raleway:wght@400;500;600&display=swap", category: "sans" },
+    { name: "Heebo", apiName: "Heebo:wght@400;500;600;700&display=swap", category: "sans" },
+  ];
+
+  let currentHeading: Font | null = null;
+  let currentBody: Font | null = null;
+  let headingLocked = false;
+  let bodyLocked = false;
+  let loadedFonts = new Set<string>();
+
+  function randomItem<T>(arr: T[]): T {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function getGoogleFontsUrl(heading: Font, body: Font): string {
+    const headingFamily = heading.apiName.split(":")[0];
+    const bodyFamily = body.apiName.split(":")[0];
+    return `https://fonts.googleapis.com/css2?family=${heading.apiName}&family=${body.apiName}&display=swap`;
+  }
+
+  function getSpecimenUrl(fontName: string): string {
+    return `https://fonts.google.com/specimen/${fontName.replace(/\s+/g, "+")}`;
+  }
+
+  function loadFont(url: string) {
+    if (loadedFonts.has(url)) return;
+    loadedFonts.add(url);
+    const link = document.createElement("link");
+    link.href = url;
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
+  }
+
+  function getFontFamily(font: Font): string {
+    return `"${font.name}", ${font.category === "serif" ? "serif" : font.category === "monospace" ? "monospace" : "sans-serif"}`;
+  }
+
+  const lockedIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/><circle cx="12" cy="16" r="1"/></svg>`;
+  const unlockedIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-zinc-500"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg>`;
+  const copyIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
+  const checkIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><path d="M20 6 9 17l-5-5"/></svg>`;
+
+  function render() {
+    if (!currentHeading || !currentBody) return;
+
+    // Update heading info
+    headingNameEl.textContent = currentHeading.name;
+    headingLinkEl.href = getSpecimenUrl(currentHeading.name);
+    headingTagEl.textContent = categoryLabels[currentHeading.category] || currentHeading.category;
+
+    // Update body info
+    bodyNameEl.textContent = currentBody.name;
+    bodyLinkEl.href = getSpecimenUrl(currentBody.name);
+    bodyTagEl.textContent = categoryLabels[currentBody.category] || currentBody.category;
+
+    // Update preview fonts
+    previewHeadingEl.style.fontFamily = getFontFamily(currentHeading);
+    previewBodyEl.style.fontFamily = getFontFamily(currentBody);
+
+    // Load fonts
+    const fontUrl = getGoogleFontsUrl(currentHeading, currentBody);
+    loadFont(fontUrl);
+
+    // Show result
+    resultEl.style.opacity = "1";
+    errorDisplay.clear();
+  }
+
+  function generatePair() {
+    if (!headingLocked || !currentHeading) {
+      currentHeading = randomItem(headingFonts);
+    }
+    if (!bodyLocked || !currentBody) {
+      let nextBody = randomItem(bodyFonts);
+      // Try to avoid picking the same font for both (if possible)
+      if (currentHeading && nextBody.name === currentHeading.name && bodyFonts.length > 1) {
+        let attempts = 0;
+        while (nextBody.name === currentHeading.name && attempts < 10) {
+          nextBody = randomItem(bodyFonts);
+          attempts++;
+        }
+      }
+      currentBody = nextBody;
+    }
+    render();
+  }
+
+  function shuffleHeadingOnly() {
+    const prevName = currentHeading?.name;
+    let next = randomItem(headingFonts);
+    // Try to pick a different font
+    if (prevName && headingFonts.length > 1) {
+      let attempts = 0;
+      while (next.name === prevName && attempts < 10) {
+        next = randomItem(headingFonts);
+        attempts++;
+      }
+    }
+    currentHeading = next;
+    render();
+  }
+
+  function shuffleBodyOnly() {
+    const prevName = currentBody?.name;
+    let next = randomItem(bodyFonts);
+    // Try to pick a different font
+    if (prevName && bodyFonts.length > 1) {
+      let attempts = 0;
+      while (next.name === prevName && attempts < 10) {
+        next = randomItem(bodyFonts);
+        attempts++;
+      }
+    }
+    // Also try to avoid matching heading
+    if (currentHeading && next.name === currentHeading.name && bodyFonts.length > 1) {
+      let attempts = 0;
+      while (next.name === currentHeading.name && attempts < 10) {
+        next = randomItem(bodyFonts);
+        attempts++;
+      }
+    }
+    currentBody = next;
+    render();
+  }
+
+  // Lock toggle handlers
+  lockHeadingBtn.addEventListener("click", () => {
+    headingLocked = !headingLocked;
+    lockHeadingBtn.setAttribute("aria-pressed", String(headingLocked));
+    lockHeadingIcon.innerHTML = headingLocked ? lockedIconSvg : unlockedIconSvg;
+    if (headingLocked) {
+      lockHeadingIcon.classList.remove("text-zinc-500");
+      lockHeadingIcon.classList.add("text-accent");
+    } else {
+      lockHeadingIcon.classList.remove("text-accent");
+      lockHeadingIcon.classList.add("text-zinc-500");
+    }
+  });
+
+  lockBodyBtn.addEventListener("click", () => {
+    bodyLocked = !bodyLocked;
+    lockBodyBtn.setAttribute("aria-pressed", String(bodyLocked));
+    lockBodyIcon.innerHTML = bodyLocked ? lockedIconSvg : unlockedIconSvg;
+    if (bodyLocked) {
+      lockBodyIcon.classList.remove("text-zinc-500");
+      lockBodyIcon.classList.add("text-accent");
+    } else {
+      lockBodyIcon.classList.remove("text-accent");
+      lockBodyIcon.classList.add("text-zinc-500");
+    }
+  });
+
+  // Generate button
+  generateBtn.addEventListener("click", generatePair);
+
+  // Shuffle buttons
+  shuffleHeadingBtn.addEventListener("click", shuffleHeadingOnly);
+  shuffleBodyBtn.addEventListener("click", shuffleBodyOnly);
+
+  // Copy button
+  copyBtn.addEventListener("click", async () => {
+    if (!currentHeading || !currentBody) return;
+
+    const headingFamily = getFontFamily(currentHeading);
+    const bodyFamily = getFontFamily(currentBody);
+    const fontUrl = getGoogleFontsUrl(currentHeading, currentBody);
+
+    const htmlLink = `<link href="${fontUrl}" rel="stylesheet">`;
+    const cssCode = `font-family: ${headingFamily};  /* heading */\nfont-family: ${bodyFamily};  /* body */`;
+    const fullText = `${htmlLink}\n\n/* CSS */\n${cssCode}`;
+
+    await navigator.clipboard.writeText(fullText);
+
+    const originalHtml = copyBtn.innerHTML;
+    copyBtn.innerHTML = `<span class="inline-flex items-center gap-2">${checkIconSvg} ${isRu ? "Скопировано!" : "Copied!"}</span>`;
+    setTimeout(() => {
+      copyBtn.innerHTML = originalHtml;
+    }, 1500);
+  });
+
+  // Generate on load
+  generatePair();
+</script>

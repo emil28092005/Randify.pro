@@ -1,0 +1,456 @@
+---
+import { useT } from "../../i18n/translations";
+const isRu = Astro.url.pathname.startsWith("/ru");
+const T = useT(isRu ? "ru" : "en");
+
+const askPlaceholder = isRu
+  ? "Задайте вопрос с ответом да/нет..."
+  : "Ask a yes/no question...";
+const askButtonLabel = isRu ? "Спросить шар" : "Ask the Ball";
+const historyTitle = isRu ? "История ответов" : "Answer History";
+const clearHistoryLabel = isRu ? "Очистить" : "Clear";
+const clickToAsk = isRu ? "Нажмите, чтобы спросить" : "Click to ask";
+const copyLabel = isRu ? "Копировать" : "Copy";
+const copiedLabel = isRu ? "Скопировано" : "Copied";
+---
+
+<div id="m8b-generator" class="mt-8">
+  <!-- Question Input -->
+  <div class="rounded-xl bg-zinc-900/50 border border-zinc-800/60 p-5">
+    <label
+      for="m8b-question"
+      class="block text-sm font-medium text-zinc-400 mb-1"
+      >{isRu ? "Ваш вопрос (необязательно)" : "Your question (optional)"}</label
+    >
+    <input
+      id="m8b-question"
+      type="text"
+      placeholder={askPlaceholder}
+      class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+    />
+  </div>
+
+  <!-- Magic 8 Ball Display -->
+  <div
+    class="my-6 rounded-2xl bg-zinc-900/80 border border-zinc-800/80 p-8 overflow-hidden"
+  >
+    <div class="flex flex-col items-center gap-6">
+      <!-- The Ball -->
+      <div id="m8b-ball-wrapper" class="relative">
+        <div
+          id="m8b-ball"
+          class="w-56 h-56 sm:w-64 sm:h-64 rounded-full relative select-none"
+          style="background: radial-gradient(circle at 35% 30%, #52525b, #18181b 50%, #09090b 85%); box-shadow: inset -12px -12px 30px rgba(0,0,0,0.7), inset 8px 8px 20px rgba(255,255,255,0.06), 0 10px 40px rgba(0,0,0,0.5);"
+        >
+          <!-- Number 8 on top -->
+          <div
+            class="absolute inset-x-0 top-3 flex justify-center"
+            aria-hidden="true"
+          >
+            <span
+              class="text-[2.5rem] sm:text-[3rem] font-black text-zinc-500/20 leading-none"
+              >8</span
+            >
+          </div>
+
+          <!-- Triangle Window -->
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div
+              id="m8b-triangle"
+              class="w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center transition-all duration-300"
+              style="clip-path: polygon(50% 8%, 92% 92%, 8% 92%);"
+            >
+              <!-- Inner blue surface -->
+              <div
+                id="m8b-triangle-bg"
+                class="absolute inset-0 transition-colors duration-300"
+                style="background: #1a237e;"
+              >
+                <!-- Subtle radial gradient overlay for depth -->
+                <div
+                  class="absolute inset-0"
+                  style="background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.08), transparent 60%);"
+                >
+                </div>
+              </div>
+
+              <!-- Answer Text -->
+              <span
+                id="m8b-answer"
+                class="relative z-10 text-center text-[9px] sm:text-[11px] font-bold text-white leading-[1.15] px-3 sm:px-4 pt-2 max-w-[8rem] sm:max-w-[9rem] transition-opacity duration-200"
+                style="text-shadow: 0 1px 2px rgba(0,0,0,0.5); opacity: 1;"
+              >
+                {clickToAsk}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Copy Button -->
+      <button
+        id="m8b-copy-btn"
+        type="button"
+        class="group invisible inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
+        aria-label="Copy answer to clipboard"
+      >
+        <span id="m8b-copy-label">{copyLabel}</span>
+        <span id="m8b-copy-icon" aria-hidden="true">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+            ></path>
+          </svg>
+        </span>
+        <span
+          id="m8b-check-icon"
+          class="hidden text-accent"
+          aria-hidden="true"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 6 9 17l-5-5"></path>
+          </svg>
+        </span>
+      </button>
+
+      <!-- Copied feedback -->
+      <span
+        id="m8b-copied-label"
+        class="text-xs font-medium text-accent opacity-0 transition-opacity duration-200"
+        aria-live="polite"
+        aria-atomic="true">{copiedLabel}</span
+      >
+    </div>
+  </div>
+
+  <!-- Ask Button -->
+  <div class="flex justify-center">
+    <button
+      id="m8b-btn"
+      type="button"
+      class="w-full sm:w-auto px-8 py-3 bg-accent text-white font-semibold rounded-xl hover:bg-accent-hover active:bg-accent-active focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer shadow-lg shadow-accent/25"
+    >
+      {askButtonLabel}
+    </button>
+  </div>
+
+  <!-- History -->
+  <div id="m8b-history-panel" class="hidden mt-10 pt-6 border-t border-zinc-800">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-xs font-semibold uppercase tracking-widest text-zinc-600">
+        {historyTitle}
+      </h3>
+      <button
+        id="m8b-clear-btn"
+        type="button"
+        class="text-xs text-zinc-600 hover:text-zinc-300 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
+      >
+        {clearHistoryLabel}
+      </button>
+    </div>
+    <div id="m8b-history-list" class="space-y-2"></div>
+  </div>
+</div>
+
+<style>
+  @keyframes shake-ball {
+    0%,
+    100% {
+      transform: translateX(0) rotate(0deg);
+    }
+    10% {
+      transform: translateX(-10px) rotate(-4deg);
+    }
+    20% {
+      transform: translateX(10px) rotate(4deg);
+    }
+    30% {
+      transform: translateX(-12px) rotate(-3deg);
+    }
+    40% {
+      transform: translateX(12px) rotate(3deg);
+    }
+    50% {
+      transform: translateX(-8px) rotate(-2deg);
+    }
+    60% {
+      transform: translateX(8px) rotate(2deg);
+    }
+    70% {
+      transform: translateX(-5px) rotate(-1deg);
+    }
+    80% {
+      transform: translateX(5px) rotate(1deg);
+    }
+    90% {
+      transform: translateX(-2px) rotate(0deg);
+    }
+  }
+
+  .m8b-shaking {
+    animation: shake-ball 0.8s ease-in-out;
+  }
+</style>
+
+<script>
+  import { CopyFeedback } from "@/lib/client/clipboard";
+
+  const isRu = document.documentElement.lang === "ru";
+
+  // ─── Answer pools ───────────────────────────────────────────────────────────
+
+  type AnswerType = "positive" | "neutral" | "negative";
+  interface Answer {
+    text: string;
+    type: AnswerType;
+  }
+
+  const EN_ANSWERS: Answer[] = [
+    { text: "It is certain.", type: "positive" },
+    { text: "It is decidedly so.", type: "positive" },
+    { text: "Without a doubt.", type: "positive" },
+    { text: "Yes definitely.", type: "positive" },
+    { text: "You may rely on it.", type: "positive" },
+    { text: "As I see it, yes.", type: "positive" },
+    { text: "Most likely.", type: "positive" },
+    { text: "Outlook good.", type: "positive" },
+    { text: "Yes.", type: "positive" },
+    { text: "Signs point to yes.", type: "positive" },
+    { text: "Reply hazy, try again.", type: "neutral" },
+    { text: "Ask again later.", type: "neutral" },
+    { text: "Better not tell you now.", type: "neutral" },
+    { text: "Cannot predict now.", type: "neutral" },
+    { text: "Concentrate and ask again.", type: "neutral" },
+    { text: "Don't count on it.", type: "negative" },
+    { text: "My reply is no.", type: "negative" },
+    { text: "My sources say no.", type: "negative" },
+    { text: "Outlook not so good.", type: "negative" },
+    { text: "Very doubtful.", type: "negative" },
+  ];
+
+  const RU_ANSWERS: Answer[] = [
+    { text: "Бесспорно.", type: "positive" },
+    { text: "Предрешено.", type: "positive" },
+    { text: "Никаких сомнений.", type: "positive" },
+    { text: "Определённо да.", type: "positive" },
+    { text: "Можешь быть уверен в этом.", type: "positive" },
+    { text: "Мне кажется — да.", type: "positive" },
+    { text: "Вероятнее всего.", type: "positive" },
+    { text: "Хорошие перспективы.", type: "positive" },
+    { text: "Да.", type: "positive" },
+    { text: "Знаки говорят — да.", type: "positive" },
+    { text: "Пока не ясно, попробуй снова.", type: "neutral" },
+    { text: "Спроси позже.", type: "neutral" },
+    { text: "Лучше не рассказывать.", type: "neutral" },
+    { text: "Сейчас нельзя предсказать.", type: "neutral" },
+    { text: "Сконцентрируйся и спроси опять.", type: "neutral" },
+    { text: "Даже не думай.", type: "negative" },
+    { text: "Мой ответ — нет.", type: "negative" },
+    { text: "По моим данным — нет.", type: "negative" },
+    { text: "Перспективы не очень хорошие.", type: "negative" },
+    { text: "Весьма сомнительно.", type: "negative" },
+  ];
+
+  const ANSWERS = isRu ? RU_ANSWERS : EN_ANSWERS;
+
+  const COLOR_MAP: Record<AnswerType, string> = {
+    positive: "#2563EB",
+    neutral: "#CA8A04",
+    negative: "#DC2626",
+  };
+
+  // ─── DOM refs ───────────────────────────────────────────────────────────────
+
+  const questionInput = document.getElementById(
+    "m8b-question",
+  ) as HTMLInputElement;
+  const btn = document.getElementById("m8b-btn") as HTMLButtonElement;
+  const ball = document.getElementById("m8b-ball") as HTMLDivElement;
+  const answerEl = document.getElementById("m8b-answer") as HTMLSpanElement;
+  const triangleBg = document.getElementById(
+    "m8b-triangle-bg",
+  ) as HTMLDivElement;
+  const copyBtn = document.getElementById("m8b-copy-btn") as HTMLButtonElement;
+  const copyLabel = document.getElementById(
+    "m8b-copy-label",
+  ) as HTMLSpanElement;
+  const copyIcon = document.getElementById(
+    "m8b-copy-icon",
+  ) as HTMLSpanElement;
+  const checkIcon = document.getElementById(
+    "m8b-check-icon",
+  ) as HTMLSpanElement;
+  const copiedLabel = document.getElementById(
+    "m8b-copied-label",
+  ) as HTMLSpanElement;
+  const historyPanel = document.getElementById(
+    "m8b-history-panel",
+  ) as HTMLDivElement;
+  const historyList = document.getElementById(
+    "m8b-history-list",
+  ) as HTMLDivElement;
+  const clearBtn = document.getElementById(
+    "m8b-clear-btn",
+  ) as HTMLButtonElement;
+
+  const clipboard = new CopyFeedback(copyIcon, checkIcon);
+
+  let isShaking = false;
+  let currentAnswer: Answer | null = null;
+  const HISTORY_KEY = "m8b-history";
+
+  // ─── Helpers ────────────────────────────────────────────────────────────────
+
+  function getRandomAnswer(): Answer {
+    return ANSWERS[Math.floor(Math.random() * ANSWERS.length)];
+  }
+
+  function loadHistory(): { question: string; answer: string; type: AnswerType; time: number }[] {
+    try {
+      return JSON.parse(sessionStorage.getItem(HISTORY_KEY) ?? "[]");
+    } catch {
+      return [];
+    }
+  }
+
+  function saveHistory(
+    h: { question: string; answer: string; type: AnswerType; time: number }[],
+  ) {
+    sessionStorage.setItem(HISTORY_KEY, JSON.stringify(h.slice(0, 5)));
+  }
+
+  function getTypeLabel(type: AnswerType): string {
+    if (type === "positive") return isRu ? "Положительный" : "Positive";
+    if (type === "neutral") return isRu ? "Нейтральный" : "Neutral";
+    return isRu ? "Отрицательный" : "Negative";
+  }
+
+  function getTypeDotClass(type: AnswerType): string {
+    if (type === "positive") return "bg-blue-500";
+    if (type === "neutral") return "bg-yellow-500";
+    return "bg-red-500";
+  }
+
+  function renderHistory() {
+    const h = loadHistory();
+    if (h.length === 0) {
+      historyPanel.classList.add("hidden");
+      return;
+    }
+    historyPanel.classList.remove("hidden");
+    historyList.innerHTML = h
+      .map(
+        (entry) => `
+        <div class="flex items-start gap-2 text-xs py-1.5 border-b border-zinc-800/40 last:border-b-0">
+          <span class="w-2 h-2 rounded-full ${getTypeDotClass(entry.type)} mt-0.5 shrink-0" aria-hidden="true"></span>
+          <div class="flex-1 min-w-0">
+            ${entry.question ? `<div class="text-zinc-500 truncate mb-0.5">${escapeHtml(entry.question)}</div>` : ""}
+            <div class="text-zinc-300 font-medium">${escapeHtml(entry.answer)}</div>
+          </div>
+        </div>
+      `,
+      )
+      .join("");
+  }
+
+  function escapeHtml(str: string): string {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function addToHistory(question: string, answer: Answer) {
+    const h = loadHistory();
+    h.unshift({
+      question,
+      answer: answer.text,
+      type: answer.type,
+      time: Date.now(),
+    });
+    saveHistory(h);
+    renderHistory();
+  }
+
+  function showAnswer(answer: Answer) {
+    currentAnswer = answer;
+    answerEl.textContent = answer.text;
+    triangleBg.style.background = COLOR_MAP[answer.type];
+    answerEl.style.opacity = "1";
+    copyBtn.classList.remove("invisible");
+  }
+
+  function shakeAndReveal() {
+    if (isShaking) return;
+    isShaking = true;
+
+    // Fade out current answer
+    answerEl.style.opacity = "0";
+    btn.disabled = true;
+    btn.classList.add("opacity-60", "cursor-not-allowed");
+
+    // Add shake animation
+    ball.classList.add("m8b-shaking");
+
+    setTimeout(() => {
+      ball.classList.remove("m8b-shaking");
+
+      const answer = getRandomAnswer();
+      showAnswer(answer);
+
+      const question = questionInput.value.trim();
+      addToHistory(question, answer);
+
+      isShaking = false;
+      btn.disabled = false;
+      btn.classList.remove("opacity-60", "cursor-not-allowed");
+    }, 800);
+  }
+
+  async function copyAnswer() {
+    if (!currentAnswer) return;
+    await navigator.clipboard.writeText(currentAnswer.text);
+    clipboard.showCopied();
+    copyLabel.textContent = isRu ? "Скопировано" : "Copied";
+    copiedLabel.style.opacity = "1";
+    setTimeout(() => {
+      copiedLabel.style.opacity = "0";
+      copyLabel.textContent = isRu ? "Копировать" : "Copy";
+    }, 1500);
+  }
+
+  // ─── Events ─────────────────────────────────────────────────────────────────
+
+  btn.addEventListener("click", shakeAndReveal);
+  copyBtn.addEventListener("click", copyAnswer);
+  questionInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") shakeAndReveal();
+  });
+  clearBtn.addEventListener("click", () => {
+    sessionStorage.removeItem(HISTORY_KEY);
+    renderHistory();
+  });
+
+  // ─── Init ───────────────────────────────────────────────────────────────────
+
+  renderHistory();
+</script>

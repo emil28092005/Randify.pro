@@ -1,0 +1,40 @@
+---
+import { useT } from "../i18n/translations";
+import type { Lang } from "../i18n/translations";
+
+interface Props {
+  howTo: string[];
+  whenTo: string[];
+  lang?: Lang;
+}
+
+const { howTo, whenTo, lang = "en" } = Astro.props;
+const T = useT(lang);
+---
+
+<section
+  class="mt-12 border-t border-zinc-800/60 pt-8 text-sm text-zinc-500 flex flex-col gap-4"
+>
+  <div class="rounded-xl bg-zinc-900/50 border border-zinc-800/60 p-5">
+    <h2
+      class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-2"
+    >
+      <span class="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true"></span>
+      {T.howToUse}
+    </h2>
+    <ol class="space-y-1 list-decimal list-inside">
+      {howTo.map((step) => <li>{step}</li>)}
+    </ol>
+  </div>
+  <div class="rounded-xl bg-zinc-900/50 border border-zinc-800/60 p-5">
+    <h2
+      class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-2"
+    >
+      <span class="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true"></span>
+      {T.whenToUse}
+    </h2>
+    <ul class="space-y-1 list-disc list-inside">
+      {whenTo.map((item) => <li>{item}</li>)}
+    </ul>
+  </div>
+</section>

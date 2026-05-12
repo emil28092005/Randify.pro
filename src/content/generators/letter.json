@@ -1,0 +1,47 @@
+{
+  "slug": "letter",
+  "title": "Random Letter",
+  "description": "Pick a random letter from the alphabet.",
+  "icon": "type",
+  "status": "live",
+  "seoTitle": "Random Letter Generator — A to Z | Randify",
+  "seoDescription": "Pick a random letter from A to Z instantly. Free online letter randomizer for games, learning, and creative projects.",
+  "ruTitle": "Случайная буква",
+  "ruDescription": "Выберите случайную букву из алфавита.",
+  "ruSeoTitle": "Генератор случайных букв — А до Я | Randify",
+  "ruSeoDescription": "Выберите случайную букву алфавита мгновенно. Бесплатный рандомайзер букв для игр, обучения и творческих проектов.",
+  "pageTitle": "Random Letter Generator",
+  "ruPageTitle": "Генератор случайных букв",
+  "howTo": [
+    "Click Generate to pick a random letter from A to Z.",
+    "The letter appears in large type for easy reading.",
+    "Click the letter to copy it to your clipboard.",
+    "Click again to generate a new random letter."
+  ],
+  "whenTo": [
+    "Choosing a starting letter for a word game or alphabet challenge.",
+    "Picking a random category in a trivia or party game.",
+    "Teaching children letters and the alphabet in a fun way."
+  ],
+  "ruHowTo": [
+    "Нажмите «Сгенерировать», чтобы выбрать случайную букву от А до Я.",
+    "Буква отображается крупным шрифтом для удобного чтения.",
+    "Нажмите на букву, чтобы скопировать её в буфер обмена.",
+    "Нажмите снова, чтобы сгенерировать новую случайную букву."
+  ],
+  "ruWhenTo": [
+    "Выбор стартовой буквы для словесной игры или алфавитного челленджа.",
+    "Случайный выбор категории в викторине или настольной игре.",
+    "Обучение детей буквам и алфавиту в игровой форме."
+  ],
+  "faq": [
+    { "q": "Does it include both uppercase and lowercase letters?", "a": "The generator produces uppercase letters by default. Lowercase is not currently supported." },
+    { "q": "Can I exclude certain letters?", "a": "Not at the moment. Every letter from A to Z has an equal chance of being selected." },
+    { "q": "Is this useful for language learning?", "a": "Yes. Teachers and students use it for alphabet drills, vocabulary games, and pronunciation practice." }
+  ],
+  "ruFaq": [
+    { "q": "Включает ли генератор заглавные и строчные буквы?", "a": "Генератор выдаёт заглавные буквы по умолчанию. Строчные буквы пока не поддерживаются." },
+    { "q": "Можно ли исключить определённые буквы?", "a": "Пока нет. Каждая буква от А до Я имеет равный шанс быть выбранной." },
+    { "q": "Подходит ли для изучения языка?", "a": "Да. Учителя и ученики используют генератор для алфавитных упражнений, словарных игр и практики произношения." }
+  ]
+}

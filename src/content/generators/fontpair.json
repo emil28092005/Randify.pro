@@ -1,0 +1,67 @@
+{
+  "slug": "fontpair",
+  "title": "Random Font Pairing",
+  "description": "Generate a random pairing of heading and body fonts from Google Fonts.",
+  "icon": "font",
+  "status": "live",
+  "seoTitle": "Random Font Pairing Generator — Google Fonts Combinations | Randify",
+  "seoDescription": "Generate random font pairings from Google Fonts for headings and body text. Discover beautiful typography combinations with one click. Free online tool for designers and developers.",
+  "ruTitle": "Случайная пара шрифтов",
+  "ruDescription": "Сгенерируйте случайную пару шрифтов для заголовков и основного текста из Google Fonts.",
+  "ruSeoTitle": "Генератор случайных пар шрифтов — комбинации Google Fonts | Randify",
+  "ruSeoDescription": "Создавайте случайные пары шрифтов из Google Fonts для заголовков и основного текста. Находите красивые типографские сочетания одним нажатием. Бесплатный онлайн-инструмент для дизайнеров и разработчиков.",
+  "pageTitle": "Random Font Pairing",
+  "ruPageTitle": "Случайная пара шрифтов",
+  "howTo": [
+    "Click Generate to create a new font pairing.",
+    "Preview shows a heading sample and a body text sample.",
+    "Use the lock icons to keep a font you like while shuffling the other.",
+    "Click Copy to get the HTML link tags and CSS font-family declarations."
+  ],
+  "whenTo": [
+    "Choosing fonts for a new website or web app.",
+    "Exploring typography options for a design system.",
+    "Finding inspiration for a brand identity or logo.",
+    "Quickly prototyping a landing page or mockup."
+  ],
+  "ruHowTo": [
+    "Нажмите «Сгенерировать», чтобы создать новую пару шрифтов.",
+    "Предпросмотр показывает образец заголовка и образец основного текста.",
+    "Используйте значки замка, чтобы сохранить понравившийся шрифт, меняя другой.",
+    "Нажмите «Копировать», чтобы получить HTML-теги link и CSS-объявления font-family."
+  ],
+  "ruWhenTo": [
+    "Выбор шрифтов для нового сайта или веб-приложения.",
+    "Исследование типографских вариантов для дизайн-системы.",
+    "Поиск вдохновения для фирменного стиля или логотипа.",
+    "Быстрое прототипирование лендинга или макета."
+  ],
+  "faq": [
+    {
+      "q": "What is a font pairing generator?",
+      "a": "A font pairing generator randomly combines two complementary fonts from Google Fonts — one for headings and one for body text — to help you discover beautiful typography combinations for your projects."
+    },
+    {
+      "q": "How does font pairing work?",
+      "a": "Good font pairing typically combines fonts with contrasting styles (e.g., a decorative serif heading with a clean sans-serif body) while maintaining visual harmony. The generator selects from curated heading and body font categories to ensure balanced combinations."
+    },
+    {
+      "q": "Can I use these fonts commercially?",
+      "a": "Yes. All fonts in this generator are from Google Fonts, which are licensed under open-source licenses (typically SIL Open Font License). You can use them freely in both personal and commercial projects."
+    }
+  ],
+  "ruFaq": [
+    {
+      "q": "Что такое генератор пар шрифтов?",
+      "a": "Генератор пар шрифтов случайным образом объединяет два дополняющих друг друга шрифта из Google Fonts — один для заголовков и один для основного текста — чтобы помочь вам найти красивые типографские сочетания для ваших проектов."
+    },
+    {
+      "q": "Как работает подбор пар шрифтов?",
+      "a": "Хороший подбор пар шрифтов обычно объединяет шрифты с контрастными стилями (например, декоративный заголовочный шрифт с засечками и чистый шрифт без засечек для основного текста), сохраняя при этом визуальную гармонию. Генератор выбирает из курируемых категорий заголовочных и текстовых шрифтов, обеспечивая сбалансированные комбинации."
+    },
+    {
+      "q": "Можно ли использовать эти шрифты в коммерческих проектах?",
+      "a": "Да. Все шрифты в этом генераторе взяты из Google Fonts и лицензированы под открытыми лицензиями (обычно SIL Open Font License). Вы можете свободно использовать их как в личных, так и в коммерческих проектах."
+    }
+  ]
+}

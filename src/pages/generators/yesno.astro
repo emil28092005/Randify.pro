@@ -1,0 +1,11 @@
+---
+import GeneratorLayout from '@/layouts/GeneratorLayout.astro';
+import YesNoGenerator from '@/components/generators/YesNoGenerator.astro';
+import { generators } from '@/data/generators';
+
+const generator = generators.find((g) => g.slug === 'yesno')!;
+---
+
+<GeneratorLayout generator={generator}>
+  <YesNoGenerator />
+</GeneratorLayout>

@@ -1,0 +1,11 @@
+---
+import GeneratorLayout from "@/layouts/GeneratorLayout.astro";
+import MealGenerator from "@/components/generators/MealGenerator.astro";
+import { generators } from "@/data/generators";
+
+const generator = generators.find((g) => g.slug === "meal")!;
+---
+
+<GeneratorLayout generator={generator}>
+  <MealGenerator />
+</GeneratorLayout>

@@ -1,0 +1,56 @@
+{
+  "slug": "colors",
+  "title": "Color",
+  "description": "Generate a random color in HEX, RGB, or HSL format.",
+  "icon": "palette",
+  "status": "live",
+  "seoTitle": "Random Color Generator — HEX, RGB, HSL | Randify",
+  "seoDescription": "Get a random color in HEX, RGB or HSL format with one click. Free online color randomizer for designers and developers.",
+  "ruTitle": "Цвет",
+  "ruDescription": "Генерируйте случайный цвет в форматах HEX, RGB или HSL.",
+  "ruSeoTitle": "Генератор случайных цветов — HEX, RGB, HSL | Randify",
+  "ruSeoDescription": "Получайте случайные цвета в форматах HEX, RGB и HSL одним нажатием. Бесплатный рандомайзер цветов для дизайнеров.",
+  "pageTitle": "Color Generator",
+  "ruPageTitle": "Генератор цветов",
+  "howTo": [
+    "Click Generate to produce a random color.",
+    "Switch between HEX, RGB, and HSL tabs to see the value in your preferred format.",
+    "Click the color value or the copy icon to copy it to the clipboard."
+  ],
+  "whenTo": [
+    "Finding inspiration for a new design palette.",
+    "Picking a placeholder color while prototyping.",
+    "Selecting a random theme color for a project or presentation.",
+    "Teaching or exploring color theory and formats."
+  ],
+  "faq": [
+    { "q": "What color formats are supported?", "a": "HEX, RGB, and HSL. All three are shown at once, so you can copy the one you need." },
+    { "q": "Can I use the generated color in CSS?", "a": "Yes. Copy the HEX or RGB value and paste it directly into your stylesheet or design tool." },
+    { "q": "Are the colors truly random?", "a": "Yes. Each color is generated using a cryptographically secure random number generator, covering the entire color space." }
+  ],
+  "ruFaq": [
+    { "q": "Какие форматы цветов поддерживаются?", "a": "HEX, RGB и HSL. Все три формата отображаются одновременно — скопируйте тот, который нужен." },
+    { "q": "Можно ли использовать сгенерированный цвет в CSS?", "a": "Да. Скопируйте значение HEX или RGB и вставьте его прямо в стили или графический редактор." },
+    { "q": "Цвета действительно случайные?", "a": "Да. Каждый цвет генерируется с помощью криптографически стойкого генератора случайных чисел, покрывая всё цветовое пространство." }
+  ],
+  "ruHowTo": [
+    "Нажмите «Сгенерировать», чтобы получить случайный цвет.",
+    "Цвет отображается в форматах HEX, RGB и HSL одновременно.",
+    "Нажмите на иконку копирования рядом с нужным форматом."
+  ],
+  "ruWhenTo": [
+    "Поиск вдохновения для цветовой палитры.",
+    "Случайный выбор цвета для дизайна или иллюстрации.",
+    "Генерация тестовых данных с цветовыми значениями."
+  ],
+  "faq": [
+    { "q": "What color formats are supported?", "a": "HEX, RGB, and HSL. All three are shown simultaneously for every generated color." },
+    { "q": "Can I copy just one format?", "a": "Yes. Click the copy icon next to any format to copy only that value." },
+    { "q": "Are the colors truly random?", "a": "Yes. Each color is generated using random values for hue, saturation, and lightness." }
+  ],
+  "ruFaq": [
+    { "q": "Какие форматы цветов поддерживаются?", "a": "HEX, RGB и HSL. Все три отображаются одновременно для каждого сгенерированного цвета." },
+    { "q": "Можно скопировать только один формат?", "a": "Да. Нажмите иконку копирования рядом с нужным форматом." },
+    { "q": "Цвета действительно случайные?", "a": "Да. Каждый цвет генерируется из случайных значений оттенка, насыщенности и освещённости." }
+  ]
+}

@@ -1,0 +1,33 @@
+---
+import { useT } from "../i18n/translations";
+import type { Lang } from "../i18n/translations";
+
+interface Props {
+  questions: Array<{ q: string; a: string }>;
+  lang?: Lang;
+}
+
+const { questions, lang = "en" } = Astro.props;
+const T = useT(lang);
+---
+
+<section class="mt-4">
+  <div class="rounded-xl bg-zinc-900/50 border border-zinc-800/60 p-5">
+    <h2
+      class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-3"
+    >
+      <span class="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true"></span>
+      {T.faq}
+    </h2>
+    <div class="space-y-3">
+      {
+        questions.map(({ q, a }) => (
+          <div>
+            <p class="font-medium text-zinc-300 text-sm">{q}</p>
+            <p class="text-zinc-400 text-sm mt-0.5">{a}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

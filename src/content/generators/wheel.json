@@ -1,0 +1,48 @@
+{
+  "slug": "wheel",
+  "title": "Spin the Wheel",
+  "description": "Add your items, spin the wheel, and let chance decide.",
+  "icon": "pie-chart",
+  "status": "live",
+  "seoTitle": "Spin the Wheel — Random Picker | Randify",
+  "seoDescription": "Spin a customizable wheel of fortune to pick a random winner, choice, or option. Add your own items and let the wheel decide.",
+  "ruTitle": "Колесо фортуны",
+  "ruDescription": "Добавьте элементы, крутите колесо и пусть случай решит.",
+  "ruSeoTitle": "Колесо фортуны онлайн — случайный выбор | Randify",
+  "ruSeoDescription": "Крутите колесо фортуны онлайн. Добавьте свои варианты и пусть случай решит победителя.",
+  "pageTitle": "Spin the Wheel",
+  "ruPageTitle": "Колесо фортуны онлайн",
+  "howTo": [
+    "Type your items into the text box — one per line.",
+    "Click \"Update wheel\" to apply changes.",
+    "Hit \"Spin\" and watch the wheel decide.",
+    "Copy the result or spin again."
+  ],
+  "whenTo": [
+    "Picking a winner for a giveaway or raffle.",
+    "Deciding whose turn it is in a game or meeting.",
+    "Choosing a random activity, movie, or restaurant.",
+    "Any decision you want to leave to chance."
+  ],
+  "ruHowTo": [
+    "Введите варианты в поле — по одному на строку (от 2 до 24).",
+    "Колесо обновляется автоматически.",
+    "Нажмите «Крутить» и дождитесь результата.",
+    "Победитель выделяется — скопируйте его кнопкой «Копировать»."
+  ],
+  "ruWhenTo": [
+    "Случайный выбор победителя розыгрыша.",
+    "Принятие решений в команде.",
+    "Распределение ролей или задач между участниками."
+  ],
+  "faq": [
+    { "q": "How many items can I add?", "a": "Between 2 and 24 items. The wheel automatically resizes to fit all segments." },
+    { "q": "Is the spin truly random?", "a": "Yes. The stopping position is determined by a cryptographically secure random value." },
+    { "q": "Can I save my wheel?", "a": "Not yet. You can bookmark the page or copy your item list to reuse it later." }
+  ],
+  "ruFaq": [
+    { "q": "Сколько элементов можно добавить?", "a": "От 2 до 24. Колесо автоматически подстраивается под количество сегментов." },
+    { "q": "Вращение действительно случайное?", "a": "Да. Конечная позиция определяется криптографически стойким случайным значением." },
+    { "q": "Можно ли сохранить колесо?", "a": "Пока нет. Можно добавить страницу в закладки или скопировать список элементов для повторного использования." }
+  ]
+}

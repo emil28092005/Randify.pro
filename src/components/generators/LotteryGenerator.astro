@@ -1,0 +1,211 @@
+---
+import { useT } from "../../i18n/translations";
+const isRu = Astro.url.pathname.startsWith("/ru");
+const T = useT(isRu ? "ru" : "en");
+---
+
+<div id="lottery-generator" class="mt-8">
+  <div class="rounded-xl bg-zinc-900/50 border border-zinc-800/60 p-5">
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div>
+      <label for="lg-from" class="block text-sm font-medium text-zinc-400 mb-1"
+        >{T.from}</label
+      >
+      <input
+        id="lg-from"
+        type="number"
+        value="1"
+        class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+      />
+    </div>
+    <div>
+      <label for="lg-to" class="block text-sm font-medium text-zinc-400 mb-1"
+        >{T.to}</label
+      >
+      <input
+        id="lg-to"
+        type="number"
+        value="49"
+        class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+      />
+    </div>
+    <div>
+      <label for="lg-pick" class="block text-sm font-medium text-zinc-400 mb-1"
+        >{T.pick}</label
+      >
+      <input
+        id="lg-pick"
+        type="number"
+        value="6"
+        min="1"
+        class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+      />
+    </div>
+  </div>
+
+  <p
+    id="lg-error"
+    role="alert"
+    aria-live="polite"
+    class="mt-3 text-sm text-red-500 hidden"
+  >
+  </p>
+  </div>
+
+  <div class="my-6 h-52 overflow-hidden flex flex-col items-center justify-center gap-4 rounded-2xl bg-zinc-900/80 border border-zinc-800/80 p-8">
+    <div
+      id="lg-result"
+      class="flex flex-wrap justify-center gap-2"
+      aria-live="polite"
+    >
+    </div>
+    <button
+      id="lg-copy-btn"
+      type="button"
+      class="invisible inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
+    >
+      <span id="lg-copy-label">{T.copy}</span>
+      <span id="lg-copy-icon" aria-hidden="true"
+        ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path
+            d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+          ></path></svg
+        ></span
+      >
+      <span id="lg-check-icon" class="hidden text-accent" aria-hidden="true"
+        ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg
+        ></span
+      >
+    </button>
+  </div>
+
+  <div class="flex justify-center">
+    <button
+      id="lg-btn"
+      type="button"
+      class="w-full sm:w-auto px-8 py-3 bg-accent text-white font-semibold rounded-xl shadow-lg shadow-accent/25 hover:bg-accent-hover active:bg-accent-active focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
+    >
+      {T.draw}
+    </button>
+  </div>
+</div>
+
+<script>
+  import { CopyFeedback } from "@/lib/client/clipboard";
+  import { createErrorDisplay, isInteger } from "@/lib/client/validation";
+
+  const isRu = document.documentElement.lang === "ru";
+  const ERR_INTEGERS = isRu
+    ? "Все значения должны быть целыми числами."
+    : "All values must be whole numbers.";
+  const ERR_FROM_TO = isRu
+    ? "«От» должно быть меньше «До»."
+    : '"From" must be less than "To".';
+  const ERR_PICK_MIN = isRu
+    ? "«Выбрать» должно быть не менее 1."
+    : '"Pick" must be at least 1.';
+  const COPY_LABEL = isRu ? "Копировать" : "Copy";
+  const COPIED_LABEL = isRu ? "Скопировано" : "Copied";
+
+  const fromInput = document.getElementById("lg-from") as HTMLInputElement;
+  const toInput = document.getElementById("lg-to") as HTMLInputElement;
+  const pickInput = document.getElementById("lg-pick") as HTMLInputElement;
+  const btn = document.getElementById("lg-btn") as HTMLButtonElement;
+  const copyBtn = document.getElementById("lg-copy-btn") as HTMLButtonElement;
+  const resultEl = document.getElementById("lg-result") as HTMLDivElement;
+  const errorEl = document.getElementById("lg-error") as HTMLParagraphElement;
+  const copyLabel = document.getElementById("lg-copy-label") as HTMLSpanElement;
+  const copyIcon = document.getElementById("lg-copy-icon") as HTMLSpanElement;
+  const checkIcon = document.getElementById("lg-check-icon") as HTMLSpanElement;
+
+  const errors = createErrorDisplay(errorEl);
+  const clipboard = new CopyFeedback(copyIcon, checkIcon);
+
+  function draw() {
+    if (
+      !isInteger(fromInput.value) ||
+      !isInteger(toInput.value) ||
+      !isInteger(pickInput.value)
+    ) {
+      errors.show(ERR_INTEGERS);
+      return;
+    }
+    const min = parseInt(fromInput.value, 10);
+    const max = parseInt(toInput.value, 10);
+    const pick = parseInt(pickInput.value, 10);
+    const pool = max - min + 1;
+    if (min >= max) {
+      errors.show(ERR_FROM_TO);
+      return;
+    }
+    if (pick < 1) {
+      errors.show(ERR_PICK_MIN);
+      return;
+    }
+    if (pick > pool) {
+      errors.show(
+        isRu
+          ? `Нельзя выбрать ${pick} уникальных чисел из диапазона ${pool}.`
+          : `Cannot pick ${pick} unique numbers from a range of ${pool}.`,
+      );
+      return;
+    }
+    errors.clear();
+    const nums = Array.from({ length: pool }, (_, i) => min + i);
+    for (let i = 0; i < pick; i++) {
+      const j = i + Math.floor(Math.random() * (pool - i));
+      [nums[i], nums[j]] = [nums[j], nums[i]];
+    }
+    const picked = nums.slice(0, pick).sort((a, b) => a - b);
+    resultEl.innerHTML = "";
+    picked.forEach((n) => {
+      const ball = document.createElement("span");
+      ball.textContent = String(n);
+      ball.className =
+        "inline-flex items-center justify-center min-w-[2.5rem] h-10 px-2 rounded-full bg-accent/15 border border-accent/40 text-zinc-100 font-bold tabular-nums text-sm";
+      resultEl.appendChild(ball);
+    });
+    copyBtn.classList.remove("invisible");
+    copyLabel.textContent = COPY_LABEL;
+  }
+
+  async function copyNumbers() {
+    const balls = resultEl.querySelectorAll("span");
+    const value = Array.from(balls)
+      .map((b) => b.textContent)
+      .join(", ");
+    if (!value) return;
+    await navigator.clipboard.writeText(value);
+    clipboard.showCopied();
+    copyLabel.textContent = COPIED_LABEL;
+    setTimeout(() => {
+      copyLabel.textContent = COPY_LABEL;
+    }, 1500);
+  }
+
+  btn.addEventListener("click", draw);
+  copyBtn.addEventListener("click", copyNumbers);
+  [fromInput, toInput, pickInput].forEach((input) => {
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") draw();
+    });
+  });
+</script>

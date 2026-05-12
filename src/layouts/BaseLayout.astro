@@ -1,0 +1,128 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import LanguageSwitcher from "../components/LanguageSwitcher.astro";
+import Starfield from "../components/Starfield.astro";
+import Analytics from "../components/Analytics.astro";
+import { useT } from "../i18n/translations";
+import type { Lang } from "../i18n/translations";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const lang = (Astro.currentLocale as Lang) || "en";
+const T = useT(lang);
+
+const { title = T.defaultTitle, description = T.defaultDesc } = Astro.props;
+
+const pathWithoutLocale = Astro.url.pathname.replace(/^\/ru/, "") || "/";
+const enUrl = `https://randify.pro${getRelativeLocaleUrl("en", pathWithoutLocale)}`;
+const ruUrl = `https://randify.pro${getRelativeLocaleUrl("ru", pathWithoutLocale)}`;
+const canonicalUrl = `https://randify.pro${Astro.url.pathname}`;
+
+const webPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description: description,
+  url: canonicalUrl,
+  inLanguage: lang,
+};
+---
+
+<!doctype html>
+<html lang={lang} style="scroll-behavior:smooth;scrollbar-gutter:stable">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="ru" href={ruUrl} />
+    <meta name="verification" content="er9ndnv9ih7agmh8" />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(webPageSchema)}
+    />
+    <meta name="theme-color" content="#534ab7" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <!-- Yandex.RTB -->
+    <script>window.yaContextCb=window.yaContextCb||[]</script>
+    <script src="https://yandex.ru/ads/system/context.js" async></script>
+    <slot name="head" />
+    <title>{title}</title>
+    <Analytics />
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/sw.js");
+      }
+    </script>
+  </head>
+  <body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans antialiased">
+    <Starfield />
+    <div class="relative z-10">
+      <LanguageSwitcher />
+      <slot />
+    </div>
+  </body>
+</html>
+
+<!-- Auto-detect language on first visit -->
+<script>
+  if (!localStorage.getItem("lang-pref")) {
+    const browserLang = (navigator.language || "").toLowerCase();
+    if (browserLang.startsWith("ru") && !location.pathname.startsWith("/ru")) {
+      location.replace("/ru" + location.pathname);
+    }
+  }
+</script>
+
+<style is:global>
+  @import "tailwindcss";
+
+  @theme {
+    --font-sans: "Space Grotesk", sans-serif;
+    --color-accent: #534ab7;
+    --color-accent-hover: #4740a0;
+    --color-accent-active: #3d3990;
+    --color-yandex: #fc3f1d;
+    --color-yandex-hover: #e03518;
+  }
+
+  :root {
+    --accent: #534ab7;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-image:
+      radial-gradient(
+        ellipse 90% 45% at 50% -5%,
+        rgba(83, 74, 183, 0.2) 0%,
+        transparent 65%
+      ),
+      radial-gradient(
+        ellipse 90% 45% at 50% 105%,
+        rgba(83, 74, 183, 0.13) 0%,
+        transparent 65%
+      );
+    background-size: auto, auto;
+  }
+
+  input[type="number"] {
+    color-scheme: dark;
+  }
+</style>

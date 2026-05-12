@@ -1,0 +1,48 @@
+{
+  "slug": "cards",
+  "title": "Card",
+  "description": "Draw a random playing card from a standard deck.",
+  "icon": "square-stack",
+  "status": "live",
+  "seoTitle": "Random Card Generator — Draw from a Deck | Randify",
+  "seoDescription": "Draw random playing cards from a standard 52-card deck. Pick any number of cards, with or without replacement. Free online card picker.",
+  "ruTitle": "Карта",
+  "ruDescription": "Вытащите случайную карту из стандартной колоды.",
+  "ruSeoTitle": "Генератор случайных карт | Randify",
+  "ruSeoDescription": "Тяните случайные карты из колоды 52 карт. С повторениями или без. Бесплатный онлайн-генератор карт.",
+  "pageTitle": "Card Generator",
+  "ruPageTitle": "Генератор карт",
+  "howTo": [
+    "Set how many cards to draw (1–52).",
+    "Toggle Allow duplicates if you want cards to repeat.",
+    "Click Draw — cards are shown as mini card tiles.",
+    "Click Copy to copy the result (e.g. A♠, K♥) to your clipboard."
+  ],
+  "whenTo": [
+    "Drawing a random hand for card games.",
+    "Practising card probability and statistics.",
+    "Simulating a random card pull for magic tricks or puzzles.",
+    "Running fair draws without a physical deck."
+  ],
+  "ruHowTo": [
+    "Укажите количество карт для розыгрыша.",
+    "Включите «Разрешить повторения», если нужны дубли.",
+    "Нажмите «Тянуть» — карты появятся на экране.",
+    "Нажмите «Копировать», чтобы скопировать результат."
+  ],
+  "ruWhenTo": [
+    "Случайная раздача карт для карточных игр.",
+    "Выбор случайных карт для гаданий.",
+    "Генерация случайных комбинаций карт для тестирования."
+  ],
+  "faq": [
+    { "q": "What deck is used?", "a": "A standard 52-card deck with four suits: spades ♠, hearts ♥, diamonds ♦, and clubs ♣." },
+    { "q": "Can I draw the same card twice?", "a": "Only if Allow duplicates is enabled. By default, each card is drawn at most once." },
+    { "q": "Are jokers included?", "a": "No. Only the standard 52 playing cards are used." }
+  ],
+  "ruFaq": [
+    { "q": "Какая колода используется?", "a": "Стандартная колода из 52 карт четырёх мастей: пики ♠, червы ♥, бубны ♦, трефы ♣." },
+    { "q": "Можно вытащить одну карту дважды?", "a": "Только если включены повторения. По умолчанию каждая карта вытаскивается не более одного раза." },
+    { "q": "Есть ли джокеры?", "a": "Нет. Используется только стандартная колода из 52 карт." }
+  ]
+}

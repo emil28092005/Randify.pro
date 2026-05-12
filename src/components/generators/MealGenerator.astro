@@ -1,0 +1,678 @@
+---
+import { useT } from "../../i18n/translations";
+const isRu = Astro.url.pathname.startsWith("/ru");
+const T = useT(isRu ? "ru" : "en");
+
+const mealTypes = isRu
+  ? [
+      { value: "all", label: "Все" },
+      { value: "breakfast", label: "Завтрак" },
+      { value: "lunch", label: "Обед" },
+      { value: "dinner", label: "Ужин" },
+      { value: "snack", label: "Перекус" },
+      { value: "dessert", label: "Десерт" },
+    ]
+  : [
+      { value: "all", label: "All" },
+      { value: "breakfast", label: "Breakfast" },
+      { value: "lunch", label: "Lunch" },
+      { value: "dinner", label: "Dinner" },
+      { value: "snack", label: "Snack" },
+      { value: "dessert", label: "Dessert" },
+    ];
+
+const cuisines = isRu
+  ? [
+      { value: "all", label: "Все" },
+      { value: "italian", label: "Итальянская" },
+      { value: "asian", label: "Азиатская" },
+      { value: "mexican", label: "Мексиканская" },
+      { value: "american", label: "Американская" },
+      { value: "mediterranean", label: "Средиземноморская" },
+      { value: "french", label: "Французская" },
+      { value: "indian", label: "Индийская" },
+      { value: "russian", label: "Русская" },
+      { value: "middle-eastern", label: "Ближневосточная" },
+    ]
+  : [
+      { value: "all", label: "All" },
+      { value: "italian", label: "Italian" },
+      { value: "asian", label: "Asian" },
+      { value: "mexican", label: "Mexican" },
+      { value: "american", label: "American" },
+      { value: "mediterranean", label: "Mediterranean" },
+      { value: "french", label: "French" },
+      { value: "indian", label: "Indian" },
+      { value: "russian", label: "Russian" },
+      { value: "middle-eastern", label: "Middle Eastern" },
+    ];
+
+const difficulties = isRu
+  ? [
+      { value: "all", label: "Все" },
+      { value: "easy", label: "Легко" },
+      { value: "medium", label: "Средне" },
+      { value: "hard", label: "Сложно" },
+    ]
+  : [
+      { value: "all", label: "All" },
+      { value: "easy", label: "Easy" },
+      { value: "medium", label: "Medium" },
+      { value: "hard", label: "Hard" },
+    ];
+
+const timeFilters = isRu
+  ? [
+      { value: "all", label: "Все" },
+      { value: "15", label: "До 15 мин" },
+      { value: "30", label: "До 30 мин" },
+      { value: "60", label: "До 1 часа" },
+      { value: "slow", label: "Долгая готовка" },
+    ]
+  : [
+      { value: "all", label: "All" },
+      { value: "15", label: "Under 15 min" },
+      { value: "30", label: "Under 30 min" },
+      { value: "60", label: "Under 1 hour" },
+      { value: "slow", label: "Slow cook" },
+    ];
+
+const cuisineLabelMap: Record<string, { en: string; ru: string }> = {
+  italian: { en: "Italian", ru: "Итальянская" },
+  asian: { en: "Asian", ru: "Азиатская" },
+  mexican: { en: "Mexican", ru: "Мексиканская" },
+  american: { en: "American", ru: "Американская" },
+  mediterranean: { en: "Mediterranean", ru: "Средиземноморская" },
+  french: { en: "French", ru: "Французская" },
+  indian: { en: "Indian", ru: "Индийская" },
+  russian: { en: "Russian", ru: "Русская" },
+  "middle-eastern": { en: "Middle Eastern", ru: "Ближневосточная" },
+};
+
+const mealTypeLabelMap: Record<string, { en: string; ru: string }> = {
+  breakfast: { en: "Breakfast", ru: "Завтрак" },
+  lunch: { en: "Lunch", ru: "Обед" },
+  dinner: { en: "Dinner", ru: "Ужин" },
+  snack: { en: "Snack", ru: "Перекус" },
+  dessert: { en: "Dessert", ru: "Десерт" },
+};
+
+const difficultyLabelMap: Record<string, { en: string; ru: string; color: string }> = {
+  easy: { en: "Easy", ru: "Легко", color: "bg-emerald-500/15 text-emerald-400 border-emerald-500/25" },
+  medium: { en: "Medium", ru: "Средне", color: "bg-amber-500/15 text-amber-400 border-amber-500/25" },
+  hard: { en: "Hard", ru: "Сложно", color: "bg-red-500/15 text-red-400 border-red-500/25" },
+};
+
+const dietaryLabelMap: Record<string, { en: string; ru: string; emoji: string }> = {
+  vegetarian: { en: "Vegetarian", ru: "Вегетарианское", emoji: "🌿" },
+  vegan: { en: "Vegan", ru: "Веганское", emoji: "🌱" },
+  "gluten-free": { en: "Gluten-Free", ru: "Без глютена", emoji: "🌾" },
+  spicy: { en: "Spicy", ru: "Острое", emoji: "🌶" },
+};
+---
+
+<div id="meal-generator" class="mt-8">
+  <!-- Filters -->
+  <div class="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+    <div class="flex flex-col gap-1.5">
+      <label for="mg-type" class="text-sm font-medium text-zinc-300">
+        {isRu ? "Тип блюда" : "Meal Type"}
+      </label>
+      <select
+        id="mg-type"
+        class="px-3 py-2 rounded-lg bg-zinc-900 border border-zinc-800 text-sm text-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 cursor-pointer"
+      >
+        {mealTypes.map((t) => <option value={t.value}>{t.label}</option>)}
+      </select>
+    </div>
+    <div class="flex flex-col gap-1.5">
+      <label for="mg-cuisine" class="text-sm font-medium text-zinc-300">
+        {isRu ? "Кухня" : "Cuisine"}
+      </label>
+      <select
+        id="mg-cuisine"
+        class="px-3 py-2 rounded-lg bg-zinc-900 border border-zinc-800 text-sm text-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 cursor-pointer"
+      >
+        {cuisines.map((c) => <option value={c.value}>{c.label}</option>)}
+      </select>
+    </div>
+    <div class="flex flex-col gap-1.5">
+      <label for="mg-difficulty" class="text-sm font-medium text-zinc-300">
+        {isRu ? "Сложность" : "Difficulty"}
+      </label>
+      <select
+        id="mg-difficulty"
+        class="px-3 py-2 rounded-lg bg-zinc-900 border border-zinc-800 text-sm text-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 cursor-pointer"
+      >
+        {difficulties.map((d) => <option value={d.value}>{d.label}</option>)}
+      </select>
+    </div>
+    <div class="flex flex-col gap-1.5">
+      <label for="mg-time" class="text-sm font-medium text-zinc-300">
+        {isRu ? "Время" : "Time"}
+      </label>
+      <select
+        id="mg-time"
+        class="px-3 py-2 rounded-lg bg-zinc-900 border border-zinc-800 text-sm text-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 cursor-pointer"
+      >
+        {timeFilters.map((t) => <option value={t.value}>{t.label}</option>)}
+      </select>
+    </div>
+  </div>
+
+  <!-- Saved count + favorites toggle -->
+  <div class="mb-4 flex items-center justify-between">
+    <div class="text-sm text-zinc-400" id="mg-saved-info" style="display:none;">
+      <button
+        id="mg-view-favs"
+        type="button"
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-zinc-100 hover:bg-zinc-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors cursor-pointer"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="text-amber-400"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span id="mg-saved-count">0</span>
+        <span>{isRu ? " избранных" : " saved"}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Favorites panel -->
+  <div id="mg-favs-panel" class="mb-6 rounded-xl bg-zinc-900/80 border border-zinc-800/80 p-4 sm:p-5 hidden">
+    <div class="flex items-center justify-between mb-3">
+      <h4 class="text-sm font-semibold text-zinc-200">{isRu ? "Избранные рецепты" : "Favorite Recipes"}</h4>
+      <button
+        id="mg-close-favs"
+        type="button"
+        class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-zinc-800 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-700 transition-colors cursor-pointer"
+        aria-label={isRu ? "Закрыть" : "Close"}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <div id="mg-favs-list" class="flex flex-col gap-2">
+      <p class="text-sm text-zinc-500">{isRu ? "Нет сохранённых рецептов." : "No saved recipes."}</p>
+    </div>
+  </div>
+
+  <!-- Result card -->
+  <div
+    id="mg-result"
+    class="rounded-2xl bg-zinc-900/80 border border-zinc-800/80 p-6 sm:p-8 opacity-0"
+    style="transition: opacity 0.25s ease;"
+    aria-live="polite"
+  >
+    <div class="flex flex-col gap-4">
+      <!-- Tags row -->
+      <div id="mg-tags" class="flex flex-wrap items-center gap-2">
+        <span id="mg-cuisine-tag" class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border bg-orange-500/15 text-orange-400 border-orange-500/25" />
+        <span id="mg-type-tag" class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border bg-zinc-700/50 text-zinc-300 border-zinc-600/40" />
+        <span id="mg-difficulty-tag" class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border" />
+        <span id="mg-time-tag" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium border bg-zinc-700/50 text-zinc-300 border-zinc-600/40">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span id="mg-time-value" />
+        </span>
+      </div>
+
+      <!-- Meal name -->
+      <h3 id="mg-name" class="text-2xl sm:text-3xl font-bold text-zinc-100" />
+
+      <!-- Description -->
+      <p id="mg-description" class="text-sm sm:text-base text-zinc-400 leading-relaxed" />
+
+      <!-- Key ingredients -->
+      <div>
+        <span class="text-xs font-medium text-zinc-500 uppercase tracking-wider">
+          {isRu ? "Ингредиенты" : "Ingredients"}
+        </span>
+        <div id="mg-ingredients" class="mt-2 flex flex-wrap gap-1.5" />
+      </div>
+
+      <!-- Calories + Dietary -->
+      <div class="flex flex-wrap items-center gap-3">
+        <span id="mg-calories" class="text-sm font-medium text-zinc-300" />
+        <div id="mg-dietary" class="flex flex-wrap gap-1.5" />
+      </div>
+
+      <!-- Actions -->
+      <div class="flex flex-wrap items-center gap-3 mt-2">
+        <!-- Copy button -->
+        <button
+          id="mg-copy"
+          type="button"
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-zinc-800 text-zinc-300 hover:text-zinc-100 hover:bg-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors cursor-pointer"
+        >
+          <svg id="mg-copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+          <svg id="mg-check-icon" class="hidden text-accent" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          <span id="mg-copy-text">{T.copy}</span>
+        </button>
+
+        <!-- Save favorite button -->
+        <button
+          id="mg-save"
+          type="button"
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-zinc-800 text-zinc-300 hover:text-zinc-100 hover:bg-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors cursor-pointer"
+        >
+          <svg id="mg-star-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg id="mg-star-filled-icon" class="hidden text-amber-400" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span id="mg-save-text">{isRu ? "В избранное" : "Save"}</span>
+        </button>
+
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Generate button -->
+  <div class="flex justify-center mt-8">
+    <button
+      id="mg-btn"
+      type="button"
+      class="w-full sm:w-auto px-8 py-3 bg-accent text-white font-semibold rounded-xl shadow-lg shadow-accent/25 hover:bg-accent-hover active:bg-accent-active focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
+    >
+      {T.generate}
+    </button>
+  </div>
+</div>
+
+<script define:vars={{ cuisineLabelMap, mealTypeLabelMap, difficultyLabelMap, dietaryLabelMap }}>
+  (function() {
+    // Meals data
+    const meals = [
+      { en: "Shakshuka", ru: "Шакшука", cuisine: "middle-eastern", type: "breakfast", difficulty: "easy", time: 25, desc: "Eggs poached in a simmering tomato sauce with spices.", ruDesc: "Яйца, приготовленные в томатном соусе со специями.", ingredients: ["eggs", "tomatoes", "bell pepper", "onion", "cumin", "paprika"], calories: 320, dietary: ["vegetarian", "gluten-free"] },
+      { en: "Spaghetti Carbonara", ru: "Спагетти Карбонара", cuisine: "italian", type: "dinner", difficulty: "medium", time: 20, desc: "Classic Roman pasta with eggs, pecorino, guanciale and black pepper.", ruDesc: "Классическая римская паста с яйцами, пекорино, гуанчиале и черным перцем.", ingredients: ["spaghetti", "eggs", "pecorino", "guanciale", "black pepper"], calories: 650, dietary: [] },
+      { en: "Borscht", ru: "Борщ", cuisine: "russian", type: "lunch", difficulty: "medium", time: 90, desc: "Hearty beet soup with vegetables and often beef, served with sour cream.", ruDesc: "Сытный свекольный суп с овощами и говядиной, подаваемый со сметаной.", ingredients: ["beets", "cabbage", "potato", "carrot", "onion", "beef", "sour cream"], calories: 280, dietary: ["gluten-free"] },
+      { en: "Pad Thai", ru: "Пад Тай", cuisine: "asian", type: "dinner", difficulty: "medium", time: 30, desc: "Stir-fried rice noodles with shrimp, tofu, peanuts and tamarind sauce.", ruDesc: "Жареная рисовая лапша с креветками, тофу, арахисом и тамариндовым соусом.", ingredients: ["rice noodles", "shrimp", "tofu", "peanuts", "tamarind", "bean sprouts", "egg"], calories: 520, dietary: [] },
+      { en: "Tacos al Pastor", ru: "Такос аль Пастор", cuisine: "mexican", type: "dinner", difficulty: "hard", time: 45, desc: "Marinated pork tacos with pineapple, cilantro and onion.", ruDesc: "Такос с маринованной свининой, ананасом, кинзой и луком.", ingredients: ["pork", "pineapple", "corn tortillas", "cilantro", "onion", "chili"], calories: 480, dietary: ["gluten-free"] },
+      { en: "Avocado Toast", ru: "Тост с авокадо", cuisine: "american", type: "breakfast", difficulty: "easy", time: 10, desc: "Crispy toast topped with smashed avocado, lime, and chili flakes.", ruDesc: "Хрустящий тост с размятым авокадо, лаймом и чили хлопьями.", ingredients: ["bread", "avocado", "lime", "chili flakes", "olive oil"], calories: 340, dietary: ["vegetarian"] },
+      { en: "Omelette", ru: "Омлет", cuisine: "french", type: "breakfast", difficulty: "easy", time: 10, desc: "Fluffy French omelette with butter, herbs, and cheese.", ruDesc: "Воздушный французский омлет со сливочным маслом, зеленью и сыром.", ingredients: ["eggs", "butter", "herbs", "cheese", "salt"], calories: 380, dietary: ["vegetarian", "gluten-free"] },
+      { en: "Butter Chicken", ru: "Курица в масле", cuisine: "indian", type: "dinner", difficulty: "medium", time: 40, desc: "Tender chicken in a rich, creamy tomato sauce with aromatic spices.", ruDesc: "Нежная курица в густом сливочно-томатном соусе с ароматными специями.", ingredients: ["chicken", "tomatoes", "cream", "butter", "garam masala", "ginger", "garlic"], calories: 550, dietary: ["gluten-free"] },
+      { en: "Greek Salad", ru: "Греческий салат", cuisine: "mediterranean", type: "lunch", difficulty: "easy", time: 10, desc: "Fresh salad with tomatoes, cucumber, olives, feta, and olive oil.", ruDesc: "Свежий салат с помидорами, огурцом, оливками, фетой и оливковым маслом.", ingredients: ["tomatoes", "cucumber", "olives", "feta cheese", "olive oil", "oregano"], calories: 250, dietary: ["vegetarian", "gluten-free"] },
+      { en: "Sushi Rolls", ru: "Роллы суши", cuisine: "asian", type: "dinner", difficulty: "hard", time: 60, desc: "Vinegared rice with fresh fish and vegetables, rolled in nori.", ruDesc: "Рис с уксусом со свежей рыбой и овощами, завернутый в нори.", ingredients: ["sushi rice", "salmon", "nori", "avocado", "cucumber", "rice vinegar"], calories: 420, dietary: [] },
+      { en: "Hummus Plate", ru: "Хумус", cuisine: "middle-eastern", type: "snack", difficulty: "easy", time: 15, desc: "Creamy chickpea dip with tahini, lemon, and garlic.", ruDesc: "Нежный нутовый дип с тахини, лимоном и чесноком.", ingredients: ["chickpeas", "tahini", "lemon", "garlic", "olive oil", "cumin"], calories: 280, dietary: ["vegetarian", "vegan", "gluten-free"] },
+      { en: "Cheeseburger", ru: "Чизбургер", cuisine: "american", type: "lunch", difficulty: "easy", time: 20, desc: "Juicy beef patty with melted cheese, lettuce, tomato, and pickles.", ruDesc: "Сочная говяжья котлета с расплавленным сыром, салатом, помидором и солеными огурцами.", ingredients: ["beef patty", "cheese", "bun", "lettuce", "tomato", "pickles"], calories: 680, dietary: [] },
+      { en: "Margherita Pizza", ru: "Пицца Маргарита", cuisine: "italian", type: "dinner", difficulty: "medium", time: 40, desc: "Classic pizza with tomato sauce, mozzarella, and fresh basil.", ruDesc: "Классическая пицца с томатным соусом, моцареллой и свежим базиликом.", ingredients: ["pizza dough", "tomato sauce", "mozzarella", "basil", "olive oil"], calories: 720, dietary: ["vegetarian"] },
+      { en: "Tiramisu", ru: "Тирамису", cuisine: "italian", type: "dessert", difficulty: "medium", time: 30, desc: "Coffee-soaked ladyfingers layered with mascarpone cream.", ruDesc: "Печенье савоярди, пропитанное кофе, со слоем крема из маскарпоне.", ingredients: ["ladyfingers", "mascarpone", "coffee", "eggs", "sugar", "cocoa"], calories: 450, dietary: ["vegetarian"] },
+      { en: "Falafel Wrap", ru: "Фалафель в лаваше", cuisine: "middle-eastern", type: "lunch", difficulty: "medium", time: 35, desc: "Crispy falafel balls wrapped in pita with tahini sauce and salad.", ruDesc: "Хрустящие шарики фалафеля в пите с соусом тахини и салатом.", ingredients: ["chickpeas", "pita bread", "tahini", "parsley", "cumin", "lettuce", "tomato"], calories: 460, dietary: ["vegetarian", "vegan"] },
+      { en: "French Toast", ru: "Французские тосты", cuisine: "american", type: "breakfast", difficulty: "easy", time: 15, desc: "Thick bread soaked in egg custard, fried until golden.", ruDesc: "Толстый хлеб, замоченный в яичной смеси и обжаренный до золотистой корочки.", ingredients: ["bread", "eggs", "milk", "cinnamon", "butter", "maple syrup"], calories: 420, dietary: ["vegetarian"] },
+      { en: "Chicken Tikka Masala", ru: "Куриное Тикка Масала", cuisine: "indian", type: "dinner", difficulty: "medium", time: 45, desc: "Marinated chicken in spiced, creamy tomato curry sauce.", ruDesc: "Маринованная курица в пряном сливочном томатном соусе карри.", ingredients: ["chicken", "yogurt", "tomatoes", "cream", "garam masala", "turmeric", "ginger"], calories: 580, dietary: ["gluten-free"] },
+      { en: "Ratatouille", ru: "Рататуй", cuisine: "french", type: "lunch", difficulty: "medium", time: 50, desc: "Provençal vegetable stew with eggplant, zucchini, tomatoes, and herbs.", ruDesc: "Прованское рагу из баклажанов, цукини, помидоров и трав.", ingredients: ["eggplant", "zucchini", "tomatoes", "bell pepper", "onion", "garlic", "herbs"], calories: 220, dietary: ["vegetarian", "vegan", "gluten-free"] },
+      { en: "Caesar Salad", ru: "Салат Цезарь", cuisine: "american", type: "lunch", difficulty: "easy", time: 15, desc: "Crisp romaine lettuce with croutons, parmesan, and creamy Caesar dressing.", ruDesc: "Хрустящий салат романо с гренками, пармезаном и соусом Цезарь.", ingredients: ["romaine lettuce", "croutons", "parmesan", "Caesar dressing", "chicken"], calories: 420, dietary: [] },
+      { en: "Miso Soup", ru: "Мисо-суп", cuisine: "asian", type: "lunch", difficulty: "easy", time: 15, desc: "Traditional Japanese soup with miso paste, tofu, and seaweed.", ruDesc: "Традиционный японский суп с мисо-пастой, тофу и водорослями.", ingredients: ["miso paste", "tofu", "seaweed", "green onions", "dashi"], calories: 90, dietary: ["vegetarian", "gluten-free"] },
+      { en: "Guacamole with Chips", ru: "Гуакамоле с чипсами", cuisine: "mexican", type: "snack", difficulty: "easy", time: 10, desc: "Creamy avocado dip with lime, cilantro, and tortilla chips.", ruDesc: "Нежный дип из авокадо с лаймом, кинзой и кукурузными чипсами.", ingredients: ["avocado", "lime", "cilantro", "onion", "jalapeno", "tortilla chips"], calories: 350, dietary: ["vegetarian", "vegan", "gluten-free"] },
+      { en: "Croissant", ru: "Круассан", cuisine: "french", type: "breakfast", difficulty: "hard", time: 180, desc: "Flaky, buttery French pastry with golden layers.", ruDesc: "Слоеная французская выпечка со сливочным маслом и золотистой корочкой.", ingredients: ["flour", "butter", "yeast", "milk", "sugar", "salt"], calories: 380, dietary: ["vegetarian"] },
+      { en: "Chicken Shawarma", ru: "Куриная шаурма", cuisine: "middle-eastern", type: "dinner", difficulty: "medium", time: 40, desc: "Spiced chicken wrapped in flatbread with garlic sauce and pickles.", ruDesc: "Пряная курица в лепешке с чесночным соусом и солеными огурцами.", ingredients: ["chicken", "flatbread", "garlic sauce", "pickles", "lettuce", "tomato", "spices"], calories: 560, dietary: [] },
+      { en: "Pancakes", ru: "Блины", cuisine: "american", type: "breakfast", difficulty: "easy", time: 20, desc: "Fluffy pancakes served with maple syrup and butter.", ruDesc: "Пышные блины с кленовым сиропом и сливочным маслом.", ingredients: ["flour", "milk", "eggs", "butter", "maple syrup", "baking powder"], calories: 460, dietary: ["vegetarian"] },
+      { en: "Tom Yum Soup", ru: "Том Ям", cuisine: "asian", type: "lunch", difficulty: "medium", time: 25, desc: "Hot and sour Thai soup with shrimp, lemongrass, and lime.", ruDesc: "Острый и кислый тайский суп с креветками, лемонграссом и лаймом.", ingredients: ["shrimp", "lemongrass", "lime", "chili", "mushrooms", "galangal", "kaffir lime"], calories: 180, dietary: ["gluten-free", "spicy"] },
+      { en: "Fettuccine Alfredo", ru: "Феттуччине Альфредо", cuisine: "italian", type: "dinner", difficulty: "easy", time: 20, desc: "Creamy pasta with butter, parmesan, and heavy cream.", ruDesc: "Сливочная паста со сливочным маслом, пармезаном и жирными сливками.", ingredients: ["fettuccine", "butter", "parmesan", "heavy cream", "garlic"], calories: 720, dietary: ["vegetarian"] },
+      { en: "Burrito Bowl", ru: "Буррито боул", cuisine: "mexican", type: "lunch", difficulty: "easy", time: 20, desc: "Rice bowl with beans, salsa, guacamole, and grilled chicken.", ruDesc: "Рис с фасолью, сальсой, гуакамоле и жареной курицей.", ingredients: ["rice", "black beans", "salsa", "guacamole", "chicken", "corn", "cheese"], calories: 640, dietary: ["gluten-free"] },
+      { en: "Baba Ganoush", ru: "Баба гануш", cuisine: "middle-eastern", type: "snack", difficulty: "easy", time: 20, desc: "Smoky eggplant dip with tahini, lemon, and garlic.", ruDesc: "Дымный дип из баклажанов с тахини, лимоном и чесноком.", ingredients: ["eggplant", "tahini", "lemon", "garlic", "olive oil", "cumin"], calories: 180, dietary: ["vegetarian", "vegan", "gluten-free"] },
+      { en: "Boeuf Bourguignon", ru: "Говядина по-бургундски", cuisine: "french", type: "dinner", difficulty: "hard", time: 180, desc: "Slow-cooked beef stew in red wine with mushrooms and onions.", ruDesc: "Тушеная говядина в красном вине с грибами и луком.", ingredients: ["beef", "red wine", "mushrooms", "onion", "bacon", "carrot", "herbs"], calories: 520, dietary: ["gluten-free"] },
+      { en: "Chana Masala", ru: "Чана масала", cuisine: "indian", type: "lunch", difficulty: "easy", time: 30, desc: "Chickpeas simmered in spiced tomato and onion gravy.", ruDesc: "Нут, тушеный в пряном томатно-луковом соусе.", ingredients: ["chickpeas", "tomatoes", "onion", "ginger", "cumin", "coriander", "turmeric"], calories: 340, dietary: ["vegetarian", "vegan", "gluten-free", "spicy"] },
+      { en: "Risotto", ru: "Ризотто", cuisine: "italian", type: "dinner", difficulty: "medium", time: 35, desc: "Creamy Arborio rice cooked with white wine, parmesan, and butter.", ruDesc: "Сливочный рис арборио с белым вином, пармезаном и сливочным маслом.", ingredients: ["Arborio rice", "white wine", "parmesan", "butter", "onion", "chicken stock"], calories: 480, dietary: ["vegetarian", "gluten-free"] },
+      { en: "Gyoza", ru: "Гедза", cuisine: "asian", type: "dinner", difficulty: "hard", time: 50, desc: "Pan-fried Japanese dumplings with pork and cabbage filling.", ruDesc: "Японские жареные пельмени с начинкой из свинины и капусты.", ingredients: ["pork", "cabbage", "ginger", "soy sauce", "gyoza wrappers", "garlic"], calories: 380, dietary: [] },
+      { en: "Poke Bowl", ru: "Поке боул", cuisine: "asian", type: "lunch", difficulty: "easy", time: 15, desc: "Fresh Hawaiian raw fish bowl with rice and toppings.", ruDesc: "Гавайский боул с сырой рыбой, рисом и топпингами.", ingredients: ["sashimi-grade fish", "rice", "soy sauce", "sesame", "avocado", "seaweed", "cucumber"], calories: 460, dietary: ["gluten-free"] },
+      { en: "BLT Sandwich", ru: "Сэндвич BLT", cuisine: "american", type: "lunch", difficulty: "easy", time: 10, desc: "Classic bacon, lettuce, and tomato sandwich on toasted bread.", ruDesc: "Классический сэндвич с беконом, салатом и помидором на поджаренном хлебе.", ingredients: ["bacon", "lettuce", "tomato", "bread", "mayonnaise"], calories: 450, dietary: [] },
+      { en: "Chicken Noodle Soup", ru: "Куриный суп с лапшой", cuisine: "american", type: "lunch", difficulty: "easy", time: 40, desc: "Comforting soup with tender chicken, noodles, and vegetables.", ruDesc: "Согревающий суп с нежной курицей, лапшой и овощами.", ingredients: ["chicken", "egg noodles", "carrot", "celery", "onion", "chicken broth"], calories: 280, dietary: [] },
+      { en: "Quiche Lorraine", ru: "Киш Лорен", cuisine: "french", type: "lunch", difficulty: "medium", time: 55, desc: "Savory tart with bacon, cheese, and creamy egg custard.", ruDesc: "Соленый пирог с беконом, сыром и яичной смесью.", ingredients: ["pie crust", "bacon", "eggs", "cream", "gruyere", "nutmeg"], calories: 480, dietary: [] },
+      { en: "Tacos", ru: "Такос", cuisine: "mexican", type: "dinner", difficulty: "easy", time: 20, desc: "Soft tortillas filled with seasoned meat, salsa, and toppings.", ruDesc: "Мягкие тортильи с приправленным мясом, сальсой и топпингами.", ingredients: ["corn tortillas", "ground beef", "salsa", "lettuce", "cheese", "sour cream"], calories: 420, dietary: ["gluten-free"] },
+      { en: "Dolma", ru: "Долма", cuisine: "mediterranean", type: "lunch", difficulty: "hard", time: 90, desc: "Stuffed grape leaves with rice, herbs, and pine nuts.", ruDesc: "Фаршированные виноградные листья с рисом, зеленью и кедровыми орехами.", ingredients: ["grape leaves", "rice", "onion", "dill", "mint", "pine nuts", "lemon"], calories: 280, dietary: ["vegetarian", "vegan", "gluten-free"] },
+      { en: "Shakshuka", ru: "Шакшука", cuisine: "mediterranean", type: "breakfast", difficulty: "easy", time: 25, desc: "Eggs poached in spiced tomato and pepper sauce.", ruDesc: "Яйца в пряном томатно-перечном соусе.", ingredients: ["eggs", "tomatoes", "bell pepper", "onion", "cumin", "paprika"], calories: 320, dietary: ["vegetarian", "gluten-free"] },
+      { en: "Veggie Stir-Fry", ru: "Овощное стир-фрай", cuisine: "asian", type: "dinner", difficulty: "easy", time: 20, desc: "Colorful vegetables quickly stir-fried with soy sauce and ginger.", ruDesc: "Разноцветные овощи, быстро обжаренные с соевым соусом и имбирем.", ingredients: ["broccoli", "bell pepper", "carrot", "snap peas", "soy sauce", "ginger", "garlic"], calories: 240, dietary: ["vegetarian", "vegan", "gluten-free"] },
+      { en: "Lentil Soup", ru: "Чечевичный суп", cuisine: "mediterranean", type: "lunch", difficulty: "easy", time: 35, desc: "Hearty red lentil soup with carrots, onions, and cumin.", ruDesc: "Сытный суп из красной чечевицы с морковью, луком и тмином.", ingredients: ["red lentils", "carrot", "onion", "cumin", "garlic", "vegetable broth"], calories: 260, dietary: ["vegetarian", "vegan", "gluten-free"] },
+      { en: "Bagel with Lox", ru: "Бейгл с лососем", cuisine: "american", type: "breakfast", difficulty: "easy", time: 10, desc: "Toasted bagel with cream cheese, smoked salmon, and capers.", ruDesc: "Поджаренный бейгл с сливочным сыром, копченым лососем и каперсами.", ingredients: ["bagel", "cream cheese", "smoked salmon", "capers", "red onion", "dill"], calories: 480, dietary: [] },
+      { en: "Paella", ru: "Паэлья", cuisine: "mediterranean", type: "dinner", difficulty: "hard", time: 60, desc: "Spanish saffron rice with seafood, chicken, and vegetables.", ruDesc: "Испанский шафрановый рис с морепродуктами, курицей и овощами.", ingredients: ["bomba rice", "saffron", "shrimp", "chicken", "peas", "bell pepper", "olive oil"], calories: 520, dietary: ["gluten-free"] },
+      { en: "Pho", ru: "Фо", cuisine: "asian", type: "lunch", difficulty: "hard", time: 180, desc: "Vietnamese beef noodle soup with aromatic broth and herbs.", ruDesc: "Вьетнамский суп с говядиной, лапшой и ароматным бульоном.", ingredients: ["rice noodles", "beef", "star anise", "cinnamon", "ginger", "bean sprouts", "basil"], calories: 420, dietary: ["gluten-free"] },
+      { en: "Cacio e Pepe", ru: "Качо э пепе", cuisine: "italian", type: "dinner", difficulty: "medium", time: 15, desc: "Simple Roman pasta with pecorino and lots of black pepper.", ruDesc: "Простая римская паста с пекорино и черным перцем.", ingredients: ["spaghetti", "pecorino", "black pepper", "butter"], calories: 580, dietary: ["vegetarian"] },
+      { en: "Couscous Salad", ru: "Салат с кускусом", cuisine: "mediterranean", type: "lunch", difficulty: "easy", time: 20, desc: "Light couscous with cucumber, tomato, herbs, and lemon.", ruDesc: "Легкий кускус с огурцом, помидорами, зеленью и лимоном.", ingredients: ["couscous", "cucumber", "tomato", "parsley", "mint", "lemon", "olive oil"], calories: 300, dietary: ["vegetarian", "vegan"] },
+      { en: "Enchiladas", ru: "Энчиладас", cuisine: "mexican", type: "dinner", difficulty: "medium", time: 50, desc: "Corn tortillas rolled around chicken, covered in chili sauce and cheese.", ruDesc: "Кукурузные тортильи с курицей, в чили соусе и сыре.", ingredients: ["corn tortillas", "chicken", "enchilada sauce", "cheese", "onion", "sour cream"], calories: 540, dietary: ["gluten-free"] },
+      { en: "Soufflé", ru: "Суфле", cuisine: "french", type: "dessert", difficulty: "hard", time: 40, desc: "Delicate, airy baked dessert that rises tall in the oven.", ruDesc: "Нежный воздушный десерт, который поднимается в духовке.", ingredients: ["eggs", "sugar", "vanilla", "butter", "flour"], calories: 280, dietary: ["vegetarian"] },
+      { en: "Aloo Gobi", ru: "Алу гоби", cuisine: "indian", type: "lunch", difficulty: "easy", time: 30, desc: "Potato and cauliflower curry with turmeric and spices.", ruDesc: "Карри из картофеля и цветной капусты с куркумой и специями.", ingredients: ["potato", "cauliflower", "turmeric", "cumin", "ginger", "tomatoes"], calories: 240, dietary: ["vegetarian", "vegan", "gluten-free", "spicy"] },
+      { en: "Carbonara", ru: "Карбонара", cuisine: "italian", type: "dinner", difficulty: "medium", time: 20, desc: "Silky pasta with eggs, guanciale, pecorino, and black pepper.", ruDesc: "Шелковистая паста с яйцами, гуанчиале, пекорино и черным перцем.", ingredients: ["spaghetti", "eggs", "guanciale", "pecorino", "black pepper"], calories: 680, dietary: [] },
+      { en: "Waffles", ru: "Вафли", cuisine: "american", type: "breakfast", difficulty: "easy", time: 20, desc: "Crispy golden waffles served with berries and syrup.", ruDesc: "Хрустящие золотистые вафли с ягодами и сиропом.", ingredients: ["flour", "eggs", "milk", "butter", "baking powder", "berries", "maple syrup"], calories: 440, dietary: ["vegetarian"] },
+      { en: "Bibimbap", ru: "Пибимпап", cuisine: "asian", type: "lunch", difficulty: "medium", time: 35, desc: "Korean rice bowl with vegetables, beef, fried egg, and gochujang.", ruDesc: "Корейский рис с овощами, говядиной, яичницей и кочхуджанг.", ingredients: ["rice", "beef", "spinach", "carrot", "bean sprouts", "egg", "gochujang"], calories: 580, dietary: ["gluten-free", "spicy"] },
+      { en: "Moussaka", ru: "Мусака", cuisine: "mediterranean", type: "dinner", difficulty: "hard", time: 90, desc: "Layered eggplant, potato, and ground beef topped with béchamel.", ruDesc: "Слоеная запеканка из баклажанов, картофеля и фарша с бешамелем.", ingredients: ["eggplant", "ground beef", "potato", "tomatoes", "béchamel sauce", "cinnamon"], calories: 480, dietary: ["gluten-free"] },
+      { en: "Crepes", ru: "Блины", cuisine: "french", type: "breakfast", difficulty: "easy", time: 25, desc: "Thin French pancakes served with Nutella, berries, or sugar.", ruDesc: "Тонкие французские блины с Нутеллой, ягодами или сахаром.", ingredients: ["flour", "milk", "eggs", "butter", "sugar", "Nutella", "berries"], calories: 350, dietary: ["vegetarian"] },
+      { en: "Green Curry", ru: "Зеленое карри", cuisine: "asian", type: "dinner", difficulty: "medium", time: 35, desc: "Thai green curry with coconut milk, chicken, and Thai basil.", ruDesc: "Тайское зеленое карри с кокосовым молоком, курицей и тайским базиликом.", ingredients: ["chicken", "coconut milk", "green curry paste", "Thai basil", "bamboo shoots", "bell pepper"], calories: 460, dietary: ["gluten-free", "spicy"] },
+      { en: "Fish and Chips", ru: "Рыба с чипсами", cuisine: "american", type: "dinner", difficulty: "medium", time: 35, desc: "Beer-battered fish fillets with crispy golden fries.", ruDesc: "Рыба в пивном кляре с хрустящим картофелем фри.", ingredients: ["white fish", "beer batter", "potatoes", "malt vinegar", "tartar sauce"], calories: 780, dietary: [] },
+      { en: "Moussaka", ru: "Мусака", cuisine: "mediterranean", type: "dinner", difficulty: "hard", time: 90, desc: "Greek baked dish with eggplant, minced meat, and béchamel.", ruDesc: "Греческая запеканка с баклажанами, фаршем и бешамелем.", ingredients: ["eggplant", "ground beef", "potato", "béchamel", "tomatoes", "cinnamon"], calories: 490, dietary: ["gluten-free"] },
+      { en: "Ramen", ru: "Рамен", cuisine: "asian", type: "dinner", difficulty: "hard", time: 240, desc: "Japanese noodle soup with rich broth, chashu pork, and soft-boiled egg.", ruDesc: "Японский суп с лапшой, насыщенным бульоном, свининой чашу и яйцом.", ingredients: ["ramen noodles", "pork belly", "soy sauce", "miso", "soft-boiled egg", "green onion", "nori"], calories: 620, dietary: [] },
+      { en: "Frittata", ru: "Фриттата", cuisine: "italian", type: "breakfast", difficulty: "easy", time: 25, desc: "Italian open-faced omelette with vegetables and cheese.", ruDesc: "Итальянский омлет с овощами и сыром, запеченный в духовке.", ingredients: ["eggs", "zucchini", "bell pepper", "onion", "parmesan", "olive oil"], calories: 320, dietary: ["vegetarian", "gluten-free"] },
+      { en: "Tacos de Pescado", ru: "Рыбные такос", cuisine: "mexican", type: "lunch", difficulty: "medium", time: 30, desc: "Baja-style fish tacos with cabbage slaw and lime crema.", ruDesc: "Рыбные такос в стиле Баха с капустным салатом и лаймовым кремом.", ingredients: ["white fish", "corn tortillas", "cabbage", "lime", "crema", "cilantro"], calories: 400, dietary: ["gluten-free"] },
+      { en: "Tiramisu", ru: "Тирамису", cuisine: "italian", type: "dessert", difficulty: "medium", time: 30, desc: "Italian coffee-flavoured dessert with layers of mascarpone.", ruDesc: "Итальянский кофейный десерт со слоями маскарпоне.", ingredients: ["mascarpone", "coffee", "ladyfingers", "eggs", "sugar", "cocoa powder"], calories: 420, dietary: ["vegetarian"] },
+      { en: "Panna Cotta", ru: "Панна котта", cuisine: "italian", type: "dessert", difficulty: "medium", time: 20, desc: "Silky Italian custard served with berry coulis.", ruDesc: "Шелковистый итальянский десерт с ягодным соусом.", ingredients: ["cream", "sugar", "gelatin", "vanilla", "berries"], calories: 310, dietary: ["vegetarian", "gluten-free"] },
+      { en: "Chicken Kiev", ru: "Котлета по-киевски", cuisine: "russian", type: "dinner", difficulty: "hard", time: 50, desc: "Breaded chicken breast stuffed with herbed butter.", ruDesc: "Куриная грудка в панировке с начинкой из сливочного масла с зеленью.", ingredients: ["chicken breast", "butter", "herbs", "breadcrumbs", "egg", "flour"], calories: 540, dietary: [] },
+      { en: "Olivier Salad", ru: "Салат Оливье", cuisine: "russian", type: "lunch", difficulty: "easy", time: 30, desc: "Classic Russian potato salad with vegetables and mayonnaise.", ruDesc: "Классический русский картофельный салат с овощами и майонезом.", ingredients: ["potatoes", "carrots", "eggs", "peas", "pickles", "mayonnaise", "bologna"], calories: 380, dietary: [] },
+      { en: "Beef Stroganoff", ru: "Бефстроганов", cuisine: "russian", type: "dinner", difficulty: "medium", time: 40, desc: "Tender beef in creamy mushroom sauce served over noodles.", ruDesc: "Нежная говядина в сливочно-грибном соусе с лапшой.", ingredients: ["beef tenderloin", "mushrooms", "sour cream", "onion", "mustard", "butter"], calories: 560, dietary: [] },
+      { en: "Syrniki", ru: "Сырники", cuisine: "russian", type: "breakfast", difficulty: "easy", time: 25, desc: "Sweet cheese pancakes served with sour cream and jam.", ruDesc: "Сладкие творожные оладьи со сметаной и вареньем.", ingredients: ["tvorog", "eggs", "flour", "sugar", "sour cream", "jam"], calories: 360, dietary: ["vegetarian"] },
+      { en: "Khinkali", ru: "Хинкали", cuisine: "russian", type: "dinner", difficulty: "hard", time: 70, desc: "Georgian dumplings filled with spiced meat and broth.", ruDesc: "Грузинские пельмени с пряным мясом и бульоном внутри.", ingredients: ["flour", "beef", "pork", "onion", "cumin", "black pepper", "broth"], calories: 480, dietary: [] },
+      { en: "Solyanka", ru: "Солянка", cuisine: "russian", type: "lunch", difficulty: "medium", time: 60, desc: "Thick, tangy Russian soup with mixed meats, pickles, and olives.", ruDesc: "Густой кислый русский суп с мясом, солеными огурцами и оливками.", ingredients: ["beef", "sausage", "ham", "pickles", "olives", "tomatoes", "lemon"], calories: 340, dietary: ["gluten-free"] },
+      { en: "Blini with Red Caviar", ru: "Блины с красной икрой", cuisine: "russian", type: "breakfast", difficulty: "easy", time: 30, desc: "Thin Russian pancakes topped with red caviar and sour cream.", ruDesc: "Тонкие русские блины с красной икрой и сметаной.", ingredients: ["flour", "milk", "eggs", "red caviar", "sour cream", "butter"], calories: 420, dietary: [] },
+      { en: "Pelmeni", ru: "Пельмени", cuisine: "russian", type: "dinner", difficulty: "hard", time: 80, desc: "Siberian meat dumplings boiled and served with butter or vinegar.", ruDesc: "Сибирские пельмени, отварные и подаваемые со сливочным маслом или уксусом.", ingredients: ["flour", "beef", "pork", "onion", "black pepper", "butter"], calories: 520, dietary: [] },
+      { en: "Vinegret", ru: "Винегрет", cuisine: "russian", type: "lunch", difficulty: "easy", time: 30, desc: "Vibrant beet and vegetable salad with sauerkraut and pickles.", ruDesc: "Яркий свекольно-овощной салат с квашеной капустой и солеными огурцами.", ingredients: ["beets", "potatoes", "carrots", "sauerkraut", "pickles", "onion", "oil"], calories: 200, dietary: ["vegetarian", "vegan", "gluten-free"] },
+      { en: "Shashlik", ru: "Шашлык", cuisine: "russian", type: "dinner", difficulty: "medium", time: 120, desc: "Marinated skewered meat grilled over charcoal.", ruDesc: "Маринованное мясо на шампурах, жареное на углях.", ingredients: ["pork", "onion", "vinegar", "spices", "bay leaf"], calories: 580, dietary: ["gluten-free"] },
+      { en: "Kasha", ru: "Гречневая каша", cuisine: "russian", type: "breakfast", difficulty: "easy", time: 20, desc: "Buckwheat porridge cooked with milk and topped with butter.", ruDesc: "Гречневая каша, сваренная на молоке с добавлением сливочного масла.", ingredients: ["buckwheat", "milk", "butter", "salt", "sugar"], calories: 280, dietary: ["vegetarian", "gluten-free"] },
+      { en: "Escargot", ru: "Эскарго", cuisine: "french", type: "dinner", difficulty: "hard", time: 40, desc: "Burgundy snails baked in garlic herb butter.", ruDesc: "Улитки из Бургундии, запеченные в чесночно-травяном масле.", ingredients: ["snails", "butter", "garlic", "parsley", "shallots", "white wine"], calories: 320, dietary: ["gluten-free"] },
+      { en: "Creme Brulee", ru: "Крем-брюле", cuisine: "french", type: "dessert", difficulty: "medium", time: 50, desc: "Rich custard topped with a layer of caramelized sugar.", ruDesc: "Нежный заварной крем с хрустящим слоем карамелизированного сахара.", ingredients: ["cream", "egg yolks", "sugar", "vanilla"], calories: 380, dietary: ["vegetarian", "gluten-free"] },
+      { en: "Galette", ru: "Галета", cuisine: "french", type: "dessert", difficulty: "medium", time: 45, desc: "Free-form rustic tart with seasonal fruits.", ruDesc: "Деревенская открытая галета с сезонными фруктами.", ingredients: ["flour", "butter", "apples", "sugar", "cinnamon", "cream"], calories: 340, dietary: ["vegetarian"] },
+      { en: "Bruschetta", ru: "Брускетта", cuisine: "italian", type: "snack", difficulty: "easy", time: 10, desc: "Grilled bread rubbed with garlic and topped with tomatoes.", ruDesc: "Поджаренный хлеб, натертый чесноком, с помидорами.", ingredients: ["baguette", "tomatoes", "garlic", "basil", "olive oil"], calories: 220, dietary: ["vegetarian", "vegan"] },
+      { en: "Arancini", ru: "Аранчини", cuisine: "italian", type: "snack", difficulty: "medium", time: 40, desc: "Deep-fried risotto balls stuffed with mozzarella.", ruDesc: "Жареные шарики из ризотто с начинкой из моцареллы.", ingredients: ["risotto rice", "mozzarella", "breadcrumbs", "egg", "oil", "peas"], calories: 380, dietary: ["vegetarian"] },
+      { en: "Satay Skewers", ru: "Сате на шпажках", cuisine: "asian", type: "snack", difficulty: "medium", time: 30, desc: "Grilled marinated meat skewers with peanut dipping sauce.", ruDesc: "Жареные маринованные шашлычки с арахисовым соусом.", ingredients: ["chicken", "peanut butter", "soy sauce", "coconut milk", "curry paste", "skewers"], calories: 380, dietary: [] },
+      { en: "Spring Rolls", ru: "Спринг-роллы", cuisine: "asian", type: "snack", difficulty: "medium", time: 35, desc: "Crispy fried rolls with vegetables and glass noodles.", ruDesc: "Хрустящие жареные роллы с овощами и стеклянной лапшой.", ingredients: ["rice paper", "glass noodles", "carrot", "cabbage", "mushrooms", "soy sauce"], calories: 240, dietary: ["vegetarian", "vegan"] },
+      { en: "Loaded Nachos", ru: "Начос с начинкой", cuisine: "mexican", type: "snack", difficulty: "easy", time: 15, desc: "Tortilla chips piled with cheese, jalapenos, beans, and salsa.", ruDesc: "Чипсы начос с сыром, халапеньо, фасолью и сальсой.", ingredients: ["tortilla chips", "cheese", "jalapenos", "black beans", "salsa", "sour cream"], calories: 560, dietary: ["vegetarian", "gluten-free"] },
+      { en: "Edamame", ru: "Эдамаме", cuisine: "asian", type: "snack", difficulty: "easy", time: 10, desc: "Steamed young soybeans sprinkled with sea salt.", ruDesc: "Пареные молодые соевые бобы с морской солью.", ingredients: ["edamame", "sea salt"], calories: 180, dietary: ["vegetarian", "vegan", "gluten-free"] },
+      { en: "Samosa", ru: "Самоса", cuisine: "indian", type: "snack", difficulty: "medium", time: 50, desc: "Crispy fried pastry filled with spiced potatoes and peas.", ruDesc: "Хрустящая жареная выпечка с пряным картофелем и горошком.", ingredients: ["flour", "potatoes", "peas", "cumin", "garam masala", "ginger", "oil"], calories: 280, dietary: ["vegetarian", "vegan", "spicy"] },
+      { en: "Crème Caramel", ru: "Крем-карамель", cuisine: "french", type: "dessert", difficulty: "medium", time: 50, desc: "Silky custard with a layer of soft caramel on top.", ruDesc: "Нежный заварной крем с мягкой карамелью сверху.", ingredients: ["milk", "eggs", "sugar", "vanilla"], calories: 290, dietary: ["vegetarian", "gluten-free"] },
+      { en: "Churros", ru: "Чуррос", cuisine: "mexican", type: "dessert", difficulty: "medium", time: 30, desc: "Deep-fried dough pastry dusted with cinnamon sugar.", ruDesc: "Жареное тесто с коричным сахаром и шоколадным соусом.", ingredients: ["flour", "water", "sugar", "cinnamon", "oil", "chocolate"], calories: 380, dietary: ["vegetarian"] },
+      { en: "Gulab Jamun", ru: "Гулаб джамун", cuisine: "indian", type: "dessert", difficulty: "hard", time: 60, desc: "Deep-fried milk solids soaked in fragrant sugar syrup.", ruDesc: "Жареные шарики из сухого молока в ароматном сахарном сиропе.", ingredients: ["milk powder", "flour", "ghee", "sugar", "cardamom", "rose water"], calories: 320, dietary: ["vegetarian", "gluten-free"] },
+      { en: "Apple Pie", ru: "Яблочный пирог", cuisine: "american", type: "dessert", difficulty: "medium", time: 75, desc: "Classic double-crust pie with cinnamon-spiced apples.", ruDesc: "Классический пирог с двойной корочкой и яблоками с корицей.", ingredients: ["flour", "butter", "apples", "sugar", "cinnamon", "lemon"], calories: 420, dietary: ["vegetarian"] },
+      { en: "Brownies", ru: "Брауни", cuisine: "american", type: "dessert", difficulty: "easy", time: 35, desc: "Dense, fudgy chocolate brownies with a crackly top.", ruDesc: "Плотный шоколадный брауни с хрустящей корочкой.", ingredients: ["chocolate", "butter", "eggs", "sugar", "flour", "cocoa"], calories: 380, dietary: ["vegetarian"] },
+      { en: "Granola Parfait", ru: "Гранола парфе", cuisine: "american", type: "breakfast", difficulty: "easy", time: 5, desc: "Layers of granola, Greek yogurt, and fresh berries.", ruDesc: "Слои гранолы, греческого йогурта и свежих ягод.", ingredients: ["granola", "Greek yogurt", "berries", "honey"], calories: 320, dietary: ["vegetarian", "gluten-free"] },
+      { en: "Smoked Salmon Toast", ru: "Тост с лососем", cuisine: "american", type: "breakfast", difficulty: "easy", time: 10, desc: "Toasted bread with cream cheese, smoked salmon, and dill.", ruDesc: "Поджаренный хлеб с сливочным сыром, лососем и укропом.", ingredients: ["bread", "cream cheese", "smoked salmon", "dill", "lemon", "capers"], calories: 380, dietary: [] },
+      { en: "Breakfast Burrito", ru: "Завтрак буррито", cuisine: "american", type: "breakfast", difficulty: "easy", time: 15, desc: "Flour tortilla with scrambled eggs, cheese, and sausage.", ruDesc: "Пшеничная тортилья с яичницей, сыром и колбасой.", ingredients: ["flour tortilla", "eggs", "cheese", "sausage", "salsa", "avocado"], calories: 580, dietary: [] },
+      { en: "Acai Bowl", ru: "Асаи боул", cuisine: "american", type: "breakfast", difficulty: "easy", time: 10, desc: "Thick acai smoothie topped with granola and fresh fruit.", ruDesc: "Густой смузи из ягод асаи с гранолой и свежими фруктами.", ingredients: ["acai", "banana", "granola", "berries", "coconut flakes", "honey"], calories: 360, dietary: ["vegetarian", "vegan", "gluten-free"] },
+      { en: "Eggs Benedict", ru: "Яйца Бенедикт", cuisine: "american", type: "breakfast", difficulty: "hard", time: 25, desc: "Poached eggs on English muffin with ham and hollandaise sauce.", ruDesc: "Яйца пашот на английском маффине с ветчиной и соусом голландез.", ingredients: ["eggs", "English muffin", "ham", "butter", "lemon", "egg yolks"], calories: 520, dietary: [] },
+      { en: "Dim Sum", ru: "Дим сам", cuisine: "asian", type: "lunch", difficulty: "hard", time: 60, desc: "Assorted Chinese bite-sized dumplings and steamed buns.", ruDesc: "Набор китайских пельменек и паровых булочек.", ingredients: ["flour", "pork", "shrimp", "ginger", "soy sauce", "bamboo steamer"], calories: 420, dietary: [] },
+      { en: "Lamb Tagine", ru: "Тажин с бараниной", cuisine: "middle-eastern", type: "dinner", difficulty: "hard", time: 120, desc: "Slow-cooked Moroccan lamb with dried fruits and spices.", ruDesc: "Марокканское томленое мясо баранины с сухофруктами и специями.", ingredients: ["lamb", "dried apricots", "couscous", "cinnamon", "ginger", "honey", "almonds"], calories: 580, dietary: ["gluten-free"] },
+      { en: "Tandoori Chicken", ru: "Курица тандури", cuisine: "indian", type: "dinner", difficulty: "medium", time: 60, desc: "Chicken marinated in yogurt and spices, roasted in tandoor.", ruDesc: "Курица в маринаде из йогурта и специй, запеченная в тандыре.", ingredients: ["chicken", "yogurt", "tandoori masala", "lemon", "ginger", "garlic"], calories: 440, dietary: ["gluten-free"] },
+      { en: "Spanakopita", ru: "Спанакопита", cuisine: "mediterranean", type: "snack", difficulty: "medium", time: 55, desc: "Greek spinach and feta pie wrapped in crispy phyllo pastry.", ruDesc: "Греческий пирог со шпинатом и фетой в хрустящем тесте фило.", ingredients: ["phyllo dough", "spinach", "feta", "onion", "dill", "egg", "butter"], calories: 340, dietary: ["vegetarian"] },
+      { en: "Baklava", ru: "Пахлава", cuisine: "middle-eastern", type: "dessert", difficulty: "hard", time: 90, desc: "Layered pastry with chopped nuts and honey syrup.", ruDesc: "Слоеная выпечка с рублеными орехами и медовым сиропом.", ingredients: ["phyllo dough", "walnuts", "butter", "honey", "cinnamon", "sugar"], calories: 420, dietary: ["vegetarian"] },
+      { en: "French Onion Soup", ru: "Луковый суп", cuisine: "french", type: "lunch", difficulty: "medium", time: 60, desc: "Caramelized onions in rich beef broth topped with melted cheese.", ruDesc: "Карамелизированный лук в насыщенном говяжьем бульоне с расплавленным сыром.", ingredients: ["onions", "beef broth", "gruyere", "baguette", "butter", "white wine"], calories: 380, dietary: [] },
+      { en: "Pulled Pork Sandwich", ru: "Сэндвич с пулд-порк", cuisine: "american", type: "lunch", difficulty: "hard", time: 360, desc: "Slow-smoked shredded pork on a bun with BBQ sauce.", ruDesc: "Медленно копченая рубленая свинина на булочке с соусом барбекю.", ingredients: ["pork shoulder", "BBQ sauce", "bun", "coleslaw", "spices", "apple cider vinegar"], calories: 620, dietary: [] },
+      { en: "Ceviche", ru: "Севиче", cuisine: "mexican", type: "lunch", difficulty: "medium", time: 30, desc: "Fresh fish cured in citrus juice with onions and cilantro.", ruDesc: "Свежая рыба, маринованная в цитрусовом соке с луком и кинзой.", ingredients: ["white fish", "lime", "lemon", "red onion", "cilantro", "jalapeno", "corn"], calories: 220, dietary: ["gluten-free"] },
+      { en: "Cottage Cheese Pancakes", ru: "Сырники", cuisine: "russian", type: "breakfast", difficulty: "easy", time: 25, desc: "Fluffy pancakes made from cottage cheese, served with jam.", ruDesc: "Пышные оладьи из творога, подаваемые с вареньем.", ingredients: ["cottage cheese", "eggs", "flour", "sugar", "vanilla", "butter"], calories: 340, dietary: ["vegetarian"] },
+      { en: "Chilaquiles", ru: "Чилакилес", cuisine: "mexican", type: "breakfast", difficulty: "easy", time: 20, desc: "Tortilla chips simmered in salsa, topped with eggs and crema.", ruDesc: "Чипсы тортильи в сальсе с яйцами и сметаной сверху.", ingredients: ["tortilla chips", "salsa verde", "eggs", "crema", "cheese", "cilantro"], calories: 480, dietary: ["gluten-free"] },
+      { en: "Shakshuka", ru: "Шакшука", cuisine: "middle-eastern", type: "breakfast", difficulty: "easy", time: 25, desc: "Eggs poached in a spiced tomato and pepper sauce.", ruDesc: "Яйца, приготовленные в пряном томатно-перечном соусе.", ingredients: ["eggs", "tomatoes", "bell pepper", "onion", "cumin", "paprika"], calories: 320, dietary: ["vegetarian", "gluten-free"] },
+      { en: "Protein Smoothie Bowl", ru: "Протеиновый смузи боул", cuisine: "american", type: "breakfast", difficulty: "easy", time: 5, desc: "Thick smoothie with protein powder, fruits, and toppings.", ruDesc: "Густой смузи с протеином, фруктами и топпингами.", ingredients: ["protein powder", "banana", "berries", "almond milk", "chia seeds", "peanut butter"], calories: 380, dietary: ["vegetarian", "gluten-free"] },
+      { en: "Chicken Caesar Wrap", ru: "Ролл Цезарь с курицей", cuisine: "american", type: "lunch", difficulty: "easy", time: 15, desc: "Grilled chicken, romaine, parmesan, and Caesar dressing in a wrap.", ruDesc: "Жареная курица, салат романо, пармезан и соус Цезарь в ролле.", ingredients: ["chicken", "tortilla", "romaine", "parmesan", "Caesar dressing"], calories: 480, dietary: [] },
+      { en: "Spicy Tuna Roll", ru: "Ролл с острым тунцом", cuisine: "asian", type: "lunch", difficulty: "medium", time: 25, desc: "Sushi roll with spicy tuna, cucumber, and sesame seeds.", ruDesc: "Суши-ролл с острым тунцом, огурцом и кунжутом.", ingredients: ["sushi rice", "tuna", "mayonnaise", "sriracha", "cucumber", "nori", "sesame"], calories: 380, dietary: ["spicy"] },
+      { en: "Halloumi Salad", ru: "Салат с халуми", cuisine: "mediterranean", type: "lunch", difficulty: "easy", time: 15, desc: "Grilled halloumi cheese with mixed greens and pomegranate.", ruDesc: "Жареный сыр халуми со смесью зелени и гранатом.", ingredients: ["halloumi", "mixed greens", "pomegranate", "olive oil", "lemon", "mint"], calories: 360, dietary: ["vegetarian", "gluten-free"] },
+      { en: "Turkey Meatballs", ru: "Фрикадельки из индейки", cuisine: "italian", type: "dinner", difficulty: "easy", time: 30, desc: "Lean turkey meatballs in marinara sauce with herbs.", ruDesc: "Постные фрикадельки из индейки в соусе маринара с зеленью.", ingredients: ["ground turkey", "breadcrumbs", "egg", "marinara", "parmesan", "herbs"], calories: 380, dietary: [] },
+      { en: "Pistachio Ice Cream", ru: "Фисташковое мороженое", cuisine: "italian", type: "dessert", difficulty: "hard", time: 40, desc: "Creamy gelato made with real pistachios.", ruDesc: "Сливочное джелато из настоящих фисташек.", ingredients: ["milk", "cream", "pistachios", "sugar", "egg yolks"], calories: 280, dietary: ["vegetarian", "gluten-free"] },
+    ];
+
+    // Deduplicate meals by (en + cuisine + type)
+    const seen = new Set();
+    const uniqueMeals = [];
+    for (const m of meals) {
+      const key = m.en + "|" + m.cuisine + "|" + m.type;
+      if (!seen.has(key)) {
+        seen.add(key);
+        uniqueMeals.push(m);
+      }
+    }
+
+    const isRu = document.documentElement.lang === "ru";
+
+    // DOM refs
+    const typeSelect = document.getElementById("mg-type");
+    const cuisineSelect = document.getElementById("mg-cuisine");
+    const difficultySelect = document.getElementById("mg-difficulty");
+    const timeSelect = document.getElementById("mg-time");
+    const resultEl = document.getElementById("mg-result");
+    const nameEl = document.getElementById("mg-name");
+    const descEl = document.getElementById("mg-description");
+    const cuisineTagEl = document.getElementById("mg-cuisine-tag");
+    const typeTagEl = document.getElementById("mg-type-tag");
+    const difficultyTagEl = document.getElementById("mg-difficulty-tag");
+    const timeValueEl = document.getElementById("mg-time-value");
+    const ingredientsEl = document.getElementById("mg-ingredients");
+    const caloriesEl = document.getElementById("mg-calories");
+    const dietaryEl = document.getElementById("mg-dietary");
+    const copyBtn = document.getElementById("mg-copy");
+    const copyIcon = document.getElementById("mg-copy-icon");
+    const checkIcon = document.getElementById("mg-check-icon");
+    const copyText = document.getElementById("mg-copy-text");
+    const saveBtn = document.getElementById("mg-save");
+    const starIcon = document.getElementById("mg-star-icon");
+    const starFilledIcon = document.getElementById("mg-star-filled-icon");
+    const saveText = document.getElementById("mg-save-text");
+    const btn = document.getElementById("mg-btn");
+    const savedInfoEl = document.getElementById("mg-saved-info");
+    const savedCountEl = document.getElementById("mg-saved-count");
+    const viewFavsBtn = document.getElementById("mg-view-favs");
+    const favsPanel = document.getElementById("mg-favs-panel");
+    const closeFavsBtn = document.getElementById("mg-close-favs");
+    const favsList = document.getElementById("mg-favs-list");
+
+    let currentMeal = null;
+    let copyTimer = null;
+    const FAV_KEY = "randify-meal-favorites";
+
+    function getFavorites() {
+      try {
+        const raw = localStorage.getItem(FAV_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch { return []; }
+    }
+
+    function saveFavorites(favs) {
+      localStorage.setItem(FAV_KEY, JSON.stringify(favs));
+      updateSavedCount();
+    }
+
+    function updateSavedCount() {
+      const favs = getFavorites();
+      if (favs.length > 0) {
+        savedInfoEl.style.display = "";
+        savedCountEl.textContent = String(favs.length);
+      } else {
+        savedInfoEl.style.display = "none";
+      }
+    }
+
+    function isFavorited(meal) {
+      if (!meal) return false;
+      const favs = getFavorites();
+      return favs.some(f => f.en === meal.en);
+    }
+
+    function toggleFavorite() {
+      if (!currentMeal) return;
+      const favs = getFavorites();
+      const idx = favs.findIndex(f => f.en === currentMeal.en);
+      if (idx >= 0) {
+        favs.splice(idx, 1);
+        starIcon.classList.remove("hidden");
+        starFilledIcon.classList.add("hidden");
+        saveText.textContent = isRu ? "В избранное" : "Save";
+      } else {
+        favs.push({ en: currentMeal.en, ru: currentMeal.ru, cuisine: currentMeal.cuisine, type: currentMeal.type });
+        starIcon.classList.add("hidden");
+        starFilledIcon.classList.remove("hidden");
+        saveText.textContent = isRu ? "Сохранено" : "Saved";
+      }
+      saveFavorites(favs);
+    }
+
+    function getFilteredMeals() {
+      const type = typeSelect.value;
+      const cuisine = cuisineSelect.value;
+      const difficulty = difficultySelect.value;
+      const time = timeSelect.value;
+
+      return uniqueMeals.filter(m => {
+        if (type !== "all" && m.type !== type) return false;
+        if (cuisine !== "all" && m.cuisine !== cuisine) return false;
+        if (difficulty !== "all" && m.difficulty !== difficulty) return false;
+        if (time !== "all") {
+          if (time === "slow") { if (m.time < 60) return false; }
+          else if (time === "15") { if (m.time > 15) return false; }
+          else if (time === "30") { if (m.time > 30) return false; }
+          else if (time === "60") { if (m.time > 60) return false; }
+        }
+        return true;
+      });
+    }
+
+    function formatTime(t) {
+      if (t >= 60) {
+        const h = Math.floor(t / 60);
+        const m = t % 60;
+        return h + (isRu ? " ч " : "h ") + (m > 0 ? m + (isRu ? " мин" : "m") : "");
+      }
+      return t + (isRu ? " мин" : " min");
+    }
+
+    function generate() {
+      const list = getFilteredMeals();
+      if (list.length === 0) {
+        nameEl.textContent = isRu ? "Ничего не найдено" : "No meals found";
+        descEl.textContent = isRu ? "Попробуйте изменить фильтры." : "Try adjusting your filters.";
+        cuisineTagEl.style.display = "none";
+        typeTagEl.style.display = "none";
+        difficultyTagEl.style.display = "none";
+        timeValueEl.parentElement.style.display = "none";
+        ingredientsEl.innerHTML = "";
+        caloriesEl.textContent = "";
+        dietaryEl.innerHTML = "";
+        resultEl.style.opacity = "1";
+        currentMeal = null;
+        return;
+      }
+
+      const meal = list[Math.floor(Math.random() * list.length)];
+      currentMeal = meal;
+
+      // Name
+      nameEl.textContent = isRu ? meal.ru : meal.en;
+
+      // Description
+      descEl.textContent = isRu ? meal.ruDesc : meal.desc;
+
+      // Cuisine tag
+      const cLabel = cuisineLabelMap[meal.cuisine];
+      cuisineTagEl.textContent = cLabel ? (isRu ? cLabel.ru : cLabel.en) : meal.cuisine;
+      cuisineTagEl.style.display = "";
+
+      // Type tag
+      const tLabel = mealTypeLabelMap[meal.type];
+      typeTagEl.textContent = tLabel ? (isRu ? tLabel.ru : tLabel.en) : meal.type;
+      typeTagEl.style.display = "";
+
+      // Difficulty tag
+      const dLabel = difficultyLabelMap[meal.difficulty];
+      difficultyTagEl.textContent = dLabel ? (isRu ? dLabel.ru : dLabel.en) : meal.difficulty;
+      difficultyTagEl.className = "inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border " + (dLabel ? dLabel.color : "bg-zinc-700/50 text-zinc-300 border-zinc-600/40");
+      difficultyTagEl.style.display = "";
+
+      // Time
+      timeValueEl.textContent = formatTime(meal.time);
+      timeValueEl.parentElement.style.display = "";
+
+      // Ingredients
+      ingredientsEl.innerHTML = meal.ingredients.map(ing =>
+        '<span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-zinc-800 text-zinc-400 border border-zinc-700/60">' + ing + '</span>'
+      ).join("");
+
+      // Calories
+      caloriesEl.textContent = "~" + meal.calories + (isRu ? " ккал" : " kcal");
+
+      // Dietary badges
+      dietaryEl.innerHTML = meal.dietary.map(d => {
+        const dl = dietaryLabelMap[d];
+        return '<span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md text-xs font-medium bg-zinc-800 text-zinc-400 border border-zinc-700/60">' + (dl ? dl.emoji + " " + (isRu ? dl.ru : dl.en) : d) + '</span>';
+      }).join("");
+
+      // Save button state
+      if (isFavorited(meal)) {
+        starIcon.classList.add("hidden");
+        starFilledIcon.classList.remove("hidden");
+        saveText.textContent = isRu ? "Сохранено" : "Saved";
+      } else {
+        starIcon.classList.remove("hidden");
+        starFilledIcon.classList.add("hidden");
+        saveText.textContent = isRu ? "В избранное" : "Save";
+      }
+
+      resultEl.style.opacity = "1";
+    }
+
+    // Copy
+    copyBtn.addEventListener("click", async () => {
+      if (!currentMeal) return;
+      const name = isRu ? currentMeal.ru : currentMeal.en;
+      const desc = isRu ? currentMeal.ruDesc : currentMeal.desc;
+      const ingredients = currentMeal.ingredients.join(", ");
+      const cuisine = cuisineLabelMap[currentMeal.cuisine];
+      const cuisineStr = cuisine ? (isRu ? cuisine.ru : cuisine.en) : currentMeal.cuisine;
+      const type = mealTypeLabelMap[currentMeal.type];
+      const typeStr = type ? (isRu ? type.ru : type.en) : currentMeal.type;
+
+      const text = name + "\n" + cuisineStr + " • " + typeStr + "\n" + desc + "\n" + (isRu ? "Ингредиенты" : "Ingredients") + ": " + ingredients;
+      await navigator.clipboard.writeText(text);
+
+      copyIcon.classList.add("hidden");
+      checkIcon.classList.remove("hidden");
+      copyText.textContent = isRu ? "Скопировано" : "Copied";
+
+      if (copyTimer) clearTimeout(copyTimer);
+      copyTimer = setTimeout(() => {
+        checkIcon.classList.add("hidden");
+        copyIcon.classList.remove("hidden");
+        copyText.textContent = isRu ? "Копировать" : "Copy";
+      }, 1500);
+    });
+
+    saveBtn.addEventListener("click", toggleFavorite);
+    btn.addEventListener("click", generate);
+
+    function renderFavoritesList() {
+      const favs = getFavorites();
+      if (favs.length === 0) {
+        favsList.innerHTML = '<p class="text-sm text-zinc-500">' + (isRu ? "Нет сохранённых рецептов." : "No saved recipes.") + '</p>';
+        return;
+      }
+      favsList.innerHTML = favs.map((f, i) => {
+        const cLabel = cuisineLabelMap[f.cuisine];
+        const cuisineStr = cLabel ? (isRu ? cLabel.ru : cLabel.en) : f.cuisine;
+        const tLabel = mealTypeLabelMap[f.type];
+        const typeStr = tLabel ? (isRu ? tLabel.ru : tLabel.en) : f.type;
+        const name = isRu ? f.ru : f.en;
+        return '<div class="flex items-center justify-between gap-3 p-3 rounded-lg bg-zinc-800/60 border border-zinc-700/40">' +
+          '<div class="min-w-0">' +
+            '<p class="text-sm font-medium text-zinc-200 truncate">' + name + '</p>' +
+            '<p class="text-xs text-zinc-500">' + cuisineStr + ' • ' + typeStr + '</p>' +
+          '</div>' +
+          '<button data-fav-idx="' + i + '" type="button" class="mg-del-fav inline-flex items-center justify-center w-7 h-7 rounded-lg bg-zinc-800 text-zinc-400 hover:text-red-400 hover:bg-zinc-700 transition-colors cursor-pointer shrink-0" aria-label="' + (isRu ? "Удалить" : "Remove") + '">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>' +
+          '</button>' +
+        '</div>';
+      }).join("");
+
+      // Attach remove handlers
+      favsList.querySelectorAll(".mg-del-fav").forEach(b => {
+        b.addEventListener("click", () => {
+          const idx = parseInt(b.dataset.favIdx, 10);
+          const favs = getFavorites();
+          if (idx >= 0 && idx < favs.length) {
+            favs.splice(idx, 1);
+            saveFavorites(favs);
+            renderFavoritesList();
+            if (currentMeal) {
+              if (isFavorited(currentMeal)) {
+                starIcon.classList.add("hidden");
+                starFilledIcon.classList.remove("hidden");
+                saveText.textContent = isRu ? "Сохранено" : "Saved";
+              } else {
+                starIcon.classList.remove("hidden");
+                starFilledIcon.classList.add("hidden");
+                saveText.textContent = isRu ? "В избранное" : "Save";
+              }
+            }
+          }
+        });
+      });
+    }
+
+    viewFavsBtn.addEventListener("click", () => {
+      renderFavoritesList();
+      favsPanel.classList.remove("hidden");
+    });
+    closeFavsBtn.addEventListener("click", () => {
+      favsPanel.classList.add("hidden");
+    });
+
+    // Init
+    updateSavedCount();
+    generate();
+  })();
+</script>

@@ -1,0 +1,11 @@
+---
+import GeneratorLayout from "@/layouts/GeneratorLayout.astro";
+import GradientGenerator from "@/components/generators/GradientGenerator.astro";
+import { findGenerator } from "@/data/generators";
+
+const generator = findGenerator("gradient");
+---
+
+<GeneratorLayout generator={generator}>
+  <GradientGenerator />
+</GeneratorLayout>

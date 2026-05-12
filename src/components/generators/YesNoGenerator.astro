@@ -1,0 +1,182 @@
+---
+import { useT } from "../../i18n/translations";
+const isRu = Astro.url.pathname.startsWith("/ru");
+const T = useT(isRu ? "ru" : "en");
+
+const askPlaceholder = isRu ? "Задайте вопрос..." : "Ask anything...";
+const getAnswerLabel = isRu ? "Получить ответ" : "Get Answer";
+const confidenceLabel = isRu ? "Уверенность" : "Confidence";
+---
+
+<div id="yesno-generator" class="mt-8">
+  <div class="rounded-xl bg-zinc-900/50 border border-zinc-800/60 p-5">
+    <label for="yn-question" class="block text-sm font-medium text-zinc-400 mb-1"
+      >{isRu ? "Вопрос (необязательно)" : "Question (optional)"}</label
+    >
+    <input
+      id="yn-question"
+      type="text"
+      placeholder={askPlaceholder}
+      class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+    />
+  </div>
+
+  <div
+    class="my-6 rounded-2xl bg-zinc-900/80 border border-zinc-800/80 p-8 h-52 overflow-hidden"
+  >
+    <div class="h-full flex flex-col items-center justify-center gap-3">
+      <button
+        id="yn-copy-btn"
+        type="button"
+        class="group relative invisible cursor-copy rounded-xl px-3 py-1 -mx-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+        aria-live="polite"
+      >
+        <span
+          id="yn-result"
+          class="text-6xl sm:text-7xl font-bold tracking-tight text-zinc-100 select-none group-hover:text-zinc-300"
+          style="transition: transform 0.12s cubic-bezier(0.34,1.56,0.64,1), opacity 0.08s ease, color 0.15s ease;"
+        ></span>
+        <span
+          id="yn-copy-icon"
+          class="absolute -right-7 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-zinc-500"
+          aria-hidden="true"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path
+              d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+            ></path></svg
+          >
+        </span>
+        <span
+          id="yn-check-icon"
+          class="absolute -right-7 top-1/2 -translate-y-1/2 hidden text-accent"
+          aria-hidden="true"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg
+          >
+        </span>
+      </button>
+
+      <div id="yn-confidence-wrap" class="hidden flex-col items-center gap-1.5">
+        <span class="text-xs text-zinc-500">{confidenceLabel}</span>
+        <div class="w-40 h-2 rounded-full bg-zinc-800 overflow-hidden">
+          <div
+            id="yn-confidence-bar"
+            class="h-full rounded-full transition-all duration-300"
+          >
+          </div>
+        </div>
+        <span id="yn-confidence-val" class="text-xs font-medium text-zinc-400"
+        ></span>
+      </div>
+
+      <span
+        id="yn-copied-label"
+        class="text-xs font-medium text-accent opacity-0 transition-opacity duration-200"
+        aria-live="polite"
+        aria-atomic="true">{T.copied}</span
+      >
+    </div>
+  </div>
+
+  <div class="flex justify-center">
+    <button
+      id="yn-btn"
+      type="button"
+      class="w-full sm:w-auto px-8 py-3 bg-accent text-white font-semibold rounded-xl hover:bg-accent-hover active:bg-accent-active focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer shadow-lg shadow-accent/25"
+    >
+      {getAnswerLabel}
+    </button>
+  </div>
+</div>
+
+<script>
+  import { CopyFeedback } from "@/lib/client/clipboard";
+  import { popElement } from "@/lib/client/animations";
+
+  const isRu = document.documentElement.lang === "ru";
+  const ANSWERS = isRu
+    ? ["ДА", "НЕТ", "ВОЗМОЖНО"]
+    : ["YES", "NO", "MAYBE"];
+
+  const questionInput = document.getElementById(
+    "yn-question",
+  ) as HTMLInputElement;
+  const btn = document.getElementById("yn-btn") as HTMLButtonElement;
+  const copyBtn = document.getElementById("yn-copy-btn") as HTMLButtonElement;
+  const resultEl = document.getElementById("yn-result") as HTMLSpanElement;
+  const copyIcon = document.getElementById("yn-copy-icon") as HTMLSpanElement;
+  const checkIcon = document.getElementById(
+    "yn-check-icon",
+  ) as HTMLSpanElement;
+  const copiedLabel = document.getElementById(
+    "yn-copied-label",
+  ) as HTMLSpanElement;
+  const confidenceWrap = document.getElementById(
+    "yn-confidence-wrap",
+  ) as HTMLDivElement;
+  const confidenceBar = document.getElementById(
+    "yn-confidence-bar",
+  ) as HTMLDivElement;
+  const confidenceVal = document.getElementById(
+    "yn-confidence-val",
+  ) as HTMLSpanElement;
+
+  const clipboard = new CopyFeedback(copyIcon, checkIcon);
+
+  function getConfidenceColor(val: number): string {
+    if (val >= 85) return "bg-emerald-500";
+    if (val >= 70) return "bg-yellow-500";
+    return "bg-red-500";
+  }
+
+  function generate() {
+    const answer = ANSWERS[Math.floor(Math.random() * ANSWERS.length)];
+    const confidence = Math.floor(Math.random() * 51) + 50;
+
+    resultEl.textContent = answer;
+    copyBtn.classList.remove("invisible");
+    popElement(resultEl);
+
+    confidenceWrap.classList.remove("hidden");
+    confidenceWrap.classList.add("flex");
+    confidenceBar.style.width = `${confidence}%`;
+    confidenceBar.className = `h-full rounded-full transition-all duration-300 ${getConfidenceColor(confidence)}`;
+    confidenceVal.textContent = `${confidence}%`;
+  }
+
+  async function copyResult() {
+    const value = resultEl.textContent?.trim();
+    if (!value) return;
+    await navigator.clipboard.writeText(value);
+    clipboard.showCopied();
+    copiedLabel.style.opacity = "1";
+    setTimeout(() => {
+      copiedLabel.style.opacity = "0";
+    }, 1500);
+  }
+
+  btn.addEventListener("click", generate);
+  copyBtn.addEventListener("click", copyResult);
+  questionInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") generate();
+  });
+</script>

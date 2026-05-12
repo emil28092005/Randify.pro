@@ -1,0 +1,11 @@
+---
+import GeneratorLayout from '@/layouts/GeneratorLayout.astro';
+import DateGenerator from '@/components/generators/DateGenerator.astro';
+import { generators } from '@/data/generators';
+
+const generator = generators.find((g) => g.slug === 'date')!;
+---
+
+<GeneratorLayout generator={generator}>
+  <DateGenerator />
+</GeneratorLayout>

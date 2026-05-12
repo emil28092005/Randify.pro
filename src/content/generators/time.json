@@ -1,0 +1,53 @@
+{
+  "slug": "time",
+  "title": "Random Time",
+  "description": "Generate a random time of day with a beautiful analog clock display.",
+  "icon": "clock",
+  "status": "live",
+  "seoTitle": "Random Time Generator — with Analog Clock | Randify",
+  "seoDescription": "Generate a random time of day between any hours. Choose 12h or 24h format, set intervals, and see a beautiful analog clock display. Free online tool.",
+  "ruTitle": "Случайное время",
+  "ruDescription": "Генерируйте случайное время суток с красивым аналоговым циферблатом.",
+  "ruSeoTitle": "Генератор случайного времени — с аналоговыми часами | Randify",
+  "ruSeoDescription": "Генерируйте случайное время суток в любом диапазоне. Выбирайте 12-часовой или 24-часовой формат, задавайте интервалы и смотрите на аналоговый циферблат. Бесплатный онлайн-инструмент.",
+  "pageTitle": "Random Time Generator",
+  "ruPageTitle": "Генератор случайного времени",
+  "howTo": [
+    "Set the start time in the From field and the end time in the To field.",
+    "Choose the time interval (every minute, 5 min, 15 min, 30 min, or hourly).",
+    "Toggle between 12-hour and 24-hour format as needed.",
+    "Click Generate — a random time appears with an analog clock display.",
+    "Click the time to copy it to your clipboard."
+  ],
+  "whenTo": [
+    "Picking a random meeting time or schedule slot.",
+    "Creating random scenarios for creative writing or games.",
+    "Generating a random alarm or reminder time for a challenge.",
+    "Simulating realistic timestamps for testing or prototyping."
+  ],
+  "ruHowTo": [
+    "Задайте начальное время в поле «От» и конечное время в поле «До».",
+    "Выберите интервал времени (каждую минуту, 5 мин, 15 мин, 30 мин или каждый час).",
+    "Переключайтесь между 12-часовым и 24-часовым форматом при необходимости.",
+    "Нажмите «Сгенерировать» — случайное время появится с аналоговым циферблатом.",
+    "Нажмите на время, чтобы скопировать его в буфер обмена."
+  ],
+  "ruWhenTo": [
+    "Выбор случайного времени для встречи или расписания.",
+    "Создание случайных сценариев для творческого письма или игр.",
+    "Генерация случайного времени будильника или напоминания для челленджа.",
+    "Имитация реалистичных временных меток для тестирования или прототипирования."
+  ],
+  "faq": [
+    { "q": "Can I switch between 12-hour and 24-hour format?", "a": "Yes. Use the format toggle to switch between 12-hour (AM/PM) and 24-hour display at any time." },
+    { "q": "What time intervals are available?", "a": "You can choose between every minute, every 5 minutes, every 15 minutes, every 30 minutes, or hourly intervals." },
+    { "q": "Can I set any time range?", "a": "Yes. Set any From and To time, as long as From is earlier than To. The generator will pick a random time within that range." },
+    { "q": "Is the generated time truly random?", "a": "Yes. Times are generated using cryptographically secure random numbers, giving every valid time in your range an equal chance." }
+  ],
+  "ruFaq": [
+    { "q": "Можно ли переключаться между 12-часовым и 24-часовым форматом?", "a": "Да. Используйте переключатель формата для выбора между 12-часовым (AM/PM) и 24-часовым отображением в любое время." },
+    { "q": "Какие интервалы времени доступны?", "a": "Вы можете выбрать интервалы: каждую минуту, каждые 5 минут, каждые 15 минут, каждые 30 минут или каждый час." },
+    { "q": "Можно ли задать любой диапазон времени?", "a": "Да. Задайте любое время «От» и «До», главное чтобы «От» было раньше «До». Генератор выберет случайное время в этом диапазоне." },
+    { "q": "Сгенерированное время действительно случайное?", "a": "Да. Время генерируется с помощью криптографически стойких случайных чисел, давая каждому допустимому времени в диапазоне равный шанс." }
+  ]
+}

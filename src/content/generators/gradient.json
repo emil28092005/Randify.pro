@@ -1,0 +1,47 @@
+{
+  "slug": "gradient",
+  "title": "Gradient Generator",
+  "description": "Generate beautiful random CSS gradients — linear, radial, and conic — with harmonious colors.",
+  "icon": "paintbrush",
+  "status": "live",
+  "seoTitle": "Random Gradient Generator — CSS Linear, Radial & Conic | Randify",
+  "seoDescription": "Generate beautiful random CSS gradients instantly. Choose linear, radial, or conic type with 2–5 harmonious color stops. Copy ready-to-use CSS code for free.",
+  "ruTitle": "Генератор градиентов",
+  "ruDescription": "Создавайте красивые случайные CSS-градиенты — линейные, радиальные и конические — с гармоничными цветами.",
+  "ruSeoTitle": "Генератор случайных градиентов — CSS линейный, радиальный, конический | Randify",
+  "ruSeoDescription": "Создавайте красивые случайные CSS-градиенты мгновенно. Выбирайте тип: линейный, радиальный или конический, с 2–5 гармоничными цветами. Копируйте готовый CSS-код бесплатно.",
+  "pageTitle": "Random Gradient Generator",
+  "ruPageTitle": "Генератор случайных градиентов",
+  "howTo": [
+    "Select the gradient type (Linear, Radial, or Conic) and the number of color stops (2–5).",
+    "Click Generate to create a new random gradient with harmonious colors.",
+    "Copy the CSS code to your clipboard, or click any individual color HEX to copy it."
+  ],
+  "whenTo": [
+    "Designing website backgrounds, hero sections, or UI overlays.",
+    "Creating eye-catching social media graphics and banners.",
+    "Prototyping app interfaces that need vibrant color transitions.",
+    "Exploring color combinations and gradient styles for presentations."
+  ],
+  "ruHowTo": [
+    "Выберите тип градиента (линейный, радиальный или конический) и количество цветовых точек (2–5).",
+    "Нажмите «Сгенерировать», чтобы создать новый случайный градиент с гармоничными цветами.",
+    "Скопируйте CSS-код в буфер обмена или нажмите на любой HEX-код цвета, чтобы скопировать его."
+  ],
+  "ruWhenTo": [
+    "Дизайн фонов сайтов, шапок страниц или UI-оверлеев.",
+    "Создание яркой графики и баннеров для социальных сетей.",
+    "Прототипирование интерфейсов приложений с живыми цветовыми переходами.",
+    "Изучение сочетаний цветов и стилей градиентов для презентаций."
+  ],
+  "faq": [
+    { "q": "What gradient types are supported?", "a": "Linear (with a random angle), Radial (circular from a random center point), and Conic (sweeping around a center point)." },
+    { "q": "How are the colors generated?", "a": "Colors are generated using HSL harmony rules — analogous hue spreads, consistent saturation (50–90%), and balanced lightness (35–65%) — so gradients always look beautiful." },
+    { "q": "Can I use the CSS code directly?", "a": "Yes. The generated CSS background value is ready to paste into your stylesheet or inline style attribute." }
+  ],
+  "ruFaq": [
+    { "q": "Какие типы градиентов поддерживаются?", "a": "Линейный (со случайным углом), радиальный (круговой от случайной центральной точки) и конический (охватывающий вокруг центра)." },
+    { "q": "Как генерируются цвета?", "a": "Цвета создаются с помощью правил гармонии HSL — распределение оттенков по аналоговой схеме, насыщенность 50–90% и сбалансированная светлота 35–65%, поэтому градиенты всегда выглядят красиво." },
+    { "q": "Можно ли использовать CSS-код напрямую?", "a": "Да. Сгенерированное значение background готово для вставки в таблицу стилей или inline-атрибут style." }
+  ]
+}

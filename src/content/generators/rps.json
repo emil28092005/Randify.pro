@@ -1,0 +1,47 @@
+{
+  "slug": "rps",
+  "title": "Rock Paper Scissors",
+  "description": "Play Rock Paper Scissors against a random computer opponent.",
+  "icon": "hand",
+  "status": "live",
+  "seoTitle": "Rock Paper Scissors — Play Online | Randify",
+  "seoDescription": "Play Rock Paper Scissors online against a random computer opponent. Free, instant, and fair — no account needed.",
+  "ruTitle": "Камень Ножницы Бумага",
+  "ruDescription": "Сыграйте в Камень Ножницы Бумага против случайного компьютерного соперника.",
+  "ruSeoTitle": "Камень Ножницы Бумага — играть онлайн | Randify",
+  "ruSeoDescription": "Играйте в Камень Ножницы Бумага онлайн против компьютера. Бесплатно, мгновенно и честно — без регистрации.",
+  "pageTitle": "Rock Paper Scissors",
+  "ruPageTitle": "Камень Ножницы Бумага",
+  "howTo": [
+    "Choose your move: Rock, Paper, or Scissors.",
+    "Click Play — the computer makes its random choice.",
+    "The result is shown instantly: win, lose, or draw.",
+    "Play again as many times as you like."
+  ],
+  "whenTo": [
+    "Making a quick decision with a friend when neither wants to choose.",
+    "Killing time with a simple, familiar game.",
+    "Settling a tie or breaking a deadlock in any activity."
+  ],
+  "ruHowTo": [
+    "Выберите свой ход: Камень, Ножницы или Бумага.",
+    "Нажмите «Играть» — компьютер делает случайный выбор.",
+    "Результат отображается мгновенно: победа, поражение или ничья.",
+    "Играйте снова сколько угодно раз."
+  ],
+  "ruWhenTo": [
+    "Быстрое решение спора с другом, когда никто не хочет выбирать первым.",
+    "Коротание времени в простой и знакомой игре.",
+    "Разрешение ничьей или выход из тупика в любой активности."
+  ],
+  "faq": [
+    { "q": "Is the computer choice truly random?", "a": "Yes. The computer's move is generated using a cryptographically secure random number generator, making every round fair and unpredictable." },
+    { "q": "Can I play multiple rounds and track my score?", "a": "Currently, each round is independent. A score tracker may be added in a future update." },
+    { "q": "Does the computer learn from my moves?", "a": "No. Each move is completely independent and random. The computer does not adapt or remember your previous choices." }
+  ],
+  "ruFaq": [
+    { "q": "Выбор компьютера действительно случайный?", "a": "Да. Ход компьютера генерируется с помощью криптографически стойкого генератора случайных чисел, делая каждый раунд честным и непредсказуемым." },
+    { "q": "Можно ли играть несколько раундов и вести счёт?", "a": "Сейчас каждый раунд независим. Счётчик побед может появиться в будущем обновлении." },
+    { "q": "Учится ли компьютер на моих ходах?", "a": "Нет. Каждый ход полностью независимый и случайный. Компьютер не адаптируется и не запоминает ваши предыдущие выборы." }
+  ]
+}

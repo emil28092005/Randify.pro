@@ -1,0 +1,11 @@
+---
+import GeneratorLayout from "@/layouts/GeneratorLayout.astro";
+import DiceGenerator from "@/components/generators/DiceGenerator.astro";
+import { generators } from "@/data/generators";
+
+const generator = generators.find((g) => g.slug === "dice")!;
+---
+
+<GeneratorLayout generator={generator}>
+  <DiceGenerator />
+</GeneratorLayout>

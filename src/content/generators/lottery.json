@@ -1,0 +1,48 @@
+{
+  "slug": "lottery",
+  "title": "Lottery",
+  "description": "Draw a set of unique numbers for lottery-style picks.",
+  "icon": "ticket",
+  "status": "live",
+  "seoTitle": "Lottery Number Generator — Random Pick | Randify",
+  "seoDescription": "Draw a set of unique random lottery numbers from any range. Perfect for lotteries, raffles, and lucky draws. Free online lottery picker.",
+  "ruTitle": "Лотерея",
+  "ruDescription": "Вытащите набор уникальных чисел в стиле лотереи.",
+  "ruSeoTitle": "Генератор лотерейных номеров | Randify",
+  "ruSeoDescription": "Тяните уникальные случайные числа для лотереи, розыгрыша или жеребьёвки. Бесплатный онлайн-генератор лотерейных номеров.",
+  "pageTitle": "Lottery Generator",
+  "ruPageTitle": "Генератор лотереи",
+  "howTo": [
+    "Set the From and To fields to define your number range (e.g. 1 to 49).",
+    "Enter how many numbers to pick in the Pick field.",
+    "Click Draw — a sorted set of unique numbers appears.",
+    "Click Copy to copy all numbers to the clipboard."
+  ],
+  "whenTo": [
+    "Generating lottery or lotto ticket numbers.",
+    "Running a fair raffle draw with unique entries.",
+    "Selecting a random sample from a numbered list.",
+    "Choosing lottery numbers for Powerball, EuroMillions, or local draws."
+  ],
+  "ruHowTo": [
+    "Укажите диапазон чисел в полях «От» и «До».",
+    "Задайте количество чисел для розыгрыша.",
+    "Нажмите «Тянуть» — выпавшие числа появятся на экране.",
+    "Нажмите «Копировать», чтобы сохранить результат."
+  ],
+  "ruWhenTo": [
+    "Розыгрыш лотерейных номеров.",
+    "Жеребьёвка участников конкурса.",
+    "Случайный выбор нескольких уникальных чисел."
+  ],
+  "faq": [
+    { "q": "Are the numbers guaranteed to be unique?", "a": "Yes. The lottery generator always picks unique numbers within your chosen range." },
+    { "q": "Can I use this for real lottery tickets?", "a": "Yes, but remember that no generator can improve your odds — each combination has the same chance." },
+    { "q": "What is the maximum range?", "a": "You can set any range where the difference between From and To is at least as large as the number of picks." }
+  ],
+  "ruFaq": [
+    { "q": "Числа гарантированно уникальны?", "a": "Да. Генератор лотереи всегда выбирает уникальные числа в заданном диапазоне." },
+    { "q": "Можно ли использовать для реальных лотерей?", "a": "Да, но помните: генератор не улучшает шансы — каждая комбинация имеет равную вероятность." },
+    { "q": "Какой максимальный диапазон?", "a": "Любой диапазон, где разница между «От» и «До» не меньше количества выбираемых чисел." }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "slug": "date",
+  "title": "Random Date",
+  "description": "Generate a random date between any two dates you choose.",
+  "icon": "calendar",
+  "status": "live",
+  "seoTitle": "Random Date Generator — Between Two Dates | Randify",
+  "seoDescription": "Generate a random date between any two dates instantly. Free online date picker for planning, games, and creative projects.",
+  "ruTitle": "Случайная дата",
+  "ruDescription": "Сгенерируйте случайную дату между любыми двумя датами.",
+  "ruSeoTitle": "Генератор случайных дат — между двумя датами | Randify",
+  "ruSeoDescription": "Сгенерируйте случайную дату в любом диапазоне мгновенно. Бесплатный инструмент для планирования, игр и творческих задач.",
+  "pageTitle": "Random Date Generator",
+  "ruPageTitle": "Генератор случайных дат",
+  "howTo": [
+    "Select the start date in the From field.",
+    "Select the end date in the To field.",
+    "Click Generate — a random date within your range appears instantly.",
+    "Click the date to copy it to your clipboard."
+  ],
+  "whenTo": [
+    "Picking a random deadline or milestone for a challenge.",
+    "Choosing a date for a hypothetical scenario or story setting.",
+    "Generating random historical dates for a quiz or trivia game."
+  ],
+  "ruHowTo": [
+    "Выберите начальную дату в поле «От».",
+    "Выберите конечную дату в поле «До».",
+    "Нажмите «Сгенерировать» — случайная дата в диапазоне появится мгновенно.",
+    "Нажмите на дату, чтобы скопировать её в буфер обмена."
+  ],
+  "ruWhenTo": [
+    "Выбор случайного дедлайна или вехи для челленджа.",
+    "Определение даты для гипотетического сценария или сюжета.",
+    "Генерация случайных исторических дат для викторины или игры."
+  ],
+  "faq": [
+    { "q": "What date format is used?", "a": "Dates are displayed in a clear, locale-friendly format. You can copy the value and paste it wherever you need." },
+    { "q": "Can I generate multiple random dates?", "a": "Currently, one date is generated per click. Click again to get another random date in the same range." },
+    { "q": "Is the selection truly random?", "a": "Yes. The date is picked using a cryptographically secure random number generator, so every day in your range has an equal chance." }
+  ],
+  "ruFaq": [
+    { "q": "Какой формат даты используется?", "a": "Даты отображаются в удобном локализованном формате. Вы можете скопировать значение и вставить его куда угодно." },
+    { "q": "Можно ли сгенерировать несколько дат сразу?", "a": "Сейчас генерируется одна дата за раз. Нажмите снова, чтобы получить ещё одну случайную дату в том же диапазоне." },
+    { "q": "Выбор действительно случайный?", "a": "Да. Дата выбирается с помощью криптографически стойкого генератора случайных чисел, поэтому каждый день в диапазоне имеет равный шанс." }
+  ]
+}

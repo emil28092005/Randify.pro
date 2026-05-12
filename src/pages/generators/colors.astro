@@ -1,0 +1,11 @@
+---
+import GeneratorLayout from "@/layouts/GeneratorLayout.astro";
+import ColorGenerator from "@/components/generators/ColorGenerator.astro";
+import { generators } from "@/data/generators";
+
+const generator = generators.find((g) => g.slug === "colors")!;
+---
+
+<GeneratorLayout generator={generator}>
+  <ColorGenerator />
+</GeneratorLayout>

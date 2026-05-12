@@ -1,0 +1,11 @@
+---
+import GeneratorLayout from '@/layouts/GeneratorLayout.astro';
+import EmojiGenerator from '@/components/generators/EmojiGenerator.astro';
+import { findGenerator } from '@/data/generators';
+
+const generator = findGenerator("emoji");
+---
+
+<GeneratorLayout generator={generator}>
+  <EmojiGenerator />
+</GeneratorLayout>

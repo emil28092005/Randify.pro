@@ -1,0 +1,252 @@
+---
+import { useT } from "../../i18n/translations";
+const isRu = Astro.url.pathname.startsWith("/ru");
+const T = useT(isRu ? "ru" : "en");
+
+const lengthOptions = isRu
+  ? [
+      { value: "short", label: "Короткие" },
+      { value: "medium", label: "Средние" },
+      { value: "long", label: "Длинные" },
+    ]
+  : [
+      { value: "short", label: "Short" },
+      { value: "medium", label: "Medium" },
+      { value: "long", label: "Long" },
+    ];
+
+const startLabel = isRu
+  ? "Начать с Lorem ipsum dolor sit amet"
+  : "Start with Lorem ipsum dolor sit amet";
+---
+
+<div id="lorem-generator" class="mt-8">
+  <!-- Controls -->
+  <div class="my-6 rounded-2xl bg-zinc-900/80 border border-zinc-800/80 p-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+      <!-- Paragraph count -->
+      <div>
+        <label for="lg-count" class="block text-sm font-medium text-zinc-300 mb-2">
+          {isRu ? "Количество абзацев" : "Paragraphs"}
+        </label>
+        <input
+          id="lg-count"
+          type="number"
+          min="1"
+          max="20"
+          value="3"
+          class="w-full px-4 py-2.5 bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+        />
+      </div>
+
+      <!-- Length selector -->
+      <div>
+        <label for="lg-length" class="block text-sm font-medium text-zinc-300 mb-2">
+          {isRu ? "Длина абзаца" : "Paragraph length"}
+        </label>
+        <select
+          id="lg-length"
+          class="w-full px-4 py-2.5 bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 appearance-none"
+        >
+          {lengthOptions.map((opt) => (
+            <option value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+
+    <!-- Start with Lorem ipsum checkbox -->
+    <div class="flex items-center gap-3 mb-6">
+      <input
+        id="lg-start"
+        type="checkbox"
+        checked
+        class="w-4 h-4 rounded border-zinc-700 bg-zinc-950 text-accent focus:ring-accent focus:ring-offset-zinc-950"
+      />
+      <label for="lg-start" class="text-sm text-zinc-300 select-none cursor-pointer">
+        {startLabel}
+      </label>
+    </div>
+
+    <!-- Generate button -->
+    <div class="flex justify-center">
+      <button
+        id="lg-btn"
+        type="button"
+        class="w-full sm:w-auto px-8 py-3 bg-accent text-white font-semibold rounded-xl shadow-lg shadow-accent/25 hover:bg-accent-hover active:bg-accent-active focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
+      >
+        {T.generate}
+      </button>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div
+    id="lg-result-wrap"
+    class="rounded-2xl bg-zinc-900/80 border border-zinc-800/80 p-8 opacity-0"
+    style="transition: opacity 0.25s ease;"
+    aria-live="polite"
+  >
+    <div class="flex items-center justify-between gap-3 mb-4">
+      <span class="text-xs font-semibold uppercase tracking-widest text-zinc-500">
+        {isRu ? "Результат" : "Result"}
+      </span>
+      <button
+        id="lg-copy"
+        type="button"
+        aria-label={T.copy}
+        class="group shrink-0 p-1.5 rounded-lg text-zinc-600 hover:text-zinc-300 focus:outline-none focus-visible:ring-1 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors cursor-pointer"
+      >
+        <svg
+          id="lg-copy-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+          <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+        </svg>
+        <svg
+          id="lg-check-icon"
+          class="hidden text-accent"
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+      </button>
+    </div>
+
+    <div
+      id="lg-output"
+      class="text-zinc-100 text-sm leading-relaxed whitespace-pre-wrap font-serif"
+    />
+  </div>
+</div>
+
+<script>
+  const WORDS = [
+    "lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit",
+    "sed", "do", "eiusmod", "tempor", "incididunt", "ut", "labore", "et", "dolore",
+    "magna", "aliqua", "enim", "ad", "minim", "veniam", "quis", "nostrud",
+    "exercitation", "ullamco", "laboris", "nisi", "aliquip", "ex", "ea", "commodo",
+    "consequat", "duis", "aute", "irure", "in", "reprehenderit", "voluptate", "velit",
+    "esse", "cillum", "fugiat", "nulla", "pariatur", "excepteur", "sint", "occaecat",
+    "cupidatat", "non", "proident", "sunt", "culpa", "qui", "officia", "deserunt",
+    "mollit", "anim", "id", "est", "laborum",
+  ];
+
+  const countInput = document.getElementById("lg-count") as HTMLInputElement;
+  const lengthSelect = document.getElementById("lg-length") as HTMLSelectElement;
+  const startCheckbox = document.getElementById("lg-start") as HTMLInputElement;
+  const btn = document.getElementById("lg-btn") as HTMLButtonElement;
+  const resultWrap = document.getElementById("lg-result-wrap") as HTMLDivElement;
+  const output = document.getElementById("lg-output") as HTMLDivElement;
+  const copyBtn = document.getElementById("lg-copy") as HTMLButtonElement;
+  const copyIcon = document.getElementById("lg-copy-icon") as SVGElement;
+  const checkIcon = document.getElementById("lg-check-icon") as SVGElement;
+
+  function randInt(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function shuffle<T>(arr: T[]): T[] {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function capitalize(word: string) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+  function generateSentence(): string {
+    const length = randInt(8, 18);
+    const words = shuffle(WORDS).slice(0, length);
+    words[0] = capitalize(words[0]);
+    const sentence = words.join(" ") + ".";
+    return sentence;
+  }
+
+  function generateParagraph(sentenceCount: number, isFirst: boolean, startClassic: boolean): string {
+    const sentences: string[] = [];
+    if (isFirst && startClassic) {
+      const classic = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+      sentences.push(classic);
+      for (let i = 1; i < sentenceCount; i++) {
+        sentences.push(generateSentence());
+      }
+    } else {
+      for (let i = 0; i < sentenceCount; i++) {
+        sentences.push(generateSentence());
+      }
+    }
+    return sentences.join(" ");
+  }
+
+  function getSentenceRange(): [number, number] {
+    const val = lengthSelect.value;
+    if (val === "short") return [2, 4];
+    if (val === "long") return [6, 10];
+    return [4, 6];
+  }
+
+  function generate() {
+    let count = parseInt(countInput.value, 10);
+    if (isNaN(count) || count < 1) count = 1;
+    if (count > 20) count = 20;
+    countInput.value = String(count);
+
+    const [minSentences, maxSentences] = getSentenceRange();
+    const startClassic = startCheckbox.checked;
+    const paragraphs: string[] = [];
+
+    for (let i = 0; i < count; i++) {
+      const sentenceCount = randInt(minSentences, maxSentences);
+      paragraphs.push(generateParagraph(sentenceCount, i === 0, startClassic));
+    }
+
+    output.textContent = paragraphs.join("\n\n");
+    resultWrap.style.opacity = "1";
+  }
+
+  const isRu = document.documentElement.lang === "ru";
+  const copyLabel = copyBtn.getAttribute("aria-label") || (isRu ? "Копировать" : "Copy");
+  let copyTimer: ReturnType<typeof setTimeout> | null = null;
+
+  copyBtn.addEventListener("click", async () => {
+    const text = output.textContent?.trim();
+    if (!text) return;
+    await navigator.clipboard.writeText(text);
+    copyIcon.classList.add("hidden");
+    checkIcon.classList.remove("hidden");
+    copyBtn.setAttribute("aria-label", isRu ? "Скопировано" : "Copied");
+    if (copyTimer) clearTimeout(copyTimer);
+    copyTimer = setTimeout(() => {
+      checkIcon.classList.add("hidden");
+      copyIcon.classList.remove("hidden");
+      copyBtn.setAttribute("aria-label", copyLabel);
+    }, 1500);
+  });
+
+  btn.addEventListener("click", generate);
+
+  // Generate on load
+  generate();
+</script>

@@ -1,0 +1,89 @@
+{
+  "slug": "magic8ball",
+  "title": "Magic 8 Ball",
+  "description": "Ask the Magic 8 Ball a yes/no question and get a mystical answer. Classic fortune-telling toy with 20 possible responses.",
+  "icon": "sparkles",
+  "status": "live",
+  "seoTitle": "Magic 8 Ball Online — Ask a Question | Randify",
+  "seoDescription": "Ask the online Magic 8 Ball any yes/no question and get a classic fortune-telling answer. 20 mystical responses — positive, neutral, and negative. Free and fun!",
+  "ruTitle": "Магический шар 8",
+  "ruDescription": "Задайте магическому шару вопрос с ответом да/нет и получите мистический ответ. Классическая игрушка-предсказатель с 20 вариантами ответов.",
+  "ruSeoTitle": "Магический шар 8 онлайн — задай вопрос | Randify",
+  "ruSeoDescription": "Задайте онлайн-шару вопрос с ответом да/нет и получите классический мистический ответ. 20 вариантов — положительные, нейтральные и отрицательные. Бесплатно и весело!",
+  "pageTitle": "Magic 8 Ball",
+  "ruPageTitle": "Магический шар 8",
+  "howTo": [
+    "Type a yes/no question into the input field (optional — just for fun).",
+    "Click the \"Ask the Ball\" button to shake the Magic 8 Ball.",
+    "Watch the ball shake and reveal its mystical answer in the blue triangle window.",
+    "The answer color indicates the type: blue for positive, yellow for neutral, red for negative.",
+    "Click the copy button to save the answer to your clipboard.",
+    "Check the history below to see your last 5 questions and answers."
+  ],
+  "whenTo": [
+    "Having fun with friends at a party or gathering.",
+    "Making light-hearted decisions when you are feeling indecisive.",
+    "Adding a mystical element to a game or role-playing session.",
+    "Breaking the ice with a fun interactive activity.",
+    "Recreating the nostalgic experience of the classic Magic 8 Ball toy."
+  ],
+  "ruHowTo": [
+    "Введите вопрос с ответом да/нет в поле (по желанию — просто для развлечения).",
+    "Нажмите кнопку «Спросить шар», чтобы встряхнуть магический шар.",
+    "Наблюдайте, как шар встряхивается и раскрывает мистический ответ в синем треугольнике.",
+    "Цвет ответа указывает на тип: синий — положительный, жёлтый — нейтральный, красный — отрицательный.",
+    "Нажмите кнопку копирования, чтобы сохранить ответ в буфер обмена.",
+    "Посмотрите историю ниже, чтобы увидеть ваши последние 5 вопросов и ответов."
+  ],
+  "ruWhenTo": [
+    "Развлечение с друзьями на вечеринке или собрании.",
+    "Принятие лёгких решений, когда вы сомневаетесь.",
+    "Добавление мистического элемента в игру или ролевую сессию.",
+    "Разрядка обстановки с помощью весёлой интерактивной активности.",
+    "Воспроизведение ностальгического опыта классической игрушки Магический шар 8."
+  ],
+  "faq": [
+    {
+      "q": "How many answers does the Magic 8 Ball have?",
+      "a": "The Magic 8 Ball has 20 possible answers: 10 positive (blue), 5 neutral (yellow), and 5 negative (red). Each answer is chosen completely at random."
+    },
+    {
+      "q": "Is the Magic 8 Ball really random?",
+      "a": "Yes! The answer is selected using a cryptographically secure random number generator, giving each of the 20 responses an equal chance."
+    },
+    {
+      "q": "Do I need to type a question?",
+      "a": "No, the question field is purely optional and for fun. The ball does not read or process your question — it simply picks a random answer each time you shake it."
+    },
+    {
+      "q": "What do the colors mean?",
+      "a": "Blue means a positive/affirmative answer, yellow means a neutral or uncertain answer, and red means a negative answer. This mirrors the classic Magic 8 Ball experience."
+    },
+    {
+      "q": "Can I use this for serious decisions?",
+      "a": "The Magic 8 Ball is intended for entertainment purposes only. For important life decisions, please rely on careful thought and professional advice."
+    }
+  ],
+  "ruFaq": [
+    {
+      "q": "Сколько ответов у магического шара?",
+      "a": "Магический шар имеет 20 возможных ответов: 10 положительных (синих), 5 нейтральных (жёлтых) и 5 отрицательных (красных). Каждый ответ выбирается полностью случайным образом."
+    },
+    {
+      "q": "Шар действительно случайный?",
+      "a": "Да! Ответ выбирается с помощью криптографически стойкого генератора случайных чисел, давая каждому из 20 вариантов равный шанс."
+    },
+    {
+      "q": "Нужно ли вводить вопрос?",
+      "a": "Нет, поле вопроса является полностью необязательным и существует для развлечения. Шар не читает и не обрабатывает ваш вопрос — он просто выбирает случайный ответ при каждом встряхивании."
+    },
+    {
+      "q": "Что означают цвета?",
+      "a": "Синий означает положительный/утвердительный ответ, жёлтый — нейтральный или неопределённый ответ, красный — отрицательный ответ. Это повторяет классический опыт магического шара."
+    },
+    {
+      "q": "Можно ли использовать шар для серьёзных решений?",
+      "a": "Магический шар предназначен только для развлечения. Для важных жизненных решений полагайтесь на внимательное обдумывание и профессиональные консультации."
+    }
+  ]
+}

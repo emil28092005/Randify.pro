@@ -1,0 +1,11 @@
+---
+import GeneratorLayout from "@/layouts/GeneratorLayout.astro";
+import CoinGenerator from "@/components/generators/CoinGenerator.astro";
+import { generators } from "@/data/generators";
+
+const generator = generators.find((g) => g.slug === "coin")!;
+---
+
+<GeneratorLayout generator={generator}>
+  <CoinGenerator />
+</GeneratorLayout>

@@ -1,0 +1,67 @@
+{
+  "slug": "shuffler",
+  "title": "Sequence Shuffler",
+  "description": "Shuffle any list of items into a random order instantly.",
+  "icon": "shuffle",
+  "status": "live",
+  "seoTitle": "Sequence Shuffler — Randomize Any List | Randify",
+  "seoDescription": "Paste a list of items and shuffle them into a completely random order. Perfect for randomizing names, tasks, playlist order, or any sequence.",
+  "ruTitle": "Перемешиватель",
+  "ruDescription": "Мгновенно перемешайте любой список элементов в случайном порядке.",
+  "ruSeoTitle": "Перемешиватель списка — случайный порядок | Randify",
+  "ruSeoDescription": "Вставьте список элементов и перемешайте их в случайном порядке. Идеально для случайного распределения имён, задач, порядка воспроизведения или любой последовательности.",
+  "pageTitle": "Sequence Shuffler",
+  "ruPageTitle": "Перемешиватель списка",
+  "howTo": [
+    "Type or paste your items into the text area — one item per line.",
+    "Click Shuffle to randomize the order of all items.",
+    "The shuffled list appears as a numbered sequence.",
+    "Click Copy to copy the shuffled list back to your clipboard."
+  ],
+  "whenTo": [
+    "Randomizing the order of presentation slides or talking points.",
+    "Shuffling a playlist, reading list, or queue of items.",
+    "Creating a random task order for a team or group activity.",
+    "Fairly deciding the speaking order in meetings or classes."
+  ],
+  "faq": [
+    {
+      "q": "Is the shuffle truly random?",
+      "a": "Yes. We use the Fisher-Yates shuffle algorithm powered by the browser's cryptographically secure random number generator, giving every item an equal chance to end up in any position."
+    },
+    {
+      "q": "Is there a limit to how many items I can shuffle?",
+      "a": "You can shuffle up to 1,000 items at once. For most everyday use cases this is more than enough."
+    },
+    {
+      "q": "Can I shuffle the same list multiple times?",
+      "a": "Absolutely. Click Shuffle as many times as you like — each time you'll get a completely new random order."
+    }
+  ],
+  "ruHowTo": [
+    "Введите или вставьте элементы в текстовое поле — по одному на строку.",
+    "Нажмите «Перемешать», чтобы случайным образом изменить порядок всех элементов.",
+    "Перемешанный список отобразится в виде пронумерованной последовательности.",
+    "Нажмите «Копировать», чтобы скопировать перемешанный список в буфер обмена."
+  ],
+  "ruWhenTo": [
+    "Случайный порядок слайдов или тем для обсуждения.",
+    "Перемешивание плейлиста, списка для чтения или очереди.",
+    "Создание случайного порядка задач для команды или групповой активности.",
+    "Честное определение порядка выступлений на собраниях или в классе."
+  ],
+  "ruFaq": [
+    {
+      "q": "Перемешивание действительно случайное?",
+      "a": "Да. Мы используем алгоритм Фишера-Йетса на основе криптографически стойкого генератора случайных чисел браузера, что даёт каждому элементу равные шансы оказаться на любой позиции."
+    },
+    {
+      "q": "Есть ли ограничение на количество элементов?",
+      "a": "Можно перемешать до 1 000 элементов за раз. Для большинства задач этого более чем достаточно."
+    },
+    {
+      "q": "Можно ли перемешать один и тот же список несколько раз?",
+      "a": "Конечно. Нажимайте «Перемешать» столько раз, сколько хотите — каждый раз вы получите совершенно новый случайный порядок."
+    }
+  ]
+}

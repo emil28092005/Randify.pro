@@ -1,0 +1,47 @@
+{
+  "slug": "yesno",
+  "title": "Yes or No",
+  "description": "Get a random Yes, No, or Maybe answer to any question.",
+  "icon": "help-circle",
+  "status": "live",
+  "seoTitle": "Yes or No Generator — Random Answer | Randify",
+  "seoDescription": "Get an instant random Yes, No, or Maybe answer to any question. Free online decision maker when you need a quick verdict.",
+  "ruTitle": "Да или Нет",
+  "ruDescription": "Получите случайный ответ Да, Нет или Возможно на любой вопрос.",
+  "ruSeoTitle": "Генератор Да или Нет — случайный ответ | Randify",
+  "ruSeoDescription": "Мгновенный случайный ответ Да, Нет или Возможно на любой вопрос. Бесплатный онлайн-помощник для быстрых решений.",
+  "pageTitle": "Yes or No Generator",
+  "ruPageTitle": "Генератор Да или Нет",
+  "howTo": [
+    "Type your question in the field (optional — it is just for context).",
+    "Click the button to get a random answer.",
+    "The result appears instantly: Yes, No, or Maybe.",
+    "A confidence percentage is shown alongside the answer."
+  ],
+  "whenTo": [
+    "Making a trivial decision when you are stuck.",
+    "Settling a friendly debate or bet.",
+    "Adding a fun random element to a game or challenge."
+  ],
+  "ruHowTo": [
+    "Введите свой вопрос в поле (по желанию — это просто для контекста).",
+    "Нажмите кнопку, чтобы получить случайный ответ.",
+    "Результат появится мгновенно: Да, Нет или Возможно.",
+    "Рядом с ответом отображается процент уверенности."
+  ],
+  "ruWhenTo": [
+    "Принятие простого решения, когда вы не можете выбрать.",
+    "Разрешение дружеского спора или пари.",
+    "Добавление случайного элемента в игру или челлендж."
+  ],
+  "faq": [
+    { "q": "Is the answer really random?", "a": "Yes. The outcome is generated using a cryptographically secure random number generator, giving each option a fair chance." },
+    { "q": "What does the confidence percentage mean?", "a": "It is a fun visual indicator showing how 'certain' the random choice feels — it does not affect the actual result." },
+    { "q": "Can I use this for serious decisions?", "a": "It is best for light-hearted or trivial choices. For important matters, trust your own judgment." }
+  ],
+  "ruFaq": [
+    { "q": "Ответ действительно случайный?", "a": "Да. Результат генерируется с помощью криптографически стойкого генератора случайных чисел, давая каждому варианту равный шанс." },
+    { "q": "Что означает процент уверенности?", "a": "Это забавный визуальный индикатор, показывающий, насколько «уверен» случайный выбор — он не влияет на сам результат." },
+    { "q": "Можно ли использовать для серьёзных решений?", "a": "Лучше всего подходит для лёгких или шуточных выборов. В важных вопросах доверяйте собственному мнению." }
+  ]
+}

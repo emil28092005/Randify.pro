@@ -1,0 +1,675 @@
+---
+import { useT } from "../../i18n/translations";
+const isRu = Astro.url.pathname.startsWith("/ru");
+const T = useT(isRu ? "ru" : "en");
+
+const categoryLabel = isRu ? "Категория" : "Category";
+const countLabel = isRu ? "Количество" : "Count";
+const allLabel = isRu ? "Все" : "All";
+const smileysLabel = isRu ? "Смайлики" : "Smileys";
+const gesturesLabel = isRu ? "Жесты и тело" : "Gestures";
+const animalsLabel = isRu ? "Животные" : "Animals";
+const foodLabel = isRu ? "Еда и напитки" : "Food";
+const travelLabel = isRu ? "Путешествия" : "Travel";
+const activitiesLabel = isRu ? "Активности" : "Activities";
+const objectsLabel = isRu ? "Предметы" : "Objects";
+const symbolsLabel = isRu ? "Символы" : "Symbols";
+const clickToCopyLabel = isRu ? "Нажмите, чтобы скопировать" : "Click to copy";
+---
+
+<div id="emoji-generator" class="mt-8">
+  <!-- Controls -->
+  <div class="rounded-xl bg-zinc-900/50 border border-zinc-800/60 p-5">
+    <div class="flex flex-col sm:flex-row gap-4">
+      <div class="flex-1">
+        <label for="eg-category" class="block text-sm font-medium text-zinc-400 mb-1">{categoryLabel}</label>
+        <select
+          id="eg-category"
+          class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors appearance-none cursor-pointer"
+          aria-label={categoryLabel}
+        >
+          <option value="all">{allLabel}</option>
+          <option value="smileys">{smileysLabel}</option>
+          <option value="gestures">{gesturesLabel}</option>
+          <option value="animals">{animalsLabel}</option>
+          <option value="food">{foodLabel}</option>
+          <option value="travel">{travelLabel}</option>
+          <option value="activities">{activitiesLabel}</option>
+          <option value="objects">{objectsLabel}</option>
+          <option value="symbols">{symbolsLabel}</option>
+        </select>
+      </div>
+      <div class="sm:w-32">
+        <label for="eg-count" class="block text-sm font-medium text-zinc-400 mb-1">{countLabel}</label>
+        <input
+          id="eg-count"
+          type="number"
+          value="5"
+          min="1"
+          max="50"
+          class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-base focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+          aria-label={countLabel}
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <p
+    id="eg-error"
+    role="alert"
+    aria-live="polite"
+    class="mt-2 text-sm text-red-600 hidden"
+  ></p>
+
+  <!-- Result area -->
+  <div
+    id="eg-result-area"
+    class="my-6 rounded-2xl bg-zinc-900/80 border border-zinc-800/80 p-6 sm:p-8 min-h-[10rem] overflow-hidden"
+    aria-live="polite"
+  >
+    <div
+      id="eg-result"
+      class="flex flex-wrap justify-center gap-3 sm:gap-4"
+      role="list"
+      aria-label={isRu ? "Сгенерированные эмодзи" : "Generated emojis"}
+    >
+    </div>
+
+    <div class="flex justify-center mt-6">
+      <button
+        id="eg-copy-all-btn"
+        type="button"
+        aria-label={isRu ? "Копировать все эмодзи" : "Copy all emojis"}
+        class="invisible inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-white font-semibold rounded-xl hover:bg-accent-hover active:bg-accent-active focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer shadow-lg shadow-accent/25 text-sm"
+      >
+        <span id="eg-copy-all-label">{T.copyAll}</span>
+        <span id="eg-copy-all-icon" aria-hidden="true">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+          </svg>
+        </span>
+        <span
+          id="eg-copy-all-check"
+          class="hidden text-white"
+          aria-hidden="true"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 6 9 17l-5-5"></path>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Generate button -->
+  <div class="flex justify-center">
+    <button
+      id="eg-btn"
+      type="button"
+      class="w-full sm:w-auto px-8 py-3 bg-accent text-white font-semibold rounded-xl hover:bg-accent-hover active:bg-accent-active focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer shadow-lg shadow-accent/25"
+    >
+      {T.generate}
+    </button>
+  </div>
+</div>
+
+<script>
+  import { createErrorDisplay } from "@/lib/client/validation";
+  import { CopyFeedback } from "@/lib/client/clipboard";
+  import { popElement } from "@/lib/client/animations";
+
+  const isRu = document.documentElement.lang === "ru";
+  const COPIED_LABEL = isRu ? "Скопировано!" : "Copied!";
+  const COPY_ALL_LABEL = isRu ? "Копировать всё" : "Copy all";
+  const ERR_COUNT_RANGE = isRu ? "Укажите количество от 1 до 50." : "Enter a count between 1 and 50.";
+  const TOOLTIP_COPIED = isRu ? "Скопировано!" : "Copied!";
+
+  const EMOJIS: Record<string, string[]> = {
+    smileys: ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🥸","🤩","🥳","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀","☠️","👽","👾","🤖","🎃","😺","😸","😹","😻","😼","😽","🙀","😿","😾"],
+    gestures: ["👋","🤚","🖐","✋","🖖","👌","🤌","🤏","✌️","🤞","🫰","🤟","🤘","🤙","🫵","🫱","🫲","🫳","🫴","👈","👉","👆","🖕","👇","☝️","👍","👎","✊","👊","🤛","🤜","👏","🙌","🫶","👐","🤲","🤝","🙏","✍️","💅","🤳","💪","🦾","🦿","🦵","🦶","👂","🦻","👃","🧠","🫀","🫁","🦷","🦴","👀","👁","👅","👄","🫦","💋","🩸"],
+    animals: ["🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐻‍❄️","🐨","🐯","🦁","🐮","🐷","🐽","🐸","🐵","🙈","🙉","🙊","🐒","🐔","🐧","🐦","🐤","🐣","🐥","🦆","🦅","🦉","🦇","🐺","🐗","🐴","🦄","🐝","🪱","🐛","🦋","🐌","🐞","🐜","🦗","🪳","🕷","🕸","🦂","🐢","🐍","🦎","🦖","🦕","🐙","🦑","🦐","🦞","🦀","🐡","🐠","🐟","🐬","🐳","🐋","🦈","🐊","🐅","🐆","🦓","🫏","🦍","🦧","🦣","🐘","🦛","🦏","🐪","🐫","🦒","🦘","🦬","🐃","🐂","🐄","🐎","🐖","🐏","🐑","🦙","🐐","🦌","🐕","🐩","🦮","🐈","🐈‍⬛","🪶","🪽","🐓","🦃","🕊","🐇","🐁","🐀","🐿","🦫","🦔","🐾","🐉","🐲"],
+    food: ["🍏","🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🫐","🍈","🍒","🍑","🥭","🍍","🥥","🥝","🍅","🍆","🥑","🥦","🥬","🥒","🌶","🫑","🌽","🥕","🫒","🧄","🧅","🥔","🍠","🫘","🥐","🥯","🍞","🥖","🥨","🧀","🥚","🍳","🧈","🥞","🧇","🥓","🥩","🍗","🍖","🦴","🌭","🍔","🍟","🍕","🫓","🥪","🥙","🧆","🌮","🌯","🫔","🥗","🥘","🫕","🥫","🍝","🍜","🍲","🍛","🍣","🍱","🥟","🦪","🍤","🍙","🍚","🍘","🍥","🥠","🥮","🍢","🍡","🍧","🍨","🍦","🥧","🧁","🍰","🎂","🍮","🍭","🍬","🍫","🍿","🍩","🍪","🌰","🥜","🍯","🥛","🍼","🫖","☕️","🍵","🧃","🥤","🧋","🫙","🍶","🍺","🍻","🥂","🍷","🫗","🥃","🍸","🍹","🧉","🍾","🧊","🥄","🍴","🍽","🥣","🥡","🥢","🧂"],
+    travel: ["🚗","🚕","🚙","🚌","🚎","🏎","🚓","🚑","🚒","🚐","🛻","🚚","🚛","🚜","🦯","🦽","🦼","🩼","🛴","🚲","🛵","🏍","🛺","🚨","🚔","🚍","🚘","🚖","🚡","🚠","🚟","🚃","🚋","🚞","🚝","🚄","🚅","🚈","🚂","🚆","🚇","🚊","🚉","✈️","🛫","🛬","🛩","💺","🛰","🚀","🛸","🚁","🛶","⛵️","🚤","🛥","🛳","⛴","🚢","⚓️","⛽️","🚧","🚦","🚥","🚏","🗺","🗿","🗽","🗼","🏰","🏯","🏟","🎡","🎢","🎠","⛲️","⛱","🏖","🏝","🏜","🌋","⛰","🏔","🗻","🏕","⛺️","🛖","🏠","🏡","🏘","🏚","🏗","🏭","🏢","🏬","🏣","🏤","🏥","🏦","🏨","🏪","🏫","🏩","💒","🏛","⛪️","🕌","🕍","🛕","🕋","⛩","🛤","🛣","🗾","🎑","🏞","🌅","🌄","🌠","🎇","🎆","🌇","🌆","🏙","🌃","🌌","🌉","🌁"],
+    activities: ["⚽️","🏀","🏈","⚾️","🥎","🎾","🏐","🏉","🥏","🎱","🪀","🏓","🏸","🏒","🏑","🥍","🏏","🪃","🥅","⛳️","🪁","🏹","🎣","🤿","🥊","🥋","🎽","🛹","🛼","🛷","⛸","🥌","🎿","⛷","🏂","🪂","🏋️","🤼","🤸","⛹️","🤺","🤾","🏌️","🏇","🧘","🏄","🏊","🤽","🚣","🧗","🚵","🚴","🏆","🥇","🥈","🥉","🏅","🎖","🏵","🎗","🎫","🎟","🎪","🤹","🎭","🩰","🎨","🎬","🎤","🎧","🎼","🎹","🥁","🪘","🪇","🎷","🎺","🪗","🎸","🪕","🎻","🎲","♟","🎯","🎳","🎮","🎰","🧩"],
+    objects: ["⌚️","📱","📲","💻","⌨️","🖥","🖨","🖱","🖲","🕹","🗜","💽","💾","💿","📀","📼","📷","📸","📹","🎥","📽","🎞","📞","☎️","📟","📠","📺","📻","🎙","🎚","🎛","🧭","⏱","⏲","⏰","🕰","⌛️","⏳","📡","🔋","🪫","🔌","💡","🔦","🕯","🪔","🧯","🛢","💸","💵","💴","💶","💷","🪙","💰","💳","🪪","💎","⚖️","🦯","🪜","🧰","🪛","🔧","🔨","⚒","🛠","⛏","🪚","🔩","⚙️","🪤","🧱","⛓","🧲","🔫","💣","🔪","🗡","⚔️","🛡","🚬","⚰️","🪦","⚱️","🏺","🔮","📿","🧿","💈","⚗️","🔭","🔬","🕳","🩹","🩺","🩻","🩼","💊","💉","🩸","🧬","🦠","🧫","🧪","🌡","🧹","🪠","🧺","🧻","🚽","🚰","🚿","🛁","🛀","🧼","🪥","🪒","🧽","🪣","🧴","🛎","🔑","🗝","🚪","🪑","🛋","🛏","🛌","🧸","🪆","🖼","🪞","🪟","🛍","🛒","🎁","🎈","🎏","🎀","🪄","🪅","🎊","🎉","🎎","🏮","🎐","🧧","✉️","📩","📨","📧","💌","📥","📤","📦","🏷","🪧","📪","📫","📬","📭","📮","📯","📜","📃","📄","📑","🧾","📊","📈","📉","🗒","🗓","📆","📅","🗑","🪪","📇","🗃","🗳","🗄","📋","📁","📂","🗂","🗞","📰","📓","📔","📒","📕","📗","📘","📙","📚","📖","🔖","🧷","🔗","📎","🖇","📐","📏","🧮","📌","📍","✂️","🖊","🖋","✒️","🖌","🖍","📝","✏️","🔍","🔎","🔏","🔐","🔒","🔓"],
+    symbols: ["❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","❤️‍🔥","❤️‍🩹","💔","❣️","💕","💞","💓","💗","💖","💘","💝","💟","☮️","✝️","☪️","🕉","☸️","✡️","🔯","🕎","☯️","☦️","🛐","⛎","♈️","♉️","♊️","♋️","♌️","♍️","♎️","♏️","♐️","♑️","♒️","♓️","🆔","⚛️","🉑","☢️","☣️","📴","📳","🈶","🈚️","🈸","🈺","🈷️","✴️","🆚","💮","🉐","㊙️","㊗️","🈴","🈵","🈹","🈲","🅰️","🅱️","🆎","🆑","🅾️","🆘","❌","⭕️","🛑","⛔️","📛","🚫","💯","💢","♨️","🚷","🚯","🚳","🚱","🔞","📵","🚭","❗️","❕","❓","❔","‼️","⁉️","🔅","🔆","〽️","⚠️","🚸","🔱","⚜️","🔰","♻️","✅","🈯️","💹","❇️","✳️","❎","🌐","💠","Ⓜ️","🌀","💤","🏧","🚾","♿️","🅿️","🈳","🈂️","🛂","🛃","🛄","🛅","🛗","⚧️","🚹","🚺","🚼","🚻","🚮","🎦","📶","🈁","🔣","ℹ️","🔤","🔡","🔠","🆖","🆗","🆙","🆒","🆕","🆓","0️⃣","1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟","🔢","#️⃣","*️⃣","⏏️","▶️","⏸","⏯","⏹","⏺","⏭","⏮","⏩","⏪","⏫","⏬","◀️","🔼","🔽","➡️","⬅️","⬆️","⬇️","↗️","↘️","↙️","↖️","↕️","↔️","↪️","↩️","⤴️","⤵️","🔀","🔁","🔂","🔄","🔃","🎵","🎶","➕","➖","➗","✖️","💲","💱","™️","©️","®️","👁‍🗨","🔚","🔙","🔛","🔝","🔜","〰️","➰","➿","✔️","☑️","🔘","🔴","🟠","🟡","🟢","🔵","🟣","⚫️","⚪️","🟤","🔺","🔻","🔸","🔹","🔶","🔷","🔳","🔲","▪️","▫️","◾️","◽️","◼️","◻️","🟥","🟧","🟨","🟩","🟦","🟪","⬛️","⬜️","🟫","🔈","🔇","🔉","🔊","🔔","🔕","📣","📢","💬","💭","🗯","♠️","♣️","♥️","♦️","🃏","🎴","🀄️","🕐","🕑","🕒","🕓","🕔","🕕","🕖","🕗","🕘","🕙","🕚","🕛","🕜","🕝","🕞","🕟","🕠","🕡","🕢","🕣","🕤","🕥","🕦","🕧"]
+  };
+
+  // Minimal emoji name map for tooltips (fallback for known emojis)
+  const EMOJI_NAMES_EN: Record<string, string> = {
+    "😀": "Grinning Face", "😃": "Smiling Face", "😄": "Smiling Face with Smiling Eyes", "😁": "Beaming Face", "😆": "Grinning Squinting Face",
+    "😅": "Grinning Face with Sweat", "😂": "Face with Tears of Joy", "🤣": "Rolling on the Floor Laughing", "😊": "Smiling Face with Smiling Eyes",
+    "😇": "Smiling Face with Halo", "🙂": "Slightly Smiling Face", "🙃": "Upside-Down Face", "😉": "Winking Face", "😌": "Relieved Face",
+    "😍": "Smiling Face with Heart-Eyes", "🥰": "Smiling Face with Hearts", "😘": "Face Blowing a Kiss", "😗": "Kissing Face",
+    "😙": "Kissing Face with Smiling Eyes", "😚": "Kissing Face with Closed Eyes", "😋": "Face Savoring Food", "😛": "Face with Tongue",
+    "😝": "Squinting Face with Tongue", "😜": "Winking Face with Tongue", "🤪": "Zany Face", "🤨": "Face with Raised Eyebrow",
+    "🧐": "Face with Monocle", "🤓": "Nerd Face", "😎": "Smiling Face with Sunglasses", "🥸": "Disguised Face", "🤩": "Star-Struck",
+    "🥳": "Partying Face", "😏": "Smirking Face", "😒": "Unamused Face", "😞": "Disappointed Face", "😔": "Pensive Face",
+    "😟": "Worried Face", "😕": "Confused Face", "🙁": "Slightly Frowning Face", "☹️": "Frowning Face", "😣": "Persevering Face",
+    "😖": "Confounded Face", "😫": "Tired Face", "😩": "Weary Face", "🥺": "Pleading Face", "😢": "Crying Face",
+    "😭": "Loudly Crying Face", "😤": "Face with Steam From Nose", "😠": "Angry Face", "😡": "Enraged Face", "🤬": "Face with Symbols on Mouth",
+    "🤯": "Exploding Head", "😳": "Flushed Face", "🥵": "Hot Face", "🥶": "Cold Face", "😱": "Face Screaming in Fear",
+    "😨": "Fearful Face", "😰": "Anxious Face", "😥": "Sad but Relieved Face", "😓": "Face with Cold Sweat", "🤗": "Hugging Face",
+    "🤔": "Thinking Face", "🤭": "Face with Hand Over Mouth", "🤫": "Shushing Face", "🤥": "Lying Face", "😶": "Face Without Mouth",
+    "😐": "Neutral Face", "😑": "Expressionless Face", "😬": "Grimacing Face", "🙄": "Face with Rolling Eyes",
+    "😯": "Hushed Face", "😦": "Frowning Face with Open Mouth", "😧": "Anguished Face", "😮": "Face with Open Mouth",
+    "😲": "Astonished Face", "🥱": "Yawning Face", "😴": "Sleeping Face", "🤤": "Drooling Face", "😪": "Sleepy Face",
+    "😵": "Face with Crossed-Out Eyes", "🤐": "Zipper-Mouth Face", "🥴": "Woozy Face", "🤢": "Nauseated Face",
+    "🤮": "Face Vomiting", "🤧": "Sneezing Face", "😷": "Face with Medical Mask", "🤒": "Face with Thermometer",
+    "🤕": "Face with Head-Bandage", "🤑": "Money-Mouth Face", "🤠": "Cowboy Hat Face", "😈": "Smiling Face with Horns",
+    "👿": "Angry Face with Horns", "👹": "Ogre", "👺": "Goblin", "🤡": "Clown Face", "💩": "Pile of Poo",
+    "👻": "Ghost", "💀": "Skull", "☠️": "Skull and Crossbones", "👽": "Alien", "👾": "Alien Monster", "🤖": "Robot",
+    "🎃": "Jack-O-Lantern", "😺": "Grinning Cat", "😸": "Grinning Cat with Smiling Eyes", "😹": "Cat with Tears of Joy",
+    "😻": "Smiling Cat with Heart-Eyes", "😼": "Cat with Wry Smile", "😽": "Kissing Cat", "🙀": "Weary Cat", "😿": "Crying Cat",
+    "😾": "Pouting Cat",
+    "👋": "Waving Hand", "🤚": "Raised Back of Hand", "🖐": "Hand with Fingers Splayed", "✋": "Raised Hand",
+    "🖖": "Vulcan Salute", "👌": "OK Hand", "🤌": "Pinched Fingers", "🤏": "Pinching Hand", "✌️": "Victory Hand",
+    "🤞": "Crossed Fingers", "🫰": "Hand with Index Finger and Thumb Crossed", "🤟": "Love-You Gesture", "🤘": "Sign of the Horns",
+    "🤙": "Call Me Hand", "🫵": "Index Pointing at the Viewer", "👈": "Backhand Index Pointing Left",
+    "👉": "Backhand Index Pointing Right", "👆": "Backhand Index Pointing Up", "🖕": "Middle Finger",
+    "👇": "Backhand Index Pointing Down", "☝️": "Index Pointing Up", "👍": "Thumbs Up", "👎": "Thumbs Down",
+    "✊": "Raised Fist", "👊": "Oncoming Fist", "🤛": "Left-Facing Fist", "🤜": "Right-Facing Fist", "👏": "Clapping Hands",
+    "🙌": "Raising Hands", "🫶": "Heart Hands", "👐": "Open Hands", "🤲": "Palms Up Together", "🤝": "Handshake",
+    "🙏": "Folded Hands", "✍️": "Writing Hand", "💅": "Nail Polish", "🤳": "Selfie", "💪": "Flexed Biceps",
+    "👂": "Ear", "👃": "Nose", "🧠": "Brain", "👀": "Eyes", "👁": "Eye", "👅": "Tongue", "👄": "Mouth", "💋": "Kiss Mark",
+    "🐶": "Dog Face", "🐱": "Cat Face", "🐭": "Mouse Face", "🐹": "Hamster", "🐰": "Rabbit Face", "🦊": "Fox",
+    "🐻": "Bear", "🐼": "Panda", "🐨": "Koala", "🐯": "Tiger Face", "🦁": "Lion", "🐮": "Cow Face",
+    "🐷": "Pig Face", "🐸": "Frog", "🐵": "Monkey Face", "🙈": "See-No-Evil Monkey", "🙉": "Hear-No-Evil Monkey",
+    "🙊": "Speak-No-Evil Monkey", "🐔": "Chicken", "🐧": "Penguin", "🐦": "Bird", "🐤": "Baby Chick",
+    "🦆": "Duck", "🦅": "Eagle", "🦉": "Owl", "🦇": "Bat", "🐺": "Wolf", "🐗": "Boar", "🐴": "Horse Face",
+    "🦄": "Unicorn", "🐝": "Honeybee", "🦋": "Butterfly", "🐌": "Snail", "🐞": "Lady Beetle",
+    "🐢": "Turtle", "🐍": "Snake", "🦎": "Lizard", "🦖": "T-Rex", "🦕": "Sauropod", "🐙": "Octopus",
+    "🦑": "Squid", "🦐": "Shrimp", "🦞": "Lobster", "🦀": "Crab", "🐡": "Blowfish", "🐠": "Tropical Fish",
+    "🐟": "Fish", "🐬": "Dolphin", "🐳": "Spouting Whale", "🐋": "Whale", "🦈": "Shark", "🐊": "Crocodile",
+    "🐅": "Tiger", "🐆": "Leopard", "🦓": "Zebra", "🦍": "Gorilla", "🐘": "Elephant", "🦛": "Hippopotamus",
+    "🦏": "Rhinoceros", "🐪": "Camel", "🐫": "Two-Hump Camel", "🦒": "Giraffe", "🦘": "Kangaroo",
+    "🐃": "Water Buffalo", "🐂": "Ox", "🐄": "Cow", "🐎": "Horse", "🐖": "Pig", "🐏": "Ram",
+    "🐑": "Ewe", "🦙": "Llama", "🐐": "Goat", "🦌": "Deer", "🐕": "Dog", "🐩": "Poodle",
+    "🐈": "Cat", "🐇": "Rabbit", "🐁": "Mouse", "🐀": "Rat", "🦔": "Hedgehog", "🐾": "Paw Prints",
+    "🐉": "Dragon", "🐲": "Dragon Face",
+    "🍏": "Green Apple", "🍎": "Red Apple", "🍐": "Pear", "🍊": "Tangerine", "🍋": "Lemon",
+    "🍌": "Banana", "🍉": "Watermelon", "🍇": "Grapes", "🍓": "Strawberry", "🫐": "Blueberries",
+    "🍈": "Melon", "🍒": "Cherries", "🍑": "Peach", "🥭": "Mango", "🍍": "Pineapple",
+    "🥥": "Coconut", "🥝": "Kiwi Fruit", "🍅": "Tomato", "🍆": "Eggplant", "🥑": "Avocado",
+    "🥦": "Broccoli", "🥬": "Leafy Green", "🥒": "Cucumber", "🌶": "Hot Pepper", "🫑": "Bell Pepper",
+    "🌽": "Ear of Corn", "🥕": "Carrot", "🧄": "Garlic", "🧅": "Onion", "🥔": "Potato",
+    "🥐": "Croissant", "🥯": "Bagel", "🍞": "Bread", "🥖": "Baguette Bread", "🥨": "Pretzel",
+    "🧀": "Cheese Wedge", "🥚": "Egg", "🍳": "Cooking", "🥞": "Pancakes", "🧇": "Waffle",
+    "🥓": "Bacon", "🥩": "Cut of Meat", "🍗": "Poultry Leg", "🍖": "Meat on Bone", "🌭": "Hot Dog",
+    "🍔": "Hamburger", "🍟": "French Fries", "🍕": "Pizza", "🥪": "Sandwich", "🥙": "Stuffed Flatbread",
+    "🌮": "Taco", "🌯": "Burrito", "🥗": "Green Salad", "🥘": "Shallow Pan of Food", "🍝": "Spaghetti",
+    "🍜": "Steaming Bowl", "🍲": "Pot of Food", "🍛": "Curry Rice", "🍣": "Sushi", "🍱": "Bento Box",
+    "🥟": "Dumpling", "🦪": "Oyster", "🍤": "Fried Shrimp", "🍙": "Rice Ball", "🍚": "Cooked Rice",
+    "🍘": "Rice Cracker", "🥠": "Fortune Cookie", "🍢": "Oden", "🍡": "Dango", "🍧": "Shaved Ice",
+    "🍨": "Ice Cream", "🍦": "Soft Ice Cream", "🥧": "Pie", "🧁": "Cupcake", "🍰": "Shortcake",
+    "🎂": "Birthday Cake", "🍮": "Custard", "🍭": "Lollipop", "🍬": "Candy", "🍫": "Chocolate Bar",
+    "🍿": "Popcorn", "🍩": "Doughnut", "🍪": "Cookie", "🌰": "Chestnut", "🥜": "Peanuts",
+    "🍯": "Honey Pot", "🥛": "Glass of Milk", "☕️": "Hot Beverage", "🍵": "Teacup Without Handle",
+    "🧃": "Beverage Box", "🥤": "Cup with Straw", "🧋": "Bubble Tea", "🍶": "Sake", "🍺": "Beer Mug",
+    "🍻": "Clinking Beer Mugs", "🥂": "Clinking Glasses", "🍷": "Wine Glass", "🥃": "Tumbler Glass",
+    "🍸": "Cocktail Glass", "🍹": "Tropical Drink", "🧉": "Mate", "🍾": "Bottle with Popping Cork",
+    "🧊": "Ice", "🥄": "Spoon", "🍴": "Fork and Knife", "🍽": "Fork and Knife with Plate",
+    "🥣": "Bowl with Spoon", "🥢": "Chopsticks", "🧂": "Salt",
+    "🚗": "Automobile", "🚕": "Taxi", "🚙": "Sport Utility Vehicle", "🚌": "Bus", "🚎": "Trolleybus",
+    "🏎": "Racing Car", "🚓": "Police Car", "🚑": "Ambulance", "🚒": "Fire Engine", "🚐": "Minibus",
+    "🚚": "Delivery Truck", "🚛": "Articulated Lorry", "🚜": "Tractor", "🛴": "Kick Scooter",
+    "🚲": "Bicycle", "🛵": "Motor Scooter", "🏍": "Motorcycle", "🚨": "Police Car Light",
+    "✈️": "Airplane", "🛫": "Airplane Departure", "🛬": "Airplane Arrival", "🚀": "Rocket",
+    "🛸": "Flying Saucer", "🚁": "Helicopter", "🛶": "Canoe", "⛵️": "Sailboat", "🚤": "Speedboat",
+    "🛳": "Passenger Ship", "🚢": "Ship", "⚓️": "Anchor", "⛽️": "Fuel Pump", "🚧": "Construction",
+    "🚦": "Vertical Traffic Light", "🚥": "Horizontal Traffic Light", "🗺": "World Map",
+    "🗿": "Moai", "🗽": "Statue of Liberty", "🗼": "Tokyo Tower", "🏰": "Castle", "🏯": "Japanese Castle",
+    "🏟": "Stadium", "🎡": "Ferris Wheel", "🎢": "Roller Coaster", "🎠": "Carousel Horse",
+    "⛲️": "Fountain", "🏖": "Beach with Umbrella", "🏝": "Desert Island", "🏜": "Desert",
+    "🌋": "Volcano", "⛰": "Mountain", "🏔": "Snow-Capped Mountain", "🗻": "Mount Fuji",
+    "🏕": "Camping", "⛺️": "Tent", "🏠": "House", "🏡": "House with Garden", "🏘": "Houses",
+    "🏗": "Building Construction", "🏭": "Factory", "🏢": "Office Building", "🏬": "Department Store",
+    "🏣": "Japanese Post Office", "🏥": "Hospital", "🏦": "Bank", "🏨": "Hotel", "🏪": "Convenience Store",
+    "🏫": "School", "🏩": "Love Hotel", "💒": "Wedding", "🏛": "Classical Building",
+    "⛪️": "Church", "🕌": "Mosque", "🕍": "Synagogue", "🛕": "Hindu Temple", "🕋": "Kaaba",
+    "⛩": "Shinto Shrine", "🌅": "Sunrise", "🌄": "Sunrise Over Mountains", "🌠": "Shooting Star",
+    "🎇": "Sparkler", "🎆": "Fireworks", "🌇": "Sunset", "🌆": "Cityscape at Dusk",
+    "🏙": "Cityscape", "🌃": "Night with Stars", "🌌": "Milky Way", "🌉": "Bridge at Night",
+    "🌁": "Foggy",
+    "⚽️": "Soccer Ball", "🏀": "Basketball", "🏈": "American Football", "⚾️": "Baseball",
+    "🎾": "Tennis", "🏐": "Volleyball", "🎱": "Pool 8 Ball", "🏓": "Ping Pong",
+    "🏸": "Badminton", "🏒": "Ice Hockey", "🏑": "Field Hockey", "🥍": "Lacrosse",
+    "🏏": "Cricket Game", "🥅": "Goal Net", "⛳️": "Flag in Hole", "🏹": "Bow and Arrow",
+    "🎣": "Fishing Pole", "🥊": "Boxing Glove", "🥋": "Martial Arts Uniform", "🛹": "Skateboard",
+    "🛼": "Roller Skate", "⛸": "Ice Skate", "🎿": "Skis", "⛷": "Skier", "🏂": "Snowboarder",
+    "🏋️": "Person Lifting Weights", "🤼": "People Wrestling", "🤸": "Person Cartwheeling",
+    "⛹️": "Person Bouncing Ball", "🤺": "Person Fencing", "🤾": "Person Playing Handball",
+    "🏌️": "Person Golfing", "🏇": "Horse Racing", "🧘": "Person in Lotus Position",
+    "🏄": "Person Surfing", "🏊": "Person Swimming", "🤽": "Person Playing Water Polo",
+    "🚣": "Person Rowing Boat", "🧗": "Person Climbing", "🚵": "Person Mountain Biking",
+    "🚴": "Person Biking", "🏆": "Trophy", "🥇": "1st Place Medal", "🥈": "2nd Place Medal",
+    "🥉": "3rd Place Medal", "🏅": "Sports Medal", "🎫": "Ticket", "🎟": "Admission Tickets",
+    "🎪": "Circus Tent", "🤹": "Person Juggling", "🎭": "Performing Arts", "🎨": "Artist Palette",
+    "🎬": "Clapper Board", "🎤": "Microphone", "🎧": "Headphone", "🎼": "Musical Score",
+    "🎹": "Musical Keyboard", "🥁": "Drum", "🎷": "Saxophone", "🎺": "Trumpet",
+    "🎸": "Guitar", "🎻": "Violin", "🎲": "Game Die", "♟": "Chess Pawn", "🎯": "Bullseye",
+    "🎳": "Bowling", "🎮": "Video Game", "🎰": "Slot Machine", "🧩": "Puzzle Piece",
+    "⌚️": "Watch", "📱": "Mobile Phone", "📲": "Mobile Phone with Arrow", "💻": "Laptop",
+    "⌨️": "Keyboard", "🖥": "Desktop Computer", "🖨": "Printer", "🖱": "Computer Mouse",
+    "🖲": "Trackball", "🕹": "Joystick", "💽": "Computer Disk", "💾": "Floppy Disk",
+    "💿": "Optical Disk", "📀": "DVD", "📷": "Camera", "📸": "Camera with Flash",
+    "📹": "Video Camera", "🎥": "Movie Camera", "📽": "Film Projector", "📞": "Telephone Receiver",
+    "☎️": "Telephone", "📟": "Pager", "📠": "Fax Machine", "📺": "Television", "📻": "Radio",
+    "🎙": "Studio Microphone", "⏱": "Stopwatch", "⏲": "Timer Clock", "⏰": "Alarm Clock",
+    "🕰": "Mantelpiece Clock", "⌛️": "Hourglass Done", "⏳": "Hourglass Not Done",
+    "📡": "Satellite Antenna", "🔋": "Battery", "🔌": "Electric Plug", "💡": "Light Bulb",
+    "🔦": "Flashlight", "🕯": "Candle", "💸": "Money with Wings", "💵": "Dollar Banknote",
+    "💴": "Yen Banknote", "💶": "Euro Banknote", "💷": "Pound Banknote", "🪙": "Coin",
+    "💰": "Money Bag", "💳": "Credit Card", "💎": "Gem Stone", "⚖️": "Balance Scale",
+    "🔧": "Wrench", "🔨": "Hammer", "⚒": "Hammer and Pick", "🛠": "Hammer and Wrench",
+    "⛏": "Pick", "🔩": "Nut and Bolt", "⚙️": "Gear", "⛓": "Chains", "🧲": "Magnet",
+    "🔫": "Water Pistol", "💣": "Bomb", "🔪": "Kitchen Knife", "🗡": "Dagger", "⚔️": "Crossed Swords",
+    "🛡": "Shield", "🚬": "Cigarette", "⚰️": "Coffin", "⚱️": "Funeral Urn", "🏺": "Amphora",
+    "🔮": "Crystal Ball", "📿": "Prayer Beads", "💈": "Barber Pole", "⚗️": "Alembic",
+    "🔭": "Telescope", "🔬": "Microscope", "💊": "Pill", "💉": "Syringe", "🩸": "Drop of Blood",
+    "🧬": "DNA", "🦠": "Microbe", "🧪": "Test Tube", "🌡": "Thermometer", "🧹": "Broom",
+    "🧺": "Basket", "🧻": "Roll of Paper", "🚽": "Toilet", "🚿": "Shower", "🛁": "Bathtub",
+    "🛀": "Person Taking Bath", "🪥": "Toothbrush", "🧼": "Soap", "🧽": "Sponge",
+    "🧴": "Lotion Bottle", "🛎": "Bellhop Bell", "🔑": "Key", "🗝": "Old Key", "🚪": "Door",
+    "🪑": "Chair", "🛋": "Couch and Lamp", "🛏": "Bed", "🛌": "Person in Bed",
+    "🧸": "Teddy Bear", "🖼": "Framed Picture", "🪞": "Mirror", "🛍": "Shopping Bags",
+    "🛒": "Shopping Cart", "🎁": "Wrapped Gift", "🎈": "Balloon", "🎏": "Wind Chime",
+    "🎀": "Ribbon", "🎊": "Confetti Ball", "🎉": "Party Popper", "🎎": "Japanese Dolls",
+    "🏮": "Red Paper Lantern", "🎐": "Wind Chime", "🧧": "Red Envelope",
+    "✉️": "Envelope", "📩": "Envelope with Arrow", "📨": "Incoming Envelope",
+    "📧": "E-Mail", "💌": "Love Letter", "📥": "Inbox Tray", "📤": "Outbox Tray",
+    "📦": "Package", "🏷": "Label", "🪧": "Placard", "📪": "Closed Mailbox with Lowered Flag",
+    "📫": "Closed Mailbox with Raised Flag", "📬": "Open Mailbox with Raised Flag",
+    "📭": "Open Mailbox with Lowered Flag", "📮": "Postbox", "📯": "Postal Horn",
+    "📜": "Scroll", "📃": "Page with Curl", "📄": "Page Facing Up", "📑": "Bookmark Tabs",
+    "🧾": "Receipt", "📊": "Bar Chart", "📈": "Chart Increasing", "📉": "Chart Decreasing",
+    "🗒": "Spiral Notepad", "🗓": "Spiral Calendar", "📆": "Tear-Off Calendar",
+    "📅": "Calendar", "🗑": "Wastebasket", "📇": "Card Index", "🗃": "Card File Box",
+    "🗳": "Ballot Box with Ballot", "🗄": "File Cabinet", "📋": "Clipboard",
+    "📁": "File Folder", "📂": "Open File Folder", "🗂": "Card Index Dividers",
+    "🗞": "Rolled-Up Newspaper", "📰": "Newspaper", "📓": "Notebook",
+    "📔": "Notebook with Decorative Cover", "📒": "Ledger", "📕": "Closed Book",
+    "📗": "Green Book", "📘": "Blue Book", "📙": "Orange Book", "📚": "Books",
+    "📖": "Open Book", "🔖": "Bookmark", "🧷": "Safety Pin", "🔗": "Link",
+    "📎": "Paperclip", "🖇": "Linked Paperclips", "📐": "Triangular Ruler",
+    "📏": "Straight Ruler", "🧮": "Abacus", "📌": "Pushpin", "📍": "Round Pushpin",
+    "✂️": "Scissors", "🖊": "Pen", "🖋": "Fountain Pen", "✒️": "Black Nib",
+    "🖌": "Paintbrush", "🖍": "Crayon", "📝": "Memo", "✏️": "Pencil",
+    "🔍": "Magnifying Glass Tilted Left", "🔎": "Magnifying Glass Tilted Right",
+    "🔏": "Locked with Pen", "🔐": "Locked with Key", "🔒": "Locked", "🔓": "Unlocked",
+    "❤️": "Red Heart", "🧡": "Orange Heart", "💛": "Yellow Heart", "💚": "Green Heart",
+    "💙": "Blue Heart", "💜": "Purple Heart", "🖤": "Black Heart", "🤍": "White Heart",
+    "🤎": "Brown Heart", "💔": "Broken Heart", "❣️": "Heart Exclamation",
+    "💕": "Two Hearts", "💞": "Revolving Hearts", "💓": "Beating Heart",
+    "💗": "Growing Heart", "💖": "Sparkling Heart", "💘": "Heart with Arrow",
+    "💝": "Heart with Ribbon", "💟": "Heart Decoration",
+    "☮️": "Peace Symbol", "✝️": "Latin Cross", "☪️": "Star and Crescent",
+    "🕉": "Om", "☸️": "Wheel of Dharma", "✡️": "Star of David",
+    "🔯": "Dotted Six-Pointed Star", "🕎": "Menorah", "☯️": "Yin Yang",
+    "☦️": "Orthodox Cross", "⛎": "Ophiuchus", "♈️": "Aries", "♉️": "Taurus",
+    "♊️": "Gemini", "♋️": "Cancer", "♌️": "Leo", "♍️": "Virgo", "♎️": "Libra",
+    "♏️": "Scorpio", "♐️": "Sagittarius", "♑️": "Capricorn", "♒️": "Aquarius",
+    "♓️": "Pisces", "🆔": "ID Button", "⚛️": "Atom Symbol", "🉑": "Japanese Acceptable Button",
+    "☢️": "Radioactive", "☣️": "Biohazard", "📴": "Mobile Phone Off",
+    "📳": "Vibration Mode", "🈶": "Japanese Not Free of Charge Button",
+    "🈚️": "Japanese Free of Charge Button", "🈸": "Japanese Application Button",
+    "🈺": "Japanese Open for Business Button", "🈷️": "Japanese Monthly Amount Button",
+    "✴️": "Eight-Pointed Star", "🆚": "VS Button", "💮": "White Flower",
+    "🉐": "Japanese Bargain Button", "㊙️": "Japanese Secret Button",
+    "㊗️": "Japanese Congratulations Button", "🈴": "Japanese Passing Grade Button",
+    "🈵": "Japanese No Vacancy Button", "🈹": "Japanese Discount Button",
+    "🈲": "Japanese Prohibited Button", "🅰️": "A Button", "🅱️": "B Button",
+    "🆎": "AB Button", "🆑": "CL Button", "🅾️": "O Button", "🆘": "SOS Button",
+    "❌": "Cross Mark", "⭕️": "Heavy Large Circle", "🛑": "Stop Sign",
+    "⛔️": "No Entry", "📛": "Name Badge", "🚫": "Prohibited", "💯": "Hundred Points",
+    "💢": "Anger Symbol", "♨️": "Hot Springs", "🚷": "No Pedestrians",
+    "🚯": "No Littering", "🚳": "No Bicycles", "🚱": "Non-Potable Water",
+    "🔞": "No One Under Eighteen", "📵": "No Mobile Phones", "🚭": "No Smoking",
+    "❗️": "Heavy Exclamation Mark", "❕": "White Exclamation Mark",
+    "❓": "Question Mark", "❔": "White Question Mark", "‼️": "Double Exclamation Mark",
+    "⁉️": "Exclamation Question Mark", "🔅": "Low Brightness Symbol",
+    "🔆": "High Brightness Symbol", "〽️": "Part Alternation Mark",
+    "⚠️": "Warning", "🚸": "Children Crossing", "🔱": "Trident Emblem",
+    "⚜️": "Fleur-de-lis", "🔰": "Japanese Symbol for Beginner", "♻️": "Recycling Symbol",
+    "✅": "White Heavy Check Mark", "🈯️": "Japanese Reserved Button", "💹": "Chart Increasing with Yen",
+    "❇️": "Sparkle", "✳️": "Eight-Spoked Asterisk", "❎": "Negative Squared Cross Mark",
+    "🌐": "Globe with Meridians", "💠": "Diamond with a Dot", "Ⓜ️": "Circled M",
+    "🌀": "Cyclone", "💤": "Zzz", "🏧": "ATM Sign", "🚾": "Water Closet",
+    "♿️": "Wheelchair Symbol", "🅿️": "Parking Button", "🈳": "Japanese Vacancy Button",
+    "🈂️": "Japanese Service Charge Button", "🛂": "Passport Control",
+    "🛃": "Customs", "🛄": "Baggage Claim", "🛅": "Left Luggage",
+    "🛗": "Elevator", "⚧️": "Transgender Symbol", "🚹": "Men's Room",
+    "🚺": "Women's Room", "🚼": "Baby Symbol", "🚻": "Restroom",
+    "🚮": "Put Litter in Its Place Symbol", "🎦": "Cinema",
+    "📶": "Antenna Bars", "🈁": "Japanese Here Button", "🔣": "Input Symbol for Symbols",
+    "ℹ️": "Information", "🔤": "Input Latin Letters", "🔡": "Input Latin Lowercase",
+    "🔠": "Input Latin Uppercase", "🆖": "NG Button", "🆗": "OK Button",
+    "🆙": "UP! Button", "🆒": "Cool Button", "🆕": "New Button", "🆓": "Free Button",
+    "0️⃣": "Keycap 0", "1️⃣": "Keycap 1", "2️⃣": "Keycap 2", "3️⃣": "Keycap 3",
+    "4️⃣": "Keycap 4", "5️⃣": "Keycap 5", "6️⃣": "Keycap 6", "7️⃣": "Keycap 7",
+    "8️⃣": "Keycap 8", "9️⃣": "Keycap 9", "🔟": "Keycap 10", "🔢": "Input Numbers",
+    "#️⃣": "Keycap #", "*️⃣": "Keycap *", "⏏️": "Eject Button",
+    "▶️": "Play Button", "⏸": "Pause Button", "⏯": "Play or Pause Button",
+    "⏹": "Stop Button", "⏺": "Record Button", "⏭": "Next Track Button",
+    "⏮": "Last Track Button", "⏩": "Fast-Forward Button",
+    "⏪": "Fast Reverse Button", "⏫": "Fast Up Button", "⏬": "Fast Down Button",
+    "◀️": "Reverse Button", "🔼": "Upwards Button", "🔽": "Downwards Button",
+    "➡️": "Right Arrow", "⬅️": "Left Arrow", "⬆️": "Up Arrow", "⬇️": "Down Arrow",
+    "↗️": "Up-Right Arrow", "↘️": "Down-Right Arrow", "↙️": "Down-Left Arrow",
+    "↖️": "Up-Left Arrow", "↕️": "Up-Down Arrow", "↔️": "Left-Right Arrow",
+    "↪️": "Right Arrow Curving Left", "↩️": "Left Arrow Curving Right",
+    "⤴️": "Right Arrow Curving Up", "⤵️": "Right Arrow Curving Down",
+    "🔀": "Shuffle Tracks Button", "🔁": "Repeat Button", "🔂": "Repeat Single Button",
+    "🔄": "Counterclockwise Arrows Button", "🔃": "Clockwise Vertical Arrows",
+    "🎵": "Musical Note", "🎶": "Musical Notes", "➕": "Heavy Plus Sign",
+    "➖": "Heavy Minus Sign", "➗": "Heavy Division Sign", "✖️": "Heavy Multiplication X",
+    "💲": "Heavy Dollar Sign", "💱": "Currency Exchange", "™️": "Trade Mark",
+    "©️": "Copyright", "®️": "Registered", "🔚": "END Arrow", "🔙": "BACK Arrow",
+    "🔛": "ON! Arrow", "🔝": "TOP Arrow", "🔜": "SOON Arrow", "〰️": "Wavy Dash",
+    "➰": "Curly Loop", "➿": "Double Curly Loop", "✔️": "Heavy Check Mark",
+    "☑️": "Ballot Box with Check", "🔘": "Radio Button", "🔴": "Red Circle",
+    "🟠": "Orange Circle", "🟡": "Yellow Circle", "🟢": "Green Circle",
+    "🔵": "Blue Circle", "🟣": "Purple Circle", "⚫️": "Black Circle",
+    "⚪️": "White Circle", "🟤": "Brown Circle", "🔺": "Red Triangle Pointed Up",
+    "🔻": "Red Triangle Pointed Down", "🔸": "Small Orange Diamond",
+    "🔹": "Small Blue Diamond", "🔶": "Large Orange Diamond",
+    "🔷": "Large Blue Diamond", "🔳": "White Square Button",
+    "🔲": "Black Square Button", "▪️": "Black Small Square",
+    "▫️": "White Small Square", "◾️": "Black Medium-Small Square",
+    "◽️": "White Medium-Small Square", "◼️": "Black Medium Square",
+    "◻️": "White Medium Square", "🟥": "Red Square", "🟧": "Orange Square",
+    "🟨": "Yellow Square", "🟩": "Green Square", "🟦": "Blue Square",
+    "🟪": "Purple Square", "⬛️": "Black Large Square", "⬜️": "White Large Square",
+    "🟫": "Brown Square", "🔈": "Speaker Low Volume", "🔇": "Muted Speaker",
+    "🔉": "Speaker Medium Volume", "🔊": "Speaker High Volume",
+    "🔔": "Bell", "🔕": "Bell with Slash", "📣": "Megaphone", "📢": "Loudspeaker",
+    "💬": "Speech Balloon", "💭": "Thought Balloon", "🗯": "Right Anger Bubble",
+    "♠️": "Spade Suit", "♣️": "Club Suit", "♥️": "Heart Suit", "♦️": "Diamond Suit",
+    "🃏": "Joker", "🎴": "Flower Playing Cards", "🀄️": "Mahjong Red Dragon",
+    "🕐": "One O'Clock", "🕑": "Two O'Clock", "🕒": "Three O'Clock",
+    "🕓": "Four O'Clock", "🕔": "Five O'Clock", "🕕": "Six O'Clock",
+    "🕖": "Seven O'Clock", "🕗": "Eight O'Clock", "🕘": "Nine O'Clock",
+    "🕙": "Ten O'Clock", "🕚": "Eleven O'Clock", "🕛": "Twelve O'Clock"
+  };
+
+  const EMOJI_NAMES_RU: Record<string, string> = {
+    "😀": "Улыбающееся лицо", "😃": "Смеющееся лицо", "😄": "Смеющееся лицо с радостными глазами",
+    "😁": "Сияющее лицо", "😆": "Хихикающее лицо", "😅": "Смеющееся лицо с потом",
+    "😂": "Лицо со слезами радости", "🤣": "Катаюсь от смеха", "😊": "Улыбающееся лицо с улыбающимися глазами",
+    "😇": "Улыбающееся лицо с нимбом", "🙂": "Слегка улыбающееся лицо", "🙃": "Перевернутое лицо",
+    "😉": "Подмигивающее лицо", "😌": "Блаженное лицо", "😍": "Влюбленное лицо",
+    "🥰": "Лицо с сердечками", "😘": "Целующее лицо", "😗": "Целующее лицо",
+    "😙": "Целующее лицо с улыбающимися глазами", "😚": "Целующее лицо с закрытыми глазами",
+    "😋": "Лицо, смакующее еду", "😛": "Лицо с высунутым языком",
+    "😝": "Хитрое лицо с высунутым языком", "😜": "Подмигивающее лицо с языком",
+    "🤪": "Чокнутое лицо", "🤨": "Лицо с приподнятой бровью", "🧐": "Лицо с моноклем",
+    "🤓": "Заучка", "😎": "Крутой в очках", "🤩": "В восторге", "🥳": "Веселящееся лицо",
+    "😏": "Хитро улыбающееся лицо", "😒": "Недовольное лицо", "😞": "Разочарованное лицо",
+    "😔": "Задумчивое лицо", "😟": "Обеспокоенное лицо", "😕": "Озадаченное лицо",
+    "🙁": "Слегка нахмуренное лицо", "☹️": "Нахмуренное лицо", "😣": "Терпящее лицо",
+    "😖": "Смущенное лицо", "😫": "Уставшее лицо", "😩": "Измученное лицо",
+    "🥺": "Молящее лицо", "😢": "Плачущее лицо", "😭": "Громко плачущее лицо",
+    "😤": "Лицо с паром из носа", "😠": "Злое лицо", "😡": "Красное злое лицо",
+    "🤬": "Лицо с матами", "🤯": "Взрыв мозга", "😳": "Покрасневшее лицо",
+    "🥵": "Жаркое лицо", "🥶": "Замерзшее лицо", "😱": "Кричащее в ужасе лицо",
+    "😨": "Испуганное лицо", "😰": "Взволнованное лицо", "😥": "Грустное, но облегченное лицо",
+    "😓": "Лицо в холодном поту", "🤗": "Обнимающее лицо", "🤔": "Думающее лицо",
+    "🤭": "Лицо с рукой у рта", "🤫": "Тссс", "🤥": "Врущее лицо",
+    "😶": "Лицо без рта", "😐": "Нейтральное лицо", "😑": "Безразличное лицо",
+    "😬": "Гримасничающее лицо", "🙄": "Лицо с закатывающимися глазами",
+    "😯": "Удивленное лицо", "😦": "Нахмуренное лицо с открытым ртом",
+    "😧": "Страдающее лицо", "😮": "Лицо с открытым ртом", "😲": "Ошеломленное лицо",
+    "🥱": "Зевающее лицо", "😴": "Спящее лицо", "🤤": "Пускающее слюни лицо",
+    "😪": "Сонное лицо", "😵": "Головокружение", "🤐": "Рот на замке",
+    "🥴": "Одурелое лицо", "🤢": "Тошнотворное лицо", "🤮": "Рвущее лицо",
+    "🤧": "Чихающее лицо", "😷": "Лицо в маске", "🤒": "Лицо с градусником",
+    "🤕": "Лицо с повязкой", "🤑": "Лицо с деньгами", "🤠": "Ковбой",
+    "😈": "Улыбающийся чертенок", "👿": "Злой чертенок", "👹": "Они",
+    "👺": "Тенгу", "🤡": "Клоун", "💩": "Какашка", "👻": "Привидение",
+    "💀": "Череп", "☠️": "Череп и кости", "👽": "Пришелец", "👾": "Инопланетный монстр",
+    "🤖": "Робот", "🎃": "Тыква", "😺": "Улыбающийся кот", "😸": "Смеющийся кот",
+    "😹": "Кот со слезами", "😻": "Влюбленный кот", "😼": "Кот с ухмылкой",
+    "😽": "Целующий кот", "🙀": "Уставший кот", "😿": "Плачущий кот", "😾": "Дуующийся кот",
+    "👍": "Большой палец вверх", "👎": "Большой палец вниз", "👏": "Аплодисменты",
+    "🙌": "Руки вверх", "🫶": "Сердце из рук", "👐": "Раскрытые луадони",
+    "🙏": "Сложенные руки", "💪": "Бицепс", "👋": "Махающая рука",
+    "❤️": "Красное сердце", "🧡": "Оранжевое сердце", "💛": "Желтое сердце",
+    "💚": "Зеленое сердце", "💙": "Синее сердце", "💜": "Фиолетовое сердце",
+    "🖤": "Черное сердце", "🤍": "Белое сердце", "🤎": "Коричневое сердце",
+    "💔": "Разбитое сердце", "💕": "Два сердца", "💖": "Сверкающее сердце",
+    "💘": "Сердце со стрелой", "💝": "Сердце с лентой",
+    "🐶": "Собака", "🐱": "Кошка", "🐭": "Мышь", "🐹": "Хомяк",
+    "🐰": "Кролик", "🦊": "Лиса", "🐻": "Медведь", "🐼": "Панда",
+    "🐨": "Коала", "🐯": "Тигр", "🦁": "Лев", "🐮": "Корова",
+    "🐷": "Свинья", "🐸": "Лягушка", "🐵": "Обезьяна", "🐔": "Курица",
+    "🐧": "Пингвин", "🐦": "Птица", "🐤": "Цыпленок", "🦆": "Утка",
+    "🦅": "Орел", "🦉": "Сова", "🦇": "Летучая мышь", "🐺": "Волк",
+    "🐴": "Лошадь", "🦄": "Единорог", "🐝": "Пчела", "🦋": "Бабочка",
+    "🐌": "Улитка", "🐞": "Божья коровка", "🐢": "Черепаха", "🐍": "Змея",
+    "🦎": "Ящерица", "🦖": "Ти-Рекс", "🦕": "Динозавр", "🐙": "Осьминог",
+    "🦑": "Кальмар", "🦐": "Креветка", "🦞": "Лобстер", "🦀": "Краб",
+    "🐡": "Рыба-фугу", "🐠": "Тропическая рыба", "🐟": "Рыба",
+    "🐬": "Дельфин", "🐳": "Кит", "🦈": "Акула", "🐊": "Крокодил",
+    "🐅": "Тигр", "🐆": "Леопард", "🦓": "Зебра", "🦍": "Горилла",
+    "🐘": "Слон", "🦛": "Бегемот", "🦏": "Носорог", "🐪": "Верблюд",
+    "🐫": "Двугорбый верблюд", "🦒": "Жираф", "🦘": "Кенгуру",
+    "🐎": "Лошадь", "🐖": "Свинья", "🐏": "Баран", "🐑": "Овца",
+    "🦙": "Лама", "🐐": "Коза", "🦌": "Олень", "🐕": "Собака",
+    "🐈": "Кошка", "🐇": "Кролик", "🐁": "Мышь", "🐀": "Крыса",
+    "🦔": "Еж", "🐾": "Следы", "🐉": "Дракон", "🐲": "Дракон",
+    "🍏": "Зеленое яблоко", "🍎": "Красное яблоко", "🍐": "Груша",
+    "🍊": "Мандарин", "🍋": "Лимон", "🍌": "Банан", "🍉": "Арбуз",
+    "🍇": "Виноград", "🍓": "Клубника", "🍒": "Вишня", "🍑": "Персик",
+    "🥭": "Манго", "🍍": "Ананас", "🥥": "Кокос", "🥝": "Киви",
+    "🍅": "Помидор", "🍆": "Баклажан", "🥑": "Авокадо", "🥦": "Брокколи",
+    "🥒": "Огурец", "🌶": "Перец чили", "🌽": "Кукуруза", "🥕": "Морковь",
+    "🧄": "Чеснок", "🧅": "Лук", "🥔": "Картофель", "🥐": "Круассан",
+    "🍞": "Хлеб", "🥖": "Багет", "🧀": "Сыр", "🥚": "Яйцо",
+    "🍳": "Яичница", "🥞": "Блины", "🥓": "Бекон", "🥩": "Мясо",
+    "🍗": "Куриная ножка", "🍖": "Мясо на кости", "🌭": "Хот-дог",
+    "🍔": "Гамбургер", "🍟": "Картошка фри", "🍕": "Пицца", "🥪": "Сэндвич",
+    "🌮": "Тако", "🌯": "Буррито", "🥗": "Салат", "🍝": "Спагетти",
+    "🍜": "Рамен", "🍲": "Суп", "🍛": "Карри", "🍣": "Суши",
+    "🍱": "Бенто", "🥟": "Пельмени", "🍤": "Креветка темпура",
+    "🍙": "Онигири", "🍚": "Рис", "🍦": "Мороженое", "🍰": "Торт",
+    "🎂": "Торт на день рождения", "🍭": "Леденец", "🍬": "Конфета",
+    "🍫": "Шоколад", "🍿": "Попкорн", "🍩": "Пончик", "🍪": "Печенье",
+    "🥛": "Молоко", "☕️": "Кофе", "🍵": "Чай", "🧃": "Сок",
+    "🥤": "Стакан", "🍺": "Пиво", "🍷": "Вино", "🍸": "Коктейль",
+    "🚗": "Машина", "🚕": "Такси", "🚌": "Автобус", "🚓": "Полицейская машина",
+    "🚑": "Скорая помощь", "✈️": "Самолет", "🚀": "Ракета",
+    "🛸": "Летающая тарелка", "🚁": "Вертолет", "🚢": "Корабль",
+    "⚓️": "Якорь", "🏰": "Замок", "🗽": "Статуя Свободы",
+    "🗼": "Токийская башня", "🎡": "Колесо обозрения", "🎢": "Американские горки",
+    "🏖": "Пляж", "🏝": "Остров", "🌋": "Вулкан", "🏔": "Гора со снегом",
+    "🏠": "Дом", "⛺️": "Палатка", "🏨": "Отель", "🏫": "Школа",
+    "⛪️": "Церковь", "🕌": "Мечеть", "🌅": "Рассвет", "🎆": "Фейерверк",
+    "⚽️": "Футбол", "🏀": "Баскетбол", "🏈": "Американский футбол",
+    "🎾": "Теннис", "🏐": "Волейбол", "🎱": "Бильярд", "🏓": "Настольный теннис",
+    "🏸": "Бадминтон", "🥊": "Бокс", "🎿": "Лыжи", "🏂": "Сноуборд",
+    "🏄": "Серфинг", "🏊": "Плавание", "🚴": "Велосипед", "🏆": "Кубок",
+    "🥇": "Золото", "🥈": "Серебро", "🥉": "Бронза", "🎤": "Микрофон",
+    "🎧": "Наушники", "🎹": "Пианино", "🥁": "Барабан", "🎷": "Саксофон",
+    "🎸": "Гитара", "🎻": "Скрипка", "🎲": "Игральная кость",
+    "🎯": "Дартс", "🎮": "Видеоигра", "🎰": "Игровой автомат",
+    "📱": "Телефон", "💻": "Ноутбук", "⌨️": "Клавиатура",
+    "🖥": "Компьютер", "📷": "Фотоаппарат", "📺": "Телевизор",
+    "⏰": "Будильник", "💡": "Лампочка", "🔋": "Батарейка",
+    "💰": "Мешок денег", "💎": "Бриллиант", "🔑": "Ключ",
+    "🚪": "Дверь", "🎁": "Подарок", "🎈": "Шарик",
+    "✉️": "Конверт", "📦": "Посылка", "📚": "Книги",
+    "📝": "Записка", "✏️": "Карандаш", "🔍": "Лупа",
+    "🔒": "Замок", "🔓": "Открытый замок", "❤️‍🔥": "Горящее сердце",
+    "❤️‍🩹": "Заживающее сердце", "💯": "Сто баллов", "💢": "Знак злости",
+    "♨️": "Горячие источники", "❗️": "Восклицательный знак",
+    "❓": "Вопросительный знак", "‼️": "Двойной восклицательный знак",
+    "⚠️": "Предупреждение", "♻️": "Переработка", "✅": "Галочка",
+    "❌": "Крестик", "⭕️": "Круг", "🚫": "Запрещено",
+    "🔴": "Красный круг", "🟠": "Оранжевый круг", "🟡": "Желтый круг",
+    "🟢": "Зеленый круг", "🔵": "Синий круг", "🟣": "Фиолетовый круг",
+    "⚫️": "Черный круг", "⚪️": "Белый круг",
+    "🟥": "Красный квадрат", "🟧": "Оранжевый квадрат",
+    "🟨": "Желтый квадрат", "🟩": "Зеленый квадрат",
+    "🟦": "Синий квадрат", "🟪": "Фиолетовый квадрат",
+    "🔈": "Динамик", "🔔": "Колокольчик",
+    "💬": "Облачко речи", "♠️": "Пики", "♣️": "Трефы",
+    "♥️": "Черви", "♦️": "Бубны", "🀄️": "Маджонг",
+    "🕐": "Час", "➡️": "Стрелка вправо", "⬅️": "Стрелка влево",
+    "⬆️": "Стрелка вверх", "⬇️": "Стрелка вниз"
+  };
+
+  const categoryEl = document.getElementById("eg-category") as HTMLSelectElement;
+  const countEl = document.getElementById("eg-count") as HTMLInputElement;
+  const btn = document.getElementById("eg-btn") as HTMLButtonElement;
+  const resultEl = document.getElementById("eg-result") as HTMLDivElement;
+  const copyAllBtn = document.getElementById("eg-copy-all-btn") as HTMLButtonElement;
+  const copyAllLabel = document.getElementById("eg-copy-all-label") as HTMLSpanElement;
+  const copyAllIcon = document.getElementById("eg-copy-all-icon") as HTMLSpanElement;
+  const copyAllCheck = document.getElementById("eg-copy-all-check") as HTMLSpanElement;
+  const errorEl = document.getElementById("eg-error") as HTMLParagraphElement;
+
+  const errors = createErrorDisplay(errorEl);
+
+  function shuffleArray<T>(arr: T[]): T[] {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function getEmojiName(emoji: string): string {
+    if (isRu) {
+      return EMOJI_NAMES_RU[emoji] || EMOJI_NAMES_EN[emoji] || emoji;
+    }
+    return EMOJI_NAMES_EN[emoji] || emoji;
+  }
+
+  function getPool(category: string): string[] {
+    if (category === "all") {
+      return Object.values(EMOJIS).flat();
+    }
+    return EMOJIS[category] || [];
+  }
+
+  function getRandomEmojis(count: number, category: string): string[] {
+    const pool = getPool(category);
+    const shuffled = shuffleArray(pool);
+    return shuffled.slice(0, Math.min(count, shuffled.length));
+  }
+
+  function createEmojiCard(emoji: string): HTMLButtonElement {
+    const wrapper = document.createElement("button");
+    wrapper.type = "button";
+    wrapper.className =
+      "group relative flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-zinc-600 hover:bg-zinc-800/60 transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950";
+    wrapper.setAttribute("aria-label", `${getEmojiName(emoji)} (${emoji})`);
+    wrapper.setAttribute("title", `${getEmojiName(emoji)} (${emoji})`);
+
+    const span = document.createElement("span");
+    span.textContent = emoji;
+    span.className = "text-3xl sm:text-4xl select-none";
+    span.style.transition = "transform 0.12s cubic-bezier(0.34,1.56,0.64,1)";
+
+    wrapper.appendChild(span);
+
+    wrapper.addEventListener("click", async () => {
+      await navigator.clipboard.writeText(emoji);
+      // Flash copied state
+      const originalTitle = wrapper.getAttribute("title") || "";
+      wrapper.setAttribute("title", TOOLTIP_COPIED);
+      span.style.transform = "scale(1.25)";
+      setTimeout(() => {
+        span.style.transform = "scale(1)";
+        wrapper.setAttribute("title", originalTitle);
+      }, 300);
+    });
+
+    return wrapper;
+  }
+
+  function generate() {
+    const countVal = parseInt(countEl.value, 10);
+    if (!Number.isInteger(countVal) || countVal < 1 || countVal > 50) {
+      errors.show(ERR_COUNT_RANGE);
+      return;
+    }
+    errors.clear();
+
+    const category = categoryEl.value;
+    const emojis = getRandomEmojis(countVal, category);
+
+    resultEl.innerHTML = "";
+    emojis.forEach((emoji, i) => {
+      const card = createEmojiCard(emoji);
+      resultEl.appendChild(card);
+      // Stagger pop animation
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          popElement(card.querySelector("span") as HTMLElement);
+        });
+      });
+    });
+
+    if (emojis.length > 0) {
+      copyAllBtn.classList.remove("invisible");
+      copyAllLabel.textContent = COPY_ALL_LABEL;
+      copyAllCheck.classList.add("hidden");
+      copyAllIcon.classList.remove("hidden");
+    }
+  }
+
+  async function copyAll() {
+    const emojis = Array.from(resultEl.querySelectorAll("button"))
+      .map((btn) => btn.querySelector("span")?.textContent || "")
+      .filter(Boolean)
+      .join("");
+    if (!emojis) return;
+    await navigator.clipboard.writeText(emojis);
+
+    copyAllLabel.textContent = COPIED_LABEL;
+    copyAllIcon.classList.add("hidden");
+    copyAllCheck.classList.remove("hidden");
+
+    setTimeout(() => {
+      copyAllLabel.textContent = COPY_ALL_LABEL;
+      copyAllCheck.classList.add("hidden");
+      copyAllIcon.classList.remove("hidden");
+    }, 1500);
+  }
+
+  btn.addEventListener("click", generate);
+  copyAllBtn.addEventListener("click", copyAll);
+  countEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") generate();
+  });
+  categoryEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") generate();
+  });
+
+  // Generate on load
+  generate();
+</script>

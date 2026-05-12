@@ -1,0 +1,217 @@
+---
+import { useT } from "../../i18n/translations";
+const isRu = Astro.url.pathname.startsWith("/ru");
+const T = useT(isRu ? "ru" : "en");
+
+const genderOptions = [
+  { value: "male", label: isRu ? "Мужские" : "Male" },
+  { value: "female", label: isRu ? "Женские" : "Female" },
+  { value: "any", label: isRu ? "Любые" : "Any" },
+];
+---
+
+<div id="names-generator" class="mt-8">
+  <div class="rounded-xl bg-zinc-900/50 border border-zinc-800/60 p-5">
+    <label class="block text-sm font-medium text-zinc-400 mb-2"
+      >{isRu ? "Пол" : "Gender"}</label
+    >
+    <div
+      class="inline-flex rounded-lg border border-zinc-700 overflow-hidden"
+      role="radiogroup"
+      aria-label={isRu ? "Пол" : "Gender"}
+    >
+      {
+        genderOptions.map(({ value, label }, i) => (
+          <label class="cursor-pointer">
+            <input
+              type="radio"
+              name="ng-gender"
+              value={value}
+              class="sr-only peer"
+              checked={value === "any"}
+            />
+            <span
+              class={`inline-flex items-center justify-center px-3 sm:px-4 h-9 text-sm font-medium text-zinc-400 peer-checked:text-accent peer-checked:bg-accent/10 hover:text-zinc-200 transition-colors select-none whitespace-nowrap${i < 2 ? " border-r border-zinc-700" : ""}`}
+            >
+              {label}
+            </span>
+          </label>
+        ))
+      }
+    </div>
+  </div>
+
+  <div
+    class="my-6 rounded-2xl bg-zinc-900/80 border border-zinc-800/80 p-8 h-52 overflow-hidden"
+  >
+    <div class="h-full flex flex-col items-center justify-center gap-3">
+      <button
+        id="nm-copy-btn"
+        type="button"
+        class="group relative invisible cursor-copy rounded-xl px-3 py-1 -mx-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+        aria-live="polite"
+      >
+        <span
+          id="nm-result"
+          class="text-5xl sm:text-6xl font-bold tracking-tight text-zinc-100 select-none group-hover:text-zinc-300"
+          style="transition: transform 0.12s cubic-bezier(0.34,1.56,0.64,1), opacity 0.08s ease, color 0.15s ease;"
+        ></span>
+        <span
+          id="nm-copy-icon"
+          class="absolute -right-7 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-zinc-500"
+          aria-hidden="true"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path
+              d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+            ></path></svg
+          >
+        </span>
+        <span
+          id="nm-check-icon"
+          class="absolute -right-7 top-1/2 -translate-y-1/2 hidden text-accent"
+          aria-hidden="true"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg
+          >
+        </span>
+      </button>
+
+      <span
+        id="nm-copied-label"
+        class="text-xs font-medium text-accent opacity-0 transition-opacity duration-200"
+        aria-live="polite"
+        aria-atomic="true">{T.copied}</span
+      >
+    </div>
+  </div>
+
+  <div class="flex justify-center">
+    <button
+      id="nm-btn"
+      type="button"
+      class="w-full sm:w-auto px-8 py-3 bg-accent text-white font-semibold rounded-xl hover:bg-accent-hover active:bg-accent-active focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer shadow-lg shadow-accent/25"
+    >
+      {T.generate}
+    </button>
+  </div>
+</div>
+
+<script>
+  import { CopyFeedback } from "@/lib/client/clipboard";
+  import { popElement } from "@/lib/client/animations";
+
+  const isRu = document.documentElement.lang === "ru";
+
+  const EN_MALE = [
+    "James", "John", "Robert", "Michael", "William", "David", "Richard",
+    "Joseph", "Thomas", "Charles", "Daniel", "Matthew", "Anthony", "Mark",
+    "Donald", "Steven", "Paul", "Andrew", "Joshua", "Kenneth", "Kevin",
+    "Brian", "George", "Timothy", "Ronald", "Jason", "Edward", "Jeffrey",
+    "Ryan", "Jacob", "Gary", "Nicholas", "Eric", "Jonathan", "Stephen",
+    "Larry", "Justin", "Scott", "Brandon", "Benjamin", "Samuel", "Gregory",
+    "Frank", "Alexander", "Raymond", "Patrick", "Jack", "Dennis", "Jerry",
+    "Tyler",
+  ];
+  const EN_FEMALE = [
+    "Mary", "Patricia", "Jennifer", "Linda", "Elizabeth", "Susan", "Jessica",
+    "Sarah", "Karen", "Nancy", "Lisa", "Betty", "Margaret", "Sandra",
+    "Ashley", "Kimberly", "Emily", "Donna", "Michelle", "Dorothy", "Carol",
+    "Amanda", "Melissa", "Deborah", "Stephanie", "Rebecca", "Laura",
+    "Sharon", "Cynthia", "Kathleen", "Amy", "Shirley", "Angela", "Helen",
+    "Anna", "Brenda", "Pamela", "Nicole", "Emma", "Samantha", "Katherine",
+    "Christine", "Debra", "Rachel", "Catherine", "Carolyn", "Janet", "Ruth",
+    "Maria", "Heather",
+  ];
+  const RU_MALE = [
+    "Александр", "Дмитрий", "Максим", "Сергей", "Андрей", "Алексей",
+    "Артём", "Илья", "Кирилл", "Михаил", "Никита", "Матвей", "Роман",
+    "Егор", "Арсений", "Иван", "Денис", "Евгений", "Даниил", "Тимофей",
+    "Владимир", "Павел", "Глеб", "Константин", "Богдан", "Степан",
+    "Тихон", "Ярослав", "Антон", "Николай", "Григорий", "Олег", "Леонид",
+    "Савелий", "Виктор", "Пётр", "Семён", "Василий", "Марк", "Георгий",
+    "Фёдор", "Давид", "Елисей", "Захар", "Артур", "Станислав", "Юрий",
+    "Борис", "Герман", "Платон",
+  ];
+  const RU_FEMALE = [
+    "Анна", "Мария", "Елена", "Анастасия", "Ольга", "Наталья", "Ирина",
+    "Татьяна", "Екатерина", "Алина", "Виктория", "Дарья", "Полина",
+    "Юлия", "Елизавета", "Ксения", "София", "Алиса", "Вероника",
+    "Валерия", "Александра", "Светлана", "Надежда", "Людмила", "Галина",
+    "Оксана", "Владислава", "Кристина", "Марина", "Софья", "Алёна", "Яна",
+    "Любовь", "Тамара", "Инна", "Злата", "Милана", "Варвара", "Лариса",
+    "Нина", "Эвелина", "Изабелла", "Мирослава", "Агата", "Лилия",
+    "Регина", "Альбина", "Марта", "Жанна", "Виолетта",
+  ];
+
+  function getNamesPool(gender: string): string[] {
+    if (isRu) {
+      if (gender === "male") return RU_MALE;
+      if (gender === "female") return RU_FEMALE;
+      return [...RU_MALE, ...RU_FEMALE];
+    }
+    if (gender === "male") return EN_MALE;
+    if (gender === "female") return EN_FEMALE;
+    return [...EN_MALE, ...EN_FEMALE];
+  }
+
+  function getSelectedGender(): string {
+    const radio = document.querySelector(
+      'input[name="ng-gender"]:checked',
+    ) as HTMLInputElement;
+    return radio?.value || "any";
+  }
+
+  const btn = document.getElementById("nm-btn") as HTMLButtonElement;
+  const copyBtn = document.getElementById("nm-copy-btn") as HTMLButtonElement;
+  const resultEl = document.getElementById("nm-result") as HTMLSpanElement;
+  const copyIcon = document.getElementById("nm-copy-icon") as HTMLSpanElement;
+  const checkIcon = document.getElementById(
+    "nm-check-icon",
+  ) as HTMLSpanElement;
+  const copiedLabel = document.getElementById(
+    "nm-copied-label",
+  ) as HTMLSpanElement;
+
+  const clipboard = new CopyFeedback(copyIcon, checkIcon);
+
+  function generate() {
+    const pool = getNamesPool(getSelectedGender());
+    const name = pool[Math.floor(Math.random() * pool.length)];
+    resultEl.textContent = name;
+    copyBtn.classList.remove("invisible");
+    popElement(resultEl);
+  }
+
+  async function copyResult() {
+    const value = resultEl.textContent?.trim();
+    if (!value) return;
+    await navigator.clipboard.writeText(value);
+    clipboard.showCopied();
+    copiedLabel.style.opacity = "1";
+    setTimeout(() => {
+      copiedLabel.style.opacity = "0";
+    }, 1500);
+  }
+
+  btn.addEventListener("click", generate);
+  copyBtn.addEventListener("click", copyResult);
+</script>

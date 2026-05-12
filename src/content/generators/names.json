@@ -1,0 +1,47 @@
+{
+  "slug": "names",
+  "title": "Random Name",
+  "description": "Generate a random first name by gender or any category.",
+  "icon": "user",
+  "status": "live",
+  "seoTitle": "Random Name Generator — First Names | Randify",
+  "seoDescription": "Generate random first names instantly. Pick male, female, or any names for characters, babies, games, and more.",
+  "ruTitle": "Случайное имя",
+  "ruDescription": "Сгенерируйте случайное имя по полу или из общего списка.",
+  "ruSeoTitle": "Генератор случайных имён | Randify",
+  "ruSeoDescription": "Генератор случайных имён: мужские, женские, любые. Для персонажей, игр, вдохновения и не только.",
+  "pageTitle": "Random Name Generator",
+  "ruPageTitle": "Генератор случайных имён",
+  "howTo": [
+    "Select a category: Male, Female, or Any.",
+    "Click Generate to produce a random name.",
+    "The name appears instantly on the screen.",
+    "Click the name to copy it to your clipboard."
+  ],
+  "whenTo": [
+    "Naming a character in a story, game, or RPG campaign.",
+    "Looking for baby name inspiration.",
+    "Generating placeholder names for mockups or test data."
+  ],
+  "ruHowTo": [
+    "Выберите категорию: Мужские, Женские или Любые.",
+    "Нажмите «Сгенерировать», чтобы получить случайное имя.",
+    "Имя появится на экране мгновенно.",
+    "Нажмите на имя, чтобы скопировать его в буфер обмена."
+  ],
+  "ruWhenTo": [
+    "Придумывание имени персонажа для рассказа, игры или НРИ.",
+    "Поиск вдохновения для имени ребёнка.",
+    "Генерация тестовых данных с реалистичными именами."
+  ],
+  "faq": [
+    { "q": "How many names are in the database?", "a": "Hundreds of popular first names are included, covering common choices in English and Russian." },
+    { "q": "Can I generate multiple names at once?", "a": "Currently, one name is shown per click. You can click Generate as many times as you like." },
+    { "q": "Are the names culturally specific?", "a": "The list includes widely used names. Some may be more common in certain regions, but all are familiar internationally." }
+  ],
+  "ruFaq": [
+    { "q": "Сколько имён в базе?", "a": "В базе сотни популярных имён, включая распространённые варианты на английском и русском языках." },
+    { "q": "Можно ли сгенерировать несколько имён сразу?", "a": "Сейчас показывается одно имя за раз. Вы можете нажимать «Сгенерировать» столько раз, сколько нужно." },
+    { "q": "Имена привязаны к конкретной культуре?", "a": "В списке широко распространённые имена. Некоторые чаще встречаются в определённых регионах, но все они международно узнаваемы." }
+  ]
+}

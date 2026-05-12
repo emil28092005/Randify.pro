@@ -1,0 +1,57 @@
+{
+  "slug": "meal",
+  "title": "Random Meal Idea",
+  "description": "Get a random meal or recipe idea when you don't know what to cook.",
+  "icon": "utensils",
+  "status": "live",
+  "seoTitle": "Random Meal Idea Generator — Recipe Inspiration | Randify",
+  "seoDescription": "Discover random meal and recipe ideas with cuisine, difficulty, time, ingredients, and calories. Filters for type, cuisine, difficulty & cooking time.",
+  "ruTitle": "Идея для блюда",
+  "ruDescription": "Получите идею для блюда или рецепта, когда не знаете, что приготовить.",
+  "ruSeoTitle": "Генератор идей для блюд — вдохновение для рецептов | Randify",
+  "ruSeoDescription": "Открывайте случайные идеи для блюд и рецептов с кухней, сложностью, временем, ингредиентами и калориями. Фильтры по типу, кухне, сложности и времени приготовления.",
+  "pageTitle": "Random Meal Idea Generator",
+  "ruPageTitle": "Генератор идей для блюд",
+  "howTo": [
+    "Use the filters to narrow down by meal type, cuisine, difficulty, or cooking time.",
+    "Click the Generate button to get a random meal idea matching your filters.",
+    "View the result card with description, ingredients, calories, and dietary info.",
+    "Click Copy to save the meal details to your clipboard.",
+    "Click the star icon to save meals to your favorites for later."
+  ],
+  "whenTo": [
+    "When you don't know what to cook for breakfast, lunch, or dinner.",
+    "Meal planning for the week ahead.",
+    "Looking for new recipe ideas from different cuisines.",
+    "Challenging yourself to try a new dish or cooking technique.",
+    "Planning a themed dinner party with friends or family."
+  ],
+  "ruHowTo": [
+    "Используйте фильтры, чтобы сузить выбор по типу блюда, кухне, сложности или времени приготовления.",
+    "Нажмите кнопку «Сгенерировать», чтобы получить случайную идею для блюда по вашим фильтрам.",
+    "Посмотрите карточку результата с описанием, ингредиентами, калориями и информацией о диете.",
+    "Нажмите «Копировать», чтобы сохранить детали блюда в буфер обмена.",
+    "Нажмите на иконку звезды, чтобы сохранить блюда в избранное на потом."
+  ],
+  "ruWhenTo": [
+    "Когда вы не знаете, что приготовить на завтрак, обед или ужин.",
+    "Планирование питания на неделю вперед.",
+    "Поиск новых идей рецептов из разных кухонь мира.",
+    "Бросая себе вызов попробовать новое блюдо или технику приготовления.",
+    "Организация тематического ужина с друзьями или семьей."
+  ],
+  "faq": [
+    { "q": "How many meals are in the generator?", "a": "The generator includes over 80 meals across 9 world cuisines, 5 meal types, and 3 difficulty levels. New meals are added regularly." },
+    { "q": "Can I filter by dietary restrictions?", "a": "Yes. Meals are tagged with dietary info including Vegetarian, Vegan, Gluten-Free, and Spicy. You can see these badges on each result card." },
+    { "q": "How do I save my favorite meals?", "a": "Click the star icon on any result card to save it to your favorites. Your saved meals are stored in your browser's localStorage and persist between visits." },
+    { "q": "Can I get a list of ingredients?", "a": "Yes. Each meal result shows 4–6 key ingredients as tags. Click Copy to get the full meal name, description, and ingredient list." },
+    { "q": "Are the calorie counts accurate?", "a": "Calorie estimates are approximate and based on standard serving sizes. They are intended as a general guide, not precise nutritional data." }
+  ],
+  "ruFaq": [
+    { "q": "Сколько блюд в генераторе?", "a": "Генератор включает более 80 блюд из 9 кухонь мира, 5 типов приемов пищи и 3 уровней сложности. Новые блюда добавляются регулярно." },
+    { "q": "Можно ли фильтровать по диетическим ограничениям?", "a": "Да. Блюда помечены диетической информацией, включая вегетарианские, веганские, безглютеновые и острые. Эти значки видны на каждой карточке результата." },
+    { "q": "Как сохранить избранные блюда?", "a": "Нажмите на иконку звезды на любой карточке результата, чтобы сохранить ее в избранное. Сохраненные блюда хранятся в localStorage вашего браузера и сохраняются между визитами." },
+    { "q": "Можно ли получить список ингредиентов?", "a": "Да. Каждый результат показывает 4–6 ключевых ингредиентов в виде тегов. Нажмите «Копировать», чтобы получить полное название блюда, описание и список ингредиентов." },
+    { "q": "Насколько точны данные о калориях?", "a": "Оценки калорийности приблизительны и основаны на стандартных порциях. Они предназначены для общего ориентира, а не для точных диетических расчетов." }
+  ]
+}

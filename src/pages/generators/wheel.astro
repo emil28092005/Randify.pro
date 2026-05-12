@@ -1,0 +1,11 @@
+---
+import GeneratorLayout from "@/layouts/GeneratorLayout.astro";
+import WheelSpinner from "@/components/generators/WheelSpinner.astro";
+import { generators } from "@/data/generators";
+
+const generator = generators.find((g) => g.slug === "wheel")!;
+---
+
+<GeneratorLayout generator={generator}>
+  <WheelSpinner />
+</GeneratorLayout>

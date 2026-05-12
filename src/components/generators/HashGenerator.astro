@@ -1,0 +1,592 @@
+---
+import { useT } from "../../i18n/translations";
+const isRu = Astro.url.pathname.startsWith("/ru");
+const T = useT(isRu ? "ru" : "en");
+---
+
+<div id="hash-generator" class="mt-8">
+  <!-- Input Mode Toggle -->
+  <div class="rounded-2xl bg-zinc-900/50 border border-zinc-800/60 p-5 mb-5">
+    <p class="text-sm font-medium text-zinc-400 mb-3" id="hash-input-label">
+      {isRu ? "Режим ввода" : "Input mode"}
+    </p>
+    <div
+      class="flex gap-1 bg-zinc-950 rounded-xl p-1 border border-zinc-800/60"
+      role="group"
+      aria-labelledby="hash-input-label"
+    >
+      <button
+        type="button"
+        id="hash-mode-text"
+        class="flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+        aria-pressed="true"
+      >
+        {isRu ? "Ввести текст" : "Enter text"}
+      </button>
+      <button
+        type="button"
+        id="hash-mode-random"
+        class="flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+        aria-pressed="false"
+      >
+        {isRu ? "Случайная строка" : "Generate random"}
+      </button>
+    </div>
+
+    <!-- Text Input -->
+    <div id="hash-text-section" class="mt-4">
+      <textarea
+        id="hash-text-input"
+        rows="3"
+        class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-3 text-zinc-100 text-base font-mono focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors resize-none"
+        placeholder={isRu ? "Введите текст для хеширования..." : "Type or paste text to hash..."}
+        aria-label={isRu ? "Текст для хеширования" : "Text to hash"}
+      ></textarea>
+    </div>
+
+    <!-- Random String Section -->
+    <div id="hash-random-section" class="mt-4 hidden">
+      <div class="flex items-center gap-4">
+        <div class="flex-1">
+          <label
+            for="hash-length-slider"
+            class="block text-sm text-zinc-400 mb-2"
+          >
+            <span id="hash-length-label">{isRu ? "Длина строки" : "String length"}</span>
+            <span class="text-zinc-200 font-medium ml-2" id="hash-length-value">32</span>
+          </label>
+          <input
+            type="range"
+            id="hash-length-slider"
+            min="8"
+            max="128"
+            value="32"
+            class="w-full accent-accent h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer"
+            aria-label={isRu ? "Длина случайной строки" : "Random string length"}
+          />
+        </div>
+        <button
+          type="button"
+          id="hash-refresh-random"
+          class="mt-5 p-2.5 bg-zinc-800 text-zinc-300 rounded-xl hover:bg-zinc-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+          aria-label={isRu ? "Обновить случайную строку" : "Refresh random string"}
+          title={isRu ? "Обновить" : "Refresh"}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <path d="M3 3v5h5"></path>
+            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path>
+            <path d="M16 16h5v5"></path>
+          </svg>
+        </button>
+      </div>
+      <div
+        id="hash-random-preview"
+        class="mt-3 px-4 py-2.5 bg-zinc-950 border border-zinc-800 rounded-xl font-mono text-sm text-zinc-400 break-all"
+      ></div>
+    </div>
+  </div>
+
+  <!-- Algorithm Selector -->
+  <div class="rounded-2xl bg-zinc-900/50 border border-zinc-800/60 p-5 mb-5">
+    <p class="text-sm font-medium text-zinc-400 mb-3">
+      {isRu ? "Алгоритмы хеширования" : "Hash algorithms"}
+    </p>
+    <div class="flex flex-wrap gap-3" role="group" aria-label={isRu ? "Алгоритмы хеширования" : "Hash algorithms"}>
+      <label
+        class="inline-flex items-center gap-2 px-4 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl cursor-pointer hover:border-purple-500/50 transition-colors select-none"
+      >
+        <input
+          type="checkbox"
+          value="md5"
+          checked
+          class="w-4 h-4 rounded border-zinc-600 text-purple-500 bg-zinc-900 focus:ring-purple-500 focus:ring-offset-zinc-950 accent-purple-500"
+        />
+        <span class="text-sm font-medium text-purple-400">MD5</span>
+      </label>
+      <label
+        class="inline-flex items-center gap-2 px-4 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl cursor-pointer hover:border-blue-500/50 transition-colors select-none"
+      >
+        <input
+          type="checkbox"
+          value="sha1"
+          class="w-4 h-4 rounded border-zinc-600 text-blue-500 bg-zinc-900 focus:ring-blue-500 focus:ring-offset-zinc-950 accent-blue-500"
+        />
+        <span class="text-sm font-medium text-blue-400">SHA-1</span>
+      </label>
+      <label
+        class="inline-flex items-center gap-2 px-4 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl cursor-pointer hover:border-green-500/50 transition-colors select-none"
+      >
+        <input
+          type="checkbox"
+          value="sha256"
+          checked
+          class="w-4 h-4 rounded border-zinc-600 text-green-500 bg-zinc-900 focus:ring-green-500 focus:ring-offset-zinc-950 accent-green-500"
+        />
+        <span class="text-sm font-medium text-green-400">SHA-256</span>
+      </label>
+      <label
+        class="inline-flex items-center gap-2 px-4 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl cursor-pointer hover:border-orange-500/50 transition-colors select-none"
+      >
+        <input
+          type="checkbox"
+          value="sha512"
+          class="w-4 h-4 rounded border-zinc-600 text-orange-500 bg-zinc-900 focus:ring-orange-500 focus:ring-offset-zinc-950 accent-orange-500"
+        />
+        <span class="text-sm font-medium text-orange-400">SHA-512</span>
+      </label>
+    </div>
+
+    <!-- Case Toggle + Generate -->
+    <div class="flex flex-col sm:flex-row gap-3 mt-5">
+      <button
+        type="button"
+        id="hash-case-toggle"
+        class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-zinc-800 text-zinc-300 text-sm font-medium rounded-xl hover:bg-zinc-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 cursor-pointer"
+      >
+        <span id="hash-case-label">{isRu ? "ВЕРХНИЙ РЕГИСТР" : "UPPERCASE"}</span>
+      </button>
+      <button
+        type="button"
+        id="hash-generate-btn"
+        class="flex-1 inline-flex items-center justify-center gap-2 px-8 py-3 bg-accent text-white font-semibold rounded-xl shadow-lg shadow-accent/25 hover:bg-accent-hover active:bg-accent-active focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-100 cursor-pointer"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
+          <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
+          <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+          <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+        </svg>
+        <span id="hash-generate-label">{isRu ? "Сгенерировать" : "Generate"}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Compare Section -->
+  <div class="rounded-2xl bg-zinc-900/50 border border-zinc-800/60 p-5 mb-5">
+    <label for="hash-compare-input" class="block text-sm font-medium text-zinc-400 mb-2">
+      {isRu ? "Сравнить хеш" : "Compare hash"}
+    </label>
+    <input
+      type="text"
+      id="hash-compare-input"
+      class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-3 text-zinc-100 text-sm font-mono focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+      placeholder={isRu ? "Вставьте хеш для сравнения..." : "Paste a hash to compare..."}
+      aria-label={isRu ? "Хеш для сравнения" : "Hash to compare"}
+    />
+    <p
+      id="hash-compare-hint"
+      class="mt-2 text-xs text-zinc-500"
+    >
+      {isRu
+        ? "Вставьте хеш, чтобы проверить совпадение с результатами."
+        : "Paste a hash to check if it matches any result."}
+    </p>
+  </div>
+
+  <!-- Results -->
+  <div
+    id="hash-results"
+    class="flex flex-col gap-3"
+    aria-live="polite"
+  ></div>
+</div>
+
+<script>
+  // ===================== MD5 Implementation =====================
+  function md5(str: string): string {
+    const utf8 = new TextEncoder().encode(str);
+    const msgLen = utf8.length;
+    const paddingLen = (56 - ((msgLen + 8) % 64) + 64) % 64;
+    const totalLen = msgLen + 1 + paddingLen + 8;
+    const buf = new Uint8Array(totalLen);
+    buf.set(utf8);
+    buf[msgLen] = 0x80;
+    const view = new DataView(buf.buffer);
+    view.setUint32(totalLen - 4, msgLen * 8, true);
+    view.setUint32(totalLen - 8, (msgLen >>> 29), true);
+
+    const k = new Uint32Array([
+      0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee, 0xf57c0faf, 0x4787c62a,
+      0xa8304613, 0xfd469501, 0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,
+      0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821, 0xf61e2562, 0xc040b340,
+      0x265e5a51, 0xe9b6c7aa, 0xd62f105d, 0x02441453, 0xd8a1e681, 0xe7d3fbc8,
+      0x21e1cde6, 0xc33707d6, 0xf4d50d87, 0x455a14ed, 0xa9e3e905, 0xfcefa3f8,
+      0x676f02d9, 0x8d2a4c8a, 0xfffa3942, 0x8771f681, 0x6d9d6122, 0xfde5380c,
+      0xa4beea44, 0x4bdecfa9, 0xf6bb4b60, 0xbebfbc70, 0x289b7ec6, 0xeaa127fa,
+      0xd4ef3085, 0x04881d05, 0xd9d4d039, 0xe6db99e5, 0x1fa27cf8, 0xc4ac5665,
+      0xf4292244, 0x432aff97, 0xab9423a7, 0xfc93a039, 0x655b59c3, 0x8f0ccc92,
+      0xffeff47d, 0x85845dd1, 0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,
+      0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391,
+    ]);
+    const s = [7,12,17,22,7,12,17,22,7,12,17,22,7,12,17,22,5,9,14,20,5,9,14,20,5,9,14,20,5,9,14,20,4,11,16,23,4,11,16,23,4,11,16,23,4,11,16,23,6,10,15,21,6,10,15,21,6,10,15,21,6,10,15,21];
+
+    let a = 0x67452301, b = 0xefcdab89, c = 0x98badcfe, d = 0x10325476;
+
+    for (let i = 0; i < totalLen; i += 64) {
+      const aa = a, bb = b, cc = c, dd = d;
+      const w = new Uint32Array(16);
+      for (let j = 0; j < 16; j++) {
+        w[j] = view.getUint32(i + j * 4, true);
+      }
+
+      for (let j = 0; j < 64; j++) {
+        let f: number, g: number;
+        if (j < 16) { f = (b & c) | (~b & d); g = j; }
+        else if (j < 32) { f = (d & b) | (~d & c); g = (5 * j + 1) % 16; }
+        else if (j < 48) { f = b ^ c ^ d; g = (3 * j + 5) % 16; }
+        else { f = c ^ (b | ~d); g = (7 * j) % 16; }
+
+        const temp = d;
+        d = c;
+        c = b;
+        b = b + leftRotate(a + f + k[j] + w[g], s[j]);
+        a = temp;
+      }
+      a += aa; b += bb; c += cc; d += dd;
+    }
+
+    function leftRotate(x: number, c: number) {
+      return ((x << c) | (x >>> (32 - c))) >>> 0;
+    }
+
+    function toHex(n: number) {
+      return (n >>> 0).toString(16).padStart(8, "4").slice(-8);
+    }
+
+    const hash = toHex(a) + toHex(b) + toHex(c) + toHex(d);
+    return hash;
+  }
+
+  // ===================== SHA helpers using Web Crypto =====================
+  async function sha1(str: string): Promise<string> {
+    return await sha("SHA-1", str);
+  }
+  async function sha256(str: string): Promise<string> {
+    return await sha("SHA-256", str);
+  }
+  async function sha512(str: string): Promise<string> {
+    return await sha("SHA-512", str);
+  }
+  async function sha(algo: string, str: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(str);
+    const hashBuffer = await crypto.subtle.digest(algo, data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  // ===================== Random string generator =====================
+  function generateRandomString(length: number): string {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
+    const randomValues = new Uint32Array(length);
+    crypto.getRandomValues(randomValues);
+    for (let i = 0; i < length; i++) {
+      result += chars[randomValues[i] % chars.length];
+    }
+    return result;
+  }
+
+  // ===================== DOM Elements =====================
+  const isRu = document.documentElement.lang === "ru";
+  const TEXTS = {
+    generate: isRu ? "Сгенерировать" : "Generate",
+    generated: isRu ? "Сгенерировано" : "Generated",
+    copy: isRu ? "Копировать" : "Copy",
+    copied: isRu ? "Скопировано" : "Copied",
+    match: isRu ? "Совпадение" : "Match",
+    noMatch: isRu ? "Нет совпадения" : "No match",
+    enterText: isRu ? "Ввести текст" : "Enter text",
+    generateRandom: isRu ? "Случайная строка" : "Generate random",
+    uppercase: isRu ? "ВЕРХНИЙ РЕГИСТР" : "UPPERCASE",
+    lowercase: isRu ? "нижний регистр" : "lowercase",
+    compareHint: isRu ? "Вставьте хеш, чтобы проверить совпадение с результатами." : "Paste a hash to check if it matches any result.",
+    refresh: isRu ? "Обновить" : "Refresh",
+    inputMode: isRu ? "Режим ввода" : "Input mode",
+    stringLength: isRu ? "Длина строки" : "String length",
+  };
+
+  const modeTextBtn = document.getElementById("hash-mode-text") as HTMLButtonElement;
+  const modeRandomBtn = document.getElementById("hash-mode-random") as HTMLButtonElement;
+  const textSection = document.getElementById("hash-text-section") as HTMLDivElement;
+  const randomSection = document.getElementById("hash-random-section") as HTMLDivElement;
+  const textInput = document.getElementById("hash-text-input") as HTMLTextAreaElement;
+  const lengthSlider = document.getElementById("hash-length-slider") as HTMLInputElement;
+  const lengthValue = document.getElementById("hash-length-value") as HTMLSpanElement;
+  const randomPreview = document.getElementById("hash-random-preview") as HTMLDivElement;
+  const refreshRandomBtn = document.getElementById("hash-refresh-random") as HTMLButtonElement;
+  const caseToggleBtn = document.getElementById("hash-case-toggle") as HTMLButtonElement;
+  const caseLabel = document.getElementById("hash-case-label") as HTMLSpanElement;
+  const generateBtn = document.getElementById("hash-generate-btn") as HTMLButtonElement;
+  const compareInput = document.getElementById("hash-compare-input") as HTMLInputElement;
+  const resultsContainer = document.getElementById("hash-results") as HTMLDivElement;
+
+  let currentMode: "text" | "random" = "text";
+  let currentRandomString = "";
+  let isUppercase = true;
+  let currentResults: { algo: string; hash: string }[] = [];
+
+  // ===================== Algorithm color mapping =====================
+  const ALGO_COLORS: Record<string, { label: string; text: string; border: string; bg: string; ring: string }> = {
+    md5:   { label: "text-purple-400",  text: "text-purple-300",  border: "border-purple-500/30",  bg: "bg-purple-500/10",  ring: "focus-visible:ring-purple-500" },
+    sha1:  { label: "text-blue-400",    text: "text-blue-300",    border: "border-blue-500/30",    bg: "bg-blue-500/10",    ring: "focus-visible:ring-blue-500" },
+    sha256:{ label: "text-green-400",   text: "text-green-300",   border: "border-green-500/30",   bg: "bg-green-500/10",   ring: "focus-visible:ring-green-500" },
+    sha512:{ label: "text-orange-400",  text: "text-orange-300",  border: "border-orange-500/30",  bg: "bg-orange-500/10",  ring: "focus-visible:ring-orange-500" },
+  };
+
+  // ===================== UI Helpers =====================
+  function setActiveMode(mode: "text" | "random") {
+    currentMode = mode;
+    if (mode === "text") {
+      modeTextBtn.classList.add("bg-zinc-800", "text-zinc-100");
+      modeTextBtn.classList.remove("text-zinc-400", "hover:bg-zinc-800/50");
+      modeRandomBtn.classList.remove("bg-zinc-800", "text-zinc-100");
+      modeRandomBtn.classList.add("text-zinc-400", "hover:bg-zinc-800/50");
+      textSection.classList.remove("hidden");
+      randomSection.classList.add("hidden");
+      modeTextBtn.setAttribute("aria-pressed", "true");
+      modeRandomBtn.setAttribute("aria-pressed", "false");
+    } else {
+      modeRandomBtn.classList.add("bg-zinc-800", "text-zinc-100");
+      modeRandomBtn.classList.remove("text-zinc-400", "hover:bg-zinc-800/50");
+      modeTextBtn.classList.remove("bg-zinc-800", "text-zinc-100");
+      modeTextBtn.classList.add("text-zinc-400", "hover:bg-zinc-800/50");
+      randomSection.classList.remove("hidden");
+      textSection.classList.add("hidden");
+      modeRandomBtn.setAttribute("aria-pressed", "true");
+      modeTextBtn.setAttribute("aria-pressed", "false");
+      if (!currentRandomString) refreshRandom();
+    }
+  }
+
+  function refreshRandom() {
+    const len = parseInt(lengthSlider.value, 10);
+    currentRandomString = generateRandomString(len);
+    randomPreview.textContent = currentRandomString;
+    lengthValue.textContent = String(len);
+  }
+
+  function getSelectedAlgos(): string[] {
+    return Array.from(document.querySelectorAll<HTMLInputElement>("#hash-generator input[type='checkbox']:checked")).map(
+      (cb) => cb.value,
+    );
+  }
+
+  function formatHash(hash: string): string {
+    return isUppercase ? hash.toUpperCase() : hash.toLowerCase();
+  }
+
+  function getInputText(): string {
+    if (currentMode === "text") {
+      return textInput.value;
+    }
+    return currentRandomString;
+  }
+
+  function checkCompare(hash: string): { matches: boolean; display: string } {
+    const compareVal = compareInput.value.trim().toLowerCase();
+    if (!compareVal) return { matches: false, display: "" };
+    const matches = compareVal === hash.toLowerCase();
+    return {
+      matches,
+      display: matches
+        ? `<span class="inline-flex items-center gap-1 text-green-400 text-xs font-medium"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> ${TEXTS.match}</span>`
+        : `<span class="inline-flex items-center gap-1 text-red-400 text-xs font-medium"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg> ${TEXTS.noMatch}</span>`,
+    };
+  }
+
+  async function copyToClipboard(text: string, iconEl: HTMLElement, checkEl: HTMLElement, labelEl: HTMLElement) {
+    try {
+      await navigator.clipboard.writeText(text);
+      labelEl.textContent = TEXTS.copied;
+      iconEl.classList.add("hidden");
+      checkEl.classList.remove("hidden");
+      setTimeout(() => {
+        labelEl.textContent = TEXTS.copy;
+        iconEl.classList.remove("hidden");
+        checkEl.classList.add("hidden");
+      }, 1500);
+    } catch {
+      // Fallback
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    }
+  }
+
+  // ===================== Generate Hashes =====================
+  async function generateHashes() {
+    const algos = getSelectedAlgos();
+    if (algos.length === 0) return;
+
+    const input = getInputText();
+    if (!input) {
+      resultsContainer.innerHTML = `<p class="text-sm text-red-400 text-center py-4">${isRu ? "Введите текст или сгенерируйте случайную строку." : "Please enter text or generate a random string."}</p>`;
+      return;
+    }
+
+    resultsContainer.innerHTML = "";
+    currentResults = [];
+
+    const algoPromises = algos.map(async (algo) => {
+      let hash: string;
+      switch (algo) {
+        case "md5": hash = md5(input); break;
+        case "sha1": hash = await sha1(input); break;
+        case "sha256": hash = await sha256(input); break;
+        case "sha512": hash = await sha512(input); break;
+        default: hash = "";
+      }
+      return { algo, hash };
+    });
+
+    const results = await Promise.all(algoPromises);
+    currentResults = results;
+
+    for (const { algo, hash } of results) {
+      const colors = ALGO_COLORS[algo] || ALGO_COLORS.sha256;
+      const formatted = formatHash(hash);
+      const compare = checkCompare(hash);
+
+      const card = document.createElement("div");
+      card.className = `rounded-2xl border ${colors.border} ${colors.bg} p-4 sm:p-5`;
+
+      card.innerHTML = `
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider ${colors.label}">${algo === "sha256" ? "SHA-256" : algo === "sha512" ? "SHA-512" : algo === "sha1" ? "SHA-1" : "MD5"}</span>
+            <span class="text-xs text-zinc-500">(${hash.length * 4} bit)</span>
+          </div>
+          <div class="hash-compare-badge">${compare.display}</div>
+        </div>
+        <div class="flex items-center gap-3">
+          <code class="flex-1 min-w-0 font-mono text-sm ${colors.text} break-all truncate sm:whitespace-normal sm:break-all">${formatted}</code>
+          <button
+            type="button"
+            class="hash-copy-btn inline-flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900/80 border border-zinc-700/50 rounded-lg text-xs font-medium text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors focus:outline-none focus-visible:ring-2 ${colors.ring} focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 flex-shrink-0 cursor-pointer"
+            aria-label="${TEXTS.copy} ${algo.toUpperCase()}"
+          >
+            <span class="hash-copy-label">${TEXTS.copy}</span>
+            <span class="hash-copy-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            </span>
+            <span class="hash-check-icon hidden text-accent" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+          </button>
+        </div>
+      `;
+
+      const copyBtn = card.querySelector(".hash-copy-btn") as HTMLButtonElement;
+      const copyIcon = card.querySelector(".hash-copy-icon") as HTMLSpanElement;
+      const checkIcon = card.querySelector(".hash-check-icon") as HTMLSpanElement;
+      const copyLabel = card.querySelector(".hash-copy-label") as HTMLSpanElement;
+
+      copyBtn.addEventListener("click", () => {
+        copyToClipboard(formatted, copyIcon, checkIcon, copyLabel);
+      });
+
+      resultsContainer.appendChild(card);
+    }
+  }
+
+  function updateCompareBadges() {
+    const cards = resultsContainer.querySelectorAll<HTMLDivElement>(":scope > div");
+    cards.forEach((card, i) => {
+      const result = currentResults[i];
+      if (!result) return;
+      const badge = card.querySelector(".hash-compare-badge") as HTMLDivElement;
+      if (badge) {
+        const compare = checkCompare(result.hash);
+        badge.innerHTML = compare.display;
+      }
+    });
+  }
+
+  function updateCase() {
+    const cards = resultsContainer.querySelectorAll<HTMLDivElement>(":scope > div");
+    cards.forEach((card, i) => {
+      const result = currentResults[i];
+      if (!result) return;
+      const codeEl = card.querySelector("code") as HTMLElement;
+      const formatted = formatHash(result.hash);
+      if (codeEl) codeEl.textContent = formatted;
+    });
+    // Re-attach copy listeners with new formatted text
+    cards.forEach((card, i) => {
+      const result = currentResults[i];
+      if (!result) return;
+      const copyBtn = card.querySelector(".hash-copy-btn") as HTMLButtonElement;
+      const copyIcon = card.querySelector(".hash-copy-icon") as HTMLSpanElement;
+      const checkIcon = card.querySelector(".hash-check-icon") as HTMLSpanElement;
+      const copyLabel = card.querySelector(".hash-copy-label") as HTMLSpanElement;
+      if (copyBtn) {
+        const formatted = formatHash(result.hash);
+        // Clone to remove old listeners
+        const newBtn = copyBtn.cloneNode(true) as HTMLButtonElement;
+        copyBtn.parentNode?.replaceChild(newBtn, copyBtn);
+        const newCopyIcon = newBtn.querySelector(".hash-copy-icon") as HTMLSpanElement;
+        const newCheckIcon = newBtn.querySelector(".hash-check-icon") as HTMLSpanElement;
+        const newCopyLabel = newBtn.querySelector(".hash-copy-label") as HTMLSpanElement;
+        newBtn.addEventListener("click", () => {
+          copyToClipboard(formatted, newCopyIcon, newCheckIcon, newCopyLabel);
+        });
+      }
+    });
+  }
+
+  // ===================== Event Listeners =====================
+  modeTextBtn.addEventListener("click", () => setActiveMode("text"));
+  modeRandomBtn.addEventListener("click", () => setActiveMode("random"));
+
+  lengthSlider.addEventListener("input", () => {
+    lengthValue.textContent = lengthSlider.value;
+    refreshRandom();
+  });
+
+  refreshRandomBtn.addEventListener("click", refreshRandom);
+
+  caseToggleBtn.addEventListener("click", () => {
+    isUppercase = !isUppercase;
+    caseLabel.textContent = isUppercase ? TEXTS.uppercase : TEXTS.lowercase;
+    updateCase();
+  });
+
+  generateBtn.addEventListener("click", generateHashes);
+
+  compareInput.addEventListener("input", updateCompareBadges);
+
+  // ===================== Init =====================
+  setActiveMode("text");
+
+  // Auto-generate on load: fill textarea with random 32-char string, SHA-256 pre-selected
+  (async () => {
+    currentRandomString = generateRandomString(32);
+    textInput.value = currentRandomString;
+    await generateHashes();
+  })();
+</script>

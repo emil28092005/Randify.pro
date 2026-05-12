@@ -1,0 +1,11 @@
+---
+import GeneratorLayout from '@/layouts/GeneratorLayout.astro';
+import RpsGenerator from '@/components/generators/RpsGenerator.astro';
+import { generators } from '@/data/generators';
+
+const generator = generators.find((g) => g.slug === 'rps')!;
+---
+
+<GeneratorLayout generator={generator}>
+  <RpsGenerator />
+</GeneratorLayout>

@@ -1,0 +1,49 @@
+{
+  "slug": "emoji",
+  "title": "Random Emoji",
+  "description": "Generate random emojis by category. Pick smileys, animals, food, travel, and more.",
+  "icon": "smile",
+  "status": "live",
+  "seoTitle": "Random Emoji Generator — Smileys, Animals, Food & More | Randify",
+  "seoDescription": "Generate random emojis by category or mix them all. Pick smileys, animals, food, travel, activities, objects, and symbols. Click to copy. Free and instant.",
+  "ruTitle": "Случайные эмодзи",
+  "ruDescription": "Генерируйте случайные эмодзи по категориям. Смайлики, животные, еда, путешествия и многое другое.",
+  "ruSeoTitle": "Генератор случайных эмодзи — смайлики, животные, еда и другое | Randify",
+  "ruSeoDescription": "Генерируйте случайные эмодзи по категории или смешивайте их все. Смайлики, животные, еда, путешествия, активности, предметы и символы. Нажмите, чтобы скопировать. Бесплатно и мгновенно.",
+  "pageTitle": "Random Emoji Generator",
+  "ruPageTitle": "Генератор случайных эмодзи",
+  "howTo": [
+    "Select a category from the dropdown — or choose \"All\" to mix every category together.",
+    "Set how many emojis you want to generate (1–50).",
+    "Click Generate to get your random emojis. Click any individual emoji to copy it, or use Copy All to copy the entire set."
+  ],
+  "whenTo": [
+    "Spicing up messages, bios, or social media posts with random emoji combos.",
+    "Picking a random emoji for games, quizzes, or ice-breakers.",
+    "Finding inspiration for emoji-based designs or creative projects.",
+    "Quickly copying a batch of emojis without scrolling through a picker."
+  ],
+  "ruHowTo": [
+    "Выберите категорию из выпадающего списка — или «Все», чтобы смешать все категории.",
+    "Укажите, сколько эмодзи вы хотите сгенерировать (1–50).",
+    "Нажмите «Сгенерировать», чтобы получить случайные эмодзи. Нажмите на любой эмодзи, чтобы скопировать его, или используйте «Копировать всё», чтобы скопировать весь набор."
+  ],
+  "ruWhenTo": [
+    "Разнообразие сообщений, биографий или постов в социальных сетях случайными комбинациями эмодзи.",
+    "Выбор случайного эмодзи для игр, викторин или разминок.",
+    "Поиск вдохновения для дизайнов на основе эмодзи или творческих проектов.",
+    "Быстрое копирование набора эмодзи без прокрутки через пикер."
+  ],
+  "faq": [
+    { "q": "How many emojis can I generate at once?", "a": "You can generate between 1 and 50 emojis in a single click. If you pick more than the category contains, we'll shuffle and return as many unique ones as available." },
+    { "q": "Can I mix categories together?", "a": "Yes. Select \"All\" from the category dropdown to get a random mix from every emoji category." },
+    { "q": "Are the emojis truly random?", "a": "Yes. Each generation shuffles the emoji pool and picks completely at random using the browser's built-in random number generator." },
+    { "q": "Can I copy a single emoji?", "a": "Absolutely. Click any individual emoji in the result grid to copy it instantly to your clipboard." }
+  ],
+  "ruFaq": [
+    { "q": "Сколько эмодзи можно сгенерировать за раз?", "a": "Вы можете сгенерировать от 1 до 50 эмодзи одним нажатием. Если вы выберете больше, чем содержит категория, мы перемешаем и вернём столько уникальных, сколько доступно." },
+    { "q": "Можно ли смешивать категории?", "a": "Да. Выберите «Все» в выпадающем списке категорий, чтобы получить случайную смесь из всех категорий эмодзи." },
+    { "q": "Эмодзи действительно случайные?", "a": "Да. При каждой генерации набор эмодзи перемешивается и выбирается полностью случайным образом с помощью встроенного генератора случайных чисел браузера." },
+    { "q": "Можно ли скопировать одно эмодзи?", "a": "Безусловно. Нажмите на любой эмодзи в сетке результатов, чтобы мгновенно скопировать его в буфер обмена." }
+  ]
+}

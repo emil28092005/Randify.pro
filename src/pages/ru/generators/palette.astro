@@ -1,0 +1,11 @@
+---
+import GeneratorLayout from "@/layouts/GeneratorLayout.astro";
+import PaletteGenerator from "@/components/generators/PaletteGenerator.astro";
+import { generators } from "@/data/generators";
+
+const generator = generators.find((g) => g.slug === "palette")!;
+---
+
+<GeneratorLayout generator={generator}>
+  <PaletteGenerator />
+</GeneratorLayout>

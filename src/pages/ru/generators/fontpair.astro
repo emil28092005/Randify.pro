@@ -1,0 +1,11 @@
+---
+import GeneratorLayout from "@/layouts/GeneratorLayout.astro";
+import FontPairGenerator from "@/components/generators/FontPairGenerator.astro";
+import { findGenerator } from "@/data/generators";
+
+const generator = findGenerator("fontpair");
+---
+
+<GeneratorLayout generator={generator}>
+  <FontPairGenerator />
+</GeneratorLayout>

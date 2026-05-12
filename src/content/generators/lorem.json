@@ -1,0 +1,47 @@
+{
+  "slug": "lorem",
+  "title": "Lorem Ipsum",
+  "description": "Generate random Lorem Ipsum placeholder text in paragraphs.",
+  "icon": "type",
+  "status": "live",
+  "seoTitle": "Lorem Ipsum Generator — Free Placeholder Text | Randify",
+  "seoDescription": "Generate random Lorem Ipsum placeholder text instantly. Choose paragraph count and length. Free online dummy text generator for designers and developers.",
+  "ruTitle": "Lorem Ipsum",
+  "ruDescription": "Генерируйте случайный текст-заполнитель Lorem Ipsum абзацами.",
+  "ruSeoTitle": "Генератор Lorem Ipsum — бесплатный текст-заполнитель | Randify",
+  "ruSeoDescription": "Генерируйте текст-заполнитель Lorem Ipsum мгновенно. Выбирайте количество абзацев и длину. Бесплатный генератор текста для дизайнеров и разработчиков.",
+  "pageTitle": "Lorem Ipsum Generator",
+  "ruPageTitle": "Генератор Lorem Ipsum",
+  "howTo": [
+    "Choose the number of paragraphs (1–20) and the desired length: Short, Medium, or Long.",
+    "Optionally check \"Start with Lorem ipsum...\" to begin the first paragraph with the classic opening.",
+    "Click Generate to create the text, then use the Copy button to copy it to your clipboard."
+  ],
+  "whenTo": [
+    "Filling mockups and wireframes with realistic placeholder text.",
+    "Testing typography, line height, and readability in designs.",
+    "Creating demo content for websites and applications.",
+    "Needing neutral Latin text that won't distract from layout."
+  ],
+  "ruHowTo": [
+    "Выберите количество абзацев (1–20) и желаемую длину: Короткие, Средние или Длинные.",
+    "При желании отметьте «Начать с Lorem ipsum...», чтобы первый абзац начинался классически.",
+    "Нажмите «Сгенерировать», а затем «Копировать», чтобы скопировать текст в буфер обмена."
+  ],
+  "ruWhenTo": [
+    "Заполнение макетов и каркасов реалистичным текстом-заполнителем.",
+    "Тестирование типографики, межстрочного интервала и читаемости в дизайнах.",
+    "Создание демонстрационного контента для сайтов и приложений.",
+    "Необходимость в нейтральном латинском тексте, который не отвлекает от макета."
+  ],
+  "faq": [
+    { "q": "What is Lorem Ipsum?", "a": "Lorem Ipsum is a classic placeholder text used in publishing and graphic design. It has been the industry's standard dummy text since the 1500s." },
+    { "q": "Can I choose how long each paragraph is?", "a": "Yes. You can select Short (2–4 sentences), Medium (4–6 sentences), or Long (6–10 sentences) per paragraph." },
+    { "q": "Is the generated text truly random?", "a": "Yes. Each paragraph is built from a shuffled pool of classic Latin words, so every generation produces unique text." }
+  ],
+  "ruFaq": [
+    { "q": "Что такое Lorem Ipsum?", "a": "Lorem Ipsum — это классический текст-заполнитель, используемый в издательском деле и графическом дизайне. Он является стандартным текстом-рыбой с XVI века." },
+    { "q": "Можно ли выбрать длину каждого абзаца?", "a": "Да. Вы можете выбрать Короткие (2–4 предложения), Средние (4–6 предложений) или Длинные (6–10 предложений) абзацы." },
+    { "q": "Сгенерированный текст действительно случайный?", "a": "Да. Каждый абзац собирается из перемешанного набора классических латинских слов, поэтому каждая генерация уникальна." }
+  ]
+}

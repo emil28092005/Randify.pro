@@ -5,6 +5,5 @@ dist/
 .astro/
 .kimi/
 node_modules_old/
-node_modules/
 package-lock.json
 plan.md

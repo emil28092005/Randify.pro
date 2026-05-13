@@ -1,7 +1,5 @@
 ---
-import { useT } from "../../i18n/translations";
 const isRu = Astro.url.pathname.startsWith("/ru");
-const T = useT(isRu ? "ru" : "en");
 
 const askPlaceholder = isRu
   ? "Задайте вопрос с ответом да/нет..."

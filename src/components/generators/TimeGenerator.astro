@@ -175,11 +175,10 @@ const T = useT(isRu ? "ru" : "en");
   import { createErrorDisplay } from "@/lib/client/validation";
   import { popElement } from "@/lib/client/animations";
   import { randomInt } from "@/lib/client/random";
-  import { getClientLang, getClientT } from "@/lib/client/i18n";
+import { getClientLang } from "@/lib/client/i18n";
 
-  const lang = getClientLang();
-  const isRu = lang === "ru";
-  const T = getClientT();
+const lang = getClientLang();
+const isRu = lang === "ru";
 
   const ERR_FROM_BEFORE_TO = isRu
     ? "«От» должно быть раньше «До»."

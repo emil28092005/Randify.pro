@@ -1,7 +1,5 @@
 ---
-import { useT } from "../../i18n/translations";
 const isRu = Astro.url.pathname.startsWith("/ru");
-const T = useT(isRu ? "ru" : "en");
 ---
 
 <div id="rps-generator" class="mt-8" data-ru={isRu ? "1" : "0"}>

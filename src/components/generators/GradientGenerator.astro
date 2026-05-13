@@ -114,10 +114,9 @@ const i18n = {
 
 <script>
   import { randomInt } from "@/lib/client/random";
-  import { getClientLang, getClientT } from "@/lib/client/i18n";
+import { getClientT } from "@/lib/client/i18n";
 
-  const lang = getClientLang();
-  const T = getClientT();
+const T = getClientT();
 
   const typeSelect = document.getElementById("gg-type") as HTMLSelectElement;
   const stopsSelect = document.getElementById("gg-stops") as HTMLSelectElement;

@@ -80,11 +80,10 @@ const T = useT(isRu ? "ru" : "en");
   import { CopyFeedback } from "@/lib/client/clipboard";
   import { popElement } from "@/lib/client/animations";
   import { randomInt } from "@/lib/client/random";
-  import { getClientLang, getClientT } from "@/lib/client/i18n";
+import { getClientLang } from "@/lib/client/i18n";
 
-  const lang = getClientLang();
-  const isRu = lang === "ru";
-  const T = getClientT();
+const lang = getClientLang();
+const isRu = lang === "ru";
   const ALPHABET = isRu
     ? "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
     : "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

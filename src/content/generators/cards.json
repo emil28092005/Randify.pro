@@ -4,6 +4,7 @@
   "description": "Draw a random playing card from a standard deck.",
   "icon": "square-stack",
   "status": "live",
+  "category": "gaming",
   "seoTitle": "Random Card Generator — Draw from a Deck | Randify",
   "seoDescription": "Draw random playing cards from a standard 52-card deck. Pick any number of cards, with or without replacement. Free online card picker.",
   "ruTitle": "Карта",

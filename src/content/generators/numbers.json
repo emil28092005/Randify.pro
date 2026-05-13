@@ -4,6 +4,7 @@
   "description": "Pick a random number within any range you choose.",
   "icon": "hash",
   "status": "live",
+  "category": "utility",
   "seoTitle": "Random Number Generator | Randify",
   "seoDescription": "Generate a random number between any two values instantly. Free online random number picker — perfect for giveaways, games, and decisions.",
   "ruTitle": "Число",

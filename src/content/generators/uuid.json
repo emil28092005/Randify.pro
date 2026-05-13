@@ -4,6 +4,7 @@
   "description": "Generate UUIDs, hex tokens, or random base64 strings.",
   "icon": "fingerprint",
   "status": "live",
+  "category": "security",
   "seoTitle": "UUID Generator — UUID v4, Hex & Base64 Tokens | Randify",
   "seoDescription": "Generate random UUID v4, hex tokens, or base64 strings online. Cryptographically secure, runs in your browser. Free UUID and token generator.",
   "ruTitle": "UUID / Токен",

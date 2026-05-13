@@ -4,6 +4,7 @@
   "description": "Generate a random time of day with a beautiful analog clock display.",
   "icon": "clock",
   "status": "live",
+  "category": "utility",
   "seoTitle": "Random Time Generator — with Analog Clock | Randify",
   "seoDescription": "Generate a random time of day between any hours. Choose 12h or 24h format, set intervals, and see a beautiful analog clock display. Free online tool.",
   "ruTitle": "Случайное время",

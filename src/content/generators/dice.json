@@ -4,6 +4,7 @@
   "description": "Roll one or more dice with any number of sides.",
   "icon": "dice-6",
   "status": "live",
+  "category": "gaming",
   "seoTitle": "Dice Roller — d4 d6 d20 + Full Notation | D&D Dice | Randify",
   "seoDescription": "Free online dice roller with full XdY+Z notation, keep/drop (4d6dl1), exploding dice (3d6!), reroll, advantage/disadvantage, and roll history. Perfect for D&D, Pathfinder, and Savage Worlds.",
   "ruTitle": "Кубик",

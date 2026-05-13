@@ -157,7 +157,7 @@
       "plan_name": "seo-blog-categories",
       "status": "active",
       "started_at": "2026-05-13T23:32:06.345Z",
-      "updated_at": "2026-05-13T23:36:41.704Z",
+      "updated_at": "2026-05-13T23:47:20.362Z",
       "session_ids": [
         "ses_1de6ede59ffexUwt5C0sddEWwR"
       ],
@@ -173,9 +173,22 @@
           "session_id": "ses_1dc4ed5ddffe54aNbdrrVGPkpI",
           "agent": "Sisyphus-Junior",
           "category": "quick",
-          "updated_at": "2026-05-13T23:36:41.704Z",
+          "updated_at": "2026-05-13T23:40:09.780Z",
           "started_at": "2026-05-13T23:36:41.704Z",
-          "status": "running"
+          "status": "completed",
+          "ended_at": "2026-05-13T23:40:09.780Z",
+          "elapsed_ms": 208076
+        },
+        "todo:7": {
+          "task_key": "todo:7",
+          "task_label": "7",
+          "task_title": "Update generatorSchema.ts with category field",
+          "session_id": "ses_1dc44f7c9ffeRvYIFc2EOUSbNd",
+          "agent": "Sisyphus-Junior",
+          "category": "quick",
+          "started_at": "2026-05-13T23:42:40.563Z",
+          "status": "running",
+          "updated_at": "2026-05-13T23:47:20.363Z"
         }
       }
     }
@@ -183,7 +196,7 @@
   "active_plan": "/home/emil/Desktop/Coding/AI/Randify.pro/.sisyphus/plans/seo-blog-categories.md",
   "started_at": "2026-05-13T23:32:06.345Z",
   "status": "active",
-  "updated_at": "2026-05-13T23:36:41.704Z",
+  "updated_at": "2026-05-13T23:47:20.362Z",
   "session_ids": [
     "ses_1de6ede59ffexUwt5C0sddEWwR"
   ],
@@ -199,9 +212,22 @@
       "session_id": "ses_1dc4ed5ddffe54aNbdrrVGPkpI",
       "agent": "Sisyphus-Junior",
       "category": "quick",
-      "updated_at": "2026-05-13T23:36:41.704Z",
+      "updated_at": "2026-05-13T23:40:09.780Z",
       "started_at": "2026-05-13T23:36:41.704Z",
-      "status": "running"
+      "status": "completed",
+      "ended_at": "2026-05-13T23:40:09.780Z",
+      "elapsed_ms": 208076
+    },
+    "todo:7": {
+      "task_key": "todo:7",
+      "task_label": "7",
+      "task_title": "Update generatorSchema.ts with category field",
+      "session_id": "ses_1dc44f7c9ffeRvYIFc2EOUSbNd",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "started_at": "2026-05-13T23:42:40.563Z",
+      "status": "running",
+      "updated_at": "2026-05-13T23:47:20.363Z"
     }
   },
   "agent": "atlas"

@@ -181,7 +181,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
 ## TODOs
 
-- [ ] 1. Fix duplicate JSON keys in 3 generator files
+- [x] 1. Fix duplicate JSON keys in 3 generator files
 
   **What to do**:
   - Read `src/content/generators/dice.json`, `list.json`, `colors.json`
@@ -227,7 +227,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 1)
 
-- [ ] 2. Fix `<main>` landmarks on about/privacy pages
+- [x] 2. Fix `<main>` landmarks on about/privacy pages
 
   **What to do**:
   - Update `src/pages/about.astro` and `src/pages/ru/about.astro`: wrap primary content in `<main>`
@@ -273,7 +273,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 1)
 
-- [ ] 3. Fix ad placement on homepage
+- [x] 3. Fix ad placement on homepage
 
   **What to do**:
   - In `src/pages/index.astro`, move `<YandexRTB />` from line 50 (before `<main>`) to after the `<main>` catalog content
@@ -315,7 +315,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 1)
 
-- [ ] 4. Add x-default hreflang to BaseLayout
+- [x] 4. Add x-default hreflang to BaseLayout
 
   **What to do**:
   - In `src/layouts/BaseLayout.astro`, add `<link rel="alternate" hreflang="x-default" href={enUrl} />` after the existing en/ru hreflang links
@@ -357,7 +357,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 1)
 
-- [ ] 5. Fix sitemap i18n config
+- [x] 5. Fix sitemap i18n config
 
   **What to do**:
   - Update `astro.config.mjs`: pass `i18n` option to `sitemap()` integration
@@ -400,7 +400,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 1)
 
-- [ ] 6. Add Open Graph + Twitter Card meta tags
+- [x] 6. Add Open Graph + Twitter Card meta tags
 
   **What to do**:
   - Extend `src/layouts/BaseLayout.astro` to accept optional `ogImage` and `article` props

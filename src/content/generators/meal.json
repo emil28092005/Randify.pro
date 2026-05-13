@@ -4,6 +4,7 @@
   "description": "Get a random meal or recipe idea when you don't know what to cook.",
   "icon": "utensils",
   "status": "live",
+  "category": "utility",
   "seoTitle": "Random Meal Idea Generator — Recipe Inspiration | Randify",
   "seoDescription": "Discover random meal and recipe ideas with cuisine, difficulty, time, ingredients, and calories. Filters for type, cuisine, difficulty & cooking time.",
   "ruTitle": "Идея для блюда",

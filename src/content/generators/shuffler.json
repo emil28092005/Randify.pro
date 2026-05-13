@@ -4,6 +4,7 @@
   "description": "Shuffle any list of items into a random order instantly.",
   "icon": "shuffle",
   "status": "live",
+  "category": "utility",
   "seoTitle": "Sequence Shuffler — Randomize Any List | Randify",
   "seoDescription": "Paste a list of items and shuffle them into a completely random order. Perfect for randomizing names, tasks, playlist order, or any sequence.",
   "ruTitle": "Перемешиватель",

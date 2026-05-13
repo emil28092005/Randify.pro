@@ -4,6 +4,7 @@
   "description": "Generate a random first name by gender or any category.",
   "icon": "user",
   "status": "live",
+  "category": "utility",
   "seoTitle": "Random Name Generator — First Names | Randify",
   "seoDescription": "Generate random first names instantly. Pick male, female, or any names for characters, babies, games, and more.",
   "ruTitle": "Случайное имя",

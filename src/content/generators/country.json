@@ -4,6 +4,7 @@
   "description": "Generate a random country with flag, capital, region, and population.",
   "icon": "user",
   "status": "live",
+  "category": "utility",
   "seoTitle": "Random Country Generator — Flag, Capital, Region | Randify",
   "seoDescription": "Get a random country with flag emoji, capital, region, and population. Free online country randomizer for games, quizzes, and travel inspiration.",
   "ruTitle": "Страна",

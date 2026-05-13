@@ -4,6 +4,7 @@
   "description": "Generate MD5, SHA-1, SHA-256, or SHA-512 hashes from any text or random string.",
   "icon": "hash",
   "status": "live",
+  "category": "security",
   "seoTitle": "Hash Generator — MD5, SHA-1, SHA-256, SHA-512 Online | Randify",
   "seoDescription": "Free online hash generator. Compute MD5, SHA-1, SHA-256, and SHA-512 hashes from any text or random string. Secure, browser-side processing.",
   "ruTitle": "Генератор хешей",

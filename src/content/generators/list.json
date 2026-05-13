@@ -4,6 +4,7 @@
   "description": "Paste a list of items and pick random winners.",
   "icon": "list",
   "status": "live",
+  "category": "utility",
   "seoTitle": "Random List Picker — Pick a Random Winner | Randify",
   "seoDescription": "Paste any list of names or items and pick random winners instantly. Great for giveaways, choosing who goes first, or any random selection.",
   "ruTitle": "Список",

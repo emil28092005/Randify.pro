@@ -1,0 +1,16 @@
+Organization Schema Verification
+================================
+
+Build: PASS
+File modified: src/layouts/BaseLayout.astro
+
+Organization schema found in dist/index.html:
+{"@context":"https://schema.org","@type":"Organization","name":"Randify","url":"https://randify.pro","logo":"https://randify.pro/favicon.png"}
+
+Presence verified across built pages:
+- dist/index.html
+- dist/ru/index.html
+- dist/ru/privacy/index.html
+- dist/ru/generators/yesno/index.html
+- dist/ru/generators/wheel/index.html
+(and all other 63 built pages)

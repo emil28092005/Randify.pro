@@ -4,6 +4,7 @@
   "description": "Generate a random color in HEX, RGB, or HSL format.",
   "icon": "palette",
   "status": "live",
+  "category": "creative",
   "seoTitle": "Random Color Generator — HEX, RGB, HSL | Randify",
   "seoDescription": "Get a random color in HEX, RGB or HSL format with one click. Free online color randomizer for designers and developers.",
   "ruTitle": "Цвет",

@@ -4,6 +4,7 @@
   "description": "Generate a random date between any two dates you choose.",
   "icon": "calendar",
   "status": "live",
+  "category": "utility",
   "seoTitle": "Random Date Generator — Between Two Dates | Randify",
   "seoDescription": "Generate a random date between any two dates instantly. Free online date picker for planning, games, and creative projects.",
   "ruTitle": "Случайная дата",

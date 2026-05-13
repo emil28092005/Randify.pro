@@ -4,6 +4,7 @@
   "description": "Pick a random item from a list using custom weights for each option.",
   "icon": "list",
   "status": "live",
+  "category": "decision-making",
   "seoTitle": "Weighted Random Generator — Weighted Choice Picker | Randify",
   "seoDescription": "Pick random items with custom weights. Perfect for raffles, weighted decisions, and probability experiments. Free online weighted random selector.",
   "ruTitle": "Взвешенный случайный выбор",

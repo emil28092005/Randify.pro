@@ -4,6 +4,7 @@
   "description": "Generate random emojis by category. Pick smileys, animals, food, travel, and more.",
   "icon": "smile",
   "status": "live",
+  "category": "utility",
   "seoTitle": "Random Emoji Generator — Smileys, Animals, Food & More | Randify",
   "seoDescription": "Generate random emojis by category or mix them all. Pick smileys, animals, food, travel, activities, objects, and symbols. Click to copy. Free and instant.",
   "ruTitle": "Случайные эмодзи",

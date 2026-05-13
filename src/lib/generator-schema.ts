@@ -21,6 +21,7 @@ export const generatorSchema = z
     ruWhenTo: z.array(z.string()),
     faq: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
     ruFaq: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
+    category: z.enum(["gaming", "security", "decision-making", "creative", "utility"]),
   })
   .strict();
 

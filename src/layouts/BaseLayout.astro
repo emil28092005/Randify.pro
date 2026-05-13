@@ -32,6 +32,15 @@ const webPageSchema = {
   url: canonicalUrl,
   inLanguage: lang,
 };
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const orgSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Randify",
+  url: "https://randify.pro",
+  logo: "https://randify.pro/favicon.png",
+};
 ---
 
 <!doctype html>
@@ -56,6 +65,10 @@ const webPageSchema = {
     <script
       type="application/ld+json"
       set:html={JSON.stringify(webPageSchema)}
+    />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(orgSchema)}
     />
     <meta name="theme-color" content="#534ab7" />
     <link rel="manifest" href="/manifest.json" />

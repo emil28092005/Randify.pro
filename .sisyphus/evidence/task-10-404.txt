@@ -1,0 +1,28 @@
+Task 10: Custom 404 Pages (EN + RU)
+Date: 2026-05-14
+Status: COMPLETE
+
+Files created:
+- src/pages/404.astro
+- src/pages/ru/404.astro
+
+Files modified:
+- src/i18n/translations.ts (added notFoundTitle, notFoundMessage, backToHome, blog keys)
+
+Build verification:
+- npm run build: PASS
+- Total pages: 64 (62 existing + 2x 404)
+- dist/404.html exists (Astro outputs root 404 as 404.html for static host compatibility)
+- dist/ru/404/index.html exists
+
+Content verified:
+- EN page contains "Page Not Found"
+- RU page contains "Страница не найдена"
+- Both pages include breadcrumb back to home, friendly message, and links to home + blog
+
+Key patterns used:
+- BaseLayout with title/description props
+- Locale detection via Astro.currentLocale
+- Translation keys via useT(lang)
+- Identical EN/RU template files (locale-aware links computed from lang variable)
+- JSON-LD WebPage schema injected via slot="head"

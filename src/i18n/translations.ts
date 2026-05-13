@@ -68,6 +68,12 @@ export const translations = {
       "Simple tools for raffles, games, and everything that needs randomness.",
     brandLabel: "randify",
     backToAll: "All generators",
+    backToHome: "Back to home",
+    blog: "Blog",
+
+    notFoundTitle: "Page Not Found",
+    notFoundMessage:
+      "The page you are looking for does not exist or has been moved. Try going back to the homepage or explore the blog.",
 
     aboutTitle: "About Randify",
     aboutMission:
@@ -162,6 +168,12 @@ export const translations = {
       "Простые инструменты для розыгрышей, игр и всего, что требует случайности.",
     brandLabel: "randify",
     backToAll: "Все генераторы",
+    backToHome: "Вернуться на главную",
+    blog: "Блог",
+
+    notFoundTitle: "Страница не найдена",
+    notFoundMessage:
+      "Страница, которую вы ищете, не существует или была перемещена. Попробуйте вернуться на главную страницу или загляните в блог.",
 
     aboutTitle: "О проекте",
     aboutMission:

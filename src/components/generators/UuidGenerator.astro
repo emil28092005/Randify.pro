@@ -133,10 +133,10 @@ const T = useT(isRu ? "ru" : "en");
 
 <script>
   import { CopyFeedback } from "@/lib/client/clipboard";
+  import { getClientT } from "@/lib/client/i18n";
+  import { randomInt, randomBytes } from "@/lib/client/random";
 
-  const isRu = document.documentElement.lang === "ru";
-  const COPY_ALL_LABEL = isRu ? "Копировать всё" : "Copy all";
-  const COPIED_LABEL = isRu ? "Скопировано" : "Copied";
+  const T = getClientT();
 
   const lengthWrap = document.getElementById(
     "ug-length-wrap",
@@ -173,15 +173,9 @@ const T = useT(isRu ? "ru" : "en");
 
   function uuidV4(): string {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
-      const r = crypto.getRandomValues(new Uint8Array(1))[0] & 0xf;
+      const r = randomInt(0, 15);
       return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
     });
-  }
-
-  function randomBytes(n: number): Uint8Array {
-    const buf = new Uint8Array(n);
-    crypto.getRandomValues(buf);
-    return buf;
   }
 
   function toHex(bytes: Uint8Array): string {
@@ -223,7 +217,7 @@ const T = useT(isRu ? "ru" : "en");
     });
 
     copyBtn.classList.remove("invisible");
-    copyLabel.textContent = COPY_ALL_LABEL;
+    copyLabel.textContent = T.copyAll;
   }
 
   async function copyAll() {
@@ -231,10 +225,10 @@ const T = useT(isRu ? "ru" : "en");
     await navigator.clipboard.writeText(lastTokens.join("\n"));
 
     clipboard.showCopied();
-    copyLabel.textContent = COPIED_LABEL;
+    copyLabel.textContent = T.copied;
 
     setTimeout(() => {
-      copyLabel.textContent = COPY_ALL_LABEL;
+      copyLabel.textContent = T.copyAll;
     }, 1500);
   }
 

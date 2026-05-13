@@ -635,7 +635,7 @@ Max Concurrent: 8 (Wave 3)
   - Message: `refactor(generators): migrate batch 3 to crypto random (Meal, Names, Number, Palette, Password, Rps, Shuffler)`
   - Files: `src/components/generators/{Meal,Names,Number,Palette,Password,Rps,Shuffler}Generator.astro`
 
-- [ ] 27. Refactor TeamsGenerator.astro
+- [x] 27. Refactor TeamsGenerator.astro
   **What to do**: Same pattern as Task 6.
   **Recommended Agent Profile**: `unspecified-high`
   **Parallelization**: YES (with Tasks 13-19, 20-26, 28-32)
@@ -643,7 +643,7 @@ Max Concurrent: 8 (Wave 3)
   **Acceptance Criteria**: No Math.random, uses random.ts and i18n.ts
   **Commit**: NO
 
-- [ ] 28. Refactor TimeGenerator.astro
+- [x] 28. Refactor TimeGenerator.astro
   **What to do**: Same pattern as Task 6.
   **Recommended Agent Profile**: `unspecified-high`
   **Parallelization**: YES (with Tasks 13-19, 20-26, 27, 29-32)
@@ -651,7 +651,7 @@ Max Concurrent: 8 (Wave 3)
   **Acceptance Criteria**: No Math.random, uses random.ts and i18n.ts
   **Commit**: NO
 
-- [ ] 29. Refactor UuidGenerator.astro
+- [x] 29. Refactor UuidGenerator.astro
   **What to do**: Same pattern as Task 6.
   **Recommended Agent Profile**: `unspecified-high`
   **Parallelization**: YES (with Tasks 13-19, 20-26, 27-28, 30-32)
@@ -659,7 +659,7 @@ Max Concurrent: 8 (Wave 3)
   **Acceptance Criteria**: No Math.random, uses random.ts and i18n.ts
   **Commit**: NO
 
-- [ ] 30. Refactor WeightedGenerator.astro
+- [x] 30. Refactor WeightedGenerator.astro
   **What to do**: Same pattern as Task 6.
   **Recommended Agent Profile**: `unspecified-high`
   **Parallelization**: YES (with Tasks 13-19, 20-26, 27-29, 31-32)
@@ -667,7 +667,7 @@ Max Concurrent: 8 (Wave 3)
   **Acceptance Criteria**: No Math.random, uses random.ts and i18n.ts
   **Commit**: NO
 
-- [ ] 31. Refactor WheelSpinner.astro
+- [x] 31. Refactor WheelSpinner.astro
   **What to do**: Same pattern as Task 6. Note: file is `WheelSpinner.astro`, not `WheelGenerator.astro`.
   **Recommended Agent Profile**: `unspecified-high`
   **Parallelization**: YES (with Tasks 13-19, 20-26, 27-30, 32)
@@ -675,7 +675,7 @@ Max Concurrent: 8 (Wave 3)
   **Acceptance Criteria**: No Math.random, uses random.ts and i18n.ts
   **Commit**: NO
 
-- [ ] 32. Refactor YesNoGenerator.astro
+- [x] 32. Refactor YesNoGenerator.astro
   **What to do**: Same pattern as Task 6.
   **Recommended Agent Profile**: `unspecified-high`
   **Parallelization**: YES (with Tasks 13-19, 20-26, 27-31)

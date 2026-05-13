@@ -126,13 +126,17 @@ const T = useT(isRu ? "ru" : "en");
 <script>
   import { CopyFeedback } from "@/lib/client/clipboard";
   import { createErrorDisplay } from "@/lib/client/validation";
+  import { randomFloat } from "@/lib/client/random";
+  import { getClientLang, getClientT } from "@/lib/client/i18n";
 
-  const isRu = document.documentElement.lang === "ru";
-  const COPY_LABEL = isRu ? "Копировать" : "Copy";
-  const COPIED_LABEL = isRu ? "Скопировано" : "Copied";
+  const lang = getClientLang();
+  const isRu = lang === "ru";
+  const T = getClientT();
+  const COPY_LABEL = T.copy;
+  const COPIED_LABEL = T.copied;
   const ERR_ITEM_EMPTY = isRu ? "Имя элемента не может быть пустым." : "Item name cannot be empty.";
   const ERR_WEIGHT_POSITIVE = isRu ? "Вес должен быть положительным числом." : "Weight must be a positive number.";
-  const ERR_ADD_AT_LEAST_ONE = isRu ? "Добавьте хотя бы один элемент с весом." : "Add at least one item with a weight.";
+  const ERR_ADD_AT_LEAST_ONE = T.errAddAtLeast1;
   const LABEL_WEIGHT = isRu ? "Вес" : "Weight";
   const LABEL_ITEM = isRu ? "Элемент" : "Item";
   const LABEL_REMOVE = isRu ? "Удалить" : "Remove";
@@ -252,7 +256,7 @@ const T = useT(isRu ? "ru" : "en");
 
   function weightedPick(items: { name: string; weight: number }[]): { name: string; weight: number } {
     const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
-    let random = Math.random() * totalWeight;
+    let random = randomFloat() * totalWeight;
 
     for (const item of items) {
       random -= item.weight;

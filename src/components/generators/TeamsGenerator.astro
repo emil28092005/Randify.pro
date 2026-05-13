@@ -139,21 +139,22 @@ const errMorePlayers = isRu
 <script>
   import { CopyFeedback } from "@/lib/client/clipboard";
   import { createErrorDisplay } from "@/lib/client/validation";
+  import { shuffleArray } from "@/lib/client/random";
+  import { getClientLang, getClientT } from "@/lib/client/i18n";
 
-  const isRu = document.documentElement.lang === "ru";
-  const COPY_LABEL = isRu ? "Копировать" : "Copy";
-  const COPIED_LABEL = isRu ? "Скопировано" : "Copied";
-  const TEAM_PREFIX = isRu ? "Команда" : "Team";
-  const ERR_ADD_TWO = isRu
+  const lang = getClientLang();
+  const T = getClientT();
+  const TEAM_PREFIX = lang === "ru" ? "Команда" : "Team";
+  const ERR_ADD_TWO = lang === "ru"
     ? "Добавьте хотя бы 2 участника."
     : "Add at least 2 participants.";
-  const ERR_TEAMS_MIN = isRu
+  const ERR_TEAMS_MIN = lang === "ru"
     ? "Минимум 2 команды."
     : "Minimum 2 teams.";
-  const ERR_TEAMS_MAX = isRu
+  const ERR_TEAMS_MAX = lang === "ru"
     ? "Максимум 20 команд."
     : "Maximum 20 teams.";
-  const ERR_MORE_PLAYERS = isRu
+  const ERR_MORE_PLAYERS = lang === "ru"
     ? "Участников должно быть больше, чем команд."
     : "Participants must outnumber teams.";
 
@@ -201,17 +202,8 @@ const errMorePlayers = isRu
   const errors = createErrorDisplay(errorEl);
   const clipboard = new CopyFeedback(copyIcon, checkIcon);
 
-  function shuffle<T>(arr: T[]): T[] {
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
-
   function splitIntoTeams(items: string[], teamCount: number): string[][] {
-    const shuffled = shuffle(items);
+    const shuffled = shuffleArray(items);
     const teams: string[][] = Array.from({ length: teamCount }, () => []);
     shuffled.forEach((item, i) => {
       teams[i % teamCount].push(item);
@@ -281,7 +273,7 @@ const errMorePlayers = isRu
     });
 
     copyBtn.classList.remove("invisible");
-    copyLabel.textContent = COPY_LABEL;
+    copyLabel.textContent = T.copy;
   }
 
   async function copyResults() {
@@ -295,10 +287,10 @@ const errMorePlayers = isRu
     await navigator.clipboard.writeText(text);
 
     clipboard.showCopied();
-    copyLabel.textContent = COPIED_LABEL;
+    copyLabel.textContent = T.copied;
 
     setTimeout(() => {
-      copyLabel.textContent = COPY_LABEL;
+      copyLabel.textContent = T.copy;
     }, 1500);
   }
 

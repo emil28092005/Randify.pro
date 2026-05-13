@@ -139,14 +139,14 @@ Frank</textarea
 <script>
   import { CopyFeedback } from "@/lib/client/clipboard";
   import { createErrorDisplay } from "@/lib/client/validation";
+  import { randomInt, randomFloat } from "@/lib/client/random";
+  import { getClientT } from "@/lib/client/i18n";
 
-  const isRu = document.documentElement.lang === "ru";
-  const COPY_LABEL = isRu ? "Копировать" : "Copy";
-  const COPIED_LABEL = isRu ? "Скопировано" : "Copied";
-  const ERR_MIN2 = isRu
-    ? "Добавьте хотя бы 2 элемента."
-    : "Add at least 2 items.";
-  const ERR_MAX24 = isRu ? "Максимум 24 элемента." : "Maximum 24 items.";
+  const T = getClientT();
+  const COPY_LABEL = T.copy;
+  const COPIED_LABEL = T.copied;
+  const ERR_MIN2 = T.errAddAtLeast2;
+  const ERR_MAX24 = T.errMax24;
 
   const COLORS = [
     "#534AB7",
@@ -299,19 +299,19 @@ Frank</textarea
 
     const n = items.length;
     const seg = TAU / n;
-    const winnerIdx = Math.floor(Math.random() * n);
+    const winnerIdx = randomInt(0, n - 1);
 
     const desiredPhase = (((-(winnerIdx + 0.5) * seg) % TAU) + TAU) % TAU;
     const currentPhase = ((currentRotation % TAU) + TAU) % TAU;
     let delta = (desiredPhase - currentPhase + TAU) % TAU;
     if (delta < 0.5) delta += TAU;
 
-    const jitter = (Math.random() - 0.5) * seg * 0.55;
-    const fullTurns = 5 + Math.floor(Math.random() * 3);
+    const jitter = (randomFloat() - 0.5) * seg * 0.55;
+    const fullTurns = randomInt(5, 7);
     const totalDelta = fullTurns * TAU + delta + jitter;
 
     const startRot = currentRotation;
-    const duration = 4000 + Math.random() * 2000;
+    const duration = 4000 + randomFloat() * 2000;
     const t0 = performance.now();
 
     isSpinning = true;
@@ -378,22 +378,22 @@ Frank</textarea
 
     for (let i = 0; i < 60; i++) {
       const el = document.createElement("div");
-      const w = 4 + Math.random() * 6;
-      const h = 4 + Math.random() * 6;
+      const w = 4 + randomFloat() * 6;
+      const h = 4 + randomFloat() * 6;
       el.style.cssText =
         `position:fixed;width:${w}px;height:${h}px;` +
         `background:${COLORS[i % COLORS.length]};border-radius:1px;` +
         `pointer-events:none;left:${cx}px;top:${cy}px;will-change:transform,opacity;z-index:9999;`;
       document.body.appendChild(el);
 
-      const angle = Math.random() * TAU;
-      const speed = 4 + Math.random() * 7;
+      const angle = randomFloat() * TAU;
+      const speed = 4 + randomFloat() * 7;
       particles.push({
         el,
         x: cx,
         y: cy,
         vx: Math.cos(angle) * speed,
-        vy: -(Math.abs(Math.sin(angle)) * speed + 2 + Math.random() * 4),
+        vy: -(Math.abs(Math.sin(angle)) * speed + 2 + randomFloat() * 4),
       });
     }
 

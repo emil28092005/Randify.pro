@@ -111,8 +111,11 @@ const confidenceLabel = isRu ? "Уверенность" : "Confidence";
 <script>
   import { CopyFeedback } from "@/lib/client/clipboard";
   import { popElement } from "@/lib/client/animations";
+  import { randomInt } from "@/lib/client/random";
+  import { getClientLang, getClientT } from "@/lib/client/i18n";
 
-  const isRu = document.documentElement.lang === "ru";
+  const isRu = getClientLang() === "ru";
+  const T = getClientT();
   const ANSWERS = isRu
     ? ["ДА", "НЕТ", "ВОЗМОЖНО"]
     : ["YES", "NO", "MAYBE"];
@@ -149,8 +152,8 @@ const confidenceLabel = isRu ? "Уверенность" : "Confidence";
   }
 
   function generate() {
-    const answer = ANSWERS[Math.floor(Math.random() * ANSWERS.length)];
-    const confidence = Math.floor(Math.random() * 51) + 50;
+    const answer = ANSWERS[randomInt(0, ANSWERS.length - 1)];
+    const confidence = randomInt(50, 100);
 
     resultEl.textContent = answer;
     copyBtn.classList.remove("invisible");

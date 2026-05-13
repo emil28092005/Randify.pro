@@ -174,8 +174,12 @@ const T = useT(isRu ? "ru" : "en");
   import { CopyFeedback } from "@/lib/client/clipboard";
   import { createErrorDisplay } from "@/lib/client/validation";
   import { popElement } from "@/lib/client/animations";
+  import { randomInt } from "@/lib/client/random";
+  import { getClientLang, getClientT } from "@/lib/client/i18n";
 
-  const isRu = document.documentElement.lang === "ru";
+  const lang = getClientLang();
+  const isRu = lang === "ru";
+  const T = getClientT();
 
   const ERR_FROM_BEFORE_TO = isRu
     ? "«От» должно быть раньше «До»."
@@ -369,11 +373,11 @@ const T = useT(isRu ? "ru" : "en");
     // Generate random time within range, respecting interval
     const rangeMinutes = toMins - fromMins;
     const maxSteps = Math.floor(rangeMinutes / interval);
-    const randomStep = Math.floor(Math.random() * (maxSteps + 1));
+    const randomStep = randomInt(0, maxSteps);
     const randomTotalMinutes = fromMins + randomStep * interval;
 
     const { h, m } = minutesToTime(randomTotalMinutes);
-    const s = Math.floor(Math.random() * 60);
+    const s = randomInt(0, 59);
 
     displayResult(h, m, s);
   }

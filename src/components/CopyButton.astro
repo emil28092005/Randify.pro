@@ -1,0 +1,70 @@
+---
+import { useT } from "@/i18n/translations";
+import type { Lang } from "@/i18n/translations";
+
+interface Props {
+  text: string;
+  label?: string;
+}
+
+const { text, label } = Astro.props;
+const lang = (Astro.currentLocale as Lang) || "en";
+const T = useT(lang);
+---
+
+<button
+  type="button"
+  class="copy-btn inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-colors duration-150 cursor-pointer"
+  data-text={text}
+  aria-label={label || T.copy}
+>
+  <span class="copy-btn-icon" aria-hidden="true">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+    </svg>
+  </span>
+  <span class="copy-btn-check hidden" aria-hidden="true">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M20 6 9 17l-5-5"></path>
+    </svg>
+  </span>
+  {label ? <span>{label}</span> : <span class="sr-only">{T.copy}</span>}
+</button>
+
+<script>
+  import { CopyFeedback } from "@/lib/client/clipboard";
+
+  document.querySelectorAll<HTMLElement>(".copy-btn").forEach((btn) => {
+    const icon = btn.querySelector<HTMLElement>(".copy-btn-icon")!;
+    const check = btn.querySelector<HTMLElement>(".copy-btn-check")!;
+    const feedback = new CopyFeedback(icon, check);
+
+    btn.addEventListener("click", async () => {
+      const text = btn.dataset.text || "";
+      if (!text) return;
+      await navigator.clipboard.writeText(text);
+      feedback.showCopied();
+    });
+  });
+</script>

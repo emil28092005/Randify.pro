@@ -2,6 +2,8 @@
 // Supports: XdY±Z, kh/kl/dh/dl, ! exploding, r reroll, advantage/disadvantage
 // Caps: explode chain ≤100, reroll recursion ≤1000
 
+import { randomInt } from "./client/random";
+
 type KeepDrop = { type: "kh" | "kl" | "dh" | "dl"; count: number } | null;
 
 type Explode = {
@@ -159,7 +161,7 @@ export function parseDiceNotation(raw: string): Parsed | null {
 
 /** Roll a single die with optional reroll and explode logic */
 function rollDie(sides: number, explode: Explode, reroll: Reroll): DieResult {
-  let value = Math.floor(Math.random() * sides) + 1;
+  let value = randomInt(1, sides);
   const original = value;
   let rerolledFrom: number | null = null;
   const explosions: number[] = [];
@@ -170,7 +172,7 @@ function rollDie(sides: number, explode: Explode, reroll: Reroll): DieResult {
     rerolledFrom = value;
     let rerollCount = 0;
     while (reroll.values.has(value) && rerollCount < REROLL_CAP) {
-      value = Math.floor(Math.random() * sides) + 1;
+      value = randomInt(1, sides);
       rerollCount++;
       if (reroll.once) break;
     }
@@ -181,7 +183,7 @@ function rollDie(sides: number, explode: Explode, reroll: Reroll): DieResult {
     exploded = true;
     let chain = 0;
     while (chain < EXPLODE_CAP) {
-      let next = Math.floor(Math.random() * sides) + 1;
+      let next = randomInt(1, sides);
       if (explode.penetrating) {
         next = Math.max(1, next - 1); // penetrating subtracts 1
       }
@@ -275,8 +277,8 @@ export function rollAdvantage(
   modifier: number,
   advantage: boolean,
 ): RollResult {
-  const r1 = Math.floor(Math.random() * sides) + 1;
-  const r2 = Math.floor(Math.random() * sides) + 1;
+  const r1 = randomInt(1, sides);
+  const r2 = randomInt(1, sides);
   const keptVal = advantage ? Math.max(r1, r2) : Math.min(r1, r2);
 
   return {

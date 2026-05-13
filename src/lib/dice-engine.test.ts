@@ -6,6 +6,11 @@ import {
   buildNotation,
   isAdvancedNotation,
 } from "./dice-engine";
+import { randomInt } from "./client/random";
+
+vi.mock("./client/random", () => ({
+  randomInt: vi.fn(),
+}));
 
 describe("parseDiceNotation", () => {
   it('parses basic notation "d6"', () => {
@@ -104,25 +109,23 @@ describe("parseDiceNotation", () => {
 });
 
 describe("rollDice", () => {
-  let mathRandomSpy: ReturnType<typeof vi.spyOn>;
-
   afterEach(() => {
-    mathRandomSpy?.mockRestore();
+    vi.mocked(randomInt).mockReset();
   });
 
   it("rolls basic dice", () => {
-    mathRandomSpy = vi.spyOn(Math, "random").mockReturnValue(0.5);
+    vi.mocked(randomInt).mockReturnValue(4);
     const parsed = parseDiceNotation("3d6")!;
     const result = rollDice(parsed);
 
     expect(result.dice).toHaveLength(3);
     expect(result.kept).toHaveLength(3);
     expect(result.dropped).toHaveLength(0);
-    expect(result.total).toBe(12); // each die: floor(0.5*6)+1 = 4, 3*4 = 12
+    expect(result.total).toBe(12);
   });
 
   it("applies modifier", () => {
-    mathRandomSpy = vi.spyOn(Math, "random").mockReturnValue(0.5);
+    vi.mocked(randomInt).mockReturnValue(11);
     const parsed = parseDiceNotation("1d20+5")!;
     const result = rollDice(parsed);
 
@@ -130,11 +133,10 @@ describe("rollDice", () => {
   });
 
   it("keeps highest rolls (kh)", () => {
-    mathRandomSpy = vi
-      .spyOn(Math, "random")
-      .mockReturnValueOnce(0.1) // 1
-      .mockReturnValueOnce(0.9) // 6
-      .mockReturnValueOnce(0.5); // 4
+    vi.mocked(randomInt)
+      .mockReturnValueOnce(1)
+      .mockReturnValueOnce(6)
+      .mockReturnValueOnce(4);
 
     const parsed = parseDiceNotation("3d6kh2")!;
     const result = rollDice(parsed);
@@ -146,11 +148,10 @@ describe("rollDice", () => {
   });
 
   it("drops highest rolls (dh)", () => {
-    mathRandomSpy = vi
-      .spyOn(Math, "random")
-      .mockReturnValueOnce(0.1) // 1
-      .mockReturnValueOnce(0.9) // 6
-      .mockReturnValueOnce(0.5); // 4
+    vi.mocked(randomInt)
+      .mockReturnValueOnce(1)
+      .mockReturnValueOnce(6)
+      .mockReturnValueOnce(4);
 
     const parsed = parseDiceNotation("3d6dh1")!;
     const result = rollDice(parsed);
@@ -162,11 +163,10 @@ describe("rollDice", () => {
   });
 
   it("handles exploding dice", () => {
-    mathRandomSpy = vi
-      .spyOn(Math, "random")
-      .mockReturnValueOnce(0.99) // first roll: 6 (max, triggers explode)
-      .mockReturnValueOnce(0.99) // explosion 1: 6 (triggers again)
-      .mockReturnValueOnce(0.1); // explosion 2: 1 (stops)
+    vi.mocked(randomInt)
+      .mockReturnValueOnce(6)
+      .mockReturnValueOnce(6)
+      .mockReturnValueOnce(1);
 
     const parsed = parseDiceNotation("1d6!")!;
     const result = rollDice(parsed);
@@ -177,10 +177,9 @@ describe("rollDice", () => {
   });
 
   it("handles penetrating explode", () => {
-    mathRandomSpy = vi
-      .spyOn(Math, "random")
-      .mockReturnValueOnce(0.99) // first roll: 6 (explode)
-      .mockReturnValueOnce(0.99); // explosion: 6 -> penetrating -> 5, then 5 < 6 stops
+    vi.mocked(randomInt)
+      .mockReturnValueOnce(6)
+      .mockReturnValueOnce(6);
 
     const parsed = parseDiceNotation("1d6!p")!;
     const result = rollDice(parsed);
@@ -190,10 +189,9 @@ describe("rollDice", () => {
   });
 
   it("handles reroll", () => {
-    mathRandomSpy = vi
-      .spyOn(Math, "random")
-      .mockReturnValueOnce(0.0) // first roll: 1 (reroll)
-      .mockReturnValueOnce(0.5); // reroll: 4
+    vi.mocked(randomInt)
+      .mockReturnValueOnce(1)
+      .mockReturnValueOnce(4);
 
     const parsed = parseDiceNotation("1d6r1")!;
     const result = rollDice(parsed);
@@ -203,10 +201,9 @@ describe("rollDice", () => {
   });
 
   it("handles reroll once (ro)", () => {
-    mathRandomSpy = vi
-      .spyOn(Math, "random")
-      .mockReturnValueOnce(0.0) // first: 1 (reroll once)
-      .mockReturnValueOnce(0.0); // second: 1 (stays, no more rerolls)
+    vi.mocked(randomInt)
+      .mockReturnValueOnce(1)
+      .mockReturnValueOnce(1);
 
     const parsed = parseDiceNotation("1d6ro1")!;
     const result = rollDice(parsed);
@@ -217,17 +214,14 @@ describe("rollDice", () => {
 });
 
 describe("rollAdvantage", () => {
-  let mathRandomSpy: ReturnType<typeof vi.spyOn>;
-
   afterEach(() => {
-    mathRandomSpy?.mockRestore();
+    vi.mocked(randomInt).mockReset();
   });
 
   it("returns highest for advantage", () => {
-    mathRandomSpy = vi
-      .spyOn(Math, "random")
-      .mockReturnValueOnce(0.1) // 3
-      .mockReturnValueOnce(0.9); // 19
+    vi.mocked(randomInt)
+      .mockReturnValueOnce(3)
+      .mockReturnValueOnce(19);
 
     const result = rollAdvantage(20, 0, true);
     expect(result.total).toBe(19);
@@ -235,13 +229,12 @@ describe("rollAdvantage", () => {
   });
 
   it("returns lowest for disadvantage", () => {
-    mathRandomSpy = vi
-      .spyOn(Math, "random")
-      .mockReturnValueOnce(0.9) // 19
-      .mockReturnValueOnce(0.1); // 3
+    vi.mocked(randomInt)
+      .mockReturnValueOnce(19)
+      .mockReturnValueOnce(3);
 
     const result = rollAdvantage(20, 2, false);
-    expect(result.total).toBe(5); // 3 + 2
+    expect(result.total).toBe(5);
     expect(result.advantageRolls).toEqual([19, 3]);
   });
 });

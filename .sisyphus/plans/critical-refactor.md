@@ -336,7 +336,7 @@ Max Concurrent: 8 (Wave 3)
   - Message: `feat(lib): add client i18n helper with tests`
   - Files: `src/lib/client/i18n.ts`, `src/lib/client/i18n.test.ts`
 
-- [ ] 4. Create ResultBox.astro shared component
+- [x] 4. Create ResultBox.astro shared component
 
   **What to do**:
   - Create `src/components/ResultBox.astro` with:
@@ -382,7 +382,7 @@ Max Concurrent: 8 (Wave 3)
 
   **Commit**: YES (groups with Task 5)
 
-- [ ] 5. Create CopyButton.astro shared component
+- [x] 5. Create CopyButton.astro shared component
 
   **What to do**:
   - Create `src/components/CopyButton.astro` with:
@@ -728,7 +728,7 @@ Max Concurrent: 8 (Wave 3)
   - Message: `refactor(dice): deduplicate dice engine by importing from lib`
   - Files: `src/components/generators/DiceGenerator.astro`
 
-- [ ] 34. Update dice-engine.ts to use crypto random
+- [x] 34. Update dice-engine.ts to use crypto random
 
   **What to do**:
   - Replace all `Math.random()` in `src/lib/dice-engine.ts` with `random.ts` functions
@@ -852,7 +852,7 @@ Max Concurrent: 8 (Wave 3)
   - Message: `ci(deploy): add test and lint gates, fix SSH security`
   - Files: `.github/workflows/deploy.yml`
 
-- [ ] 37. Verify CI blocks deploy on failure
+- [x] 37. Verify CI blocks deploy on failure
 
   **What to do**:
   - Verify updated `deploy.yml` workflow syntax

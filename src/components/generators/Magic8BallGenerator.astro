@@ -214,8 +214,12 @@ const copiedLabel = isRu ? "Скопировано" : "Copied";
 
 <script>
   import { CopyFeedback } from "@/lib/client/clipboard";
+  import { randomInt } from "@/lib/client/random";
+  import { getClientLang, getClientT } from "@/lib/client/i18n";
 
-  const isRu = document.documentElement.lang === "ru";
+  const lang = getClientLang();
+  const T = getClientT();
+  const isRu = lang === "ru";
 
   // ─── Answer pools ───────────────────────────────────────────────────────────
 
@@ -322,7 +326,7 @@ const copiedLabel = isRu ? "Скопировано" : "Copied";
   // ─── Helpers ────────────────────────────────────────────────────────────────
 
   function getRandomAnswer(): Answer {
-    return ANSWERS[Math.floor(Math.random() * ANSWERS.length)];
+    return ANSWERS[randomInt(0, ANSWERS.length - 1)];
   }
 
   function loadHistory(): { question: string; answer: string; type: AnswerType; time: number }[] {
@@ -430,11 +434,11 @@ const copiedLabel = isRu ? "Скопировано" : "Copied";
     if (!currentAnswer) return;
     await navigator.clipboard.writeText(currentAnswer.text);
     clipboard.showCopied();
-    copyLabel.textContent = isRu ? "Скопировано" : "Copied";
+    copyLabel.textContent = T.copied;
     copiedLabel.style.opacity = "1";
     setTimeout(() => {
       copiedLabel.style.opacity = "0";
-      copyLabel.textContent = isRu ? "Копировать" : "Copy";
+      copyLabel.textContent = T.copy;
     }, 1500);
   }
 

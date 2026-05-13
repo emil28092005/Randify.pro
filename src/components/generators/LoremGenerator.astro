@@ -138,6 +138,8 @@ const startLabel = isRu
 </div>
 
 <script>
+  import { randomInt, shuffleArray } from "@/lib/client/random";
+  import { getClientLang, getClientT } from "@/lib/client/i18n";
   const WORDS = [
     "lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit",
     "sed", "do", "eiusmod", "tempor", "incididunt", "ut", "labore", "et", "dolore",
@@ -159,26 +161,13 @@ const startLabel = isRu
   const copyIcon = document.getElementById("lg-copy-icon") as SVGElement;
   const checkIcon = document.getElementById("lg-check-icon") as SVGElement;
 
-  function randInt(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  function shuffle<T>(arr: T[]): T[] {
-    const a = arr.slice();
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
-
   function capitalize(word: string) {
     return word.charAt(0).toUpperCase() + word.slice(1);
   }
 
   function generateSentence(): string {
-    const length = randInt(8, 18);
-    const words = shuffle(WORDS).slice(0, length);
+    const length = randomInt(8, 18);
+    const words = shuffleArray(WORDS).slice(0, length);
     words[0] = capitalize(words[0]);
     const sentence = words.join(" ") + ".";
     return sentence;
@@ -218,7 +207,7 @@ const startLabel = isRu
     const paragraphs: string[] = [];
 
     for (let i = 0; i < count; i++) {
-      const sentenceCount = randInt(minSentences, maxSentences);
+      const sentenceCount = randomInt(minSentences, maxSentences);
       paragraphs.push(generateParagraph(sentenceCount, i === 0, startClassic));
     }
 
@@ -226,8 +215,8 @@ const startLabel = isRu
     resultWrap.style.opacity = "1";
   }
 
-  const isRu = document.documentElement.lang === "ru";
-  const copyLabel = copyBtn.getAttribute("aria-label") || (isRu ? "Копировать" : "Copy");
+  const T = getClientT();
+  const copyLabel = copyBtn.getAttribute("aria-label") || T.copy;
   let copyTimer: ReturnType<typeof setTimeout> | null = null;
 
   copyBtn.addEventListener("click", async () => {
@@ -236,7 +225,7 @@ const startLabel = isRu
     await navigator.clipboard.writeText(text);
     copyIcon.classList.add("hidden");
     checkIcon.classList.remove("hidden");
-    copyBtn.setAttribute("aria-label", isRu ? "Скопировано" : "Copied");
+    copyBtn.setAttribute("aria-label", T.copied);
     if (copyTimer) clearTimeout(copyTimer);
     copyTimer = setTimeout(() => {
       checkIcon.classList.add("hidden");

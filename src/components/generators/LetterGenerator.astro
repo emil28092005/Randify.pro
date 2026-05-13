@@ -79,8 +79,12 @@ const T = useT(isRu ? "ru" : "en");
 <script>
   import { CopyFeedback } from "@/lib/client/clipboard";
   import { popElement } from "@/lib/client/animations";
+  import { randomInt } from "@/lib/client/random";
+  import { getClientLang, getClientT } from "@/lib/client/i18n";
 
-  const isRu = document.documentElement.lang === "ru";
+  const lang = getClientLang();
+  const isRu = lang === "ru";
+  const T = getClientT();
   const ALPHABET = isRu
     ? "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
     : "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -97,7 +101,7 @@ const T = useT(isRu ? "ru" : "en");
   const clipboard = new CopyFeedback(copyIcon, checkIcon);
 
   function generate() {
-    const idx = Math.floor(Math.random() * ALPHABET.length);
+    const idx = randomInt(0, ALPHABET.length - 1);
     const letter = ALPHABET[idx];
     resultEl.textContent = letter;
     copyBtn.classList.remove("invisible");

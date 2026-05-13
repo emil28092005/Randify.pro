@@ -111,19 +111,17 @@ const T = useT(isRu ? "ru" : "en");
 <script>
   import { CopyFeedback } from "@/lib/client/clipboard";
   import { createErrorDisplay, isInteger } from "@/lib/client/validation";
+  import { shuffleArray } from "@/lib/client/random";
+  import { getClientLang, getClientT } from "@/lib/client/i18n";
 
-  const isRu = document.documentElement.lang === "ru";
-  const ERR_INTEGERS = isRu
-    ? "Все значения должны быть целыми числами."
-    : "All values must be whole numbers.";
-  const ERR_FROM_TO = isRu
-    ? "«От» должно быть меньше «До»."
-    : '"From" must be less than "To".';
-  const ERR_PICK_MIN = isRu
-    ? "«Выбрать» должно быть не менее 1."
-    : '"Pick" must be at least 1.';
-  const COPY_LABEL = isRu ? "Копировать" : "Copy";
-  const COPIED_LABEL = isRu ? "Скопировано" : "Copied";
+  const lang = getClientLang();
+  const T = getClientT();
+  const isRu = lang === "ru";
+  const ERR_INTEGERS = T.errAllIntegers;
+  const ERR_FROM_TO = T.errFromLessThanTo;
+  const ERR_PICK_MIN = T.errPickAtLeastOne;
+  const COPY_LABEL = T.copy;
+  const COPIED_LABEL = T.copied;
 
   const fromInput = document.getElementById("lg-from") as HTMLInputElement;
   const toInput = document.getElementById("lg-to") as HTMLInputElement;
@@ -170,11 +168,7 @@ const T = useT(isRu ? "ru" : "en");
     }
     errors.clear();
     const nums = Array.from({ length: pool }, (_, i) => min + i);
-    for (let i = 0; i < pick; i++) {
-      const j = i + Math.floor(Math.random() * (pool - i));
-      [nums[i], nums[j]] = [nums[j], nums[i]];
-    }
-    const picked = nums.slice(0, pick).sort((a, b) => a - b);
+    const picked = shuffleArray(nums).slice(0, pick).sort((a, b) => a - b);
     resultEl.innerHTML = "";
     picked.forEach((n) => {
       const ball = document.createElement("span");

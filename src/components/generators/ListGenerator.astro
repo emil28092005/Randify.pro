@@ -135,16 +135,15 @@ David"
 <script>
   import { CopyFeedback } from "@/lib/client/clipboard";
   import { createErrorDisplay } from "@/lib/client/validation";
+  import { randomInt, shuffleArray } from "@/lib/client/random";
+  import { getClientLang, getClientT } from "@/lib/client/i18n";
 
-  const isRu = document.documentElement.lang === "ru";
-  const COPY_LABEL = isRu ? "Копировать" : "Copy";
-  const COPIED_LABEL = isRu ? "Скопировано" : "Copied";
-  const ERR_ADD_ONE = isRu
-    ? "Добавьте хотя бы один элемент в список."
-    : "Add at least one item to the list.";
-  const ERR_PICK_ONE = isRu
-    ? "Выберите хотя бы 1 элемент."
-    : "Pick at least 1 item.";
+  const isRu = getClientLang() === "ru";
+  const T = getClientT();
+  const COPY_LABEL = T.copy;
+  const COPIED_LABEL = T.copied;
+  const ERR_ADD_ONE = T.errAddAtLeast1;
+  const ERR_PICK_ONE = T.errPickAtLeast1;
 
   const itemsInput = document.getElementById(
     "lst-items",
@@ -198,15 +197,10 @@ David"
     if (withReplacement) {
       lastPicked = Array.from(
         { length: count },
-        () => items[Math.floor(Math.random() * items.length)],
+        () => items[randomInt(0, items.length - 1)],
       );
     } else {
-      const pool = [...items];
-      for (let i = 0; i < count; i++) {
-        const j = i + Math.floor(Math.random() * (pool.length - i));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
-      }
-      lastPicked = pool.slice(0, count);
+      lastPicked = shuffleArray(items).slice(0, count);
     }
 
     resultEl.innerHTML = "";

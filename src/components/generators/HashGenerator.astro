@@ -213,6 +213,12 @@ const T = useT(isRu ? "ru" : "en");
 </div>
 
 <script>
+  import { randomInt } from "@/lib/client/random";
+  import { getClientLang, getClientT } from "@/lib/client/i18n";
+
+  const isRu = getClientLang() === "ru";
+  const T = getClientT();
+
   // ===================== MD5 Implementation =====================
   function md5(str: string): string {
     const utf8 = new TextEncoder().encode(str);
@@ -300,33 +306,13 @@ const T = useT(isRu ? "ru" : "en");
   function generateRandomString(length: number): string {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let result = "";
-    const randomValues = new Uint32Array(length);
-    crypto.getRandomValues(randomValues);
     for (let i = 0; i < length; i++) {
-      result += chars[randomValues[i] % chars.length];
+      result += chars[randomInt(0, chars.length - 1)];
     }
     return result;
   }
 
   // ===================== DOM Elements =====================
-  const isRu = document.documentElement.lang === "ru";
-  const TEXTS = {
-    generate: isRu ? "Сгенерировать" : "Generate",
-    generated: isRu ? "Сгенерировано" : "Generated",
-    copy: isRu ? "Копировать" : "Copy",
-    copied: isRu ? "Скопировано" : "Copied",
-    match: isRu ? "Совпадение" : "Match",
-    noMatch: isRu ? "Нет совпадения" : "No match",
-    enterText: isRu ? "Ввести текст" : "Enter text",
-    generateRandom: isRu ? "Случайная строка" : "Generate random",
-    uppercase: isRu ? "ВЕРХНИЙ РЕГИСТР" : "UPPERCASE",
-    lowercase: isRu ? "нижний регистр" : "lowercase",
-    compareHint: isRu ? "Вставьте хеш, чтобы проверить совпадение с результатами." : "Paste a hash to check if it matches any result.",
-    refresh: isRu ? "Обновить" : "Refresh",
-    inputMode: isRu ? "Режим ввода" : "Input mode",
-    stringLength: isRu ? "Длина строки" : "String length",
-  };
-
   const modeTextBtn = document.getElementById("hash-mode-text") as HTMLButtonElement;
   const modeRandomBtn = document.getElementById("hash-mode-random") as HTMLButtonElement;
   const textSection = document.getElementById("hash-text-section") as HTMLDivElement;
@@ -411,19 +397,19 @@ const T = useT(isRu ? "ru" : "en");
     return {
       matches,
       display: matches
-        ? `<span class="inline-flex items-center gap-1 text-green-400 text-xs font-medium"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> ${TEXTS.match}</span>`
-        : `<span class="inline-flex items-center gap-1 text-red-400 text-xs font-medium"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg> ${TEXTS.noMatch}</span>`,
+        ? `<span class="inline-flex items-center gap-1 text-green-400 text-xs font-medium"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> ${isRu ? "Совпадение" : "Match"}</span>`
+        : `<span class="inline-flex items-center gap-1 text-red-400 text-xs font-medium"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg> ${isRu ? "Нет совпадения" : "No match"}</span>`,
     };
   }
 
   async function copyToClipboard(text: string, iconEl: HTMLElement, checkEl: HTMLElement, labelEl: HTMLElement) {
     try {
       await navigator.clipboard.writeText(text);
-      labelEl.textContent = TEXTS.copied;
+      labelEl.textContent = T.copied;
       iconEl.classList.add("hidden");
       checkEl.classList.remove("hidden");
       setTimeout(() => {
-        labelEl.textContent = TEXTS.copy;
+        labelEl.textContent = T.copy;
         iconEl.classList.remove("hidden");
         checkEl.classList.add("hidden");
       }, 1500);
@@ -488,9 +474,9 @@ const T = useT(isRu ? "ru" : "en");
           <button
             type="button"
             class="hash-copy-btn inline-flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900/80 border border-zinc-700/50 rounded-lg text-xs font-medium text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors focus:outline-none focus-visible:ring-2 ${colors.ring} focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 flex-shrink-0 cursor-pointer"
-            aria-label="${TEXTS.copy} ${algo.toUpperCase()}"
+            aria-label="${T.copy} ${algo.toUpperCase()}"
           >
-            <span class="hash-copy-label">${TEXTS.copy}</span>
+            <span class="hash-copy-label">${T.copy}</span>
             <span class="hash-copy-icon" aria-hidden="true">
               <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
             </span>
@@ -572,7 +558,7 @@ const T = useT(isRu ? "ru" : "en");
 
   caseToggleBtn.addEventListener("click", () => {
     isUppercase = !isUppercase;
-    caseLabel.textContent = isUppercase ? TEXTS.uppercase : TEXTS.lowercase;
+    caseLabel.textContent = isUppercase ? (isRu ? "ВЕРХНИЙ РЕГИСТР" : "UPPERCASE") : (isRu ? "нижний регистр" : "lowercase");
     updateCase();
   });
 

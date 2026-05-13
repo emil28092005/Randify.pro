@@ -99,8 +99,11 @@ const i18n = {
 
 <script>
   import { createErrorDisplay } from "@/lib/client/validation";
+  import { randomInt } from "@/lib/client/random";
+  import { getClientLang, getClientT } from "@/lib/client/i18n";
 
-  const isRu = document.documentElement.lang === "ru";
+  const lang = getClientLang();
+  const T = getClientT();
 
   const harmonySelect = document.getElementById("pg-harmony") as HTMLSelectElement;
   const countSelect = document.getElementById("pg-count") as HTMLSelectElement;
@@ -114,10 +117,6 @@ const i18n = {
   // Copy icon SVGs
   const copyIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
   const checkIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><path d="M20 6 9 17l-5-5"/></svg>`;
-
-  function randomInt(max: number): number {
-    return Math.floor(Math.random() * max);
-  }
 
   function hslToHex(h: number, s: number, l: number): string {
     s /= 100;
@@ -136,18 +135,18 @@ const i18n = {
   function generateRandomColors(count: number): string[] {
     const colors: string[] = [];
     for (let i = 0; i < count; i++) {
-      const h = randomInt(360);
-      const s = 50 + randomInt(51);
-      const l = 40 + randomInt(41);
+      const h = randomInt(0, 359);
+      const s = randomInt(50, 100);
+      const l = randomInt(40, 80);
       colors.push(hslToHex(h, s, l));
     }
     return colors;
   }
 
   function generateAnalogousColors(count: number): string[] {
-    const baseH = randomInt(360);
-    const s = 55 + randomInt(41);
-    const l = 40 + randomInt(31);
+    const baseH = randomInt(0, 359);
+    const s = randomInt(55, 95);
+    const l = randomInt(40, 70);
     const colors: string[] = [];
     const step = 30;
     const start = baseH - ((count - 1) * step) / 2;
@@ -159,9 +158,9 @@ const i18n = {
   }
 
   function generateComplementaryColors(count: number): string[] {
-    const baseH = randomInt(360);
-    const s = 55 + randomInt(41);
-    const l = 40 + randomInt(31);
+    const baseH = randomInt(0, 359);
+    const s = randomInt(55, 95);
+    const l = randomInt(40, 70);
     const colors: string[] = [];
     const compH = (baseH + 180) % 360;
     if (count <= 2) {
@@ -178,9 +177,9 @@ const i18n = {
   }
 
   function generateTriadicColors(count: number): string[] {
-    const baseH = randomInt(360);
-    const s = 55 + randomInt(41);
-    const l = 40 + randomInt(31);
+    const baseH = randomInt(0, 359);
+    const s = randomInt(55, 95);
+    const l = randomInt(40, 70);
     const colors: string[] = [];
     const triad = [baseH, (baseH + 120) % 360, (baseH + 240) % 360];
     for (let i = 0; i < count; i++) {
@@ -192,8 +191,8 @@ const i18n = {
   }
 
   function generateMonochromaticColors(count: number): string[] {
-    const baseH = randomInt(360);
-    const s = 55 + randomInt(41);
+    const baseH = randomInt(0, 359);
+    const s = randomInt(55, 95);
     const colors: string[] = [];
     const startL = 25;
     const endL = 75;
@@ -205,9 +204,9 @@ const i18n = {
   }
 
   function generateSplitComplementaryColors(count: number): string[] {
-    const baseH = randomInt(360);
-    const s = 55 + randomInt(41);
-    const l = 40 + randomInt(31);
+    const baseH = randomInt(0, 359);
+    const s = randomInt(55, 95);
+    const l = randomInt(40, 70);
     const colors: string[] = [];
     const hues = [baseH, (baseH + 150) % 360, (baseH + 210) % 360];
     for (let i = 0; i < count; i++) {
@@ -219,9 +218,9 @@ const i18n = {
   }
 
   function generateTetradicColors(count: number): string[] {
-    const baseH = randomInt(360);
-    const s = 55 + randomInt(41);
-    const l = 40 + randomInt(31);
+    const baseH = randomInt(0, 359);
+    const s = randomInt(55, 95);
+    const l = randomInt(40, 70);
     const colors: string[] = [];
     const rectHues = [baseH, (baseH + 60) % 360, (baseH + 180) % 360, (baseH + 240) % 360];
     for (let i = 0; i < count; i++) {
@@ -268,7 +267,7 @@ const i18n = {
       colorBox.className =
         "group relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border border-zinc-800 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 transition-transform duration-150 hover:scale-105";
       colorBox.style.backgroundColor = hex;
-      colorBox.setAttribute("aria-label", isRu ? `Скопировать ${hex}` : `Copy ${hex}`);
+      colorBox.setAttribute("aria-label", lang === "ru" ? `Скопировать ${hex}` : `Copy ${hex}`);
       colorBox.dataset.hex = hex;
 
       // Copy overlay icon
@@ -322,7 +321,7 @@ const i18n = {
     await navigator.clipboard.writeText(text);
 
     const originalText = copyAllBtn.textContent;
-    copyAllBtn.textContent = isRu ? "Скопировано!" : "Copied!";
+    copyAllBtn.textContent = T.copied + "!";
     setTimeout(() => {
       copyAllBtn.textContent = originalText;
     }, 1500);
@@ -335,7 +334,7 @@ const i18n = {
       const colors = generatePalette(mode, count);
       renderSwatches(colors);
     } catch {
-      errorDisplay.show(isRu ? "Не удалось сгенерировать палитру." : "Failed to generate palette.");
+      errorDisplay.show(lang === "ru" ? "Не удалось сгенерировать палитру." : "Failed to generate palette.");
     }
   }
 

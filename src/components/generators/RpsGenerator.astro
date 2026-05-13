@@ -67,7 +67,10 @@ const T = useT(isRu ? "ru" : "en");
 </div>
 
 <script>
-  const isRu = document.documentElement.lang === "ru";
+  import { getClientLang } from "@/lib/client/i18n";
+  import { randomInt } from "@/lib/client/random";
+
+  const isRu = getClientLang() === "ru";
 
   const LABELS: Record<string, { name: string; emoji: string }> = isRu
     ? {
@@ -111,7 +114,7 @@ const T = useT(isRu ? "ru" : "en");
   }
 
   function play(playerMove: string) {
-    const botMove = MOVES[Math.floor(Math.random() * MOVES.length)];
+    const botMove = MOVES[randomInt(0, MOVES.length - 1)];
     const result = getWinner(playerMove, botMove);
 
     choices.forEach((btn) => {

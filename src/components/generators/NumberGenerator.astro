@@ -115,14 +115,10 @@ const T = useT(isRu ? "ru" : "en");
   import { CopyFeedback } from "@/lib/client/clipboard";
   import { createErrorDisplay, isInteger } from "@/lib/client/validation";
   import { popElement } from "@/lib/client/animations";
+  import { randomInt } from "@/lib/client/random";
+  import { getClientT } from "@/lib/client/i18n";
 
-  const isRu = document.documentElement.lang === "ru";
-  const ERR_INTEGERS = isRu
-    ? "Оба значения должны быть целыми числами."
-    : "Both values must be whole numbers.";
-  const ERR_FROM_TO = isRu
-    ? "«От» должно быть меньше «До»."
-    : '"From" must be less than "To".';
+  const T = getClientT();
 
   const fromInput = document.getElementById("ng-from") as HTMLInputElement;
   const toInput = document.getElementById("ng-to") as HTMLInputElement;
@@ -141,17 +137,17 @@ const T = useT(isRu ? "ru" : "en");
 
   function generate() {
     if (!isInteger(fromInput.value) || !isInteger(toInput.value)) {
-      errors.show(ERR_INTEGERS);
+      errors.show(T.errBothIntegers);
       return;
     }
     const min = parseInt(fromInput.value, 10);
     const max = parseInt(toInput.value, 10);
     if (min >= max) {
-      errors.show(ERR_FROM_TO);
+      errors.show(T.errFromLessThanTo);
       return;
     }
     errors.clear();
-    const result = Math.floor(Math.random() * (max - min + 1)) + min;
+    const result = randomInt(min, max);
     resultEl.textContent = String(result);
     copyBtn.classList.remove("invisible");
     popElement(resultEl);

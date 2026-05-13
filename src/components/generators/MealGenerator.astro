@@ -77,38 +77,7 @@ const timeFilters = isRu
       { value: "slow", label: "Slow cook" },
     ];
 
-const cuisineLabelMap: Record<string, { en: string; ru: string }> = {
-  italian: { en: "Italian", ru: "Итальянская" },
-  asian: { en: "Asian", ru: "Азиатская" },
-  mexican: { en: "Mexican", ru: "Мексиканская" },
-  american: { en: "American", ru: "Американская" },
-  mediterranean: { en: "Mediterranean", ru: "Средиземноморская" },
-  french: { en: "French", ru: "Французская" },
-  indian: { en: "Indian", ru: "Индийская" },
-  russian: { en: "Russian", ru: "Русская" },
-  "middle-eastern": { en: "Middle Eastern", ru: "Ближневосточная" },
-};
 
-const mealTypeLabelMap: Record<string, { en: string; ru: string }> = {
-  breakfast: { en: "Breakfast", ru: "Завтрак" },
-  lunch: { en: "Lunch", ru: "Обед" },
-  dinner: { en: "Dinner", ru: "Ужин" },
-  snack: { en: "Snack", ru: "Перекус" },
-  dessert: { en: "Dessert", ru: "Десерт" },
-};
-
-const difficultyLabelMap: Record<string, { en: string; ru: string; color: string }> = {
-  easy: { en: "Easy", ru: "Легко", color: "bg-emerald-500/15 text-emerald-400 border-emerald-500/25" },
-  medium: { en: "Medium", ru: "Средне", color: "bg-amber-500/15 text-amber-400 border-amber-500/25" },
-  hard: { en: "Hard", ru: "Сложно", color: "bg-red-500/15 text-red-400 border-red-500/25" },
-};
-
-const dietaryLabelMap: Record<string, { en: string; ru: string; emoji: string }> = {
-  vegetarian: { en: "Vegetarian", ru: "Вегетарианское", emoji: "🌿" },
-  vegan: { en: "Vegan", ru: "Веганское", emoji: "🌱" },
-  "gluten-free": { en: "Gluten-Free", ru: "Без глютена", emoji: "🌾" },
-  spicy: { en: "Spicy", ru: "Острое", emoji: "🌶" },
-};
 ---
 
 <div id="meal-generator" class="mt-8">
@@ -273,9 +242,44 @@ const dietaryLabelMap: Record<string, { en: string; ru: string; emoji: string }>
   </div>
 </div>
 
-<script define:vars={{ cuisineLabelMap, mealTypeLabelMap, difficultyLabelMap, dietaryLabelMap }}>
-  (function() {
-    // Meals data
+<script>
+  import { randomInt } from "@/lib/client/random";
+  import { getClientLang, getClientT } from "@/lib/client/i18n";
+
+  const cuisineLabelMap = {
+    italian: { en: "Italian", ru: "Итальянская" },
+    asian: { en: "Asian", ru: "Азиатская" },
+    mexican: { en: "Mexican", ru: "Мексиканская" },
+    american: { en: "American", ru: "Американская" },
+    mediterranean: { en: "Mediterranean", ru: "Средиземноморская" },
+    french: { en: "French", ru: "Французская" },
+    indian: { en: "Indian", ru: "Индийская" },
+    russian: { en: "Russian", ru: "Русская" },
+    "middle-eastern": { en: "Middle Eastern", ru: "Ближневосточная" },
+  };
+
+  const mealTypeLabelMap = {
+    breakfast: { en: "Breakfast", ru: "Завтрак" },
+    lunch: { en: "Lunch", ru: "Обед" },
+    dinner: { en: "Dinner", ru: "Ужин" },
+    snack: { en: "Snack", ru: "Перекус" },
+    dessert: { en: "Dessert", ru: "Десерт" },
+  };
+
+  const difficultyLabelMap = {
+    easy: { en: "Easy", ru: "Легко", color: "bg-emerald-500/15 text-emerald-400 border-emerald-500/25" },
+    medium: { en: "Medium", ru: "Средне", color: "bg-amber-500/15 text-amber-400 border-amber-500/25" },
+    hard: { en: "Hard", ru: "Сложно", color: "bg-red-500/15 text-red-400 border-red-500/25" },
+  };
+
+  const dietaryLabelMap = {
+    vegetarian: { en: "Vegetarian", ru: "Вегетарианское", emoji: "🌿" },
+    vegan: { en: "Vegan", ru: "Веганское", emoji: "🌱" },
+    "gluten-free": { en: "Gluten-Free", ru: "Без глютена", emoji: "🌾" },
+    spicy: { en: "Spicy", ru: "Острое", emoji: "🌶" },
+  };
+
+  // Meals data
     const meals = [
       { en: "Shakshuka", ru: "Шакшука", cuisine: "middle-eastern", type: "breakfast", difficulty: "easy", time: 25, desc: "Eggs poached in a simmering tomato sauce with spices.", ruDesc: "Яйца, приготовленные в томатном соусе со специями.", ingredients: ["eggs", "tomatoes", "bell pepper", "onion", "cumin", "paprika"], calories: 320, dietary: ["vegetarian", "gluten-free"] },
       { en: "Spaghetti Carbonara", ru: "Спагетти Карбонара", cuisine: "italian", type: "dinner", difficulty: "medium", time: 20, desc: "Classic Roman pasta with eggs, pecorino, guanciale and black pepper.", ruDesc: "Классическая римская паста с яйцами, пекорино, гуанчиале и черным перцем.", ingredients: ["spaghetti", "eggs", "pecorino", "guanciale", "black pepper"], calories: 650, dietary: [] },
@@ -400,7 +404,9 @@ const dietaryLabelMap: Record<string, { en: string; ru: string; emoji: string }>
       }
     }
 
-    const isRu = document.documentElement.lang === "ru";
+    const lang = getClientLang();
+    const isRu = lang === "ru";
+    const T = getClientT();
 
     // DOM refs
     const typeSelect = document.getElementById("mg-type");
@@ -529,7 +535,7 @@ const dietaryLabelMap: Record<string, { en: string; ru: string; emoji: string }>
         return;
       }
 
-      const meal = list[Math.floor(Math.random() * list.length)];
+      const meal = list[randomInt(0, list.length - 1)];
       currentMeal = meal;
 
       // Name
@@ -602,13 +608,13 @@ const dietaryLabelMap: Record<string, { en: string; ru: string; emoji: string }>
 
       copyIcon.classList.add("hidden");
       checkIcon.classList.remove("hidden");
-      copyText.textContent = isRu ? "Скопировано" : "Copied";
+      copyText.textContent = T.copied;
 
       if (copyTimer) clearTimeout(copyTimer);
       copyTimer = setTimeout(() => {
         checkIcon.classList.add("hidden");
         copyIcon.classList.remove("hidden");
-        copyText.textContent = isRu ? "Копировать" : "Copy";
+        copyText.textContent = T.copy;
       }, 1500);
     });
 
@@ -674,5 +680,4 @@ const dietaryLabelMap: Record<string, { en: string; ru: string; emoji: string }>
     // Init
     updateSavedCount();
     generate();
-  })();
 </script>

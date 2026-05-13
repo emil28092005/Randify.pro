@@ -112,13 +112,10 @@ const T = useT(isRu ? "ru" : "en");
 <script>
   import { CopyFeedback } from "@/lib/client/clipboard";
   import { createErrorDisplay } from "@/lib/client/validation";
+  import { shuffleArray } from "@/lib/client/random";
+  import { getClientT } from "@/lib/client/i18n";
 
-  const isRu = document.documentElement.lang === "ru";
-  const COPY_LABEL = isRu ? "Копировать" : "Copy";
-  const COPIED_LABEL = isRu ? "Скопировано" : "Copied";
-  const ERR_MIN_TWO = isRu
-    ? "Добавьте хотя бы 2 элемента."
-    : "Add at least 2 items.";
+  const T = getClientT();
 
   const itemsInput = document.getElementById(
     "shf-items",
@@ -143,15 +140,6 @@ const T = useT(isRu ? "ru" : "en");
   const errors = createErrorDisplay(errorEl);
   const clipboard = new CopyFeedback(copyIcon, checkIcon);
 
-  function fisherYatesShuffle<T>(array: T[]): T[] {
-    const arr = [...array];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }
-
   function shuffle() {
     const items = itemsInput.value
       .split("\n")
@@ -159,12 +147,12 @@ const T = useT(isRu ? "ru" : "en");
       .filter(Boolean);
 
     if (items.length < 2) {
-      errors.show(ERR_MIN_TWO);
+      errors.show(T.errAddAtLeast2);
       return;
     }
 
     errors.clear();
-    lastShuffled = fisherYatesShuffle(items);
+    lastShuffled = shuffleArray(items);
 
     resultEl.innerHTML = "";
     lastShuffled.forEach((item, index) => {
@@ -188,7 +176,7 @@ const T = useT(isRu ? "ru" : "en");
     });
 
     resultArea.classList.remove("hidden");
-    copyLabel.textContent = COPY_LABEL;
+    copyLabel.textContent = T.copy;
     clipboard.revert();
   }
 
@@ -197,10 +185,10 @@ const T = useT(isRu ? "ru" : "en");
     await navigator.clipboard.writeText(lastShuffled.join("\n"));
 
     clipboard.showCopied();
-    copyLabel.textContent = COPIED_LABEL;
+    copyLabel.textContent = T.copied;
 
     setTimeout(() => {
-      copyLabel.textContent = COPY_LABEL;
+      copyLabel.textContent = T.copy;
     }, 1500);
   }
 

@@ -118,8 +118,10 @@ const genderOptions = [
 <script>
   import { CopyFeedback } from "@/lib/client/clipboard";
   import { popElement } from "@/lib/client/animations";
+  import { randomInt } from "@/lib/client/random";
+  import { getClientLang, getClientT } from "@/lib/client/i18n";
 
-  const isRu = document.documentElement.lang === "ru";
+  const isRu = getClientLang() === "ru";
 
   const EN_MALE = [
     "James", "John", "Robert", "Michael", "William", "David", "Richard",
@@ -195,7 +197,7 @@ const genderOptions = [
 
   function generate() {
     const pool = getNamesPool(getSelectedGender());
-    const name = pool[Math.floor(Math.random() * pool.length)];
+    const name = pool[randomInt(0, pool.length - 1)];
     resultEl.textContent = name;
     copyBtn.classList.remove("invisible");
     popElement(resultEl);

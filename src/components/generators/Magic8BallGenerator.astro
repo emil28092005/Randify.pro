@@ -341,12 +341,6 @@ const copiedLabel = isRu ? "Скопировано" : "Copied";
     sessionStorage.setItem(HISTORY_KEY, JSON.stringify(h.slice(0, 5)));
   }
 
-  function getTypeLabel(type: AnswerType): string {
-    if (type === "positive") return isRu ? "Положительный" : "Positive";
-    if (type === "neutral") return isRu ? "Нейтральный" : "Neutral";
-    return isRu ? "Отрицательный" : "Negative";
-  }
-
   function getTypeDotClass(type: AnswerType): string {
     if (type === "positive") return "bg-blue-500";
     if (type === "neutral") return "bg-yellow-500";

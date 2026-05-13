@@ -14,7 +14,7 @@ const travelLabel = isRu ? "Путешествия" : "Travel";
 const activitiesLabel = isRu ? "Активности" : "Activities";
 const objectsLabel = isRu ? "Предметы" : "Objects";
 const symbolsLabel = isRu ? "Символы" : "Symbols";
-const clickToCopyLabel = isRu ? "Нажмите, чтобы скопировать" : "Click to copy";
+
 ---
 
 <div id="emoji-generator" class="mt-8">
@@ -137,7 +137,6 @@ const clickToCopyLabel = isRu ? "Нажмите, чтобы скопироват
 
 <script>
   import { createErrorDisplay } from "@/lib/client/validation";
-  import { CopyFeedback } from "@/lib/client/clipboard";
   import { popElement } from "@/lib/client/animations";
   import { shuffleArray } from "@/lib/client/random";
   import { getClientLang, getClientT } from "@/lib/client/i18n";
@@ -617,7 +616,7 @@ const clickToCopyLabel = isRu ? "Нажмите, чтобы скопироват
     const emojis = getRandomEmojis(countVal, category);
 
     resultEl.innerHTML = "";
-    emojis.forEach((emoji, i) => {
+    emojis.forEach((emoji) => {
       const card = createEmojiCard(emoji);
       resultEl.appendChild(card);
       // Stagger pop animation

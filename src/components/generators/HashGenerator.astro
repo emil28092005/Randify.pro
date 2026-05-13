@@ -525,9 +525,6 @@ const isRu = Astro.url.pathname.startsWith("/ru");
       const result = currentResults[i];
       if (!result) return;
       const copyBtn = card.querySelector(".hash-copy-btn") as HTMLButtonElement;
-      const copyIcon = card.querySelector(".hash-copy-icon") as HTMLSpanElement;
-      const checkIcon = card.querySelector(".hash-check-icon") as HTMLSpanElement;
-      const copyLabel = card.querySelector(".hash-copy-label") as HTMLSpanElement;
       if (copyBtn) {
         const formatted = formatHash(result.hash);
         // Clone to remove old listeners

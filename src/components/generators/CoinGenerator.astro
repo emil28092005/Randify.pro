@@ -100,16 +100,18 @@ const T = useT(isRu ? "ru" : "en");
 
 <script>
   import { CopyFeedback } from "@/lib/client/clipboard";
+  import { randomFloat } from "@/lib/client/random";
+  import { getClientT } from "@/lib/client/i18n";
 
-  const isRu = document.documentElement.lang === "ru";
-  const COPY_LABEL = isRu ? "Копировать" : "Copy";
-  const COPIED_LABEL = isRu ? "Скопировано" : "Copied";
-  const HEADS_LABEL = isRu ? "О" : "H";
-  const TAILS_LABEL = isRu ? "Р" : "T";
-  const HEADS_WORD = isRu ? "орёл" : "Heads";
-  const TAILS_WORD = isRu ? "решка" : "Tails";
-  const HEADS_SUMMARY = isRu ? "орёл" : "heads";
-  const TAILS_SUMMARY = isRu ? "решка" : "tails";
+  const T = getClientT();
+  const COPY_LABEL = T.copy;
+  const COPIED_LABEL = T.copied;
+  const HEADS_LABEL = T.headsLabel;
+  const TAILS_LABEL = T.tailsLabel;
+  const HEADS_WORD = T.headsWord;
+  const TAILS_WORD = T.tailsWord;
+  const HEADS_SUMMARY = T.headsWord;
+  const TAILS_SUMMARY = T.tailsWord;
 
   const countInput = document.getElementById("coin-count") as HTMLInputElement;
   const countVal = document.getElementById("coin-count-val") as HTMLSpanElement;
@@ -135,7 +137,7 @@ const T = useT(isRu ? "ru" : "en");
 
   function flip() {
     const count = parseInt(countInput.value, 10);
-    lastResults = Array.from({ length: count }, () => Math.random() < 0.5);
+    lastResults = Array.from({ length: count }, () => randomFloat() < 0.5);
 
     const heads = lastResults.filter(Boolean).length;
     const tails = count - heads;

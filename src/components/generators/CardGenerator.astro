@@ -116,19 +116,15 @@ const T = useT(isRu ? "ru" : "en");
 <script>
   import { CopyFeedback } from "@/lib/client/clipboard";
   import { createErrorDisplay } from "@/lib/client/validation";
+  import { randomInt, shuffleArray } from "@/lib/client/random";
+  import { getClientT } from "@/lib/client/i18n";
 
-  const isRu = document.documentElement.lang === "ru";
-  const COPY_LABEL = isRu ? "Копировать" : "Copy";
-  const COPIED_LABEL = isRu ? "Скопировано" : "Copied";
-  const ERR_AT_LEAST = isRu
-    ? "Вытащите хотя бы 1 карту."
-    : "Draw at least 1 card.";
-  const ERR_UNIQUE = isRu
-    ? "Нельзя вытащить более 52 уникальных карт."
-    : "Cannot draw more than 52 unique cards.";
-  const ERR_MAX52 = isRu
-    ? "Максимум 52 карты одновременно."
-    : "Maximum 52 cards at once.";
+  const T = getClientT();
+  const COPY_LABEL = T.copy;
+  const COPIED_LABEL = T.copied;
+  const ERR_AT_LEAST = T.errDrawAtLeast;
+  const ERR_UNIQUE = T.errMaxUniqueCards;
+  const ERR_MAX52 = T.errMax52Cards;
 
   const countInput = document.getElementById("crd-count") as HTMLInputElement;
   const replaceCb = document.getElementById("crd-replace") as HTMLInputElement;
@@ -195,15 +191,10 @@ const T = useT(isRu ? "ru" : "en");
     if (withReplacement) {
       lastCards = Array.from(
         { length: count },
-        () => DECK[Math.floor(Math.random() * DECK.length)],
+        () => DECK[randomInt(0, DECK.length - 1)],
       );
     } else {
-      const deck = [...DECK];
-      for (let i = 0; i < count; i++) {
-        const j = i + Math.floor(Math.random() * (deck.length - i));
-        [deck[i], deck[j]] = [deck[j], deck[i]];
-      }
-      lastCards = deck.slice(0, count);
+      lastCards = shuffleArray(DECK).slice(0, count);
     }
 
     renderCards();

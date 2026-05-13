@@ -8,7 +8,7 @@
       "plan_name": "critical-refactor",
       "status": "active",
       "started_at": "2026-05-13T16:25:19.266Z",
-      "updated_at": "2026-05-13T16:42:05.595Z",
+      "updated_at": "2026-05-13T17:16:10.363Z",
       "session_ids": [
         "ses_1de6ede59ffexUwt5C0sddEWwR"
       ],
@@ -42,6 +42,32 @@
           "status": "completed",
           "ended_at": "2026-05-13T16:42:05.595Z",
           "elapsed_ms": 68147
+        },
+        "todo:6": {
+          "task_key": "todo:6",
+          "task_label": "6",
+          "task_title": "Refactor CardGenerator.astro",
+          "session_id": "ses_1ddc76889ffe240ehScl9taAza",
+          "agent": "Sisyphus-Junior",
+          "category": "unspecified-high",
+          "updated_at": "2026-05-13T16:47:10.433Z",
+          "started_at": "2026-05-13T16:44:57.812Z",
+          "status": "completed",
+          "ended_at": "2026-05-13T16:47:10.433Z",
+          "elapsed_ms": 132621
+        },
+        "todo:10": {
+          "task_key": "todo:10",
+          "task_label": "10",
+          "task_title": "Refactor DateGenerator.astro",
+          "session_id": "ses_1ddc380cbffe0YA1da3ew6QlNf",
+          "agent": "Sisyphus-Junior",
+          "category": "unspecified-high",
+          "updated_at": "2026-05-13T17:16:10.363Z",
+          "started_at": "2026-05-13T16:49:43.859Z",
+          "status": "completed",
+          "ended_at": "2026-05-13T17:16:10.363Z",
+          "elapsed_ms": 1586504
         }
       }
     }
@@ -49,7 +75,7 @@
   "active_plan": "/home/emil/Desktop/Coding/AI/Randify.pro/.sisyphus/plans/critical-refactor.md",
   "started_at": "2026-05-13T16:25:19.266Z",
   "status": "active",
-  "updated_at": "2026-05-13T16:42:05.595Z",
+  "updated_at": "2026-05-13T17:16:10.363Z",
   "session_ids": [
     "ses_1de6ede59ffexUwt5C0sddEWwR"
   ],
@@ -83,6 +109,32 @@
       "status": "completed",
       "ended_at": "2026-05-13T16:42:05.595Z",
       "elapsed_ms": 68147
+    },
+    "todo:6": {
+      "task_key": "todo:6",
+      "task_label": "6",
+      "task_title": "Refactor CardGenerator.astro",
+      "session_id": "ses_1ddc76889ffe240ehScl9taAza",
+      "agent": "Sisyphus-Junior",
+      "category": "unspecified-high",
+      "updated_at": "2026-05-13T16:47:10.433Z",
+      "started_at": "2026-05-13T16:44:57.812Z",
+      "status": "completed",
+      "ended_at": "2026-05-13T16:47:10.433Z",
+      "elapsed_ms": 132621
+    },
+    "todo:10": {
+      "task_key": "todo:10",
+      "task_label": "10",
+      "task_title": "Refactor DateGenerator.astro",
+      "session_id": "ses_1ddc380cbffe0YA1da3ew6QlNf",
+      "agent": "Sisyphus-Junior",
+      "category": "unspecified-high",
+      "updated_at": "2026-05-13T17:16:10.363Z",
+      "started_at": "2026-05-13T16:49:43.859Z",
+      "status": "completed",
+      "ended_at": "2026-05-13T17:16:10.363Z",
+      "elapsed_ms": 1586504
     }
   },
   "agent": "atlas"

@@ -139,12 +139,15 @@ const clickToCopyLabel = isRu ? "Нажмите, чтобы скопироват
   import { createErrorDisplay } from "@/lib/client/validation";
   import { CopyFeedback } from "@/lib/client/clipboard";
   import { popElement } from "@/lib/client/animations";
+  import { shuffleArray } from "@/lib/client/random";
+  import { getClientLang, getClientT } from "@/lib/client/i18n";
 
-  const isRu = document.documentElement.lang === "ru";
-  const COPIED_LABEL = isRu ? "Скопировано!" : "Copied!";
-  const COPY_ALL_LABEL = isRu ? "Копировать всё" : "Copy all";
+  const isRu = getClientLang() === "ru";
+  const T = getClientT();
+  const COPIED_LABEL = T.copied;
+  const COPY_ALL_LABEL = T.copyAll;
   const ERR_COUNT_RANGE = isRu ? "Укажите количество от 1 до 50." : "Enter a count between 1 and 50.";
-  const TOOLTIP_COPIED = isRu ? "Скопировано!" : "Copied!";
+  const TOOLTIP_COPIED = T.copied;
 
   const EMOJIS: Record<string, string[]> = {
     smileys: ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🥸","🤩","🥳","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀","☠️","👽","👾","🤖","🎃","😺","😸","😹","😻","😼","😽","🙀","😿","😾"],
@@ -551,15 +554,6 @@ const clickToCopyLabel = isRu ? "Нажмите, чтобы скопироват
   const errorEl = document.getElementById("eg-error") as HTMLParagraphElement;
 
   const errors = createErrorDisplay(errorEl);
-
-  function shuffleArray<T>(arr: T[]): T[] {
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
 
   function getEmojiName(emoji: string): string {
     if (isRu) {

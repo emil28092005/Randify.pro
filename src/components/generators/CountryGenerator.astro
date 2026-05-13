@@ -124,6 +124,9 @@ const regions = isRu
 </div>
 
 <script>
+  import { randomInt } from "@/lib/client/random";
+  import { getClientLang, getClientT } from "@/lib/client/i18n";
+
   interface Country {
     name: string;
     ruName: string;
@@ -190,7 +193,9 @@ const regions = isRu
   const checkIcon = document.getElementById("cg-check-icon") as SVGElement;
   const copyText = document.getElementById("cg-copy-text") as HTMLSpanElement;
 
-  const isRu = document.documentElement.lang === "ru";
+  const lang = getClientLang();
+  const isRu = lang === "ru";
+  const T = getClientT();
 
   function formatPopulation(n: number): string {
     if (n >= 1_000_000_000) return (n / 1_000_000_000).toFixed(1).replace(/\.0$/, "") + "B";
@@ -208,7 +213,7 @@ const regions = isRu
   function generate() {
     const list = getFilteredCountries();
     if (list.length === 0) return;
-    const country = list[Math.floor(Math.random() * list.length)];
+    const country = list[randomInt(0, list.length - 1)];
 
     flagEl.textContent = country.flagEmoji;
     nameEl.textContent = isRu ? country.ruName : country.name;
@@ -235,13 +240,13 @@ const regions = isRu
 
     copyIcon.classList.add("hidden");
     checkIcon.classList.remove("hidden");
-    copyText.textContent = isRu ? "Скопировано" : "Copied";
+    copyText.textContent = T.copied;
 
     if (copyTimer) clearTimeout(copyTimer);
     copyTimer = setTimeout(() => {
       checkIcon.classList.add("hidden");
       copyIcon.classList.remove("hidden");
-      copyText.textContent = isRu ? "Копировать" : "Copy";
+      copyText.textContent = T.copy;
     }, 1500);
   });
 

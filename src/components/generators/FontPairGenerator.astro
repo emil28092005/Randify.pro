@@ -170,8 +170,11 @@ const i18n = {
 
 <script>
   import { createErrorDisplay } from "@/lib/client/validation";
+  import { randomInt } from "@/lib/client/random";
+  import { getClientLang, getClientT } from "@/lib/client/i18n";
 
-  const isRu = document.documentElement.lang === "ru";
+  const isRu = getClientLang() === "ru";
+  const clientT = getClientT();
 
   const generateBtn = document.getElementById("fp-btn") as HTMLButtonElement;
   const shuffleHeadingBtn = document.getElementById("fp-shuffle-heading") as HTMLButtonElement;
@@ -309,7 +312,7 @@ const i18n = {
   let loadedFonts = new Set<string>();
 
   function randomItem<T>(arr: T[]): T {
-    return arr[Math.floor(Math.random() * arr.length)];
+    return arr[randomInt(0, arr.length - 1)];
   }
 
   function getGoogleFontsUrl(heading: Font, body: Font): string {
@@ -472,7 +475,7 @@ const i18n = {
     await navigator.clipboard.writeText(fullText);
 
     const originalHtml = copyBtn.innerHTML;
-    copyBtn.innerHTML = `<span class="inline-flex items-center gap-2">${checkIconSvg} ${isRu ? "Скопировано!" : "Copied!"}</span>`;
+    copyBtn.innerHTML = `<span class="inline-flex items-center gap-2">${checkIconSvg} ${clientT.copied}</span>`;
     setTimeout(() => {
       copyBtn.innerHTML = originalHtml;
     }, 1500);

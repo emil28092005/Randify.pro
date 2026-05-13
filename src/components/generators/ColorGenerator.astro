@@ -95,6 +95,10 @@ const T = useT(isRu ? "ru" : "en");
 </div>
 
 <script>
+  import { randomInt } from "@/lib/client/random";
+  import { getClientT } from "@/lib/client/i18n";
+
+  const T = getClientT();
   const swatch = document.getElementById("cg-swatch") as HTMLDivElement;
   const valuesEl = document.getElementById("cg-values") as HTMLDivElement;
   const hexEl = document.getElementById("cg-hex") as HTMLSpanElement;
@@ -166,9 +170,9 @@ const T = useT(isRu ? "ru" : "en");
     );
 
   function generate() {
-    const r = Math.floor(Math.random() * 256);
-    const g = Math.floor(Math.random() * 256);
-    const b = Math.floor(Math.random() * 256);
+    const r = randomInt(0, 255);
+    const g = randomInt(0, 255);
+    const b = randomInt(0, 255);
     const [h, s, l] = rgbToHsl(r, g, b);
 
     const hex = `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();

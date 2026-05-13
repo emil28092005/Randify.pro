@@ -113,8 +113,12 @@ const T = useT(isRu ? "ru" : "en");
   import { CopyFeedback } from "@/lib/client/clipboard";
   import { createErrorDisplay } from "@/lib/client/validation";
   import { popElement } from "@/lib/client/animations";
+  import { randomFloat } from "@/lib/client/random";
+  import { getClientLang, getClientT } from "@/lib/client/i18n";
 
-  const isRu = document.documentElement.lang === "ru";
+  const lang = getClientLang();
+  const isRu = lang === "ru";
+  const T = getClientT();
   const ERR_BOTH_DATES = isRu
     ? "Укажите обе даты."
     : "Please enter both dates.";
@@ -158,7 +162,7 @@ const T = useT(isRu ? "ru" : "en");
 
     const fromMs = fromDate.getTime();
     const toMs = toDate.getTime();
-    const randomMs = fromMs + Math.random() * (toMs - fromMs);
+    const randomMs = fromMs + randomFloat() * (toMs - fromMs);
     const resultDate = new Date(randomMs);
 
     const formatted = resultDate.toLocaleDateString(isRu ? "ru-RU" : "en-US", {

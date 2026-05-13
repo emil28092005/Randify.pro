@@ -427,7 +427,7 @@ Max Concurrent: 8 (Wave 3)
   - Message: `feat(components): add ResultBox and CopyButton shared components`
   - Files: `src/components/ResultBox.astro`, `src/components/CopyButton.astro`
 
-- [ ] 6. Refactor CardGenerator.astro
+- [x] 6. Refactor CardGenerator.astro
 
   **What to do**:
   - Replace `Math.random()` with `random.ts` functions
@@ -457,7 +457,7 @@ Max Concurrent: 8 (Wave 3)
 
   **Commit**: NO (groups with batch)
 
-- [ ] 7. Refactor CoinGenerator.astro
+- [x] 7. Refactor CoinGenerator.astro
 
   **What to do**: Same pattern as Task 6.
   **Recommended Agent Profile**: `unspecified-high`
@@ -467,7 +467,7 @@ Max Concurrent: 8 (Wave 3)
   **QA Scenarios**: grep Math.random → empty
   **Commit**: NO
 
-- [ ] 8. Refactor ColorGenerator.astro
+- [x] 8. Refactor ColorGenerator.astro
 
   **What to do**: Same pattern as Task 6.
   **Recommended Agent Profile**: `unspecified-high`
@@ -477,7 +477,7 @@ Max Concurrent: 8 (Wave 3)
   **QA Scenarios**: grep Math.random → empty
   **Commit**: NO
 
-- [ ] 9. Refactor CountryGenerator.astro
+- [x] 9. Refactor CountryGenerator.astro
 
   **What to do**: Same pattern as Task 6.
   **Recommended Agent Profile**: `unspecified-high`
@@ -487,7 +487,7 @@ Max Concurrent: 8 (Wave 3)
   **QA Scenarios**: grep Math.random → empty
   **Commit**: NO
 
-- [ ] 10. Refactor DateGenerator.astro
+- [x] 10. Refactor DateGenerator.astro
 
   **What to do**: Same pattern as Task 6.
   **Recommended Agent Profile**: `unspecified-high`
@@ -497,7 +497,7 @@ Max Concurrent: 8 (Wave 3)
   **QA Scenarios**: grep Math.random → empty
   **Commit**: NO
 
-- [ ] 11. Refactor EmojiGenerator.astro
+- [x] 11. Refactor EmojiGenerator.astro
 
   **What to do**: Same pattern as Task 6.
   **Recommended Agent Profile**: `unspecified-high`
@@ -507,7 +507,7 @@ Max Concurrent: 8 (Wave 3)
   **QA Scenarios**: grep Math.random → empty
   **Commit**: NO
 
-- [ ] 12. Refactor FontPairGenerator.astro
+- [x] 12. Refactor FontPairGenerator.astro
 
   **What to do**: Same pattern as Task 6.
   **Recommended Agent Profile**: `unspecified-high`
@@ -685,7 +685,7 @@ Max Concurrent: 8 (Wave 3)
   - Message: `refactor(generators): migrate batch 4 to crypto random (Teams, Time, Uuid, Weighted, WheelSpinner, YesNo)`
   - Files: `src/components/generators/{Teams,Time,Uuid,Weighted,YesNo}Generator.astro`, `src/components/generators/WheelSpinner.astro`
 
-- [ ] 33. Refactor DiceGenerator to import dice-engine.ts
+- [x] 33. Refactor DiceGenerator to import dice-engine.ts
 
   **What to do**:
   - Replace inline dice engine code in `DiceGenerator.astro:274-958` with imports from `src/lib/dice-engine.ts`

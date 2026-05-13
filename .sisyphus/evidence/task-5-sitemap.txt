@@ -1,0 +1,13 @@
+# Task 5 Evidence: Sitemap i18n Config
+
+## Build Status
+PASS
+
+## Verification
+File: dist/sitemap-0.xml
+Contains <xhtml:link rel="alternate" hreflang="en-US"> and <xhtml:link rel="alternate" hreflang="ru-RU"> entries for all bilingual pages.
+
+## Sample Entries
+- https://randify.pro/ -> en-US + ru-RU
+- https://randify.pro/about/ -> en-US + ru-RU
+- https://randify.pro/generators/coin/ -> en-US + ru-RU

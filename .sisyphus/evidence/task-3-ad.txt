@@ -1,0 +1,8 @@
+TASK: Fix ad placement on homepage
+FILE: src/pages/index.astro
+CHANGE: Moved <YandexRTB /> from before <main> to after </main>
+BUILD: PASS (npm run build exited 0)
+VERIFICATION:
+  - dist/index.html: </main> at byte 43284
+  - dist/index.html: yandex_rtb at byte 43335
+  - Order correct: True (main content before ad block)

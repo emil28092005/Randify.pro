@@ -1,0 +1,16 @@
+Task: Fix <main> landmarks on about/privacy pages
+
+Files modified:
+- src/pages/about.astro
+- src/pages/ru/about.astro
+- src/pages/privacy.astro
+- src/pages/ru/privacy.astro
+
+Verification:
+- npm run lint: 0 errors
+- npm run build: success
+- grep dist for <main> on about/privacy pages: all 4 files contain <main> tag
+
+Pattern applied:
+- Breadcrumb nav and page header remain outside <main>
+- Content sections wrapped in <main> following GeneratorLayout.astro pattern

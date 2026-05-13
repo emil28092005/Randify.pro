@@ -26,12 +26,18 @@
   "faq": [
     { "q": "What color formats are supported?", "a": "HEX, RGB, and HSL. All three are shown at once, so you can copy the one you need." },
     { "q": "Can I use the generated color in CSS?", "a": "Yes. Copy the HEX or RGB value and paste it directly into your stylesheet or design tool." },
-    { "q": "Are the colors truly random?", "a": "Yes. Each color is generated using a cryptographically secure random number generator, covering the entire color space." }
+    { "q": "Are the colors truly random?", "a": "Yes. Each color is generated using a cryptographically secure random number generator, covering the entire color space." },
+    { "q": "What color formats are supported?", "a": "HEX, RGB, and HSL. All three are shown simultaneously for every generated color." },
+    { "q": "Can I copy just one format?", "a": "Yes. Click the copy icon next to any format to copy only that value." },
+    { "q": "Are the colors truly random?", "a": "Yes. Each color is generated using random values for hue, saturation, and lightness." }
   ],
   "ruFaq": [
     { "q": "Какие форматы цветов поддерживаются?", "a": "HEX, RGB и HSL. Все три формата отображаются одновременно — скопируйте тот, который нужен." },
     { "q": "Можно ли использовать сгенерированный цвет в CSS?", "a": "Да. Скопируйте значение HEX или RGB и вставьте его прямо в стили или графический редактор." },
-    { "q": "Цвета действительно случайные?", "a": "Да. Каждый цвет генерируется с помощью криптографически стойкого генератора случайных чисел, покрывая всё цветовое пространство." }
+    { "q": "Цвета действительно случайные?", "a": "Да. Каждый цвет генерируется с помощью криптографически стойкого генератора случайных чисел, покрывая всё цветовое пространство." },
+    { "q": "Какие форматы цветов поддерживаются?", "a": "HEX, RGB и HSL. Все три отображаются одновременно для каждого сгенерированного цвета." },
+    { "q": "Можно скопировать только один формат?", "a": "Да. Нажмите иконку копирования рядом с нужным форматом." },
+    { "q": "Цвета действительно случайные?", "a": "Да. Каждый цвет генерируется из случайных значений оттенка, насыщенности и освещённости." }
   ],
   "ruHowTo": [
     "Нажмите «Сгенерировать», чтобы получить случайный цвет.",

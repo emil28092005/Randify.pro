@@ -1,0 +1,185 @@
+
+> randify@0.0.1 build
+> astro build
+
+02:36:15 [types] Generated 342ms
+02:36:15 [build] output: "static"
+02:36:15 [build] directory: /home/emil/Desktop/Coding/AI/Randify.pro/dist/
+02:36:15 [build] Collecting build info...
+02:36:15 [build] ✓ Completed in 368ms.
+02:36:15 [build] Building static entrypoints...
+02:36:17 [vite] ✓ built in 2.10s
+02:36:17 [build] ✓ Completed in 2.15s.
+
+ building client (vite) 
+02:36:17 [vite] transforming...
+02:36:17 [vite] ✓ 71 modules transformed.
+02:36:17 [vite] rendering chunks...
+02:36:17 [vite] computing gzip size...
+02:36:17 [vite] dist/_astro/hoisted.BKKrxAht.js      0.16 kB │ gzip:  0.15 kB
+02:36:17 [vite] dist/_astro/animations.JKmio82t.js   0.19 kB │ gzip:  0.13 kB
+02:36:17 [vite] dist/_astro/validation.plcuGzaj.js   0.20 kB │ gzip:  0.16 kB
+02:36:17 [vite] dist/_astro/clipboard.v9BZgIeL.js    0.43 kB │ gzip:  0.22 kB
+02:36:17 [vite] dist/_astro/random.PhfdigkC.js       0.50 kB │ gzip:  0.31 kB
+02:36:17 [vite] dist/_astro/hoisted.B5m2ZYh6.js      0.90 kB │ gzip:  0.56 kB
+02:36:17 [vite] dist/_astro/hoisted.CdG8uTdI.js      1.23 kB │ gzip:  0.61 kB
+02:36:17 [vite] dist/_astro/hoisted.CT9HX5_Y.js      1.38 kB │ gzip:  0.72 kB
+02:36:17 [vite] dist/_astro/hoisted.Cb7Tv2oN.js      1.48 kB │ gzip:  0.83 kB
+02:36:17 [vite] dist/_astro/hoisted.D82rtlIG.js      1.54 kB │ gzip:  0.84 kB
+02:36:17 [vite] dist/_astro/hoisted.uArMeWBD.js      1.63 kB │ gzip:  0.81 kB
+02:36:17 [vite] dist/_astro/hoisted.CwDo-_-Z.js      1.64 kB │ gzip:  0.73 kB
+02:36:17 [vite] dist/_astro/hoisted.j6ibv0wb.js      1.65 kB │ gzip:  0.81 kB
+02:36:17 [vite] dist/_astro/hoisted.BEwWV8JC.js      1.73 kB │ gzip:  0.90 kB
+02:36:17 [vite] dist/_astro/hoisted.6rLeMLDm.js      1.74 kB │ gzip:  0.86 kB
+02:36:17 [vite] dist/_astro/hoisted.DOtqogeQ.js      1.76 kB │ gzip:  0.99 kB
+02:36:17 [vite] dist/_astro/hoisted.CHG7AXVP.js      1.89 kB │ gzip:  1.05 kB
+02:36:17 [vite] dist/_astro/hoisted.DnGtBYme.js      1.99 kB │ gzip:  0.95 kB
+02:36:17 [vite] dist/_astro/hoisted.hrxZZFEF.js      2.19 kB │ gzip:  1.07 kB
+02:36:17 [vite] dist/_astro/hoisted.CjZD7f2g.js      2.33 kB │ gzip:  1.15 kB
+02:36:17 [vite] dist/_astro/hoisted.qLZXl1Do.js      2.88 kB │ gzip:  1.70 kB
+02:36:17 [vite] dist/_astro/hoisted.BKosNXxl.js      2.91 kB │ gzip:  1.41 kB
+02:36:17 [vite] dist/_astro/hoisted.CpSL7HYx.js      3.94 kB │ gzip:  1.95 kB
+02:36:17 [vite] dist/_astro/hoisted.DmqdUAAB.js      4.10 kB │ gzip:  1.70 kB
+02:36:17 [vite] dist/_astro/hoisted.COsV1Syq.js      4.30 kB │ gzip:  1.96 kB
+02:36:17 [vite] dist/_astro/hoisted.Ftg8tUcf.js      4.53 kB │ gzip:  1.97 kB
+02:36:17 [vite] dist/_astro/hoisted.3XDY-7Px.js      4.79 kB │ gzip:  1.97 kB
+02:36:17 [vite] dist/_astro/hoisted.mRfAHLMS.js      5.27 kB │ gzip:  2.20 kB
+02:36:17 [vite] dist/_astro/hoisted.B7vaoHN9.js      7.19 kB │ gzip:  2.54 kB
+02:36:17 [vite] dist/_astro/hoisted.DU8tsC8l.js      9.71 kB │ gzip:  3.84 kB
+02:36:17 [vite] dist/_astro/i18n.DYCg5-VL.js        10.76 kB │ gzip:  5.53 kB
+02:36:17 [vite] dist/_astro/hoisted.ChvQAxmv.js     10.92 kB │ gzip:  3.89 kB
+02:36:17 [vite] dist/_astro/hoisted.DdCnpAKh.js     11.83 kB │ gzip:  2.76 kB
+02:36:17 [vite] dist/_astro/hoisted.CvjQ9xHL.js     35.55 kB │ gzip: 17.46 kB
+02:36:17 [vite] dist/_astro/hoisted.Bdx021zL.js     45.26 kB │ gzip: 14.58 kB
+02:36:17 [vite] ✓ built in 438ms
+
+ generating static routes 
+02:36:18 ▶ src/pages/about.astro
+02:36:18   └─ /about/index.html (+11ms)
+02:36:18 ▶ src/pages/generators/cards.astro
+02:36:18   └─ /generators/cards/index.html (+6ms)
+02:36:18 ▶ src/pages/generators/coin.astro
+02:36:18   └─ /generators/coin/index.html (+4ms)
+02:36:18 ▶ src/pages/generators/colors.astro
+02:36:18   └─ /generators/colors/index.html (+3ms)
+02:36:18 ▶ src/pages/generators/country.astro
+02:36:18   └─ /generators/country/index.html (+4ms)
+02:36:18 ▶ src/pages/generators/date.astro
+02:36:18   └─ /generators/date/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/dice.astro
+02:36:18   └─ /generators/dice/index.html (+3ms)
+02:36:18 ▶ src/pages/generators/emoji.astro
+02:36:18   └─ /generators/emoji/index.html (+3ms)
+02:36:18 ▶ src/pages/generators/fontpair.astro
+02:36:18   └─ /generators/fontpair/index.html (+3ms)
+02:36:18 ▶ src/pages/generators/gradient.astro
+02:36:18   └─ /generators/gradient/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/hash.astro
+02:36:18   └─ /generators/hash/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/letter.astro
+02:36:18   └─ /generators/letter/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/list.astro
+02:36:18   └─ /generators/list/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/lorem.astro
+02:36:18   └─ /generators/lorem/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/lottery.astro
+02:36:18   └─ /generators/lottery/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/magic8ball.astro
+02:36:18   └─ /generators/magic8ball/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/meal.astro
+02:36:18   └─ /generators/meal/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/names.astro
+02:36:18   └─ /generators/names/index.html (+3ms)
+02:36:18 ▶ src/pages/generators/numbers.astro
+02:36:18   └─ /generators/numbers/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/palette.astro
+02:36:18   └─ /generators/palette/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/password.astro
+02:36:18   └─ /generators/password/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/rps.astro
+02:36:18   └─ /generators/rps/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/shuffler.astro
+02:36:18   └─ /generators/shuffler/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/teams.astro
+02:36:18   └─ /generators/teams/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/time.astro
+02:36:18   └─ /generators/time/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/uuid.astro
+02:36:18   └─ /generators/uuid/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/weighted.astro
+02:36:18   └─ /generators/weighted/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/wheel.astro
+02:36:18   └─ /generators/wheel/index.html (+2ms)
+02:36:18 ▶ src/pages/generators/yesno.astro
+02:36:18   └─ /generators/yesno/index.html (+2ms)
+02:36:18 ▶ src/pages/privacy.astro
+02:36:18   └─ /privacy/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/about.astro
+02:36:18   └─ /ru/about/index.html (+3ms)
+02:36:18 ▶ src/pages/ru/generators/cards.astro
+02:36:18   └─ /ru/generators/cards/index.html (+3ms)
+02:36:18 ▶ src/pages/ru/generators/coin.astro
+02:36:18   └─ /ru/generators/coin/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/colors.astro
+02:36:18   └─ /ru/generators/colors/index.html (+3ms)
+02:36:18 ▶ src/pages/ru/generators/country.astro
+02:36:18   └─ /ru/generators/country/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/date.astro
+02:36:18   └─ /ru/generators/date/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/dice.astro
+02:36:18   └─ /ru/generators/dice/index.html (+3ms)
+02:36:18 ▶ src/pages/ru/generators/emoji.astro
+02:36:18   └─ /ru/generators/emoji/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/fontpair.astro
+02:36:18   └─ /ru/generators/fontpair/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/gradient.astro
+02:36:18   └─ /ru/generators/gradient/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/hash.astro
+02:36:18   └─ /ru/generators/hash/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/letter.astro
+02:36:18   └─ /ru/generators/letter/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/list.astro
+02:36:18   └─ /ru/generators/list/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/lorem.astro
+02:36:18   └─ /ru/generators/lorem/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/lottery.astro
+02:36:18   └─ /ru/generators/lottery/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/magic8ball.astro
+02:36:18   └─ /ru/generators/magic8ball/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/meal.astro
+02:36:18   └─ /ru/generators/meal/index.html (+3ms)
+02:36:18 ▶ src/pages/ru/generators/names.astro
+02:36:18   └─ /ru/generators/names/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/numbers.astro
+02:36:18   └─ /ru/generators/numbers/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/palette.astro
+02:36:18   └─ /ru/generators/palette/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/password.astro
+02:36:18   └─ /ru/generators/password/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/rps.astro
+02:36:18   └─ /ru/generators/rps/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/shuffler.astro
+02:36:18   └─ /ru/generators/shuffler/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/teams.astro
+02:36:18   └─ /ru/generators/teams/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/time.astro
+02:36:18   └─ /ru/generators/time/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/uuid.astro
+02:36:18   └─ /ru/generators/uuid/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/weighted.astro
+02:36:18   └─ /ru/generators/weighted/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/wheel.astro
+02:36:18   └─ /ru/generators/wheel/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/generators/yesno.astro
+02:36:18   └─ /ru/generators/yesno/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/privacy.astro
+02:36:18   └─ /ru/privacy/index.html (+2ms)
+02:36:18 ▶ src/pages/ru/index.astro
+02:36:18   └─ /ru/index.html (+4ms)
+02:36:18 ▶ src/pages/index.astro
+02:36:18   └─ /index.html (+3ms)
+02:36:18 ✓ Completed in 381ms.
+
+02:36:18 [@astrojs/sitemap] `sitemap-index.xml` created at `dist`
+02:36:18 [build] 62 page(s) built in 3.40s
+02:36:18 [build] Complete!

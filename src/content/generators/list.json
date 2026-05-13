@@ -27,12 +27,18 @@
   "faq": [
     { "q": "Can the same item be picked more than once?", "a": "Only if you enable the 'Allow duplicates' toggle. By default, each item can be chosen only once per draw." },
     { "q": "Is there a limit to how many items I can add?", "a": "You can add up to 1,000 items. For most use cases — giveaways, raffles, or team assignments — this is more than enough." },
-    { "q": "Can I pick multiple winners at once?", "a": "Yes. Set the 'Pick' field to any number up to the total count of items, and Randify will select that many winners in one go." }
+    { "q": "Can I pick multiple winners at once?", "a": "Yes. Set the 'Pick' field to any number up to the total count of items, and Randify will select that many winners in one go." },
+    { "q": "Can the same item be picked more than once?", "a": "Only if you toggle Allow duplicates. By default, each item is picked at most once." },
+    { "q": "Is there a limit to how many items I can add?", "a": "You can add up to 500 items, and pick up to the total number of unique items." },
+    { "q": "Does the order of items matter?", "a": "No. The selection is completely random regardless of the order you enter items." }
   ],
   "ruFaq": [
     { "q": "Может ли один и тот же элемент выпасть несколько раз?", "a": "Только если включён переключатель «Разрешить повторения». По умолчанию каждый элемент выбирается не более одного раза." },
     { "q": "Есть ли ограничение на количество элементов в списке?", "a": "Можно добавить до 1 000 элементов. Для розыгрышей, жеребьёвок и распределения задач этого более чем достаточно." },
-    { "q": "Можно ли выбрать несколько победителей сразу?", "a": "Да. Укажите в поле «Выбрать» любое число до общего количества элементов — Randify выберет нужное количество победителей за один раз." }
+    { "q": "Можно ли выбрать несколько победителей сразу?", "a": "Да. Укажите в поле «Выбрать» любое число до общего количества элементов — Randify выберет нужное количество победителей за один раз." },
+    { "q": "Может ли один элемент выпасть несколько раз?", "a": "Только если включена опция «Разрешить повторения». По умолчанию каждый элемент выбирается не более одного раза." },
+    { "q": "Есть ли ограничение на количество элементов?", "a": "Можно добавить до 500 элементов и выбрать до общего числа уникальных элементов." },
+    { "q": "Имеет ли значение порядок элементов?", "a": "Нет. Выбор полностью случайный независимо от порядка ввода." }
   ],
   "ruHowTo": [
     "Введите список элементов — по одному на строку.",

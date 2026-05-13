@@ -1,0 +1,11 @@
+Task: Add x-default hreflang to BaseLayout
+Date: 2026-05-14
+
+Verification:
+- npm run build: PASS (62 pages built)
+- grep dist/index.html for x-default: FOUND
+  <link rel="alternate" hreflang="x-default" href="https://randify.pro/">
+- grep dist/generators/dice/index.html for x-default: FOUND
+- grep all dist/*.html for x-default: 62 matches across 62 files
+
+All pages now include x-default hreflang fallback pointing to the English version.

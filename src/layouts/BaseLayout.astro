@@ -9,12 +9,15 @@ import type { Lang } from "../i18n/translations";
 interface Props {
   title?: string;
   description?: string;
+  ogImage?: string;
 }
 
 const lang = (Astro.currentLocale as Lang) || "en";
 const T = useT(lang);
 
-const { title = T.defaultTitle, description = T.defaultDesc } = Astro.props;
+const { title = T.defaultTitle, description = T.defaultDesc, ogImage = "/og-default.jpg" } = Astro.props;
+
+const ogImageUrl = ogImage.startsWith("http") ? ogImage : `https://randify.pro${ogImage}`;
 
 const pathWithoutLocale = Astro.url.pathname.replace(/^\/ru/, "") || "/";
 const enUrl = `https://randify.pro${getRelativeLocaleUrl("en", pathWithoutLocale)}`;
@@ -48,6 +51,7 @@ const webPageSchema = {
     <link rel="canonical" href={canonicalUrl} />
     <link rel="alternate" hreflang="en" href={enUrl} />
     <link rel="alternate" hreflang="ru" href={ruUrl} />
+    <link rel="alternate" hreflang="x-default" href={enUrl} />
     <meta name="verification" content="er9ndnv9ih7agmh8" />
     <script
       type="application/ld+json"
@@ -61,6 +65,17 @@ const webPageSchema = {
     <script src="https://yandex.ru/ads/system/context.js" async></script>
     <slot name="head" />
     <title>{title}</title>
+    <meta property="og:site_name" content="Randify" />
+    <meta property="og:locale" content={lang === "ru" ? "ru_RU" : "en_US"} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
     <Analytics />
     <script>
       if ("serviceWorker" in navigator) {

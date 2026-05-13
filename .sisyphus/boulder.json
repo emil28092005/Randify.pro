@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "active_work_id": "critical-refactor-f063daf0",
+  "active_work_id": "seo-blog-categories-9c7476b9",
   "works": {
     "critical-refactor-f063daf0": {
       "work_id": "critical-refactor-f063daf0",
@@ -150,152 +150,59 @@
       },
       "ended_at": "2026-05-13T18:03:08.059Z",
       "elapsed_ms": 5868793
+    },
+    "seo-blog-categories-9c7476b9": {
+      "work_id": "seo-blog-categories-9c7476b9",
+      "active_plan": "/home/emil/Desktop/Coding/AI/Randify.pro/.sisyphus/plans/seo-blog-categories.md",
+      "plan_name": "seo-blog-categories",
+      "status": "active",
+      "started_at": "2026-05-13T23:32:06.345Z",
+      "updated_at": "2026-05-13T23:36:41.704Z",
+      "session_ids": [
+        "ses_1de6ede59ffexUwt5C0sddEWwR"
+      ],
+      "session_origins": {
+        "ses_1de6ede59ffexUwt5C0sddEWwR": "direct"
+      },
+      "agent": "atlas",
+      "task_sessions": {
+        "todo:1": {
+          "task_key": "todo:1",
+          "task_label": "1",
+          "task_title": "Fix duplicate JSON keys in 3 generator files",
+          "session_id": "ses_1dc4ed5ddffe54aNbdrrVGPkpI",
+          "agent": "Sisyphus-Junior",
+          "category": "quick",
+          "updated_at": "2026-05-13T23:36:41.704Z",
+          "started_at": "2026-05-13T23:36:41.704Z",
+          "status": "running"
+        }
+      }
     }
   },
-  "active_plan": "/home/emil/Desktop/Coding/AI/Randify.pro/.sisyphus/plans/critical-refactor.md",
-  "started_at": "2026-05-13T16:25:19.266Z",
-  "status": "completed",
-  "updated_at": "2026-05-13T18:03:08.059Z",
+  "active_plan": "/home/emil/Desktop/Coding/AI/Randify.pro/.sisyphus/plans/seo-blog-categories.md",
+  "started_at": "2026-05-13T23:32:06.345Z",
+  "status": "active",
+  "updated_at": "2026-05-13T23:36:41.704Z",
   "session_ids": [
     "ses_1de6ede59ffexUwt5C0sddEWwR"
   ],
   "session_origins": {
     "ses_1de6ede59ffexUwt5C0sddEWwR": "direct"
   },
-  "plan_name": "critical-refactor",
+  "plan_name": "seo-blog-categories",
   "task_sessions": {
     "todo:1": {
       "task_key": "todo:1",
       "task_label": "1",
-      "task_title": "Add missing dependencies to package.json",
-      "session_id": "ses_1ddd57501ffeO4NlJDKb2pwLz2",
+      "task_title": "Fix duplicate JSON keys in 3 generator files",
+      "session_id": "ses_1dc4ed5ddffe54aNbdrrVGPkpI",
       "agent": "Sisyphus-Junior",
-      "category": "writing",
-      "started_at": "2026-05-13T16:27:48.876Z",
-      "status": "completed",
-      "updated_at": "2026-05-13T16:33:52.668Z",
-      "ended_at": "2026-05-13T16:33:52.668Z",
-      "elapsed_ms": 363792
-    },
-    "todo:4": {
-      "task_key": "todo:4",
-      "task_label": "4",
-      "task_title": "Create ResultBox.astro shared component",
-      "session_id": "ses_1ddce8961ffeoaXaB2Rxgt684X",
-      "agent": "Sisyphus-Junior",
-      "category": "visual-engineering",
-      "updated_at": "2026-05-13T16:42:05.595Z",
-      "started_at": "2026-05-13T16:40:57.448Z",
-      "status": "completed",
-      "ended_at": "2026-05-13T16:42:05.595Z",
-      "elapsed_ms": 68147
-    },
-    "todo:6": {
-      "task_key": "todo:6",
-      "task_label": "6",
-      "task_title": "Refactor CardGenerator.astro",
-      "session_id": "ses_1ddc76889ffe240ehScl9taAza",
-      "agent": "Sisyphus-Junior",
-      "category": "unspecified-high",
-      "updated_at": "2026-05-13T16:47:10.433Z",
-      "started_at": "2026-05-13T16:44:57.812Z",
-      "status": "completed",
-      "ended_at": "2026-05-13T16:47:10.433Z",
-      "elapsed_ms": 132621
-    },
-    "todo:10": {
-      "task_key": "todo:10",
-      "task_label": "10",
-      "task_title": "Refactor DateGenerator.astro",
-      "session_id": "ses_1ddc380cbffe0YA1da3ew6QlNf",
-      "agent": "Sisyphus-Junior",
-      "category": "unspecified-high",
-      "updated_at": "2026-05-13T17:16:10.363Z",
-      "started_at": "2026-05-13T16:49:43.859Z",
-      "status": "completed",
-      "ended_at": "2026-05-13T17:16:10.363Z",
-      "elapsed_ms": 1586504
-    },
-    "todo:13": {
-      "task_key": "todo:13",
-      "task_label": "13",
-      "task_title": "Refactor GradientGenerator.astro",
-      "session_id": "ses_1dda85f21ffeEGeOWrbqmWAk02",
-      "agent": "Sisyphus-Junior",
-      "category": "unspecified-high",
-      "updated_at": "2026-05-13T17:22:16.123Z",
-      "started_at": "2026-05-13T17:19:45.020Z",
-      "status": "completed",
-      "ended_at": "2026-05-13T17:22:16.123Z",
-      "elapsed_ms": 151103
-    },
-    "todo:17": {
-      "task_key": "todo:17",
-      "task_label": "17",
-      "task_title": "Refactor LoremGenerator.astro",
-      "session_id": "ses_1dda37bf2ffexATCZ3W4Z6EDu1",
-      "agent": "Sisyphus-Junior",
-      "category": "unspecified-high",
-      "updated_at": "2026-05-13T17:25:32.173Z",
-      "started_at": "2026-05-13T17:25:11.269Z",
-      "status": "completed",
-      "ended_at": "2026-05-13T17:25:32.173Z",
-      "elapsed_ms": 20904
-    },
-    "todo:20": {
-      "task_key": "todo:20",
-      "task_label": "20",
-      "task_title": "Refactor MealGenerator.astro",
-      "session_id": "ses_1dda01e38ffeVc6AUwAlt7lQXl",
-      "agent": "Sisyphus-Junior",
-      "category": "unspecified-high",
-      "updated_at": "2026-05-13T17:31:02.031Z",
-      "started_at": "2026-05-13T17:30:26.005Z",
-      "status": "completed",
-      "ended_at": "2026-05-13T17:31:02.031Z",
-      "elapsed_ms": 36026
-    },
-    "todo:24": {
-      "task_key": "todo:24",
-      "task_label": "24",
-      "task_title": "Refactor PasswordGenerator.astro",
-      "session_id": "ses_1dd9b7bb1ffez3Q0aayg7PZUIF",
-      "agent": "Sisyphus-Junior",
-      "category": "unspecified-high",
-      "updated_at": "2026-05-13T17:34:08.166Z",
-      "started_at": "2026-05-13T17:32:34.652Z",
-      "status": "completed",
-      "ended_at": "2026-05-13T17:34:08.166Z",
-      "elapsed_ms": 93514
-    },
-    "todo:27": {
-      "task_key": "todo:27",
-      "task_label": "27",
-      "task_title": "Refactor TeamsGenerator.astro",
-      "session_id": "ses_1dd94b493ffemX2z2dEFdh8W7R",
-      "agent": "Sisyphus-Junior",
-      "category": "unspecified-high",
-      "started_at": "2026-05-13T17:37:23.881Z",
-      "status": "completed",
-      "updated_at": "2026-05-13T17:41:13.262Z",
-      "ended_at": "2026-05-13T17:41:13.262Z",
-      "elapsed_ms": 229381
-    },
-    "final-wave:f1": {
-      "task_key": "final-wave:f1",
-      "task_label": "F1",
-      "task_title": "**Plan Compliance Audit** — `oracle`",
-      "session_id": "ses_1dd81d9e1ffeclA0rP510AXfNB",
-      "agent": "Sisyphus-Junior",
-      "category": "deep",
-      "started_at": "2026-05-13T17:47:58.486Z",
-      "status": "completed",
-      "updated_at": "2026-05-13T18:02:13.341Z",
-      "ended_at": "2026-05-13T18:02:13.341Z",
-      "elapsed_ms": 854855
+      "category": "quick",
+      "updated_at": "2026-05-13T23:36:41.704Z",
+      "started_at": "2026-05-13T23:36:41.704Z",
+      "status": "running"
     }
   },
-  "agent": "atlas",
-  "ended_at": "2026-05-13T18:03:08.059Z",
-  "elapsed_ms": 5868793
+  "agent": "atlas"
 }

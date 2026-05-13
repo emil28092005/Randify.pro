@@ -29,12 +29,18 @@
   "faq": [
     { "q": "What dice notation can I use?", "a": "You can use standard XdY+Z notation, plus modifiers like advantage, disadvantage, keep/drop (kh/kl/dl/dh), and exploding dice (!)." },
     { "q": "Is this fair for D&D and other RPGs?", "a": "Yes. Randify uses the browser's cryptographically secure random number generator, so every roll is unbiased." },
-    { "q": "Can I roll multiple dice at once?", "a": "Absolutely. Enter something like 5d6 or click the die buttons and set the count to roll up to 20 dice in a single throw." }
+    { "q": "Can I roll multiple dice at once?", "a": "Absolutely. Enter something like 5d6 or click the die buttons and set the count to roll up to 20 dice in a single throw." },
+    { "q": "What dice notation is supported?", "a": "Standard XdY+Z, advantage/disadvantage, keep/drop (kh/kl/dh/dl), reroll (r), and exploding dice (!)." },
+    { "q": "Can I roll more than one type of die at once?", "a": "Yes. Enter multiple notations separated by spaces, like 2d6 1d20." },
+    { "q": "Is the roll history saved?", "a": "Yes. Your last rolls are shown below the results until you refresh the page." }
   ],
   "ruFaq": [
     { "q": "Какую нотацию кубиков поддерживает генератор?", "a": "Стандартную нотацию XdY+Z, а также модификаторы: преимущество, помеха, keep/drop (kh/kl/dl/dh) и взрывающиеся кубики (!)." },
     { "q": "Подходит ли генератор для D&D и других НРИ?", "a": "Да. Randify использует криптографически стойкий генератор случайных чисел браузера, поэтому каждый бросок честный и непредвзятый." },
-    { "q": "Можно ли бросать несколько кубиков одновременно?", "a": "Конечно. Введите что-то вроде 5d6 или настройте кубики вручную — можно бросить до 20 кубиков за раз." }
+    { "q": "Можно ли бросать несколько кубиков одновременно?", "a": "Конечно. Введите что-то вроде 5d6 или настройте кубики вручную — можно бросить до 20 кубиков за раз." },
+    { "q": "Какая нотация кубиков поддерживается?", "a": "Стандартная XdY+Z, преимущество/помеха, keep/drop (kh/kl/dh/dl), переброс (r) и взрывающиеся кубики (!)." },
+    { "q": "Можно ли бросить несколько типов кубиков сразу?", "a": "Да. Введите несколько нотаций через пробел, например 2d6 1d20." },
+    { "q": "История бросков сохраняется?", "a": "Да. Последние броски отображаются под результатами до обновления страницы." }
   ],
   "ruHowTo": [
     "Введите нотацию, например 2d6+3 или 1d20 — или настройте кубики вручную.",

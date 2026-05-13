@@ -75,7 +75,7 @@ export const translations = {
     aboutHistory:
       "The idea for Randify came from a simple frustration: every time we needed a quick random number or a coin flip, we ended up on cluttered websites full of ads, pop-ups, and unnecessary steps. We wanted something cleaner — a tool that just works, without distractions.\n\nWe started with a single number generator and gradually expanded the collection based on what people actually use: dice for board games, wheels for raffles, passwords for security, and more. Each tool was built with the same philosophy — minimal interface, instant results, zero friction.",
     aboutHowItWorks:
-      "Everything on Randify runs entirely in your browser. No data is sent to any server, no personal information is collected, and no account is required. The random values are generated locally using the Web Crypto API, which provides cryptographically secure randomness. This means your passwords, numbers, and choices stay private — we never see them.",
+      "Everything on Randify runs entirely in your browser. No data is sent to any server, no personal information is collected, and no account is required. The random values are generated locally using crypto.getRandomValues from the Web Crypto API, which provides cryptographically secure randomness. This means your passwords, numbers, and choices stay private — we never see them.",
     aboutContact:
       "Have a suggestion, found a bug, or just want to say hello? Drop us a line at hello@randify.pro — we read every message.",
     aboutCta:
@@ -169,7 +169,7 @@ export const translations = {
     aboutHistory:
       "Идея Randify родилась из простого раздражения: каждый раз, когда нам нужно было быстро сгенерировать случайное число или подбросить монетку, мы попадали на перегруженные рекламой сайты с всплывающими окнами и лишними шагами. Мы хотели создать что-то чище — инструмент, который просто работает, без отвлекающих элементов.\n\nМы начали с одного генератора чисел и постепенно расширяли коллекцию, ориентируясь на реальные потребности: кубики для настольных игр, колесо фортуны для розыгрышей, генератор паролей для безопасности и многое другое. Каждый инструмент создавался по одному принципу — минимальный интерфейс, мгновенный результат, никаких препятствий.",
     aboutHowItWorks:
-      "Всё на Randify работает полностью в вашем браузере. Данные не отправляются на сервер, личная информация не собирается, регистрация не требуется. Случайные значения генерируются локально с помощью Web Crypto API, который обеспечивает криптографически стойкую случайность. Это означает, что ваши пароли, числа и выбор остаются приватными — мы их не видим.",
+      "Всё на Randify работает полностью в вашем браузере. Данные не отправляются на сервер, личная информация не собирается, регистрация не требуется. Случайные значения генерируются локально с помощью crypto.getRandomValues из Web Crypto API, который обеспечивает криптографически стойкую случайность. Это означает, что ваши пароли, числа и выбор остаются приватными — мы их не видим.",
     aboutContact:
       "Есть предложение, нашли ошибку или просто хотите поздороваться? Напишите нам на hello@randify.pro — мы читаем каждое сообщение.",
     aboutCta:

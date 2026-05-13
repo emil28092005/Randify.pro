@@ -1,0 +1,63 @@
+{
+  "schema_version": 2,
+  "active_work_id": "critical-refactor-f063daf0",
+  "works": {
+    "critical-refactor-f063daf0": {
+      "work_id": "critical-refactor-f063daf0",
+      "active_plan": "/home/emil/Desktop/Coding/AI/Randify.pro/.sisyphus/plans/critical-refactor.md",
+      "plan_name": "critical-refactor",
+      "status": "active",
+      "started_at": "2026-05-13T16:25:19.266Z",
+      "updated_at": "2026-05-13T16:33:52.668Z",
+      "session_ids": [
+        "ses_1de6ede59ffexUwt5C0sddEWwR"
+      ],
+      "session_origins": {
+        "ses_1de6ede59ffexUwt5C0sddEWwR": "direct"
+      },
+      "agent": "atlas",
+      "task_sessions": {
+        "todo:1": {
+          "task_key": "todo:1",
+          "task_label": "1",
+          "task_title": "Add missing dependencies to package.json",
+          "session_id": "ses_1ddd57501ffeO4NlJDKb2pwLz2",
+          "agent": "Sisyphus-Junior",
+          "category": "writing",
+          "started_at": "2026-05-13T16:27:48.876Z",
+          "status": "completed",
+          "updated_at": "2026-05-13T16:33:52.668Z",
+          "ended_at": "2026-05-13T16:33:52.668Z",
+          "elapsed_ms": 363792
+        }
+      }
+    }
+  },
+  "active_plan": "/home/emil/Desktop/Coding/AI/Randify.pro/.sisyphus/plans/critical-refactor.md",
+  "started_at": "2026-05-13T16:25:19.266Z",
+  "status": "active",
+  "updated_at": "2026-05-13T16:33:52.668Z",
+  "session_ids": [
+    "ses_1de6ede59ffexUwt5C0sddEWwR"
+  ],
+  "session_origins": {
+    "ses_1de6ede59ffexUwt5C0sddEWwR": "direct"
+  },
+  "plan_name": "critical-refactor",
+  "task_sessions": {
+    "todo:1": {
+      "task_key": "todo:1",
+      "task_label": "1",
+      "task_title": "Add missing dependencies to package.json",
+      "session_id": "ses_1ddd57501ffeO4NlJDKb2pwLz2",
+      "agent": "Sisyphus-Junior",
+      "category": "writing",
+      "started_at": "2026-05-13T16:27:48.876Z",
+      "status": "completed",
+      "updated_at": "2026-05-13T16:33:52.668Z",
+      "ended_at": "2026-05-13T16:33:52.668Z",
+      "elapsed_ms": 363792
+    }
+  },
+  "agent": "atlas"
+}

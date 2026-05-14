@@ -8,7 +8,7 @@ export const GET: APIRoute = async ({ url }) => {
   const challenge = await generateCodeChallenge(verifier);
   const state = generateState();
 
-  const redirectUri = `${import.meta.env.PUBLIC_APP_URL || url.origin}/api/auth/callback/vk`;
+  const redirectUri = `${process.env.PUBLIC_APP_URL || url.origin}/api/auth/callback/vk`;
 
   const params = new URLSearchParams({
     client_id: vkOAuthConfig.clientId,

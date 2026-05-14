@@ -1,6 +1,6 @@
 import { SignJWT, jwtVerify } from 'jose';
 
-const JWT_SECRET = new TextEncoder().encode(import.meta.env.JWT_SECRET || '');
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || '');
 
 export function generateCodeVerifier(): string {
   const array = new Uint8Array(64);
@@ -30,16 +30,16 @@ export function generateState(): string {
 }
 
 export const vkOAuthConfig = {
-  clientId: import.meta.env.VK_CLIENT_ID || '',
-  clientSecret: import.meta.env.VK_CLIENT_SECRET || '',
+  clientId: process.env.VK_CLIENT_ID || '',
+  clientSecret: process.env.VK_CLIENT_SECRET || '',
   authUrl: 'https://id.vk.com/oauth2/auth',
   tokenUrl: 'https://id.vk.ru/oauth2/auth',
   scope: 'email phone',
 };
 
 export const yandexOAuthConfig = {
-  clientId: import.meta.env.YANDEX_CLIENT_ID || '',
-  clientSecret: import.meta.env.YANDEX_CLIENT_SECRET || '',
+  clientId: process.env.YANDEX_CLIENT_ID || '',
+  clientSecret: process.env.YANDEX_CLIENT_SECRET || '',
   authUrl: 'https://oauth.yandex.com/authorize',
   tokenUrl: 'https://oauth.yandex.com/token',
   scope: 'login:email login:info login:avatar',

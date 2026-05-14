@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import GeneratorCard from "@/components/GeneratorCard.astro";
-import AdBanner from "@/components/AdBanner.astro";
 import { generators } from "@/data/generators";
 import { useT } from "@/i18n/translations";
 import type { Lang } from "@/i18n/translations";
@@ -69,8 +68,6 @@ const webSiteSchema = {
         }
       </ul>
     </nav>
-
-    <AdBanner size="leaderboard" />
 
     <main class="mt-8">
       <div

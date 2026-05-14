@@ -1,6 +1,5 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
-import AdBanner from "../components/AdBanner.astro";
 import SeoBlock from "../components/SeoBlock.astro";
 import FaqBlock from "../components/FaqBlock.astro";
 import RelatedGenerators from "../components/RelatedGenerators.astro";
@@ -135,10 +134,6 @@ const breadcrumbSchema = {
     <main>
       <slot />
     </main>
-    </div>
-
-    <div class="mt-12 flex justify-center">
-      <AdBanner size="leaderboard" />
     </div>
 
     <SeoBlock

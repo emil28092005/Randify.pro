@@ -23,8 +23,8 @@ export const GET: APIRoute = async ({ url }) => {
   const redirectUrl = `${yandexOAuthConfig.authUrl}?${params.toString()}`;
 
   const cookies = [
-    `${VERIFIER_COOKIE_NAME}=${encodeURIComponent(verifier)}; HttpOnly; SameSite=Strict; Max-Age=600; Path=/`,
-    `oauth_state=${encodeURIComponent(state)}; HttpOnly; SameSite=Strict; Max-Age=600; Path=/`,
+    `${VERIFIER_COOKIE_NAME}=${encodeURIComponent(verifier)}; HttpOnly; Secure; SameSite=Lax; Max-Age=600; Path=/`,
+    `oauth_state=${encodeURIComponent(state)}; HttpOnly; Secure; SameSite=Lax; Max-Age=600; Path=/`,
   ];
 
   return new Response(null, {

@@ -63,7 +63,7 @@ export async function verifySessionToken(token: string): Promise<{ userId: numbe
   }
 }
 
-export const COOKIE_NAME = 'session';
+export const COOKIE_NAME = 'auth_token';
 export const VERIFIER_COOKIE_NAME = 'oauth_verifier';
 
 export function getCookieValue(cookieHeader: string | null, name: string): string | null {

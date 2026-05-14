@@ -80,6 +80,8 @@ export const GET: APIRoute = async ({ url, request }) => {
     ? `https://avatars.yandex.net/get-yapic/${yandexUser.default_avatar_id}/islands-200`
     : null;
 
+  console.log('[OAuth Yandex] User info:', { id: yandexUser.id, email, name });
+
   const existingUsers = await db.select().from(users).where(eq(users.yandexId, String(yandexUser.id)));
   let user;
 
@@ -97,7 +99,10 @@ export const GET: APIRoute = async ({ url, request }) => {
     user = inserted[0];
   }
 
+  console.log('[OAuth Yandex] DB user upserted:', { userId: user.id });
+
   const sessionToken = await createSessionToken(user.id);
+  console.log('[OAuth Yandex] Session token created:', sessionToken.slice(0, 10) + '...');
   const expiresAt = new Date();
   expiresAt.setDate(expiresAt.getDate() + 7);
 
@@ -112,6 +117,8 @@ export const GET: APIRoute = async ({ url, request }) => {
   headers.append('Set-Cookie', `${COOKIE_NAME}=${sessionToken}; HttpOnly; Secure; SameSite=Lax; Max-Age=604800; Path=/`);
   headers.append('Set-Cookie', `${VERIFIER_COOKIE_NAME}=; HttpOnly; SameSite=Lax; Max-Age=0; Path=/`);
   headers.append('Set-Cookie', `oauth_state=; HttpOnly; SameSite=Lax; Max-Age=0; Path=/`);
+
+  console.log('[OAuth Yandex] Redirect headers:', Object.fromEntries(headers.entries()));
 
   return new Response(null, {
     status: 302,

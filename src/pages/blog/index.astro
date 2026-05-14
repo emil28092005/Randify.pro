@@ -27,7 +27,7 @@ const blogSchema = {
     headline: post.data.title,
     description: post.data.description,
     datePublished: post.data.pubDate.toISOString(),
-    url: `https://randify.pro/blog/${post.slug}/`,
+    url: `https://randify.pro/blog/${post.id.replace(/^en\//, "").replace(/\.md$/, "")}/`,
   })),
 };
 ---
@@ -69,7 +69,7 @@ const blogSchema = {
             {posts.map((post) => (
               <li>
                 <a
-                  href={`/blog/${post.slug}/`}
+                   href={`/blog/${post.id.replace(/^en\//, "").replace(/\.md$/, "")}/`}
                   class="group block rounded-xl border border-zinc-800/60 bg-zinc-900/40 p-6 hover:border-accent/40 hover:bg-zinc-900/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
                 >
                   <div class="flex flex-wrap items-center gap-2 mb-3">

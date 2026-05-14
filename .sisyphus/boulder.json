@@ -157,7 +157,7 @@
       "plan_name": "seo-blog-categories",
       "status": "active",
       "started_at": "2026-05-13T23:32:06.345Z",
-      "updated_at": "2026-05-14T00:06:43.314Z",
+      "updated_at": "2026-05-14T00:24:58.610Z",
       "session_ids": [
         "ses_1de6ede59ffexUwt5C0sddEWwR"
       ],
@@ -183,12 +183,11 @@
           "task_key": "todo:7",
           "task_label": "7",
           "task_title": "Update generatorSchema.ts with category field",
-          "session_id": "ses_1dc34addfffegfOdNPOQJJYU66",
-          "agent": "Sisyphus-Junior",
-          "category": "visual-engineering",
+          "session_id": "ses_1dc25691cffe0lapEubAagS3AK",
+          "agent": "oracle",
           "started_at": "2026-05-13T23:42:40.563Z",
           "status": "running",
-          "updated_at": "2026-05-14T00:06:43.315Z"
+          "updated_at": "2026-05-14T00:24:58.611Z"
         }
       }
     }
@@ -196,7 +195,7 @@
   "active_plan": "/home/emil/Desktop/Coding/AI/Randify.pro/.sisyphus/plans/seo-blog-categories.md",
   "started_at": "2026-05-13T23:32:06.345Z",
   "status": "active",
-  "updated_at": "2026-05-14T00:06:43.314Z",
+  "updated_at": "2026-05-14T00:24:58.610Z",
   "session_ids": [
     "ses_1de6ede59ffexUwt5C0sddEWwR"
   ],
@@ -222,12 +221,11 @@
       "task_key": "todo:7",
       "task_label": "7",
       "task_title": "Update generatorSchema.ts with category field",
-      "session_id": "ses_1dc34addfffegfOdNPOQJJYU66",
-      "agent": "Sisyphus-Junior",
-      "category": "visual-engineering",
+      "session_id": "ses_1dc25691cffe0lapEubAagS3AK",
+      "agent": "oracle",
       "started_at": "2026-05-13T23:42:40.563Z",
       "status": "running",
-      "updated_at": "2026-05-14T00:06:43.315Z"
+      "updated_at": "2026-05-14T00:24:58.611Z"
     }
   },
   "agent": "atlas"

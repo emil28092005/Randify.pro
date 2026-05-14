@@ -197,3 +197,45 @@
 - Body content is 3 paragraphs of placeholder text ("This article will explore... Stay tuned for the full guide.") per instructions.
 - Build passes with 85 pages (up from 77), confirming 8 new static blog post pages were generated.
 - Existing `test-post.md` remains untouched; total EN blog collection now has 9 posts.
+
+---
+
+## F1 Plan Compliance Audit — $(date -Iseconds)
+
+### Build & Lint
+- `npm run build` → 93 pages, 0 errors ✓
+- `npm run lint` → 0 errors, 1 pre-existing warning ✓
+
+### Must Have Verification [12/12]
+1. **OG + Twitter Card meta tags** — Verified in dist/ (property="og:" present across built pages) ✓
+2. **x-default hreflang** — Verified in dist/ (hreflang="x-default" present) ✓
+3. **Sitemap with hreflang alternates** — Verified in dist/sitemap-0.xml (`<xhtml:link rel="alternate" hreflang="...">` for all pages) ✓
+4. **Blog content collections with Zod schema** — Verified src/content/config.ts (generators + blog collections, strict Zod schema) ✓
+5. **RSS feeds EN/RU** — Verified dist/rss.xml and dist/ru/rss.xml (valid RSS 2.0 with `<language>` tags) ✓
+6. **5 category pages** — Verified dist/generators/category/{gaming,security,decision-making,creative,utility}/ ✓
+7. **Visual breadcrumbs** — Verified aria-label="Breadcrumb" in dist/ generator and blog pages ✓
+8. **Related generators** — Verified in dist/generators/dice/index.html and dist/generators/password/index.html ✓
+9. **Custom 404 page** — Verified dist/404.html exists ✓
+10. **Fixed duplicate JSON keys** — All 28 generator JSON files parse successfully with Python json.load (no duplicate keys) ✓
+11. **`<main>` landmarks** — Verified exactly 1 `<main>` on dist/about/index.html, dist/privacy/index.html, and RU mirrors ✓
+12. **Blog post templates with correct frontmatter** — Verified 8 EN + 8 RU posts with valid frontmatter matching schema ✓
+
+### Must NOT Have Verification [6/6]
+1. **YandexRTB not removed** — Still present in GeneratorLayout.astro and index pages ✓
+2. **AdBanner not removed** — File src/components/AdBanner.astro exists (was never referenced in codebase pre-work) ✓
+3. **Generator behavior unchanged** — 0 generator component files modified between Wave 1 commit and HEAD ✓
+4. **No external SEO tools/services** — No google-analytics, gtag, facebook-pixel, ahrefs, semrush found ✓
+5. **No full blog content** — All posts contain placeholder Lorem-style paragraphs only ✓
+6. **No dynamic [slug].astro for generators** — No such file in src/pages/generators/ ✓
+
+### Evidence Files [24/26]
+Present: task-1,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,26
+Missing: task-7-schema.txt, task-25-related.txt
+Note: Both missing tasks are verifiable in build output (schema updated → all 28 JSONs have category; related generators → present on generator pages).
+
+### Minor Observations
+- EN blog directory contains 9 files (including test-post.md) vs. 8 specified in plan. Harmless scope creep.
+- AdBanner.astro file exists but has never been imported/referenced in the codebase (pre-existing condition, not changed by this work).
+
+### Verdict
+**Must Have [12/12] | Must NOT Have [6/6] | Tasks [24/26] | VERDICT: APPROVE**

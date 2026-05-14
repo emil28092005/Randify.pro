@@ -13,12 +13,13 @@ interface Props {
   ogType?: string;
   articlePubDate?: Date;
   articleModDate?: Date;
+  hideLanguageSwitcher?: boolean;
 }
 
 const lang = (Astro.currentLocale as Lang) || "en";
 const T = useT(lang);
 
-const { title = T.defaultTitle, description = T.defaultDesc, ogImage = "/og-default.jpg", ogType = "website", articlePubDate, articleModDate } = Astro.props;
+const { title = T.defaultTitle, description = T.defaultDesc, ogImage = "/og-default.jpg", ogType = "website", articlePubDate, articleModDate, hideLanguageSwitcher = false } = Astro.props;
 
 const ogImageUrl = ogImage.startsWith("http") ? ogImage : `https://randify.pro${ogImage}`;
 
@@ -105,7 +106,7 @@ const orgSchema = {
   <body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans antialiased">
     <Starfield />
     <div class="relative z-10">
-      <LanguageSwitcher />
+      {!hideLanguageSwitcher && <LanguageSwitcher />}
       <slot />
     </div>
   </body>

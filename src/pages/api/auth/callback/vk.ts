@@ -26,7 +26,7 @@ export const GET: APIRoute = async ({ url, request }) => {
     });
   }
 
-  const redirectUri = `${url.origin}/api/auth/callback/vk`;
+  const redirectUri = `${process.env.PUBLIC_APP_URL || url.origin}/api/auth/callback/vk`;
 
   const tokenRes = await fetch(vkOAuthConfig.tokenUrl, {
     method: 'POST',

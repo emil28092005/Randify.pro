@@ -1300,11 +1300,11 @@ docker compose exec postgres psql -U dmuser -d dmdashboard -c "\dt"
 ```
 
 ### Final Checklist
-- [ ] All "Must Have" present
-- [ ] All "Must NOT Have" absent
-- [ ] All tests pass
-- [ ] Build succeeds
-- [ ] Docker compose запускается
-- [ ] OAuth callbacks отвечают
-- [ ] DM Dashboard страница доступна
-- [ ] Таблицы в PostgreSQL созданы
+- [x] All "Must Have" present
+- [x] All "Must NOT Have" absent
+- [x] All tests pass
+- [x] Build succeeds
+- [x] Docker compose запускается
+- [x] OAuth callbacks отвечают
+- [x] DM Dashboard страница доступна
+- [x] Таблицы в PostgreSQL созданы

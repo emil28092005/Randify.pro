@@ -9,14 +9,14 @@ import { dmTranslations as T } from "@/i18n/dm-translations";
 ---
 
 <DmLayout>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
     <!-- Subtitle -->
     <p class="text-[var(--text-secondary)] text-base mb-4">
       {T.subtitle}
     </p>
 
     <!-- Anchor Navigation -->
-    <nav aria-label="Инструменты" class="mb-8">
+    <nav aria-label="Инструменты" class="mb-6">
       <ul class="flex flex-wrap gap-2">
         {[
           { id: "dice", label: T.anchorDice },
@@ -27,7 +27,7 @@ import { dmTranslations as T } from "@/i18n/dm-translations";
           <li>
         <a
           href={`#${item.id}`}
-          class="inline-flex items-center px-3 py-1.5 rounded-full bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] text-sm font-medium hover:bg-[var(--accent)]/10 hover:text-[var(--accent)] hover:border-[var(--accent)]/30 active:bg-[var(--accent)]/20 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
+          class="inline-flex items-center px-3 py-1.5 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/30 text-[var(--accent)] text-sm font-medium hover:bg-[var(--accent)]/20 active:bg-[var(--accent)]/30 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
         >
               {item.label}
             </a>
@@ -37,10 +37,10 @@ import { dmTranslations as T } from "@/i18n/dm-translations";
     </nav>
 
     <!-- Dashboard Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <!-- Dice Roller -->
       <section id="dice" aria-labelledby="dice-heading">
-        <div class="flex items-center gap-3 mb-3">
+        <div class="flex items-center gap-3 mb-2">
           <span class="w-1 h-6 bg-[var(--accent)] rounded-full" aria-hidden="true"></span>
           <h2 id="dice-heading" class="text-lg font-bold text-[var(--text-primary)]">
             {T.dice}
@@ -51,7 +51,7 @@ import { dmTranslations as T } from "@/i18n/dm-translations";
 
       <!-- Initiative Tracker -->
       <section id="initiative" aria-labelledby="initiative-heading">
-        <div class="flex items-center gap-3 mb-3">
+        <div class="flex items-center gap-3 mb-2">
           <span class="w-1 h-6 bg-[var(--accent)] rounded-full" aria-hidden="true"></span>
           <h2 id="initiative-heading" class="text-lg font-bold text-[var(--text-primary)]">
             {T.initiative}
@@ -62,7 +62,7 @@ import { dmTranslations as T } from "@/i18n/dm-translations";
 
       <!-- Open5e Reference -->
       <section id="reference" aria-labelledby="reference-heading">
-        <div class="flex items-center gap-3 mb-3">
+        <div class="flex items-center gap-3 mb-2">
           <span class="w-1 h-6 bg-[var(--accent)] rounded-full" aria-hidden="true"></span>
           <h2 id="reference-heading" class="text-lg font-bold text-[var(--text-primary)]">
             {T.reference}
@@ -75,7 +75,7 @@ import { dmTranslations as T } from "@/i18n/dm-translations";
 
       <!-- Notes Panel -->
       <section id="notes" aria-labelledby="notes-heading">
-        <div class="flex items-center gap-3 mb-3">
+        <div class="flex items-center gap-3 mb-2">
           <span class="w-1 h-6 bg-[var(--accent)] rounded-full" aria-hidden="true"></span>
           <h2 id="notes-heading" class="text-lg font-bold text-[var(--text-primary)]">
             {T.notes}

@@ -81,6 +81,8 @@ export const translations = {
     catDecisionMaking: "Decision Making",
     catCreative: "Creative",
     catUtility: "Utility",
+    dmDashboard: "DM Dashboard",
+    dmDashboardDesc: "Tools for dungeon masters — dice, initiative, reference, and notes.",
 
     notFoundTitle: "Page Not Found",
     notFoundMessage:
@@ -192,6 +194,8 @@ export const translations = {
     catDecisionMaking: "Принятие решений",
     catCreative: "Творчество",
     catUtility: "Утилиты",
+    dmDashboard: "Для мастера",
+    dmDashboardDesc: "Инструменты для мастера подземелий — кубики, инициатива, справочник и заметки.",
 
     notFoundTitle: "Страница не найдена",
     notFoundMessage:

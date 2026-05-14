@@ -1,0 +1,262 @@
+---
+import DmCard from "./DmCard.astro";
+import DmInput from "./DmInput.astro";
+import DmButton from "./DmButton.astro";
+
+const quickDice = [
+  { label: "d4", notation: "d4" },
+  { label: "d6", notation: "d6" },
+  { label: "d8", notation: "d8" },
+  { label: "d10", notation: "d10" },
+  { label: "d12", notation: "d12" },
+  { label: "d20", notation: "d20" },
+  { label: "d100", notation: "d100" },
+];
+---
+
+<DmCard>
+  <div class="space-y-4">
+    <div class="flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-[var(--text-primary)]">
+        Dice Roller
+      </h3>
+      <button
+        id="clear-history"
+        class="text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] active:text-[var(--accent-dark)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] rounded-md px-2 py-1"
+      >
+        Clear History
+      </button>
+    </div>
+
+    <div
+      class="grid grid-cols-4 sm:grid-cols-7 gap-2"
+      id="quick-dice-grid"
+      role="group"
+      aria-label="Quick dice selectors"
+    >
+      {
+        quickDice.map((d) => (
+          <button
+            type="button"
+            data-notation={d.notation}
+            class="quick-dice-btn bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] rounded-lg px-2 py-2 text-sm font-semibold hover:border-[var(--accent)] hover:text-[var(--accent)] active:bg-[var(--accent)]/10 active:border-[var(--accent)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
+          >
+            {d.label}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="flex gap-2 items-end">
+      <DmInput
+        id="dice-notation"
+        name="notation"
+        placeholder="e.g. 2d6+3"
+        label="Custom Roll"
+        class="flex-1"
+      />
+      <DmButton id="roll-btn" variant="primary" size="md">
+        Roll
+      </DmButton>
+    </div>
+
+    <div
+      id="result-display"
+      class="hidden rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] p-4 text-center"
+    >
+      <div class="text-sm text-[var(--text-secondary)] mb-1" id="result-label">
+        Result
+      </div>
+      <div
+        class="text-4xl font-bold text-[var(--accent)]"
+        id="result-total"
+      >
+        0
+      </div>
+      <div
+        class="text-sm text-[var(--text-secondary)] mt-1"
+        id="result-details"
+      >
+      </div>
+    </div>
+
+    <div id="history-section" class="hidden">
+      <h4 class="text-sm font-medium text-[var(--text-secondary)] mb-2">
+        Recent Rolls
+      </h4>
+      <ul
+        id="history-list"
+        class="space-y-1 max-h-40 overflow-y-auto"
+        role="list"
+        aria-label="Roll history"
+      >
+      </ul>
+    </div>
+  </div>
+</DmCard>
+
+<script>
+  import { parseDiceNotation, rollDice } from "@/lib/client/dice";
+  import { popElement } from "@/lib/client/animations";
+
+  const STORAGE_KEY = "dice-roller-history";
+  const MAX_HISTORY = 10;
+
+  interface HistoryEntry {
+    notation: string;
+    total: number;
+    rolls: number[];
+    modifier: number;
+    timestamp: number;
+  }
+
+  function loadHistory(): HistoryEntry[] {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      return raw ? (JSON.parse(raw) as HistoryEntry[]) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveHistory(history: HistoryEntry[]) {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+    } catch {
+      // sessionStorage may be unavailable
+    }
+  }
+
+  function addToHistory(entry: HistoryEntry) {
+    const history = loadHistory();
+    history.unshift(entry);
+    if (history.length > MAX_HISTORY) {
+      history.length = MAX_HISTORY;
+    }
+    saveHistory(history);
+    renderHistory();
+  }
+
+  function clearHistory() {
+    saveHistory([]);
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const history = loadHistory();
+    const section = document.getElementById("history-section");
+    const list = document.getElementById("history-list");
+    if (!section || !list) return;
+
+    if (history.length === 0) {
+      section.classList.add("hidden");
+      list.innerHTML = "";
+      return;
+    }
+
+    section.classList.remove("hidden");
+    list.innerHTML = history
+      .map(
+        (entry) => `
+          <li class="flex items-center justify-between rounded-md bg-[var(--bg-secondary)] px-3 py-2 text-sm">
+            <span class="text-[var(--text-secondary)]">${entry.notation}</span>
+            <span class="font-semibold text-[var(--text-primary)]">${entry.total}</span>
+          </li>
+        `,
+      )
+      .join("");
+  }
+
+  function showResult(
+    notation: string,
+    result: { rolls: number[]; total: number; modifier: number },
+  ) {
+    const display = document.getElementById("result-display");
+    const totalEl = document.getElementById("result-total");
+    const detailsEl = document.getElementById("result-details");
+    const labelEl = document.getElementById("result-label");
+    if (!display || !totalEl || !detailsEl || !labelEl) return;
+
+    display.classList.remove("hidden");
+    totalEl.textContent = String(result.total);
+    labelEl.textContent = notation;
+
+    const rolls = result.rolls.join(", ");
+    if (result.modifier !== 0) {
+      const sign = result.modifier > 0 ? "+" : "";
+      detailsEl.textContent = `Rolls: ${rolls} ${sign}${result.modifier}`;
+    } else {
+      detailsEl.textContent = `Rolls: ${rolls}`;
+    }
+
+    popElement(totalEl);
+
+    addToHistory({
+      notation,
+      total: result.total,
+      rolls: result.rolls,
+      modifier: result.modifier,
+      timestamp: Date.now(),
+    });
+  }
+
+  function performRoll(notation: string) {
+    const trimmed = notation.trim();
+    if (!trimmed) return;
+
+    try {
+      const parsed = parseDiceNotation(trimmed);
+      const result = rollDice(parsed.count, parsed.sides, parsed.modifier);
+      showResult(trimmed, result);
+    } catch {
+      const display = document.getElementById("result-display");
+      const totalEl = document.getElementById("result-total");
+      const detailsEl = document.getElementById("result-details");
+      const labelEl = document.getElementById("result-label");
+      if (!display || !totalEl || !detailsEl || !labelEl) return;
+
+      display.classList.remove("hidden");
+      totalEl.textContent = "?";
+      labelEl.textContent = trimmed;
+      detailsEl.textContent = "Invalid notation";
+    }
+  }
+
+  const quickButtons = document.querySelectorAll<HTMLButtonElement>(
+    ".quick-dice-btn",
+  );
+  quickButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const notation = btn.dataset.notation;
+      if (notation) {
+        const input = document.getElementById(
+          "dice-notation",
+        ) as HTMLInputElement | null;
+        if (input) input.value = notation;
+        performRoll(notation);
+      }
+    });
+  });
+
+  const rollBtn = document.getElementById("roll-btn");
+  rollBtn?.addEventListener("click", () => {
+    const input = document.getElementById(
+      "dice-notation",
+    ) as HTMLInputElement | null;
+    performRoll(input?.value ?? "");
+  });
+
+  const notationInput = document.getElementById(
+    "dice-notation",
+  ) as HTMLInputElement | null;
+  notationInput?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      performRoll(notationInput.value);
+    }
+  });
+
+  const clearBtn = document.getElementById("clear-history");
+  clearBtn?.addEventListener("click", clearHistory);
+
+  renderHistory();
+</script>

@@ -1,0 +1,60 @@
+---
+export interface Props {
+  id?: string;
+  name?: string;
+  type?: string;
+  value?: string | number;
+  placeholder?: string;
+  label?: string;
+  required?: boolean;
+  class?: string;
+  min?: number | string;
+  max?: number | string;
+  step?: number | string;
+}
+
+const {
+  id,
+  name,
+  type = "text",
+  value,
+  placeholder,
+  label,
+  required = false,
+  class: className = "",
+  min,
+  max,
+  step,
+} = Astro.props;
+
+const inputClasses =
+  "w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg px-3 py-2 text-[var(--text-primary)] text-base placeholder:text-[var(--text-secondary)] hover:border-[var(--text-secondary)] focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] transition-colors";
+
+const classes = `${inputClasses} ${className}`;
+---
+
+<div class="w-full">
+  {
+    label && (
+      <label
+        for={id}
+        class="block text-sm font-medium text-[var(--text-secondary)] mb-1"
+      >
+        {label}
+        {required && <span class="text-[var(--accent)]">*</span>}
+      </label>
+    )
+  }
+  <input
+    id={id}
+    name={name}
+    type={type}
+    value={value}
+    placeholder={placeholder}
+    required={required}
+    min={min}
+    max={max}
+    step={step}
+    class={classes}
+  />
+</div>

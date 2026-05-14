@@ -18,6 +18,7 @@ const notFoundSchema = {
   inLanguage: lang,
 };
 ---
+export const prerender = true;
 
 <BaseLayout title={`${T.notFoundTitle} | Randify`} description={T.notFoundMessage}>
   <script type="application/ld+json" set:html={JSON.stringify(notFoundSchema)} slot="head" />

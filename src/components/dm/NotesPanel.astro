@@ -1,0 +1,77 @@
+---
+import DmButton from './DmButton.astro';
+---
+
+<div class="w-full">
+  <div class="flex items-center justify-between mb-3">
+    <span id="notes-saved-indicator" class="text-sm text-[var(--accent)] opacity-0 transition-opacity duration-300">
+      Saved
+    </span>
+    <span id="notes-char-count" class="text-sm text-[var(--text-secondary)]">0 chars</span>
+  </div>
+
+  <textarea
+    id="notes-textarea"
+    class="w-full h-64 resize-y rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] p-4 hover:border-[var(--text-secondary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] transition-shadow duration-150"
+    placeholder="Type your notes here..."
+  ></textarea>
+
+  <div class="mt-4 flex justify-end">
+    <DmButton id="notes-clear-btn" variant="secondary" size="sm">Clear</DmButton>
+  </div>
+</div>
+
+<script>
+  import { saveNotes, loadNotes, clearNotes } from '@/lib/client/notes';
+
+  const textarea = document.getElementById('notes-textarea') as HTMLTextAreaElement;
+  const savedIndicator = document.getElementById('notes-saved-indicator') as HTMLSpanElement;
+  const charCount = document.getElementById('notes-char-count') as HTMLSpanElement;
+  const clearBtn = document.getElementById('notes-clear-btn') as HTMLButtonElement;
+
+  let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+  let hideIndicatorTimer: ReturnType<typeof setTimeout> | null = null;
+
+  function showSavedIndicator() {
+    savedIndicator.classList.remove('opacity-0');
+    if (hideIndicatorTimer) clearTimeout(hideIndicatorTimer);
+    hideIndicatorTimer = setTimeout(() => {
+      savedIndicator.classList.add('opacity-0');
+    }, 1500);
+  }
+
+  function updateCharCount() {
+    const count = textarea.value.length;
+    charCount.textContent = `${count} char${count === 1 ? '' : 's'}`;
+  }
+
+  function loadSavedNotes() {
+    const saved = loadNotes();
+    textarea.value = saved;
+    updateCharCount();
+  }
+
+  function handleInput() {
+    updateCharCount();
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      saveNotes(textarea.value);
+      showSavedIndicator();
+    }, 500);
+  }
+
+  function handleClear() {
+    textarea.value = '';
+    clearNotes();
+    updateCharCount();
+    savedIndicator.classList.add('opacity-0');
+    if (hideIndicatorTimer) clearTimeout(hideIndicatorTimer);
+    if (debounceTimer) clearTimeout(debounceTimer);
+    textarea.focus();
+  }
+
+  textarea.addEventListener('input', handleInput);
+  clearBtn.addEventListener('click', handleClear);
+
+  loadSavedNotes();
+</script>

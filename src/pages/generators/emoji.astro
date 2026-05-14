@@ -5,6 +5,7 @@ import { findGenerator } from '@/data/generators';
 
 const generator = findGenerator("emoji");
 ---
+export const prerender = true;
 
 <GeneratorLayout generator={generator}>
   <EmojiGenerator />

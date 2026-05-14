@@ -6,6 +6,7 @@ import type { Lang } from "@/i18n/translations";
 const lang = (Astro.currentLocale as Lang) || "en";
 const T = useT(lang);
 ---
+export const prerender = true;
 
 <BaseLayout title={`${T.privacyTitle} | Randify`} description={T.privacyIntro}>
   <div class="max-w-2xl mx-auto px-4 py-12 sm:py-20">

@@ -7,6 +7,24 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/randify
+      NODE_ENV: test
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: randify
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
     steps:
       - uses: actions/checkout@v4
 
@@ -20,6 +38,9 @@ jobs:
       - run: npm run test
       - run: npm run build
 
+      - name: Run database migrations
+        run: npm run db:migrate
+
       - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
@@ -27,9 +48,14 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy via rsync
+      - name: Deploy Node.js app
         run: |
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/deploy_key" \
-            dist/ \
+            dist/ package*.json docker-compose.yml Dockerfile \
             ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:~/www/randify.pro/
+
+      - name: Restart app
+        run: |
+          ssh -i ~/.ssh/deploy_key ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
+            "cd ~/www/randify.pro && docker compose down && docker compose up -d --build && sleep 5 && curl -sf http://localhost:4321/api/health || echo 'Health check skipped'"

@@ -1,0 +1,49 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import DmHeader from "../components/dm/DmHeader.astro";
+import AuthPanel from "../components/dm/AuthPanel.astro";
+import { dmTranslations as T } from "../i18n/dm-translations";
+import "../styles/dm-theme.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = T.title,
+  description = "Dungeon Master Dashboard",
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col">
+    <DmHeader title={title}>
+      <a
+        href="/"
+        class="hidden sm:inline-flex items-center text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] rounded-md px-2 py-1"
+      >
+        {T.backToRandify}
+      </a>
+      <AuthPanel />
+    </DmHeader>
+
+    <main class="flex-1">
+      <slot />
+    </main>
+
+    <footer class="w-full border-t border-[var(--border-color)] bg-[var(--bg-secondary)]/60 backdrop-blur-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+        <span class="text-sm text-[var(--text-secondary)]">
+          {T.footer}
+        </span>
+        <a
+          href="/"
+          class="text-sm text-[var(--accent)] hover:text-[var(--accent-light)] active:text-[var(--accent-dark)] transition-colors font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] rounded-md px-1 py-0.5"
+        >
+          {T.backToRandify}
+        </a>
+      </div>
+    </footer>
+  </div>
+</BaseLayout>

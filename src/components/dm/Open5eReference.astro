@@ -1,0 +1,435 @@
+---
+import DmCard from "./DmCard.astro";
+import DmInput from "./DmInput.astro";
+import DmButton from "./DmButton.astro";
+---
+
+<div id="open5e-reference" class="w-full max-w-3xl mx-auto">
+  <!-- Tabs -->
+  <div class="flex gap-1 mb-4" role="tablist" aria-label="Open5e разделы">
+    <button
+      id="o5-tab-monsters"
+      type="button"
+      role="tab"
+      aria-selected="true"
+      aria-controls="o5-panel-monsters"
+      class="flex-1 px-4 py-2.5 text-sm font-semibold rounded-lg transition-colors bg-[var(--accent)] text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
+      data-tab="monsters"
+    >
+      Монстры
+    </button>
+    <button
+      id="o5-tab-spells"
+      type="button"
+      role="tab"
+      aria-selected="false"
+      aria-controls="o5-panel-spells"
+      class="flex-1 px-4 py-2.5 text-sm font-semibold rounded-lg transition-colors bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-color)] hover:text-[var(--text-primary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
+      data-tab="spells"
+    >
+      Заклинания
+    </button>
+  </div>
+
+  <!-- Search and filters -->
+  <DmCard padding="md" class="mb-4">
+    <div class="flex flex-col sm:flex-row gap-3">
+      <div class="flex-1">
+        <DmInput
+          id="o5-search"
+          type="text"
+          placeholder="Поиск..."
+          label=""
+        />
+      </div>
+      <div class="sm:w-40">
+        <select
+          id="o5-filter"
+          class="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg px-3 py-2 text-[var(--text-primary)] text-base hover:border-[var(--text-secondary)] focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] transition-colors"
+        >
+          <option value="">Все</option>
+        </select>
+      </div>
+    </div>
+  </DmCard>
+
+  <!-- Loading state -->
+  <div id="o5-loading" class="hidden text-center py-8">
+    <div class="inline-block w-8 h-8 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin"></div>
+    <p class="mt-2 text-sm text-[var(--text-secondary)]">Загрузка...</p>
+  </div>
+
+  <!-- Error state -->
+  <div id="o5-error" class="hidden rounded-xl bg-red-500/10 border border-red-500/30 p-4 mb-4">
+    <p class="text-sm text-red-400" id="o5-error-text"></p>
+  </div>
+
+  <!-- Empty state -->
+  <div id="o5-empty" class="hidden rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] p-8 text-center">
+    <p class="text-[var(--text-secondary)] text-sm">Ничего не найдено. Попробуйте изменить запрос или фильтры.</p>
+  </div>
+
+  <!-- Results list -->
+  <div id="o5-results" class="space-y-2 mb-4" role="tabpanel" aria-label="Результаты поиска"></div>
+
+  <!-- Pagination -->
+  <div id="o5-pagination" class="hidden flex items-center justify-between gap-3">
+    <DmButton id="o5-prev" variant="secondary" size="sm" disabled>
+      ← Назад
+    </DmButton>
+    <span id="o5-page-info" class="text-sm text-[var(--text-secondary)] font-medium"></span>
+    <DmButton id="o5-next" variant="secondary" size="sm" disabled>
+      Вперёд →
+    </DmButton>
+  </div>
+
+  <!-- Detail modal / panel -->
+  <div
+    id="o5-detail-overlay"
+    class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center p-4 pt-12"
+    aria-modal="true"
+    role="dialog"
+  >
+    <DmCard padding="lg" class="w-full max-w-2xl max-h-[80vh] overflow-y-auto relative">
+      <button
+        id="o5-detail-close"
+        type="button"
+        class="absolute top-4 right-4 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] rounded-lg p-1"
+        aria-label="Закрыть"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"/>
+          <path d="m6 6 12 12"/>
+        </svg>
+      </button>
+      <div id="o5-detail-content"></div>
+    </DmCard>
+  </div>
+</div>
+
+<script>
+  import { Open5eUIManager } from "@/lib/client/open5e-ui";
+
+  const CR_OPTIONS = [
+    { value: "", label: "Все ОП" },
+    { value: "0.125", label: "1/8" },
+    { value: "0.25", label: "1/4" },
+    { value: "0.5", label: "1/2" },
+    { value: "1", label: "1" },
+    { value: "2", label: "2" },
+    { value: "3", label: "3" },
+    { value: "5", label: "5" },
+    { value: "10", label: "10" },
+    { value: "15", label: "15" },
+    { value: "20", label: "20" },
+    { value: "30", label: "30" },
+  ];
+
+  const LEVEL_OPTIONS = [
+    { value: "", label: "Все уровни" },
+    { value: "0", label: "Заговор" },
+    { value: "1", label: "1-й" },
+    { value: "2", label: "2-й" },
+    { value: "3", label: "3-й" },
+    { value: "4", label: "4-й" },
+    { value: "5", label: "5-й" },
+    { value: "6", label: "6-й" },
+    { value: "7", label: "7-й" },
+    { value: "8", label: "8-й" },
+    { value: "9", label: "9-й" },
+  ];
+
+  const searchInput = document.getElementById("o5-search") as HTMLInputElement;
+  const filterSelect = document.getElementById("o5-filter") as HTMLSelectElement;
+  const resultsContainer = document.getElementById("o5-results")!;
+  const loadingEl = document.getElementById("o5-loading")!;
+  const errorEl = document.getElementById("o5-error")!;
+  const errorTextEl = document.getElementById("o5-error-text")!;
+  const emptyEl = document.getElementById("o5-empty")!;
+  const paginationEl = document.getElementById("o5-pagination")!;
+  const prevBtn = document.getElementById("o5-prev")!;
+  const nextBtn = document.getElementById("o5-next")!;
+  const pageInfoEl = document.getElementById("o5-page-info")!;
+  const detailOverlay = document.getElementById("o5-detail-overlay")!;
+  const detailContent = document.getElementById("o5-detail-content")!;
+  const detailClose = document.getElementById("o5-detail-close")!;
+  const tabMonsters = document.getElementById("o5-tab-monsters")!;
+  const tabSpells = document.getElementById("o5-tab-spells")!;
+
+  interface Monster {
+    key: string;
+    name: string;
+    challenge_rating_decimal?: string;
+    type?: string;
+    hit_points?: number;
+    armor_class?: number;
+    speed?: Record<string, unknown>;
+    actions?: Array<{ name: string; desc?: string }>;
+  }
+
+  interface Spell {
+    key: string;
+    name: string;
+    level?: number;
+    school?: string;
+    casting_time?: string;
+    range?: string;
+    components?: string;
+    duration?: string;
+    desc?: string;
+  }
+
+  const manager = new Open5eUIManager(render);
+
+  function buildFilterOptions() {
+    const options = manager.state.tab === "monsters" ? CR_OPTIONS : LEVEL_OPTIONS;
+    filterSelect.innerHTML = options
+      .map((o) => `<option value="${o.value}">${o.label}</option>`)
+      .join("");
+  }
+
+  function updateTabs() {
+    const isMonsters = manager.state.tab === "monsters";
+    tabMonsters.setAttribute("aria-selected", String(isMonsters));
+    tabSpells.setAttribute("aria-selected", String(!isMonsters));
+
+    if (isMonsters) {
+      tabMonsters.className = "flex-1 px-4 py-2.5 text-sm font-semibold rounded-lg transition-colors bg-[var(--accent)] text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]";
+      tabSpells.className = "flex-1 px-4 py-2.5 text-sm font-semibold rounded-lg transition-colors bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-color)] hover:text-[var(--text-primary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]";
+    } else {
+      tabMonsters.className = "flex-1 px-4 py-2.5 text-sm font-semibold rounded-lg transition-colors bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-color)] hover:text-[var(--text-primary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]";
+      tabSpells.className = "flex-1 px-4 py-2.5 text-sm font-semibold rounded-lg transition-colors bg-[var(--accent)] text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]";
+    }
+  }
+
+  function renderMonsterCard(monster: Monster): string {
+    const cr = Open5eUIManager.formatCr(monster.challenge_rating_decimal ?? "");
+    return `
+      <div class="flex items-center justify-between gap-3 cursor-pointer rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] p-4 hover:border-[var(--accent)] transition-colors group focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
+           data-key="${monster.key}" role="button" tabindex="0">
+        <div class="min-w-0">
+          <p class="font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors truncate">
+            ${escapeHtml(monster.name)}
+          </p>
+          <p class="text-xs text-[var(--text-secondary)] mt-0.5">
+            ${escapeHtml(monster.type || "—")} · ОП ${cr}
+          </p>
+        </div>
+        <div class="shrink-0 text-right">
+          <p class="text-xs text-[var(--text-secondary)]">КЗ ${monster.armor_class ?? "—"}</p>
+          <p class="text-xs text-[var(--text-secondary)]">ХП ${monster.hit_points ?? "—"}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderSpellCard(spell: Spell): string {
+    const level = Open5eUIManager.formatSpellLevel(spell.level ?? 0);
+    return `
+      <div class="flex items-center justify-between gap-3 cursor-pointer rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] p-4 hover:border-[var(--accent)] transition-colors group focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
+           data-key="${spell.key}" role="button" tabindex="0">
+        <div class="min-w-0">
+          <p class="font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors truncate">
+            ${escapeHtml(spell.name)}
+          </p>
+          <p class="text-xs text-[var(--text-secondary)] mt-0.5">
+            ${escapeHtml(spell.school || "—")} · ${level}
+          </p>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderMonsterDetail(monster: Monster): string {
+    const cr = Open5eUIManager.formatCr(monster.challenge_rating_decimal ?? "");
+    let html = `
+      <h2 class="text-xl font-bold text-[var(--text-primary)] pr-8">${escapeHtml(monster.name)}</h2>
+      <p class="text-sm text-[var(--text-secondary)] mt-1">${escapeHtml(monster.type || "—")} · ОП ${cr}</p>
+      <div class="grid grid-cols-3 gap-3 mt-4">
+        <div class="rounded-lg bg-[var(--bg-secondary)] p-3 text-center">
+          <p class="text-lg font-bold text-[var(--accent)]">${monster.hit_points ?? "—"}</p>
+          <p class="text-xs text-[var(--text-secondary)]">ХП</p>
+        </div>
+        <div class="rounded-lg bg-[var(--bg-secondary)] p-3 text-center">
+          <p class="text-lg font-bold text-[var(--accent)]">${monster.armor_class ?? "—"}</p>
+          <p class="text-xs text-[var(--text-secondary)]">КЗ</p>
+        </div>
+        <div class="rounded-lg bg-[var(--bg-secondary)] p-3 text-center">
+          <p class="text-lg font-bold text-[var(--accent)]">${cr}</p>
+          <p class="text-xs text-[var(--text-secondary)]">ОП</p>
+        </div>
+      </div>
+    `;
+
+    if (monster.speed && typeof monster.speed === "object") {
+      const speeds = Object.entries(monster.speed)
+        .filter(([, v]) => v)
+        .map(([k, v]) => `${k} ${v} фт.`)
+        .join(", ");
+      if (speeds) {
+        html += `<div class="mt-4"><p class="text-sm text-[var(--text-secondary)]">Скорость</p><p class="text-sm text-[var(--text-primary)]">${escapeHtml(speeds)}</p></div>`;
+      }
+    }
+
+    if (Array.isArray(monster.actions) && monster.actions.length > 0) {
+      html += `<div class="mt-4"><p class="text-sm font-semibold text-[var(--text-primary)] mb-2">Действия</p>`;
+      for (const action of monster.actions) {
+        html += `
+          <div class="mb-2">
+            <p class="text-sm font-medium text-[var(--accent)]">${escapeHtml(action.name)}</p>
+            <p class="text-sm text-[var(--text-secondary)]">${escapeHtml(action.desc || "")}</p>
+          </div>
+        `;
+      }
+      html += `</div>`;
+    }
+
+    return html;
+  }
+
+  function renderSpellDetail(spell: Spell): string {
+    const level = Open5eUIManager.formatSpellLevel(spell.level ?? 0);
+    let html = `
+      <h2 class="text-xl font-bold text-[var(--text-primary)] pr-8">${escapeHtml(spell.name)}</h2>
+      <p class="text-sm text-[var(--text-secondary)] mt-1">${escapeHtml(spell.school || "—")} · ${level}</p>
+      <div class="grid grid-cols-2 gap-3 mt-4">
+        <div class="rounded-lg bg-[var(--bg-secondary)] p-3 text-center">
+          <p class="text-sm font-bold text-[var(--accent)]">${escapeHtml(spell.casting_time || "—")}</p>
+          <p class="text-xs text-[var(--text-secondary)]">Время накладывания</p>
+        </div>
+        <div class="rounded-lg bg-[var(--bg-secondary)] p-3 text-center">
+          <p class="text-sm font-bold text-[var(--accent)]">${escapeHtml(spell.range || "—")}</p>
+          <p class="text-xs text-[var(--text-secondary)]">Дистанция</p>
+        </div>
+        <div class="rounded-lg bg-[var(--bg-secondary)] p-3 text-center">
+          <p class="text-sm font-bold text-[var(--accent)]">${escapeHtml(spell.components || "—")}</p>
+          <p class="text-xs text-[var(--text-secondary)]">Компоненты</p>
+        </div>
+        <div class="rounded-lg bg-[var(--bg-secondary)] p-3 text-center">
+          <p class="text-sm font-bold text-[var(--accent)]">${escapeHtml(spell.duration || "—")}</p>
+          <p class="text-xs text-[var(--text-secondary)]">Длительность</p>
+        </div>
+      </div>
+    `;
+
+    if (spell.desc) {
+      html += `<div class="mt-4"><p class="text-sm text-[var(--text-secondary)] whitespace-pre-line">${escapeHtml(spell.desc)}</p></div>`;
+    }
+
+    return html;
+  }
+
+  function escapeHtml(str: string): string {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function render() {
+    const state = manager.state;
+
+    updateTabs();
+
+    loadingEl.classList.toggle("hidden", !state.loading || state.results.length > 0);
+    errorEl.classList.toggle("hidden", !state.error);
+    if (state.error) errorTextEl.textContent = state.error;
+    emptyEl.classList.toggle("hidden", state.results.length > 0 || state.loading || !!state.error);
+
+    const paginated = manager.getPaginatedResults();
+    resultsContainer.innerHTML = "";
+
+    if (paginated.length > 0) {
+      for (const item of paginated) {
+        const cardHtml = state.tab === "monsters"
+          ? renderMonsterCard(item)
+          : renderSpellCard(item);
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = cardHtml;
+        const card = wrapper.firstElementChild as HTMLElement;
+        if (card) {
+          const key = item.key;
+          card.addEventListener("click", () => manager.selectItem(key));
+          card.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              manager.selectItem(key);
+            }
+          });
+          resultsContainer.appendChild(card);
+        }
+      }
+    }
+
+    if (state.totalPages > 1) {
+      paginationEl.classList.remove("hidden");
+      pageInfoEl.textContent = `Страница ${state.page} из ${state.totalPages}`;
+      (prevBtn as HTMLButtonElement).disabled = state.page <= 1;
+      (nextBtn as HTMLButtonElement).disabled = state.page >= state.totalPages;
+    } else {
+      paginationEl.classList.add("hidden");
+    }
+
+    if (state.selectedItem) {
+      detailContent.innerHTML = state.tab === "monsters"
+        ? renderMonsterDetail(state.selectedItem)
+        : renderSpellDetail(state.selectedItem);
+      detailOverlay.classList.remove("hidden");
+      detailClose.focus();
+    } else {
+      detailOverlay.classList.add("hidden");
+    }
+  }
+
+  function closeDetail() {
+    manager.clearSelectedItem();
+  }
+
+  tabMonsters.addEventListener("click", () => {
+    manager.setTab("monsters");
+    buildFilterOptions();
+  });
+  tabSpells.addEventListener("click", () => {
+    manager.setTab("spells");
+    buildFilterOptions();
+  });
+
+  searchInput.addEventListener("input", () => {
+    manager.setQueryDebounced(searchInput.value.trim());
+  });
+
+  searchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      manager.setQuery(searchInput.value.trim());
+    }
+  });
+
+  filterSelect.addEventListener("change", () => {
+    const value = filterSelect.value;
+    if (manager.state.tab === "monsters") {
+      manager.setMonsterCrFilter(value);
+    } else {
+      manager.setSpellLevelFilter(value);
+    }
+    manager.search();
+  });
+
+  prevBtn.addEventListener("click", () => {
+    manager.prevPage();
+  });
+  nextBtn.addEventListener("click", () => {
+    manager.nextPage();
+  });
+
+  detailClose.addEventListener("click", closeDetail);
+  detailOverlay.addEventListener("click", (e) => {
+    if (e.target === detailOverlay) closeDetail();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !detailOverlay.classList.contains("hidden")) {
+      closeDetail();
+    }
+  });
+
+  buildFilterOptions();
+  manager.search();
+</script>

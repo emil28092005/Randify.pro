@@ -1,0 +1,297 @@
+---
+import DmButton from "./DmButton.astro";
+import DmInput from "./DmInput.astro";
+---
+
+<div id="initiative-tracker" class="w-full max-w-xl mx-auto">
+  <!-- Add combatant form -->
+  <div class="rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] p-5 mb-6">
+    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+      <div class="sm:col-span-5">
+        <DmInput
+          id="it-name"
+          name="name"
+          type="text"
+          placeholder="Combatant name"
+          label="Name"
+        />
+      </div>
+      <div class="sm:col-span-3">
+        <DmInput
+          id="it-modifier"
+          name="modifier"
+          type="number"
+          value={0}
+          placeholder="Modifier"
+          label="Modifier"
+        />
+      </div>
+      <div class="sm:col-span-2">
+        <DmButton id="it-roll-btn" variant="secondary" size="sm" class="w-full">
+          Roll d20
+        </DmButton>
+      </div>
+      <div class="sm:col-span-2">
+        <DmButton id="it-add-btn" variant="primary" size="sm" class="w-full">
+          Add
+        </DmButton>
+      </div>
+    </div>
+    <div class="mt-3 flex items-center gap-3">
+      <DmInput
+        id="it-initiative"
+        name="initiative"
+        type="number"
+        placeholder="Or enter total"
+        label="Initiative"
+        class="sm:max-w-[120px]"
+      />
+      <span class="text-xs text-[var(--text-secondary)]">
+        Roll d20 + modifier, or enter total manually
+      </span>
+    </div>
+  </div>
+
+  <!-- Combatant list -->
+  <div
+    id="it-list-panel"
+    class="rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] p-5 hidden"
+  >
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider">
+        Turn Order
+      </h3>
+      <DmButton id="it-clear-btn" variant="ghost" size="sm">
+        Clear All
+      </DmButton>
+    </div>
+    <ul id="it-list" class="space-y-2" role="list" aria-label="Combatants"></ul>
+
+    <!-- Next turn button -->
+    <div class="mt-5 flex justify-center">
+      <DmButton id="it-next-btn" variant="primary" size="md" class="w-full sm:w-auto">
+        Next Turn
+      </DmButton>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div
+    id="it-empty"
+    class="rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] p-8 text-center"
+  >
+    <p class="text-[var(--text-secondary)] text-sm">
+      No combatants yet. Add a name and roll initiative to begin.
+    </p>
+  </div>
+</div>
+
+<script>
+  import {
+    sortByInitiative,
+    getNextActiveIndex,
+    rollInitiative,
+  } from "@/lib/client/initiative";
+
+  const STORAGE_KEY = "it-combatants";
+
+  // DOM refs
+  const nameInput = document.getElementById("it-name") as HTMLInputElement;
+  const modifierInput = document.getElementById(
+    "it-modifier",
+  ) as HTMLInputElement;
+  const initiativeInput = document.getElementById(
+    "it-initiative",
+  ) as HTMLInputElement;
+  const rollBtn = document.getElementById("it-roll-btn");
+  const addBtn = document.getElementById("it-add-btn");
+  const nextBtn = document.getElementById("it-next-btn");
+  const clearBtn = document.getElementById("it-clear-btn");
+  const listEl = document.getElementById("it-list");
+  const listPanel = document.getElementById("it-list-panel");
+  const emptyState = document.getElementById("it-empty");
+
+  let activeIndex = 0;
+
+  interface CombatantData {
+    id: string;
+    name: string;
+    initiative: number;
+  }
+
+  function loadCombatants(): CombatantData[] {
+    try {
+      return JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? "[]");
+    } catch {
+      return [];
+    }
+  }
+
+  function saveCombatants(combatants: CombatantData[]) {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(combatants));
+  }
+
+  function generateId(): string {
+    return Math.random().toString(36).slice(2, 9);
+  }
+
+  function updateVisibility() {
+    const combatants = loadCombatants();
+    const hasCombatants = combatants.length > 0;
+    listPanel?.classList.toggle("hidden", !hasCombatants);
+    emptyState?.classList.toggle("hidden", hasCombatants);
+  }
+
+  function renderList() {
+    const combatants = sortByInitiative(loadCombatants());
+    if (!listEl) return;
+
+    listEl.innerHTML = "";
+    combatants.forEach((c, index) => {
+      const isActive = index === activeIndex;
+      const li = document.createElement("li");
+      li.className = `flex items-center justify-between gap-3 rounded-lg border px-4 py-3 transition-colors ${
+        isActive
+          ? "border-[var(--accent)] bg-[var(--accent)]/10"
+          : "border-[var(--border-color)] bg-[var(--bg-secondary)]"
+      }`;
+      li.setAttribute("data-id", c.id);
+
+      li.innerHTML = `
+        <div class="flex items-center gap-3 min-w-0">
+          <span class="inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${
+            isActive
+              ? "bg-[var(--accent)] text-white"
+              : "bg-[var(--border-color)] text-[var(--text-secondary)]"
+          }">
+            ${index + 1}
+          </span>
+          <span class="font-medium text-[var(--text-primary)] truncate">
+            ${escapeHtml(c.name)}
+          </span>
+        </div>
+        <div class="flex items-center gap-3 shrink-0">
+          <span class="text-sm font-bold text-[var(--accent)] tabular-nums">
+            ${c.initiative}
+          </span>
+          <button
+            type="button"
+            class="it-delete-btn text-[var(--text-secondary)] hover:text-red-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] rounded"
+            aria-label="Delete ${escapeHtml(c.name)}"
+            data-id="${c.id}"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 6h18"/>
+              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+            </svg>
+          </button>
+        </div>
+      `;
+
+      listEl.appendChild(li);
+    });
+
+    // Attach delete listeners
+    listEl.querySelectorAll(".it-delete-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const id = (e.currentTarget as HTMLElement).getAttribute("data-id");
+        if (id) deleteCombatant(id);
+      });
+    });
+  }
+
+  function escapeHtml(str: string): string {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function addCombatant() {
+    const name = nameInput.value.trim();
+    const initiativeVal = initiativeInput.value;
+
+    if (!name) {
+      nameInput.focus();
+      return;
+    }
+
+    let initiative = parseInt(initiativeVal, 10);
+    if (Number.isNaN(initiative)) {
+      const modifier = parseInt(modifierInput.value, 10) || 0;
+      initiative = rollInitiative(modifier);
+      initiativeInput.value = String(initiative);
+    }
+
+    const combatants = loadCombatants();
+    combatants.push({ id: generateId(), name, initiative });
+    saveCombatants(combatants);
+
+    // Reset form
+    nameInput.value = "";
+    initiativeInput.value = "";
+    modifierInput.value = "0";
+    nameInput.focus();
+
+    activeIndex = 0;
+    updateVisibility();
+    renderList();
+  }
+
+  function deleteCombatant(id: string) {
+    const combatants = loadCombatants().filter((c) => c.id !== id);
+    saveCombatants(combatants);
+
+    // Adjust active index if needed
+    if (activeIndex >= combatants.length) {
+      activeIndex = 0;
+    }
+
+    updateVisibility();
+    renderList();
+  }
+
+  function nextTurn() {
+    const combatants = loadCombatants();
+    if (combatants.length === 0) return;
+    activeIndex = getNextActiveIndex(activeIndex, combatants.length);
+    renderList();
+  }
+
+  function clearAll() {
+    sessionStorage.removeItem(STORAGE_KEY);
+    activeIndex = 0;
+    updateVisibility();
+    renderList();
+  }
+
+  function handleRoll() {
+    const modifier = parseInt(modifierInput.value, 10) || 0;
+    const result = rollInitiative(modifier);
+    initiativeInput.value = String(result);
+  }
+
+  // Event listeners
+  rollBtn?.addEventListener("click", handleRoll);
+  addBtn?.addEventListener("click", addCombatant);
+  nextBtn?.addEventListener("click", nextTurn);
+  clearBtn?.addEventListener("click", clearAll);
+
+  nameInput?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addCombatant();
+    }
+  });
+
+  initiativeInput?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addCombatant();
+    }
+  });
+
+  // Init
+  updateVisibility();
+  renderList();
+</script>

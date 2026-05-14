@@ -31,6 +31,7 @@ export async function getStaticPaths() {
 const { post, prev, next } = Astro.props;
 const { Content } = await post.render();
 ---
+export const prerender = true;
 
 <BlogLayout
   title={post.data.title}

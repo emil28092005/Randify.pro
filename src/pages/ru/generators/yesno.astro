@@ -5,6 +5,7 @@ import { generators } from '@/data/generators';
 
 const generator = generators.find((g) => g.slug === 'yesno')!;
 ---
+export const prerender = true;
 
 <GeneratorLayout generator={generator}>
   <YesNoGenerator />

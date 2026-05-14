@@ -5,6 +5,7 @@ import { findGenerator } from '@/data/generators';
 
 const generator = findGenerator('magic8ball');
 ---
+export const prerender = true;
 
 <GeneratorLayout generator={generator}>
   <Magic8BallGenerator />

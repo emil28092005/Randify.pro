@@ -15,6 +15,7 @@ const aboutSchema = {
   inLanguage: lang,
 };
 ---
+export const prerender = true;
 
 <BaseLayout title={`${T.aboutTitle} | Randify`} description={T.aboutMission}>
   <script type="application/ld+json" set:html={JSON.stringify(aboutSchema)} slot="head" />

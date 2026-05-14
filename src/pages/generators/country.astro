@@ -5,6 +5,7 @@ import { generators } from "@/data/generators";
 
 const generator = generators.find((g) => g.slug === "country")!;
 ---
+export const prerender = true;
 
 <GeneratorLayout generator={generator}>
   <CountryGenerator />

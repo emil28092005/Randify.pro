@@ -20,6 +20,7 @@ export const GET: APIRoute = async ({ url, request }) => {
   const storedState = getCookieValue(cookieHeader, 'oauth_state');
 
   if (!code || !state || !verifier || state !== storedState) {
+    console.error('[OAuth VK] Validation failed:', { hasCode: !!code, hasState: !!state, hasVerifier: !!verifier, stateMatch: state === storedState });
     return new Response(JSON.stringify({ error: 'Invalid or missing parameters' }), {
       status: 400,
       headers: { 'Content-Type': 'application/json' },
@@ -42,7 +43,9 @@ export const GET: APIRoute = async ({ url, request }) => {
   });
 
   if (!tokenRes.ok) {
-    return new Response(JSON.stringify({ error: 'Token exchange failed' }), {
+    const errorText = await tokenRes.text();
+    console.error('[OAuth VK] Token exchange failed:', tokenRes.status, errorText);
+    return new Response(JSON.stringify({ error: 'Token exchange failed', details: errorText }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

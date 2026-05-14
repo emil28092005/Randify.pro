@@ -33,7 +33,7 @@ export const vkOAuthConfig = {
   clientId: process.env.VK_CLIENT_ID || '',
   clientSecret: process.env.VK_CLIENT_SECRET || '',
   authUrl: 'https://id.vk.com/oauth2/auth',
-  tokenUrl: 'https://id.vk.ru/oauth2/auth',
+  tokenUrl: 'https://id.vk.com/oauth2/auth',
   scope: 'email phone',
 };
 

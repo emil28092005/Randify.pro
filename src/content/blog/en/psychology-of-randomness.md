@@ -1,8 +1,8 @@
 ---
 title: "The Psychology of Randomness: Why Humans Are Bad at Being Random"
 description: "Discover the fascinating psychology behind why humans struggle to generate truly random choices and numbers."
-pubDate: 2025-01-12
-modDate: 2025-01-12
+pubDate: 2026-05-14T09:00:00
+modDate: 2026-05-14T09:00:00
 draft: false
 lang: en
 category: guide

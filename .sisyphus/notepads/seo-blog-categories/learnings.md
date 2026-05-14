@@ -237,5 +237,13 @@ Note: Both missing tasks are verifiable in build output (schema updated → all 
 - EN blog directory contains 9 files (including test-post.md) vs. 8 specified in plan. Harmless scope creep.
 - AdBanner.astro file exists but has never been imported/referenced in the codebase (pre-existing condition, not changed by this work).
 
+## Quick Fixes: Blog Back Links + Post Dates (2026-05-14)
+
+- Added `backToGenerators` translation key to both EN (`"← All Generators"`) and RU (`"← Все генераторы"`) objects in `src/i18n/translations.ts`.
+- Added back-link `<nav>` to `src/pages/blog/index.astro` (href `/`) and `src/pages/ru/blog/index.astro` (href `/ru/`), styled as `inline-flex` with chevron-left SVG, `text-sm text-zinc-400 hover:text-accent`.
+- Updated `pubDate` and `modDate` in all 16 blog posts to `2026-05-14` with staggered times (05:00–12:00) to preserve newest-first sort order.
+- EN and RU posts with matching topics share identical timestamps (e.g., both `what-is-cryptographically-secure-randomness` files → `2026-05-14T12:00:00`).
+- `npm run build` → 92 pages, 0 errors ✓
+
 ### Verdict
 **Must Have [12/12] | Must NOT Have [6/6] | Tasks [24/26] | VERDICT: APPROVE**

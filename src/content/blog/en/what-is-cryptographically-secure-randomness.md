@@ -1,8 +1,8 @@
 ---
 title: "What is Cryptographically Secure Randomness and Why It Matters"
 description: "Learn why cryptographically secure random number generators are essential for passwords, gaming, and security."
-pubDate: 2025-01-15
-modDate: 2025-01-15
+pubDate: 2026-05-14T12:00:00
+modDate: 2026-05-14T12:00:00
 draft: false
 lang: en
 category: guide

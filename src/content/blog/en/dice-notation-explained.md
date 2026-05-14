@@ -1,8 +1,8 @@
 ---
 title: "Dice Notation Explained: From d4 to Exploding Dice"
 description: "Everything you need to know about dice notation for D&D, Pathfinder, and tabletop RPGs."
-pubDate: 2025-01-13
-modDate: 2025-01-13
+pubDate: 2026-05-14T10:00:00
+modDate: 2026-05-14T10:00:00
 draft: false
 lang: en
 category: guide

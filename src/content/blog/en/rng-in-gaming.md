@@ -1,8 +1,8 @@
 ---
 title: "Random Number Generators in Gaming: Fairness and Algorithms"
 description: "How RNG works in video games and casinos, and why fairness matters for player trust."
-pubDate: 2025-01-11
-modDate: 2025-01-11
+pubDate: 2026-05-14T08:00:00
+modDate: 2026-05-14T08:00:00
 draft: false
 lang: en
 category: guide

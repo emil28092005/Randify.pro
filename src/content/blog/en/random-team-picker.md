@@ -1,8 +1,8 @@
 ---
 title: "How to Use a Random Team Picker for Sports and Events"
 description: "Make team selection fair and fun with random team pickers for sports, workshops, and group activities."
-pubDate: 2025-01-10
-modDate: 2025-01-10
+pubDate: 2026-05-14T07:00:00
+modDate: 2026-05-14T07:00:00
 draft: false
 lang: en
 category: guide

@@ -1,8 +1,8 @@
 ---
 title: "UUID vs Sequential IDs: When to Use What"
 description: "Compare UUIDs and sequential IDs to choose the right identifier strategy for your application."
-pubDate: 2025-01-08
-modDate: 2025-01-08
+pubDate: 2026-05-14T05:00:00
+modDate: 2026-05-14T05:00:00
 draft: false
 lang: en
 category: guide

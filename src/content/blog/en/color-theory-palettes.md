@@ -1,8 +1,8 @@
 ---
 title: "Color Theory: How to Generate Harmonious Palettes"
 description: "Learn the basics of color theory and how to create beautiful, harmonious color palettes for your projects."
-pubDate: 2025-01-09
-modDate: 2025-01-09
+pubDate: 2026-05-14T06:00:00
+modDate: 2026-05-14T06:00:00
 draft: false
 lang: en
 category: guide

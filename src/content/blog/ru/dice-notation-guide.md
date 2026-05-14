@@ -1,8 +1,8 @@
 ---
 title: "Нотация кубиков: от d4 до взрывающихся кубиков"
 description: "Всё, что нужно знать о нотации кубиков для D&D, Pathfinder и настольных RPG."
-pubDate: 2025-01-18
-modDate: 2025-01-18
+pubDate: 2026-05-14T10:00:00
+modDate: 2026-05-14T10:00:00
 draft: false
 lang: ru
 category: guide

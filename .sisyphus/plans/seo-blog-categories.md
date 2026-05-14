@@ -459,7 +459,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 1)
 
-- [ ] 7. Update generatorSchema.ts with category field
+- [x] 7. Update generatorSchema.ts with category field
 
   **What to do**:
   - Add `category` field to `generatorSchema` in `src/lib/generator-schema.ts`
@@ -503,7 +503,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 2)
 
-- [ ] 8. Update all 28 generator JSON files with categories
+- [x] 8. Update all 28 generator JSON files with categories
 
   **What to do**:
   - Add `"category"` field to ALL 28 files in `src/content/generators/*.json`
@@ -550,7 +550,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 2)
 
-- [ ] 9. Add Organization schema to BaseLayout
+- [x] 9. Add Organization schema to BaseLayout
 
   **What to do**:
   - Add `Organization` JSON-LD schema to `src/layouts/BaseLayout.astro`
@@ -592,7 +592,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 2)
 
-- [ ] 10. Create custom 404 page
+- [x] 10. Create custom 404 page
 
   **What to do**:
   - Create `src/pages/404.astro` with BaseLayout, friendly message, link to homepage, link to blog
@@ -1452,19 +1452,19 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
 ## Final Verification Wave
 
-- [ ] F1. **Plan Compliance Audit** — `oracle`
+- [x] F1. **Plan Compliance Audit** — `oracle`
   Read the plan end-to-end. For each "Must Have": verify implementation exists (read file, curl endpoint, run command). For each "Must NOT Have": search codebase for forbidden patterns — reject with file:line if found. Check evidence files exist in .sisyphus/evidence/. Compare deliverables against plan.
   Output: `Must Have [N/N] | Must NOT Have [N/N] | Tasks [N/N] | VERDICT: APPROVE/REJECT`
 
-- [ ] F2. **Code Quality Review** — `unspecified-high`
+- [x] F2. **Code Quality Review** — `unspecified-high`
   Run `tsc --noEmit` + `npm run lint` + `npm run test` + `npm run build`. Review all changed files for: `as any`/`@ts-ignore`, empty catches, console.log in prod, commented-out code, unused imports. Check AI slop: excessive comments, over-abstraction, generic names.
   Output: `Build [PASS/FAIL] | Lint [PASS/FAIL] | Tests [N pass/N fail] | Files [N clean/N issues] | VERDICT`
 
-- [ ] F3. **Real Manual QA** — `unspecified-high`
+- [x] F3. **Real Manual QA** — `unspecified-high`
   Start from clean state. Execute EVERY QA scenario from EVERY task — follow exact steps, capture evidence. Test cross-task integration (blog + categories + generators). Test edge cases: empty blog, category with no generators, 404 page. Save to `.sisyphus/evidence/final-qa/`.
   Output: `Scenarios [N/N pass] | Integration [N/N] | Edge Cases [N tested] | VERDICT`
 
-- [ ] F4. **Scope Fidelity Check** — `deep`
+- [x] F4. **Scope Fidelity Check** — `deep`
   For each task: read "What to do", read actual diff (git log/diff). Verify 1:1 — everything in spec was built (no missing), nothing beyond spec was built (no creep). Check "Must NOT do" compliance. Detect cross-task contamination.
   Output: `Tasks [N/N compliant] | Contamination [CLEAN/N issues] | Unaccounted [CLEAN/N files] | VERDICT`
 

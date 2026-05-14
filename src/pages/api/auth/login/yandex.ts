@@ -22,16 +22,13 @@ export const GET: APIRoute = async ({ url }) => {
 
   const redirectUrl = `${yandexOAuthConfig.authUrl}?${params.toString()}`;
 
-  const cookies = [
-    `${VERIFIER_COOKIE_NAME}=${encodeURIComponent(verifier)}; HttpOnly; Secure; SameSite=Lax; Max-Age=600; Path=/`,
-    `oauth_state=${encodeURIComponent(state)}; HttpOnly; Secure; SameSite=Lax; Max-Age=600; Path=/`,
-  ];
+  const headers = new Headers();
+  headers.set('Location', redirectUrl);
+  headers.append('Set-Cookie', `${VERIFIER_COOKIE_NAME}=${encodeURIComponent(verifier)}; HttpOnly; Secure; SameSite=Lax; Max-Age=600; Path=/`);
+  headers.append('Set-Cookie', `oauth_state=${encodeURIComponent(state)}; HttpOnly; Secure; SameSite=Lax; Max-Age=600; Path=/`);
 
   return new Response(null, {
     status: 302,
-    headers: {
-      Location: redirectUrl,
-      'Set-Cookie': cookies.join(', '),
-    },
+    headers,
   });
 };

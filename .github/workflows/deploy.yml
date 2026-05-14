@@ -52,7 +52,7 @@ jobs:
         run: |
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/deploy_key" \
-            dist/ package*.json docker-compose.yml Dockerfile \
+            dist package*.json docker-compose.yml Dockerfile \
             ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:~/www/randify.pro/
 
       - name: Restart app

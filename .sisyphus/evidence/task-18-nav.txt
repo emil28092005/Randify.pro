@@ -1,0 +1,16 @@
+Task 18: Category Navigation Pills on Homepage
+
+Files modified:
+- src/pages/index.astro
+- src/pages/ru/index.astro
+- src/i18n/translations.ts
+
+Build result: PASS (85 pages, 0 errors)
+
+Verification:
+- dist/index.html contains category navigation pills
+- dist/ru/index.html contains localized category navigation pills
+- All 5 categories present: Gaming (6), Security (3), Decision Making (4), Creative (5), Utility (10)
+- Links point to /generators/category/[category]/ (EN) and /ru/generators/category/[category]/ (RU)
+- Pills styled with Tailwind: rounded-full, bg-zinc-800/60, border-zinc-700/50, hover:bg-accent/20, hover:text-accent
+- Responsive flex-wrap layout

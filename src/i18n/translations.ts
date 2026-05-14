@@ -70,6 +70,16 @@ export const translations = {
     backToAll: "All generators",
     backToHome: "Back to home",
     blog: "Blog",
+    blogDesc: "Tips, guides, and news about randomness and our generators.",
+    readMore: "Read more",
+    noPosts: "No posts yet.",
+    relatedGenerators: "Related generators",
+    relatedPosts: "Related posts",
+    catGaming: "Gaming",
+    catSecurity: "Security",
+    catDecisionMaking: "Decision Making",
+    catCreative: "Creative",
+    catUtility: "Utility",
 
     notFoundTitle: "Page Not Found",
     notFoundMessage:
@@ -170,6 +180,16 @@ export const translations = {
     backToAll: "Все генераторы",
     backToHome: "Вернуться на главную",
     blog: "Блог",
+    blogDesc: "Советы, руководства и новости о случайности и наших генераторах.",
+    readMore: "Читать далее",
+    noPosts: "Пока нет записей.",
+    relatedGenerators: "Похожие генераторы",
+    relatedPosts: "Похожие статьи",
+    catGaming: "Игры",
+    catSecurity: "Безопасность",
+    catDecisionMaking: "Принятие решений",
+    catCreative: "Творчество",
+    catUtility: "Утилиты",
 
     notFoundTitle: "Страница не найдена",
     notFoundMessage:

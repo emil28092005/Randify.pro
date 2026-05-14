@@ -1,0 +1,10 @@
+Task 11: Install @astrojs/rss and set up content collections config
+
+- Package installed: @astrojs/rss (added 9 packages, 511 total)
+- File updated: src/content/config.ts
+  - Imported z from astro:content
+  - Added blog collection with type: "content"
+  - Blog schema fields: title (max 120), description (max 160), pubDate, modDate (optional), draft (default false), lang (en/ru), category (tutorial/guide/news/tips), tags (default []), ogImage (optional, image()), relatedGenerators (optional), relatedPosts (optional)
+  - Preserved existing generators collection (type: "data", schema: generatorSchema)
+- Directories created: src/content/blog/en/ and src/content/blog/ru/
+- Build verification: npm run build passed with 64 pages, 0 errors

@@ -1,0 +1,49 @@
+---
+import { getCollection } from "astro:content";
+import BlogLayout from "@/layouts/BlogLayout.astro";
+import RelatedPosts from "@/components/RelatedPosts.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  const enPosts = posts.filter((p) => p.data.lang === "en" && !p.data.draft);
+  const sorted = enPosts.sort(
+    (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf(),
+  );
+
+  return sorted.map((post, index) => {
+    const prev = sorted[index - 1] ?? null;
+    const next = sorted[index + 1] ?? null;
+    return {
+      params: { slug: post.id.replace(/^en\//, "").replace(/\.md$/, "") },
+      props: {
+        post,
+        prev: prev
+          ? { slug: prev.id.replace(/^en\//, "").replace(/\.md$/, ""), title: prev.data.title }
+          : null,
+        next: next
+          ? { slug: next.id.replace(/^en\//, "").replace(/\.md$/, ""), title: next.data.title }
+          : null,
+      },
+    };
+  });
+}
+
+const { post, prev, next } = Astro.props;
+const { Content } = await post.render();
+---
+
+<BlogLayout
+  title={post.data.title}
+  description={post.data.description}
+  pubDate={post.data.pubDate}
+  modDate={post.data.modDate}
+  ogImage={post.data.ogImage?.src}
+  lang="en"
+  prevPost={prev}
+  nextPost={next}
+>
+  <article>
+    <Content />
+  </article>
+  <RelatedPosts post={post} slot="related" />
+</BlogLayout>

@@ -1,0 +1,20 @@
+Build completed: 93 pages
+RU blog posts generated (8):
+- /ru/blog/what-is-cryptographically-secure-randomness/index.html
+- /ru/blog/how-to-create-strong-passwords/index.html
+- /ru/blog/dice-notation-guide/index.html
+- /ru/blog/psychology-of-randomness/index.html
+- /ru/blog/rng-in-gaming/index.html
+- /ru/blog/random-team-selection/index.html
+- /ru/blog/color-theory-guide/index.html
+- /ru/blog/uuid-vs-sequential-ids/index.html
+Files created:
+- src/content/blog/ru/what-is-cryptographically-secure-randomness.md
+- src/content/blog/ru/how-to-create-strong-passwords.md
+- src/content/blog/ru/dice-notation-guide.md
+- src/content/blog/ru/psychology-of-randomness.md
+- src/content/blog/ru/rng-in-gaming.md
+- src/content/blog/ru/random-team-selection.md
+- src/content/blog/ru/color-theory-guide.md
+- src/content/blog/ru/uuid-vs-sequential-ids.md
+Build timestamp: 2026-05-14T03:08:00+03:00

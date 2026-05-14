@@ -1,0 +1,28 @@
+Task 19: Create Breadcrumbs.astro Component — Evidence
+=====================================================
+
+1. File Created
+---------------
+Path: src/components/Breadcrumbs.astro
+
+2. Component Specification
+--------------------------
+- Props interface: { items: Array<{ label: string, href?: string }> }
+- Renders <nav aria-label="Breadcrumb"> containing <ol>
+- Each item rendered as <li> with "/" separator between items
+- Last item (no href or end of array): <span aria-current="page"> with text-zinc-400
+- Items with href: <a> with text-zinc-500 hover:text-accent transition-colors and focus ring
+- Tailwind styling: text-sm, muted zinc colors, accent hover state
+
+3. Build Verification
+---------------------
+Command: npm run build
+Result: PASS (64 pages built, 0 errors)
+
+4. Example Usage
+----------------
+<Breadcrumbs items={[
+  { label: "Home", href: "/" },
+  { label: "Gaming", href: "/generators/category/gaming/" },
+  { label: "Dice Roller" }
+]} />

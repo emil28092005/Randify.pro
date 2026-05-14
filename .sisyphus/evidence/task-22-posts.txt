@@ -1,0 +1,25 @@
+Task 22: Create 8 English blog post templates
+Date: 2026-05-14
+Build result: PASS
+Pages built: 85
+
+Files created:
+- src/content/blog/en/what-is-cryptographically-secure-randomness.md
+- src/content/blog/en/how-to-create-strong-passwords.md
+- src/content/blog/en/dice-notation-explained.md
+- src/content/blog/en/psychology-of-randomness.md
+- src/content/blog/en/rng-in-gaming.md
+- src/content/blog/en/random-team-picker.md
+- src/content/blog/en/color-theory-palettes.md
+- src/content/blog/en/uuid-vs-sequential-ids.md
+
+Build output confirms all 8 posts were generated alongside the existing test-post:
+/blog/what-is-cryptographically-secure-randomness/index.html
+/blog/how-to-create-strong-passwords/index.html
+/blog/dice-notation-explained/index.html
+/blog/psychology-of-randomness/index.html
+/blog/rng-in-gaming/index.html
+/blog/random-team-picker/index.html
+/blog/color-theory-palettes/index.html
+/blog/uuid-vs-sequential-ids/index.html
+/blog/test-post/index.html

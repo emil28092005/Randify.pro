@@ -1,0 +1,69 @@
+---
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { useT } from "@/i18n/translations";
+import type { Lang } from "@/i18n/translations";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const lang = post.data.lang as Lang;
+const T = useT(lang);
+const isRu = lang === "ru";
+
+const allPosts = await getCollection(
+  "blog",
+  ({ data }) => !data.draft && data.lang === lang,
+);
+
+const related = allPosts
+  .filter((p) => p.id !== post.id)
+  .map((p) => ({
+    post: p,
+    score: p.data.tags.filter((t) => post.data.tags.includes(t)).length,
+  }))
+  .filter(({ score }) => score > 0)
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 3)
+  .map(({ post }) => post);
+
+if (related.length === 0) return null;
+
+function getSlug(p: CollectionEntry<"blog">) {
+  return p.id.replace(/^(en|ru)\//, "").replace(/\.md$/, "");
+}
+
+const blogBase = isRu ? "/ru/blog/" : "/blog/";
+---
+
+<section class="mt-12 pt-10 border-t border-zinc-800/60">
+  <h2 class="text-lg font-semibold text-zinc-100 mb-4">{T.relatedPosts}</h2>
+  <div class="flex flex-col gap-4">
+    {
+      related.map((p) => {
+        const slug = getSlug(p);
+        const href = `${blogBase}${slug}/`;
+        const dateStr = new Date(p.data.pubDate).toLocaleDateString(
+          isRu ? "ru-RU" : "en-US",
+          { year: "numeric", month: "long", day: "numeric" },
+        );
+        return (
+          <a
+            href={href}
+            class="group block p-4 border border-zinc-800 rounded-lg hover:border-accent hover:bg-zinc-900/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+          >
+            <span class="block text-sm font-medium text-zinc-300 group-hover:text-accent transition-colors">
+              {p.data.title}
+            </span>
+            <span class="block text-xs text-zinc-500 mt-1">{dateStr}</span>
+            <span class="block text-sm text-zinc-400 mt-2 leading-relaxed line-clamp-2">
+              {p.data.description}
+            </span>
+          </a>
+        );
+      })
+    }
+  </div>
+</section>

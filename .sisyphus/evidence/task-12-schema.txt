@@ -1,0 +1,38 @@
+Task 12: BlogLayout.astro with BlogPosting JSON-LD and Article OG Meta Tags
+
+Verification: npm run build — PASSED (64 pages built)
+
+File: src/layouts/BlogLayout.astro
+
+Features implemented:
+1. Wraps BaseLayout, passing title, description, ogImage.
+2. Injects BlogPosting JSON-LD schema via slot="head" with:
+   - @type: BlogPosting
+   - headline (from title prop)
+   - author: Organization { name: "Randify" }
+   - publisher: Organization { name: "Randify", logo: ImageObject }
+   - datePublished (ISO 8601)
+   - dateModified (ISO 8601, falls back to datePublished)
+   - url (canonical)
+   - description
+   - inLanguage
+3. OG type set to "article" via <meta property="og:type" content="article" /> in slot="head".
+4. Article-specific meta tags added:
+   - article:published_time
+   - article:modified_time
+5. Styled container: max-w-2xl mx-auto, matching GeneratorLayout spacing.
+6. Header with title, accent dot, publication date, and conditional "Updated" label.
+7. Prev/next post navigation with bilingual labels (EN/RU), arrow icons, and focus rings.
+8. Named slot "related" for RelatedPosts component.
+
+Props accepted:
+- title: string
+- description: string
+- pubDate: Date | string
+- modDate?: Date | string
+- ogImage?: string
+- lang?: Lang
+- prevPost?: { slug: string; title: string }
+- nextPost?: { slug: string; title: string }
+
+Build output: 64 pages, 0 errors.

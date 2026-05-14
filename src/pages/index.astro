@@ -47,6 +47,29 @@ const webSiteSchema = {
       </p>
     </header>
 
+    <nav aria-label="Categories" class="mb-8">
+      <ul class="flex flex-wrap gap-2">
+        {
+          [
+            { slug: "gaming", label: T.catGaming },
+            { slug: "security", label: T.catSecurity },
+            { slug: "decision-making", label: T.catDecisionMaking },
+            { slug: "creative", label: T.catCreative },
+            { slug: "utility", label: T.catUtility },
+          ].map((cat) => (
+            <li>
+              <a
+                href={`/generators/category/${cat.slug}/`}
+                class="inline-flex items-center px-4 py-2 rounded-full bg-zinc-800/60 border border-zinc-700/50 text-zinc-300 text-sm font-medium hover:bg-accent/20 hover:text-accent hover:border-accent/30 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+              >
+                {cat.label} ({generators.filter((g) => g.category === cat.slug).length})
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
     <main class="mt-8">
       <div
         class="grid gap-3"

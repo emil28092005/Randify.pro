@@ -3,9 +3,11 @@ import BaseLayout from "./BaseLayout.astro";
 import YandexRTB from "../components/YandexRTB.astro";
 import SeoBlock from "../components/SeoBlock.astro";
 import FaqBlock from "../components/FaqBlock.astro";
+import RelatedGenerators from "../components/RelatedGenerators.astro";
 import { useT } from "../i18n/translations";
-import type { Lang } from "../i18n/translations";
+import type { Lang, T as TType } from "../i18n/translations";
 import type { Generator } from "../data/generators";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
 
 interface Props {
   generator: Generator;
@@ -15,6 +17,15 @@ const { generator } = Astro.props;
 const lang = (Astro.currentLocale as Lang) || "en";
 const T = useT(lang);
 const isRu = lang === "ru";
+
+const categoryKeyMap: Record<Generator["category"], keyof TType> = {
+  gaming: "catGaming",
+  security: "catSecurity",
+  "decision-making": "catDecisionMaking",
+  creative: "catCreative",
+  utility: "catUtility",
+};
+const categoryLabel = T[categoryKeyMap[generator.category]];
 
 const canonicalUrl = `https://randify.pro${Astro.url.pathname}`;
 
@@ -90,6 +101,17 @@ const breadcrumbSchema = {
       </a>
     </nav>
 
+    <Breadcrumbs
+      items={[
+        { label: isRu ? "Главная" : "Home", href: isRu ? "/ru/" : "/" },
+        {
+          label: categoryLabel,
+          href: `${isRu ? "/ru" : ""}/generators/category/${generator.category}/`,
+        },
+        { label: isRu ? generator.ruTitle : generator.title },
+      ]}
+    />
+
     <header class="mb-2">
       <div class="flex items-center gap-2 mb-4">
         <span
@@ -133,5 +155,11 @@ const breadcrumbSchema = {
         />
       )
     }
+
+    <RelatedGenerators
+      currentSlug={generator.slug}
+      category={generator.category}
+      lang={lang}
+    />
   </div>
 </BaseLayout>

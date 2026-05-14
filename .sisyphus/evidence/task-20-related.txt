@@ -1,0 +1,19 @@
+Task 20: RelatedGenerators.astro
+
+Files changed:
+- src/components/RelatedGenerators.astro (created)
+- src/layouts/GeneratorLayout.astro (updated — integrated RelatedGenerators)
+- src/i18n/translations.ts (updated — added relatedGenerators key EN+RU)
+
+Build result:
+- npm run build: PASSED
+- 76 pages built, 0 errors
+
+Component behavior:
+- Accepts props: currentSlug, category, optional lang
+- Filters generators by category, excludes current slug, limits to 4
+- Returns null (renders nothing) if no related generators exist
+- Locale-aware titles and links (EN / RU)
+- Compact card layout: icon + title in a responsive 2-column grid
+- Uses Tailwind with existing design tokens (accent color, zinc palette)
+- Includes focus-visible ring for accessibility

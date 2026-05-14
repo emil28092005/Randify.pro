@@ -1,0 +1,16 @@
+Task 24 Evidence: Blog Navigation Link
+=======================================
+
+Build: PASS
+- npm run build completed successfully (84 pages built)
+
+Verification:
+- EN blog link (/blog/) found in dist/index.html
+- RU blog link (/ru/blog/) found in 38 RU pages including dist/ru/index.html
+
+Changes made:
+- Modified src/components/LanguageSwitcher.astro
+- Added Blog / Блог link between language toggle and About link
+- Link points to /blog/ on EN pages and /ru/blog/ on RU pages
+- Used existing translation keys (blog: "Blog", blog: "Блог") from src/i18n/translations.ts
+- Styled consistently with existing About/Privacy links

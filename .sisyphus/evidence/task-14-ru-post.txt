@@ -1,0 +1,16 @@
+Task 14: Create RU blog post page src/pages/ru/blog/[slug].astro
+
+Build result: PASS
+Pages built: 77
+RU blog post page: compiled successfully (no RU blog posts yet, so no static pages generated)
+EN blog post page: /blog/test-post/index.html generated
+
+Files created/modified:
+- src/pages/ru/blog/[slug].astro (created)
+- src/layouts/BlogLayout.astro (fixed locale-aware prev/next links)
+
+Verification:
+- npm run build exited with code 0
+- No TypeScript or Astro errors
+- RU [slug].astro correctly filters getCollection("blog") by lang === "ru"
+- BlogLayout prev/next navigation updated to use locale-aware paths (/ru/blog/ for RU, /blog/ for EN)

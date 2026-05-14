@@ -1,0 +1,36 @@
+Task 15: Blog Index Pages — Evidence
+======================================
+
+Build Status: PASS (76 pages, exit code 0)
+
+Files Created:
+- src/pages/blog/index.astro
+- src/pages/ru/blog/index.astro
+
+Files Modified:
+- src/i18n/translations.ts (added blogDesc, readMore, noPosts keys for EN + RU)
+
+Build Output Verification:
+- dist/blog/index.html      (6893 bytes)
+- dist/ru/blog/index.html   (7342 bytes)
+
+EN Page Features:
+- Queries getCollection("blog"), filters lang === "en" and draft !== true
+- Sorts by pubDate descending
+- Links to /blog/[slug]/
+- Date formatting: toLocaleDateString("en-US", ...)
+- JSON-LD Blog schema with blogPost array
+
+RU Page Features:
+- Queries getCollection("blog"), filters lang === "ru" and draft !== true
+- Sorts by pubDate descending
+- Links to /ru/blog/[slug]/
+- Date formatting: toLocaleDateString("ru-RU", ...)
+- JSON-LD Blog schema with blogPost array
+
+Both pages:
+- Use BaseLayout with title and description props
+- Include OG/Twitter Card meta tags (inherited from BaseLayout)
+- Include canonical + hreflang alternates (inherited from BaseLayout)
+- Show empty state "No posts yet" / "Пока нет записей." when collection is empty
+- Display category badge + tag badges per post card

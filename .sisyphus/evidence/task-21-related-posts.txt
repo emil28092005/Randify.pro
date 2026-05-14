@@ -1,0 +1,24 @@
+Task 21: RelatedPosts Component
+================================
+
+Files created:
+- src/components/RelatedPosts.astro
+
+Files modified:
+- src/i18n/translations.ts (added relatedPosts key: en="Related posts", ru="Похожие статьи")
+- src/pages/blog/[slug].astro (imported RelatedPosts, wired into "related" slot)
+- src/pages/ru/blog/[slug].astro (imported RelatedPosts, wired into "related" slot)
+
+Build result: PASS
+- 83 pages built successfully
+- No errors or warnings
+
+Implementation details:
+- Accepts post: CollectionEntry<"blog">
+- Uses getCollection to fetch non-draft posts in same language
+- Scores related posts by tag overlap count
+- Shows top 3 posts with score > 0
+- Hides section entirely if no related posts found
+- Renders title, date, and description snippet for each related post
+- Links use correct /blog/ or /ru/blog/ base path
+- Styled with Tailwind matching existing dark theme (zinc palette, accent color)

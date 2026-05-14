@@ -638,7 +638,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 2)
 
-- [ ] 11. Install @astrojs/rss, set up content collections config
+- [x] 11. Install @astrojs/rss, set up content collections config
 
   **What to do**:
   - Run `npm install @astrojs/rss`
@@ -705,7 +705,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 3)
 
-- [ ] 12. Create BlogLayout.astro with BlogPosting schema
+- [x] 12. Create BlogLayout.astro with BlogPosting schema
 
   **What to do**:
   - Create `src/layouts/BlogLayout.astro`
@@ -752,7 +752,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 3)
 
-- [ ] 13. Create blog post page EN ([slug].astro)
+- [x] 13. Create blog post page EN ([slug].astro)
 
   **What to do**:
   - Create `src/pages/blog/[slug].astro`
@@ -799,7 +799,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 3)
 
-- [ ] 14. Create blog post page RU ([slug].astro)
+- [x] 14. Create blog post page RU ([slug].astro)
 
   **What to do**:
   - Create `src/pages/ru/blog/[slug].astro`
@@ -842,7 +842,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 3)
 
-- [ ] 15. Create blog index pages (EN + RU)
+- [x] 15. Create blog index pages (EN + RU)
 
   **What to do**:
   - Create `src/pages/blog/index.astro` — list all EN blog posts sorted by date (newest first)
@@ -889,7 +889,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 3)
 
-- [ ] 16. Create RSS feeds (EN + RU)
+- [x] 16. Create RSS feeds (EN + RU)
 
   **What to do**:
   - Create `src/pages/rss.xml.ts` — English RSS feed
@@ -941,7 +941,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 3)
 
-- [ ] 17. Create category pages for generators (EN + RU)
+- [x] 17. Create category pages for generators (EN + RU)
 
   **What to do**:
   - Create `src/pages/generators/category/[category].astro`
@@ -991,7 +991,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 4)
 
-- [ ] 18. Add category navigation to homepage
+- [x] 18. Add category navigation to homepage
 
   **What to do**:
   - Update `src/pages/index.astro` to show category pills/links above or below the generator grid
@@ -1037,7 +1037,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 4)
 
-- [ ] 19. Create Breadcrumbs component
+- [x] 19. Create Breadcrumbs component
 
   **What to do**:
   - Create `src/components/Breadcrumbs.astro`
@@ -1084,7 +1084,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 4)
 
-- [ ] 20. Create RelatedGenerators component
+- [x] 20. Create RelatedGenerators component
 
   **What to do**:
   - Create `src/components/RelatedGenerators.astro`
@@ -1133,7 +1133,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 4)
 
-- [ ] 21. Create RelatedPosts component
+- [x] 21. Create RelatedPosts component
 
   **What to do**:
   - Create `src/components/RelatedPosts.astro`
@@ -1190,7 +1190,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 4)
 
-- [ ] 22. Create 8 blog post templates EN
+- [x] 22. Create 8 blog post templates EN
 
   **What to do**:
   - Create 8 markdown files in `src/content/blog/en/` with correct frontmatter:
@@ -1255,7 +1255,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 5)
 
-- [ ] 23. Create 8 blog post templates RU
+- [x] 23. Create 8 blog post templates RU
 
   **What to do**:
   - Create 8 markdown files in `src/content/blog/ru/` with Russian titles/descriptions
@@ -1307,7 +1307,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 5)
 
-- [ ] 24. Add blog link to navigation
+- [x] 24. Add blog link to navigation
 
   **What to do**:
   - Update `src/components/LanguageSwitcher.astro` or add a new nav component
@@ -1355,7 +1355,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 5)
 
-- [ ] 25. Add related generators to generator pages
+- [x] 25. Add related generators to generator pages
 
   **What to do**:
   - Update `src/layouts/GeneratorLayout.astro` to import and render `<RelatedGenerators />`
@@ -1401,7 +1401,7 @@ Max Concurrent: 6 (Wave 1), 4 (Wave 2), 6 (Wave 3), 8 (Wave 4), 2 (Wave 5)
 
   **Commit**: YES (Wave 5)
 
-- [ ] 26. Add breadcrumbs to generator and blog layouts
+- [x] 26. Add breadcrumbs to generator and blog layouts
 
   **What to do**:
   - Update `src/layouts/GeneratorLayout.astro` to include `<Breadcrumbs />`

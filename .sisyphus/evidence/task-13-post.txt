@@ -1,0 +1,7 @@
+Task 13: EN blog post page ([slug].astro)
+- Build: PASS (77 pages)
+- Generated: dist/blog/test-post/index.html
+- Verified: post title present in HTML
+- Verified: BlogPosting JSON-LD schema present
+- Verified: article:published_time meta tag present
+- Slug derived from post.id with en/ prefix and .md extension stripped

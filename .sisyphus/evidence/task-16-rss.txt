@@ -1,0 +1,20 @@
+Task 16: RSS Feeds
+
+Files created:
+- src/pages/rss.xml.ts (EN feed)
+- src/pages/ru/rss.xml.ts (RU feed)
+
+File modified:
+- src/layouts/BaseLayout.astro (added <link rel="alternate" type="application/rss+xml"> for both EN and RU feeds)
+
+Build: PASS (npm run build exited 0)
+
+Generated feeds:
+- dist/rss.xml exists (287 bytes)
+- dist/ru/rss.xml exists (404 bytes)
+
+Feed content verified:
+- EN: title="Randify Blog", language="en", description present, link=https://randify.pro/
+- RU: title="Блог Randify", language="ru", description present, link=https://randify.pro/
+
+Note: Feeds are currently empty because no blog posts exist in src/content/blog/ yet. When posts are added with lang="en"/"ru" and draft !== true, they will appear automatically.

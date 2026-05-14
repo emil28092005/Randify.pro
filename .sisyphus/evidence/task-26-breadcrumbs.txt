@@ -1,0 +1,17 @@
+Task: Add Breadcrumbs component to generator and blog layouts
+Date: 2026-05-14
+
+1. npm run build
+   Result: PASS (93 pages built, exit code 0)
+
+2. Grep dist/generators/dice/index.html for breadcrumb items:
+   - Found: Home, Gaming, Dice
+   - Command: grep -o 'Home\|Gaming\|Dice' dist/generators/dice/index.html
+
+3. Grep dist/blog/test-post/index.html for breadcrumb items:
+   - Found: Home, Blog, Test Post
+   - Command: grep -o 'Home\|Blog\|Test Post' dist/blog/test-post/index.html
+
+Files modified:
+- src/layouts/GeneratorLayout.astro
+- src/layouts/BlogLayout.astro

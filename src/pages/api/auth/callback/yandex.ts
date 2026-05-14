@@ -109,9 +109,9 @@ export const GET: APIRoute = async ({ url, request }) => {
 
   const headers = new Headers();
   headers.set('Location', '/dm/');
-  headers.append('Set-Cookie', `${COOKIE_NAME}=${sessionToken}; HttpOnly; SameSite=Strict; Max-Age=604800; Path=/`);
-  headers.append('Set-Cookie', `${VERIFIER_COOKIE_NAME}=; HttpOnly; SameSite=Strict; Max-Age=0; Path=/`);
-  headers.append('Set-Cookie', `oauth_state=; HttpOnly; SameSite=Strict; Max-Age=0; Path=/`);
+  headers.append('Set-Cookie', `${COOKIE_NAME}=${sessionToken}; HttpOnly; Secure; SameSite=Lax; Max-Age=604800; Path=/`);
+  headers.append('Set-Cookie', `${VERIFIER_COOKIE_NAME}=; HttpOnly; SameSite=Lax; Max-Age=0; Path=/`);
+  headers.append('Set-Cookie', `oauth_state=; HttpOnly; SameSite=Lax; Max-Age=0; Path=/`);
 
   return new Response(null, {
     status: 302,

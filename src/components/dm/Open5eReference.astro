@@ -31,6 +31,30 @@ import DmButton from "./DmButton.astro";
     >
       Заклинания
     </button>
+    <button
+      id="o5-tab-equipment"
+      type="button"
+      role="tab"
+      aria-selected="false"
+      aria-controls="o5-panel-equipment"
+      class="flex-1 pb-2.5 text-sm font-semibold transition-colors border-b-2 border-transparent text-[var(--text-muted)] hover:text-[var(--text-secondary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
+      data-tab="equipment"
+      data-testid="ref-tab-equipment"
+    >
+      Снаряжение
+    </button>
+    <button
+      id="o5-tab-magicitems"
+      type="button"
+      role="tab"
+      aria-selected="false"
+      aria-controls="o5-panel-magicitems"
+      class="flex-1 pb-2.5 text-sm font-semibold transition-colors border-b-2 border-transparent text-[var(--text-muted)] hover:text-[var(--text-secondary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
+      data-tab="magicitems"
+      data-testid="ref-tab-magicitems"
+    >
+      Магические
+    </button>
   </div>
 
   <!-- Search and filters -->
@@ -225,18 +249,41 @@ import DmButton from "./DmButton.astro";
     desc?: string;
   }
 
+  interface EquipmentItem {
+    key: string;
+    name: string;
+    category?: string;
+    cost?: string | number | Record<string, unknown>;
+    weight?: string | number;
+    damage?: string | Record<string, unknown>;
+    properties?: string[] | Record<string, unknown>[];
+    desc?: string;
+  }
+
+  interface MagicItem {
+    key: string;
+    name: string;
+    type?: string;
+    rarity?: string;
+    requires_attunement?: string;
+    desc?: string;
+  }
+
+  type AnyItem = Monster | Spell | EquipmentItem | MagicItem;
+  type ItemType = "creature" | "spell" | "equipment" | "magicitem";
+
   function escapeHtml(str: string): string {
     const div = document.createElement("div");
     div.textContent = str;
     return div.innerHTML;
   }
 
-  function mergeWithTranslation<T extends Monster | Spell>(item: T, translated: Record<string, unknown> | null): T {
+  function mergeWithTranslation<T extends AnyItem>(item: T, translated: Record<string, unknown> | null): T {
     if (!translated) return item;
     return { ...item, ...translated } as T;
   }
 
-  function translateButtonHtml(key: string, type: "creature" | "spell", isTranslated: boolean): string {
+  function translateButtonHtml(key: string, type: ItemType, isTranslated: boolean): string {
     const label = isTranslated ? "Переведено" : "Перевести";
     const disabled = isTranslated ? "disabled" : "";
     return `
@@ -339,6 +386,91 @@ import DmButton from "./DmButton.astro";
     return html;
   }
 
+  function formatCost(cost: EquipmentItem["cost"]): string {
+    if (cost == null) return "—";
+    if (typeof cost === "string" || typeof cost === "number") return String(cost);
+    if (typeof cost === "object") {
+      const quantity = (cost as Record<string, unknown>).quantity;
+      const unit = (cost as Record<string, unknown>).unit;
+      if (quantity != null && unit != null) return `${quantity} ${unit}`;
+    }
+    return "—";
+  }
+
+  function renderEquipmentCard(item: EquipmentItem): string {
+    const cost = formatCost(item.cost);
+    return `
+      <div class="flex items-center justify-between gap-3 cursor-pointer rounded-xl bg-[var(--bg-card)] border border-[var(--border-gold-strong)] shadow-lg shadow-black/20 p-5 hover:border-[var(--border-gold)] hover:-translate-y-0.5 transition-all duration-[var(--transition-base)] group focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
+           data-key="${item.key}" role="button" tabindex="0" data-testid="ref-result-card">
+        <div class="min-w-0">
+          <p class="font-semibold text-[var(--gold)] group-hover:text-[var(--gold-hover)] transition-colors truncate">
+            ${escapeHtml(item.name)}
+          </p>
+          <p class="text-xs text-[var(--text-secondary)] mt-0.5">
+            ${escapeHtml(item.category || "—")} · ${escapeHtml(cost)}
+          </p>
+        </div>
+        <div class="shrink-0 text-right">
+          <p class="text-xs text-[var(--text-secondary)]">Вес ${escapeHtml(String(item.weight ?? "—"))}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderEquipmentDetail(item: EquipmentItem, isTranslated: boolean): string {
+    const cost = formatCost(item.cost);
+    let html = `
+      <h2 class="text-xl font-bold text-[var(--text-primary)] pr-8">${escapeHtml(item.name)}</h2>
+      <p class="text-sm text-[var(--text-secondary)] mt-1">${escapeHtml(item.category || "—")}</p>
+      ${translateButtonHtml(item.key, "equipment", isTranslated)}
+      <div class="grid grid-cols-2 gap-3 mt-4">
+        <div class="rounded-lg bg-[var(--bg-secondary)] p-3 text-center">
+          <p class="text-sm font-bold text-[var(--accent)]">${escapeHtml(cost)}</p>
+          <p class="text-xs text-[var(--text-secondary)]">Стоимость</p>
+        </div>
+        <div class="rounded-lg bg-[var(--bg-secondary)] p-3 text-center">
+          <p class="text-sm font-bold text-[var(--accent)]">${escapeHtml(String(item.weight ?? "—"))}</p>
+          <p class="text-xs text-[var(--text-secondary)]">Вес</p>
+        </div>
+      </div>
+    `;
+    if (item.desc) {
+      html += `<div class="mt-4"><p class="text-sm text-[var(--text-secondary)] whitespace-pre-line">${escapeHtml(item.desc)}</p></div>`;
+    }
+    return html;
+  }
+
+  function renderMagicItemCard(item: MagicItem): string {
+    return `
+      <div class="flex items-center justify-between gap-3 cursor-pointer rounded-xl bg-[var(--bg-card)] border border-[var(--border-gold-strong)] shadow-lg shadow-black/20 p-5 hover:border-[var(--border-gold)] hover:-translate-y-0.5 transition-all duration-[var(--transition-base)] group focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
+           data-key="${item.key}" role="button" tabindex="0" data-testid="ref-result-card">
+        <div class="min-w-0">
+          <p class="font-semibold text-[var(--gold)] group-hover:text-[var(--gold-hover)] transition-colors truncate">
+            ${escapeHtml(item.name)}
+          </p>
+          <p class="text-xs text-[var(--text-secondary)] mt-0.5">
+            ${escapeHtml(item.type || "—")} · ${escapeHtml(item.rarity || "—")}
+          </p>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderMagicItemDetail(item: MagicItem, isTranslated: boolean): string {
+    let html = `
+      <h2 class="text-xl font-bold text-[var(--text-primary)] pr-8">${escapeHtml(item.name)}</h2>
+      <p class="text-sm text-[var(--text-secondary)] mt-1">${escapeHtml(item.type || "—")} · ${escapeHtml(item.rarity || "—")}</p>
+      ${translateButtonHtml(item.key, "magicitem", isTranslated)}
+    `;
+    if (item.requires_attunement) {
+      html += `<p class="text-sm text-[var(--gold)] mt-2 italic">Требует настройки: ${escapeHtml(item.requires_attunement)}</p>`;
+    }
+    if (item.desc) {
+      html += `<div class="mt-4"><p class="text-sm text-[var(--text-secondary)] whitespace-pre-line">${escapeHtml(item.desc)}</p></div>`;
+    }
+    return html;
+  }
+
   function renderSpellDetail(spell: Spell, isTranslated: boolean): string {
     const level = Open5eUIManager.formatSpellLevel(spell.level ?? 0);
     let html = `
@@ -391,27 +523,53 @@ import DmButton from "./DmButton.astro";
     const detailBg = container.querySelector("#o5-detail-bg")!;
     const tabMonsters = container.querySelector("#o5-tab-monsters")!;
     const tabSpells = container.querySelector("#o5-tab-spells")!;
+    const tabEquipment = container.querySelector("#o5-tab-equipment")!;
+    const tabMagicitems = container.querySelector("#o5-tab-magicitems")!;
     const retryBtn = container.querySelector("#o5-retry")!;
+
+    const tabTypeMap: Record<string, ItemType> = {
+      monsters: "creature",
+      spells: "spell",
+      equipment: "equipment",
+      magicitems: "magicitem",
+    };
 
     const manager = new Open5eUIManager(render);
 
     function buildFilterOptions() {
-      const options = manager.state.tab === "monsters" ? CR_OPTIONS : LEVEL_OPTIONS;
-      filterSelect.innerHTML = options
-        .map((o) => `<option value="${o.value}">${o.label}</option>`)
-        .join("");
+      const tab = manager.state.tab;
+      if (tab === "monsters") {
+        filterSelect.innerHTML = CR_OPTIONS.map(
+          (o) => `<option value="${o.value}">${o.label}</option>`,
+        ).join("");
+        filterSelect.classList.remove("hidden");
+      } else if (tab === "spells") {
+        filterSelect.innerHTML = LEVEL_OPTIONS.map(
+          (o) => `<option value="${o.value}">${o.label}</option>`,
+        ).join("");
+        filterSelect.classList.remove("hidden");
+      } else {
+        filterSelect.innerHTML = "";
+        filterSelect.classList.add("hidden");
+      }
     }
 
     function updateTabs() {
-      const isMonsters = manager.state.tab === "monsters";
-      tabMonsters.setAttribute("aria-selected", String(isMonsters));
-      tabSpells.setAttribute("aria-selected", String(!isMonsters));
-
+      const tab = manager.state.tab;
       const activeClasses = "flex-1 pb-2.5 text-sm font-semibold transition-colors border-b-2 border-[var(--gold)] text-[var(--gold)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]";
       const inactiveClasses = "flex-1 pb-2.5 text-sm font-semibold transition-colors border-b-2 border-transparent text-[var(--text-muted)] hover:text-[var(--text-secondary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]";
 
-      tabMonsters.className = isMonsters ? activeClasses : inactiveClasses;
-      tabSpells.className = isMonsters ? inactiveClasses : activeClasses;
+      const tabs: Array<[Element, string]> = [
+        [tabMonsters, "monsters"],
+        [tabSpells, "spells"],
+        [tabEquipment, "equipment"],
+        [tabMagicitems, "magicitems"],
+      ];
+      for (const [el, tabName] of tabs) {
+        const isActive = tab === tabName;
+        el.setAttribute("aria-selected", String(isActive));
+        el.className = isActive ? activeClasses : inactiveClasses;
+      }
     }
 
     function render() {
@@ -425,16 +583,34 @@ import DmButton from "./DmButton.astro";
       errorEl.classList.toggle("hidden", !state.error);
       if (state.error) errorTextEl.textContent = state.error;
       emptyEl.classList.toggle("hidden", state.results.length > 0 || state.loading || !!state.error);
-      resultsContainer.setAttribute("data-testid", state.tab === "monsters" ? "ref-monsters-list" : "ref-spells-list");
+      const listTestid: Record<string, string> = {
+        monsters: "ref-monsters-list",
+        spells: "ref-spells-list",
+        equipment: "ref-equipment-list",
+        magicitems: "ref-magicitems-list",
+      };
+      resultsContainer.setAttribute("data-testid", listTestid[state.tab] ?? "ref-results-list");
 
       const paginated = manager.getPaginatedResults();
       resultsContainer.innerHTML = "";
 
+      function renderCard(tab: typeof state.tab, item: AnyItem): string {
+        if (tab === "monsters") return renderMonsterCard(item as Monster);
+        if (tab === "spells") return renderSpellCard(item as Spell);
+        if (tab === "equipment") return renderEquipmentCard(item as EquipmentItem);
+        return renderMagicItemCard(item as MagicItem);
+      }
+
+      function renderDetail(tab: typeof state.tab, item: AnyItem, translated: boolean): string {
+        if (tab === "monsters") return renderMonsterDetail(item as Monster, translated);
+        if (tab === "spells") return renderSpellDetail(item as Spell, translated);
+        if (tab === "equipment") return renderEquipmentDetail(item as EquipmentItem, translated);
+        return renderMagicItemDetail(item as MagicItem, translated);
+      }
+
       if (paginated.length > 0) {
         for (const item of paginated) {
-          const cardHtml = state.tab === "monsters"
-            ? renderMonsterCard(item)
-            : renderSpellCard(item);
+          const cardHtml = renderCard(state.tab, item);
           const wrapper = document.createElement("div");
           wrapper.innerHTML = cardHtml;
           const card = wrapper.firstElementChild as HTMLElement;
@@ -462,13 +638,11 @@ import DmButton from "./DmButton.astro";
       }
 
       if (state.selectedItem) {
-        const type = state.tab === "monsters" ? "creature" : "spell";
+        const type = tabTypeMap[state.tab];
         const cached = getCachedTranslation(state.selectedItem.key, type);
         const isTranslated = cached !== null;
-        const item = mergeWithTranslation(state.selectedItem, cached);
-        detailContent.innerHTML = state.tab === "monsters"
-          ? renderMonsterDetail(item as Monster, isTranslated)
-          : renderSpellDetail(item as Spell, isTranslated);
+        const item = mergeWithTranslation(state.selectedItem as AnyItem, cached);
+        detailContent.innerHTML = renderDetail(state.tab, item, isTranslated);
         detailOverlay.classList.remove("hidden");
         detailClose.focus();
       } else {
@@ -486,6 +660,14 @@ import DmButton from "./DmButton.astro";
     });
     tabSpells.addEventListener("click", () => {
       manager.setTab("spells");
+      buildFilterOptions();
+    });
+    tabEquipment.addEventListener("click", () => {
+      manager.setTab("equipment");
+      buildFilterOptions();
+    });
+    tabMagicitems.addEventListener("click", () => {
+      manager.setTab("magicitems");
       buildFilterOptions();
     });
 
@@ -524,12 +706,20 @@ import DmButton from "./DmButton.astro";
       const btn = (e.target as HTMLElement).closest("[data-translate-btn]") as HTMLButtonElement | null;
       if (!btn || btn.disabled) return;
       const slug = btn.dataset.slug;
-      const type = btn.dataset.type as "creature" | "spell";
+      const type = btn.dataset.type as ItemType;
       if (!slug || !type) return;
       handleTranslate(slug, type, btn);
     });
 
-    async function handleTranslate(slug: string, type: "creature" | "spell", btn: HTMLButtonElement) {
+    function renderSelectedDetail(item: AnyItem, isTranslated: boolean): string {
+      const tab = manager.state.tab;
+      if (tab === "monsters") return renderMonsterDetail(item as Monster, isTranslated);
+      if (tab === "spells") return renderSpellDetail(item as Spell, isTranslated);
+      if (tab === "equipment") return renderEquipmentDetail(item as EquipmentItem, isTranslated);
+      return renderMagicItemDetail(item as MagicItem, isTranslated);
+    }
+
+    async function handleTranslate(slug: string, type: ItemType, btn: HTMLButtonElement) {
       const originalText = btn.textContent?.trim() ?? "Перевести";
       btn.textContent = "Перевод...";
       btn.disabled = true;
@@ -543,10 +733,8 @@ import DmButton from "./DmButton.astro";
         const state = manager.state;
         if (state.selectedItem && state.selectedItem.key === slug) {
           const isTranslated = translated !== null;
-          const item = mergeWithTranslation(state.selectedItem, translated);
-          detailContent.innerHTML = state.tab === "monsters"
-            ? renderMonsterDetail(item as Monster, isTranslated)
-            : renderSpellDetail(item as Spell, isTranslated);
+          const item = mergeWithTranslation(state.selectedItem as AnyItem, translated);
+          detailContent.innerHTML = renderSelectedDetail(item, isTranslated);
         }
       } catch {
         btn.textContent = "Ошибка перевода";

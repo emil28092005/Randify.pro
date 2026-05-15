@@ -29,6 +29,46 @@ export const npcResultSchema = z.object({
 
 export type NPCResult = z.infer<typeof npcResultSchema>;
 
+export const spellParamsSchema = z.object({
+  name: z.string().optional(),
+  level: z.number().int().min(0).max(9),
+  school: z.string(),
+  classes: z.string().optional(),
+  tone: z.string().optional(),
+});
+
+export type SpellParams = z.infer<typeof spellParamsSchema>;
+
+export const spellResultSchema = z.object({
+  name: z.string(),
+  level: z.number().int().min(0).max(9),
+  school: z.string(),
+  casting_time: z.string(),
+  range: z.string(),
+  components: z.string(),
+  duration: z.string(),
+  classes: z.string(),
+  description: z.string(),
+  higher_levels: z.string().optional(),
+});
+
+export type SpellResult = z.infer<typeof spellResultSchema>;
+
+export interface Open5eSpell {
+  name: string;
+  level?: number;
+  school?: string;
+  casting_time?: string;
+  range?: string;
+  components?: string;
+  duration?: string;
+  desc?: string | string[];
+  higher_level?: string | string[];
+  ritual?: boolean;
+  concentration?: boolean;
+  classes?: Array<{ name: string }> | string[];
+}
+
 export interface Open5eMonster {
   name: string;
   size?: string;

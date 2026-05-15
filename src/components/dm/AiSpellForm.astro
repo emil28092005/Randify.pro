@@ -1,0 +1,305 @@
+---
+import DmCard from "./DmCard.astro";
+import DmButton from "./DmButton.astro";
+import { dmTranslations as T } from "@/i18n/dm-translations";
+
+export interface Props {
+  disabled?: boolean;
+}
+
+const { disabled = false } = Astro.props;
+
+const selectClasses =
+  "w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-lg px-3 py-2 text-[var(--text-primary)] text-base hover:border-[var(--text-secondary)] focus:outline-none focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)] focus-visible:ring-2 focus-visible:ring-[var(--gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] transition-all duration-[var(--transition-base)] appearance-none cursor-pointer";
+
+const inputClasses =
+  "w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-lg px-3 py-2 text-[var(--text-primary)] text-base placeholder:text-[var(--text-secondary)] hover:border-[var(--text-secondary)] focus:outline-none focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)] focus-visible:ring-2 focus-visible:ring-[var(--gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] transition-all duration-[var(--transition-base)]";
+
+const labelClasses = "block text-sm font-medium text-[var(--text-secondary)] mb-1";
+---
+
+<DmCard dataTestid="ai-spell-form-card">
+  <form id="ai-spell-form" class="space-y-4" data-testid="ai-spell-form">
+    <div>
+      <label for="spell-name" class={labelClasses}>{T.spellFormName}</label>
+      <input
+        id="spell-name"
+        name="name"
+        type="text"
+        placeholder=""
+        class={inputClasses}
+        disabled={disabled}
+      />
+    </div>
+
+    <div>
+      <label for="spell-level" class={labelClasses}>{T.spellFormLevel}</label>
+      <select id="spell-level" name="level" class={selectClasses} required disabled={disabled}>
+        <option value="0">{T.spellCantripLabel}</option>
+        <option value="1" selected>1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="spell-school" class={labelClasses}>{T.spellFormSchool}</label>
+      <select id="spell-school" name="school" class={selectClasses} required disabled={disabled}>
+        <option value="" disabled selected>{T.aiFormSelectOption}</option>
+        <option value="Evocation">{T.schoolEvocation}</option>
+        <option value="Abjuration">{T.schoolAbjuration}</option>
+        <option value="Conjuration">{T.schoolConjuration}</option>
+        <option value="Divination">{T.schoolDivination}</option>
+        <option value="Enchantment">{T.schoolEnchantment}</option>
+        <option value="Illusion">{T.schoolIllusion}</option>
+        <option value="Necromancy">{T.schoolNecromancy}</option>
+        <option value="Transmutation">{T.schoolTransmutation}</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="spell-classes" class={labelClasses}>{T.spellFormClasses}</label>
+      <input
+        id="spell-classes"
+        name="classes"
+        type="text"
+        placeholder="Wizard, Sorcerer"
+        class={inputClasses}
+        disabled={disabled}
+      />
+    </div>
+
+    <div>
+      <label for="spell-tone" class={labelClasses}>{T.spellFormTone}</label>
+      <select id="spell-tone" name="tone" class={selectClasses} disabled={disabled}>
+        <option value="">{T.aiFormSelectOption}</option>
+        <option value="Serious">{T.toneSerious}</option>
+        <option value="Humorous">{T.toneHumorous}</option>
+        <option value="Dark">{T.toneDark}</option>
+        <option value="Heroic">{T.toneHeroic}</option>
+        <option value="Mysterious">{T.toneMysterious}</option>
+      </select>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <input
+        id="spell-use-reference"
+        name="useOpen5eReference"
+        type="checkbox"
+        class="w-5 h-5 rounded border-[var(--border-color)] bg-[var(--bg-input)] text-[var(--accent)] accent-[var(--accent)] focus:ring-[var(--gold)] focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--bg-primary)] cursor-pointer"
+        disabled={disabled}
+      />
+      <label for="spell-use-reference" class="text-sm text-[var(--text-secondary)] cursor-pointer">
+        {T.aiFormUseReference}
+      </label>
+    </div>
+
+    <div class="pt-2">
+      <DmButton
+        id="ai-spell-submit"
+        type="submit"
+        variant="primary"
+        size="md"
+        class="w-full"
+        disabled={disabled}
+        dataTestid="ai-spell-submit"
+      >
+        {T.spellFormSubmit}
+      </DmButton>
+    </div>
+
+    <div
+      id="ai-spell-status"
+      class="text-sm text-center min-h-[1.5rem]"
+      aria-live="polite"
+      data-testid="ai-spell-status"
+    ></div>
+  </form>
+</DmCard>
+
+<div id="ai-spell-result" class="mt-4 hidden" data-testid="ai-spell-result"></div>
+
+<script is:inline define:vars={{
+  generatingLabel: T.spellGenerating,
+  submitLabel: T.spellGenerate,
+  rateLimitTemplate: T.spellErrorRateLimit,
+  genericError: T.spellErrorGeneric,
+  labels: {
+    level: T.spellLabelLevel,
+    school: T.spellLabelSchool,
+    castingTime: T.spellLabelCastingTime,
+    range: T.spellLabelRange,
+    components: T.spellLabelComponents,
+    duration: T.spellLabelDuration,
+    classes: T.spellLabelClasses,
+    description: T.spellLabelDescription,
+    higherLevels: T.spellLabelHigherLevels,
+    cantrip: T.spellCantripLabel,
+    copy: T.spellCopyJson,
+    copied: T.spellCopied,
+  },
+}}>
+  (function () {
+    const form = document.getElementById("ai-spell-form");
+    const submitBtn = document.getElementById("ai-spell-submit");
+    const statusEl = document.getElementById("ai-spell-status");
+    const resultEl = document.getElementById("ai-spell-result");
+    if (!form || !submitBtn || !statusEl || !resultEl) return;
+
+    let isSubmitting = false;
+
+    function escapeHtml(s) {
+      const div = document.createElement("div");
+      div.textContent = String(s ?? "");
+      return div.innerHTML;
+    }
+
+    function formatLevel(level) {
+      return level === 0 ? labels.cantrip : `${level} ${labels.level}`;
+    }
+
+    function renderSpell(spell) {
+      const json = JSON.stringify(spell, null, 2);
+      const higherLevelsBlock = spell.higher_levels
+        ? `<div class="mt-3">
+             <div class="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-0.5">${escapeHtml(labels.higherLevels)}</div>
+             <p class="text-sm text-[var(--text-primary)] leading-relaxed">${escapeHtml(spell.higher_levels)}</p>
+           </div>`
+        : "";
+      resultEl.innerHTML = `
+        <div class="rounded-xl bg-[var(--bg-card)] border border-[var(--border-gold-strong)] shadow-lg shadow-black/20 p-5" data-testid="ai-spell-card">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <div class="min-w-0">
+              <h3 class="text-xl font-bold text-[var(--text-primary)] truncate">${escapeHtml(spell.name)}</h3>
+              <p class="text-sm text-[var(--text-secondary)] mt-1">${escapeHtml(formatLevel(spell.level))} · ${escapeHtml(spell.school)}</p>
+            </div>
+            <button
+              type="button"
+              id="spell-copy-btn"
+              class="inline-flex items-center justify-center px-4 py-1.5 text-sm font-semibold rounded-lg bg-[var(--bg-card)] text-[var(--text-primary)] border border-[var(--border-color)] hover:border-[var(--gold)] hover:text-[var(--gold)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] transition-all"
+              data-testid="spell-copy-btn"
+            >${escapeHtml(labels.copy)}</button>
+          </div>
+          <div class="grid grid-cols-2 gap-3 mb-4">
+            <div class="rounded-lg bg-[var(--bg-secondary)] p-3 text-center">
+              <p class="text-sm font-bold text-[var(--accent)]">${escapeHtml(spell.casting_time)}</p>
+              <p class="text-xs text-[var(--text-secondary)]">${escapeHtml(labels.castingTime)}</p>
+            </div>
+            <div class="rounded-lg bg-[var(--bg-secondary)] p-3 text-center">
+              <p class="text-sm font-bold text-[var(--accent)]">${escapeHtml(spell.range)}</p>
+              <p class="text-xs text-[var(--text-secondary)]">${escapeHtml(labels.range)}</p>
+            </div>
+            <div class="rounded-lg bg-[var(--bg-secondary)] p-3 text-center">
+              <p class="text-sm font-bold text-[var(--accent)]">${escapeHtml(spell.components)}</p>
+              <p class="text-xs text-[var(--text-secondary)]">${escapeHtml(labels.components)}</p>
+            </div>
+            <div class="rounded-lg bg-[var(--bg-secondary)] p-3 text-center">
+              <p class="text-sm font-bold text-[var(--accent)]">${escapeHtml(spell.duration)}</p>
+              <p class="text-xs text-[var(--text-secondary)]">${escapeHtml(labels.duration)}</p>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-0.5">${escapeHtml(labels.classes)}</div>
+            <p class="text-sm text-[var(--text-primary)]">${escapeHtml(spell.classes)}</p>
+          </div>
+          <div>
+            <div class="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-0.5">${escapeHtml(labels.description)}</div>
+            <p class="text-sm text-[var(--text-primary)] leading-relaxed whitespace-pre-line">${escapeHtml(spell.description)}</p>
+          </div>
+          ${higherLevelsBlock}
+        </div>
+      `;
+      resultEl.classList.remove("hidden");
+      const copyBtn = document.getElementById("spell-copy-btn");
+      if (copyBtn) {
+        copyBtn.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(json);
+            const originalText = copyBtn.textContent || "";
+            copyBtn.textContent = labels.copied;
+            setTimeout(() => { copyBtn.textContent = originalText; }, 1500);
+          } catch { /* ignore */ }
+        });
+      }
+    }
+
+    function setStatus(message, type) {
+      statusEl.textContent = message;
+      statusEl.className =
+        "text-sm text-center min-h-[1.5rem] " +
+        (type === "error" ? "text-[var(--danger)]" : "text-[var(--text-secondary)]");
+    }
+
+    function setLoading(loading) {
+      isSubmitting = loading;
+      submitBtn.disabled = loading;
+      submitBtn.textContent = loading ? generatingLabel : submitLabel;
+      submitBtn.setAttribute("aria-busy", loading ? "true" : "false");
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (isSubmitting) return;
+
+      const formData = new FormData(form);
+      const nameValue = String(formData.get("name") ?? "").trim();
+      const classesValue = String(formData.get("classes") ?? "").trim();
+      const toneValue = String(formData.get("tone") ?? "").trim();
+
+      const body = {
+        level: parseInt(String(formData.get("level")), 10),
+        school: String(formData.get("school")),
+        useOpen5eReference: formData.get("useOpen5eReference") === "on",
+      };
+      if (nameValue) body.name = nameValue;
+      if (classesValue) body.classes = classesValue;
+      if (toneValue) body.tone = toneValue;
+
+      setLoading(true);
+      setStatus("");
+
+      try {
+        const response = await fetch("/api/dm/ai/generate-spell", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+
+        if (response.status === 429) {
+          const retryAfter = response.headers.get("Retry-After");
+          const minutes = retryAfter ? Math.ceil(parseInt(retryAfter, 10) / 60) : 60;
+          setStatus(rateLimitTemplate.replace("{minutes}", String(minutes)), "error");
+          setLoading(false);
+          return;
+        }
+
+        if (!response.ok) {
+          setStatus(genericError, "error");
+          setLoading(false);
+          return;
+        }
+
+        const result = await response.json();
+        if (!result.spell) {
+          setStatus(genericError, "error");
+          setLoading(false);
+          return;
+        }
+
+        setStatus("");
+        renderSpell(result.spell);
+        window.dispatchEvent(new CustomEvent("spell-generated", { detail: result.spell, bubbles: true }));
+      } catch {
+        setStatus(genericError, "error");
+      } finally {
+        setLoading(false);
+      }
+    });
+  })();
+</script>

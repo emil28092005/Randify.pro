@@ -1,9 +1,14 @@
 import {
   npcParamsSchema,
   npcResultSchema,
+  spellParamsSchema,
+  spellResultSchema,
   type NPCParams,
   type NPCResult,
   type Open5eMonster,
+  type SpellParams,
+  type SpellResult,
+  type Open5eSpell,
 } from "./types";
 
 const KIMI_API_URL = "https://api.moonshot.ai/v1/chat/completions";
@@ -116,6 +121,182 @@ export class KimiClientError extends Error {
   ) {
     super(message);
     this.name = "KimiClientError";
+  }
+}
+
+const spellJsonSchema = {
+  type: "object" as const,
+  properties: {
+    name: { type: "string" },
+    level: { type: "integer" },
+    school: { type: "string" },
+    casting_time: { type: "string" },
+    range: { type: "string" },
+    components: { type: "string" },
+    duration: { type: "string" },
+    classes: { type: "string" },
+    description: { type: "string" },
+    higher_levels: { type: "string" },
+  },
+  required: [
+    "name",
+    "level",
+    "school",
+    "casting_time",
+    "range",
+    "components",
+    "duration",
+    "classes",
+    "description",
+  ],
+};
+
+function buildSpellSystemPrompt(): string {
+  return [
+    "You are a Dungeons & Dragons 5e spell designer.",
+    "You MUST respond with valid JSON only. Do NOT wrap the response in markdown code blocks.",
+    "Do NOT include any explanatory text outside the JSON object.",
+    "The JSON must exactly match the provided schema.",
+  ].join(" ");
+}
+
+function formatSpellReference(spell: Open5eSpell): string {
+  const parts: string[] = [`Open5e Reference Spell: ${spell.name}`];
+  if (spell.level !== undefined) parts.push(`Level: ${spell.level}`);
+  if (spell.school) parts.push(`School: ${spell.school}`);
+  if (spell.casting_time) parts.push(`Casting time: ${spell.casting_time}`);
+  if (spell.range) parts.push(`Range: ${spell.range}`);
+  if (spell.duration) parts.push(`Duration: ${spell.duration}`);
+  if (spell.components) parts.push(`Components: ${spell.components}`);
+  if (spell.desc) {
+    const desc = Array.isArray(spell.desc) ? spell.desc.join(" ") : spell.desc;
+    parts.push(`Description: ${desc}`);
+  }
+  return parts.join("\n");
+}
+
+function buildSpellUserPrompt(params: SpellParams, reference?: Open5eSpell): string {
+  const lines: string[] = [
+    `Generate a D&D 5e spell with the following parameters:`,
+    `- Level: ${params.level}`,
+    `- School: ${params.school}`,
+  ];
+  if (params.classes) lines.push(`- Classes: ${params.classes}`);
+  if (params.tone) lines.push(`- Tone: ${params.tone}`);
+  if (params.name) lines.push(`- Suggested name: ${params.name}`);
+
+  if (reference) {
+    lines.push("");
+    lines.push("Use the following Open5e spell as a balance reference. Do not exceed its power band:");
+    lines.push(formatSpellReference(reference));
+  }
+
+  lines.push("");
+  lines.push("Respond with a single JSON object matching this schema:");
+  lines.push(JSON.stringify(spellJsonSchema, null, 2));
+
+  return lines.join("\n");
+}
+
+export async function generateSpell(
+  params: SpellParams,
+  reference?: Open5eSpell
+): Promise<SpellResult> {
+  spellParamsSchema.parse(params);
+
+  const apiKey = process.env.KIMI_API_KEY;
+  if (!apiKey) {
+    throw new KimiClientError("KIMI_API_KEY is not configured");
+  }
+
+  const abortController = new AbortController();
+  const timeoutId = setTimeout(() => abortController.abort(), REQUEST_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(KIMI_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: KIMI_MODEL,
+        messages: [
+          { role: "system", content: buildSpellSystemPrompt() },
+          { role: "user", content: buildSpellUserPrompt(params, reference) },
+        ],
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "spell_result",
+            strict: true,
+            schema: spellJsonSchema,
+          },
+        },
+        temperature: 0.7,
+      }),
+      signal: abortController.signal,
+    });
+
+    if (!response.ok) {
+      const body = await response.text().catch(() => undefined);
+      if (response.status === 429) {
+        throw new KimiClientError("Kimi API rate limit exceeded", response.status, body);
+      }
+      throw new KimiClientError(
+        `Kimi API error: ${response.status} ${response.statusText}`,
+        response.status,
+        body,
+      );
+    }
+
+    const responseText = await response.text();
+    let data: {
+      choices?: Array<{ message?: { content?: string | null } }>;
+      error?: { message?: string };
+    };
+    try {
+      data = JSON.parse(responseText);
+    } catch {
+      throw new KimiClientError("Kimi API returned invalid JSON", undefined, responseText);
+    }
+
+    if (data.error?.message) {
+      throw new KimiClientError(`Kimi API error: ${data.error.message}`);
+    }
+
+    const content = data.choices?.[0]?.message?.content;
+    if (!content) {
+      throw new KimiClientError("Kimi API returned empty content");
+    }
+
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(content);
+    } catch {
+      throw new KimiClientError("Kimi API returned invalid JSON", undefined, content);
+    }
+
+    const validation = spellResultSchema.safeParse(parsed);
+    if (!validation.success) {
+      throw new KimiClientError(
+        `Kimi API spell validation failed: ${validation.error.message}`,
+        undefined,
+        content,
+      );
+    }
+
+    return validation.data;
+  } catch (error) {
+    if (error instanceof KimiClientError) throw error;
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new KimiClientError("Kimi API request timed out after 10s");
+    }
+    throw new KimiClientError(
+      error instanceof Error ? error.message : "Unknown Kimi API error",
+    );
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
 

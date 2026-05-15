@@ -8,7 +8,8 @@ import DiceRoller from "@/components/dm/DiceRoller.astro";
 import InitiativeTracker from "@/components/dm/InitiativeTracker.astro";
 import Open5eReference from "@/components/dm/Open5eReference.astro";
 import NotesPanel from "@/components/dm/NotesPanel.astro";
-import AiNpcForm from "@/components/dm/AiNpcForm.astro";
+import AiKindSwitcher from "@/components/dm/AiKindSwitcher.astro";
+import AiQuotaExhausted from "@/components/dm/AiQuotaExhausted.astro";
 import ImportModal from "@/components/dm/ImportModal.astro";
 import { dmTranslations as T } from "@/i18n/dm-translations";
 import { getRemainingQuota, TIER_LIMITS } from "@/lib/rate-limit";
@@ -18,6 +19,7 @@ let quota = null;
 if (user) {
   quota = await getRemainingQuota(user.id, user.tier);
 }
+const quotaExhausted = !!user && user.tier === "free" && !!quota && quota.remaining <= 0;
 ---
 
 <DmLayout>
@@ -58,14 +60,16 @@ if (user) {
           {T.ai}
         </h2>
       </div>
-      {Astro.locals.user ? (
-        <AiNpcForm />
-      ) : (
+      {!user ? (
         <DmCard>
           <div class="p-6 text-center">
             <p class="text-[var(--text-secondary)]">{T.aiSignInCta}</p>
           </div>
         </DmCard>
+      ) : quotaExhausted ? (
+        <AiQuotaExhausted resetAt={quota!.resetAt} />
+      ) : (
+        <AiKindSwitcher />
       )}
     </section>
   </div>

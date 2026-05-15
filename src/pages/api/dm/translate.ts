@@ -3,12 +3,20 @@ import { jsonResponse, handleCorsPreflight } from "@/lib/cors";
 import { db } from "@/db/client";
 import { translations } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
-import { getMonster, getSpell } from "@/lib/open5e/client";
-import { translateOpen5eContent } from "@/lib/ai/openrouter";
+import {
+  getMonster,
+  getSpell,
+  getEquipmentItem,
+  getMagicItem,
+} from "@/lib/open5e/client";
+import {
+  translateOpen5eContent,
+  type Open5eContentType,
+} from "@/lib/ai/openrouter";
 
 export const prerender = false;
 
-const ALLOWED_TYPES = new Set(["creature", "spell"]);
+const ALLOWED_TYPES = new Set(["creature", "spell", "equipment", "magicitem"]);
 
 function getOrigin(request: Request): string | null {
   return request.headers.get("origin");
@@ -30,7 +38,7 @@ export const GET: APIRoute = async ({ request }) => {
 
   if (!ALLOWED_TYPES.has(type)) {
     return jsonResponse(
-      { error: `Invalid type. Allowed: creature, spell` },
+      { error: `Invalid type. Allowed: creature, spell, equipment, magicitem` },
       400,
       origin
     );
@@ -59,11 +67,13 @@ export const GET: APIRoute = async ({ request }) => {
   let original: Record<string, unknown>;
   try {
     if (type === "creature") {
-      const monster = await getMonster(slug);
-      original = monster as unknown as Record<string, unknown>;
+      original = (await getMonster(slug)) as unknown as Record<string, unknown>;
+    } else if (type === "spell") {
+      original = (await getSpell(slug)) as unknown as Record<string, unknown>;
+    } else if (type === "equipment") {
+      original = (await getEquipmentItem(slug)) as unknown as Record<string, unknown>;
     } else {
-      const spell = await getSpell(slug);
-      original = spell as unknown as Record<string, unknown>;
+      original = (await getMagicItem(slug)) as unknown as Record<string, unknown>;
     }
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
@@ -76,7 +86,7 @@ export const GET: APIRoute = async ({ request }) => {
 
   let translated: Record<string, unknown>;
   try {
-    translated = await translateOpen5eContent(original, type as "creature" | "spell");
+    translated = await translateOpen5eContent(original, type as Open5eContentType);
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     return jsonResponse(

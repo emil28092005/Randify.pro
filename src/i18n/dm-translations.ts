@@ -88,6 +88,9 @@ export const dmTranslations = {
   aiTitle: "Генератор ИИ",
   aiSignInCta: "Войдите, чтобы использовать ИИ",
   aiPlaceholder: "Генератор ИИ появится здесь",
+  aiQuotaExhausted: "Лимит ИИ-генераций исчерпан.",
+  aiQuotaResetsIn: "Новые генерации будут доступны через {minutes} мин.",
+  aiQuotaUpgradeHint: "Хотите больше? Поддержите проект на Boosty — получите PRO с 100 генерациями/час.",
 
   // AI Form
   aiFormRace: "Раса",
@@ -140,6 +143,47 @@ export const dmTranslations = {
   npcErrorGeneric: "Ошибка генерации. Попробуйте снова.",
   npcErrorRateLimit: "Превышен лимит генераций. Попробуйте через {minutes} мин.",
   npcErrorValidation: "Проверьте введённые данные.",
+
+  // AI segmented control
+  aiKindNpc: "NPC",
+  aiKindSpell: "Заклинание",
+
+  // AI Spell Form
+  spellFormName: "Подсказка имени (опционально)",
+  spellFormLevel: "Уровень заклинания",
+  spellFormSchool: "Школа",
+  spellFormClasses: "Классы (опционально)",
+  spellFormTone: "Тон",
+  spellFormSubmit: "Сгенерировать заклинание",
+  spellGenerating: "Генерация...",
+  spellGenerate: "Сгенерировать заклинание",
+  spellErrorGeneric: "Ошибка генерации заклинания.",
+  spellErrorRateLimit: "Превышен лимит генераций. Попробуйте через {minutes} мин.",
+
+  // Spell schools
+  schoolAbjuration: "Ограждение",
+  schoolConjuration: "Призыв",
+  schoolDivination: "Прорицание",
+  schoolEnchantment: "Очарование",
+  schoolEvocation: "Воплощение",
+  schoolIllusion: "Иллюзия",
+  schoolNecromancy: "Некромантия",
+  schoolTransmutation: "Преобразование",
+
+  // Spell result card
+  spellLabelLevel: "Уровень",
+  spellLabelSchool: "Школа",
+  spellLabelCastingTime: "Время накладывания",
+  spellLabelRange: "Дистанция",
+  spellLabelComponents: "Компоненты",
+  spellLabelDuration: "Длительность",
+  spellLabelClasses: "Классы",
+  spellLabelDescription: "Описание",
+  spellLabelHigherLevels: "На больших уровнях",
+  spellCopyJson: "Копировать JSON",
+  spellCopied: "Скопировано",
+  spellRegenerate: "Перегенерировать",
+  spellCantripLabel: "Заговор",
 
   // AI History
   historyTitle: "История генераций",

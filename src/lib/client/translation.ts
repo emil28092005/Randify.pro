@@ -1,6 +1,8 @@
+export type TranslationType = "creature" | "spell" | "equipment" | "magicitem";
+
 export interface TranslationEntry {
   slug: string;
-  type: "creature" | "spell";
+  type: TranslationType;
   data: Record<string, unknown>;
   timestamp: number;
 }
@@ -21,14 +23,14 @@ if (CHANNEL) {
 
 export function getCachedTranslation(
   slug: string,
-  type: "creature" | "spell",
+  type: TranslationType,
 ): Record<string, unknown> | null {
   return CACHE.get(`${type}:${slug}`)?.data ?? null;
 }
 
 export function setCachedTranslation(
   slug: string,
-  type: "creature" | "spell",
+  type: TranslationType,
   data: Record<string, unknown>,
 ): void {
   const entry: TranslationEntry = {
@@ -43,7 +45,7 @@ export function setCachedTranslation(
 
 export async function fetchTranslation(
   slug: string,
-  type: "creature" | "spell",
+  type: TranslationType,
 ): Promise<Record<string, unknown> | null> {
   const cached = getCachedTranslation(slug, type);
   if (cached) return cached;

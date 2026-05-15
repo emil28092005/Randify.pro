@@ -1,0 +1,69 @@
+---
+import AiNpcForm from "./AiNpcForm.astro";
+import AiSpellForm from "./AiSpellForm.astro";
+import { dmTranslations as T } from "@/i18n/dm-translations";
+---
+
+<div data-testid="ai-kind-switcher">
+  <div class="inline-flex rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] p-1 mb-4" role="tablist" aria-label="Тип генератора">
+    <button
+      type="button"
+      role="tab"
+      id="ai-kind-npc"
+      aria-selected="true"
+      aria-controls="ai-kind-panel-npc"
+      class="px-4 py-1.5 text-sm font-semibold rounded-md transition-colors bg-[var(--accent)] text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)]"
+      data-kind="npc"
+      data-testid="ai-kind-tab-npc"
+    >
+      {T.aiKindNpc}
+    </button>
+    <button
+      type="button"
+      role="tab"
+      id="ai-kind-spell"
+      aria-selected="false"
+      aria-controls="ai-kind-panel-spell"
+      class="px-4 py-1.5 text-sm font-semibold rounded-md transition-colors text-[var(--text-secondary)] hover:text-[var(--text-primary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)]"
+      data-kind="spell"
+      data-testid="ai-kind-tab-spell"
+    >
+      {T.aiKindSpell}
+    </button>
+  </div>
+
+  <div id="ai-kind-panel-npc" role="tabpanel" aria-labelledby="ai-kind-npc">
+    <AiNpcForm />
+  </div>
+  <div id="ai-kind-panel-spell" role="tabpanel" aria-labelledby="ai-kind-spell" class="hidden">
+    <AiSpellForm />
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    const npcTab = document.getElementById("ai-kind-npc");
+    const spellTab = document.getElementById("ai-kind-spell");
+    const npcPanel = document.getElementById("ai-kind-panel-npc");
+    const spellPanel = document.getElementById("ai-kind-panel-spell");
+    if (!npcTab || !spellTab || !npcPanel || !spellPanel) return;
+
+    const activeClasses =
+      "px-4 py-1.5 text-sm font-semibold rounded-md transition-colors bg-[var(--accent)] text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)]";
+    const inactiveClasses =
+      "px-4 py-1.5 text-sm font-semibold rounded-md transition-colors text-[var(--text-secondary)] hover:text-[var(--text-primary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)]";
+
+    function setKind(kind) {
+      const isNpc = kind === "npc";
+      npcTab.className = isNpc ? activeClasses : inactiveClasses;
+      spellTab.className = isNpc ? inactiveClasses : activeClasses;
+      npcTab.setAttribute("aria-selected", String(isNpc));
+      spellTab.setAttribute("aria-selected", String(!isNpc));
+      npcPanel.classList.toggle("hidden", !isNpc);
+      spellPanel.classList.toggle("hidden", isNpc);
+    }
+
+    npcTab.addEventListener("click", () => setKind("npc"));
+    spellTab.addEventListener("click", () => setKind("spell"));
+  })();
+</script>

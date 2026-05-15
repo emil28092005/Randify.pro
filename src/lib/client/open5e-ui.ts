@@ -1,11 +1,15 @@
 import {
   searchMonsters,
   searchSpells,
+  searchEquipment,
+  searchMagicItems,
   getMonster,
   getSpell,
+  getEquipmentItem,
+  getMagicItem,
 } from "@/lib/open5e/client";
 
-export type Tab = "monsters" | "spells";
+export type Tab = "monsters" | "spells" | "equipment" | "magicitems";
 
 export interface Open5eItem {
   key: string;
@@ -101,11 +105,15 @@ export class Open5eUIManager {
           ? { challenge_rating_decimal: this.state.monsterCrFilter }
           : undefined;
         results = await searchMonsters(this.state.query, filters);
-      } else {
+      } else if (this.state.tab === "spells") {
         const filters = this.state.spellLevelFilter
           ? { level: this.state.spellLevelFilter }
           : undefined;
         results = await searchSpells(this.state.query, filters);
+      } else if (this.state.tab === "equipment") {
+        results = await searchEquipment(this.state.query);
+      } else {
+        results = await searchMagicItems(this.state.query);
       }
       this.state.results = results;
       this.state.totalPages = Math.max(
@@ -148,8 +156,12 @@ export class Open5eUIManager {
     try {
       if (this.state.tab === "monsters") {
         this.state.selectedItem = await getMonster(key);
-      } else {
+      } else if (this.state.tab === "spells") {
         this.state.selectedItem = await getSpell(key);
+      } else if (this.state.tab === "equipment") {
+        this.state.selectedItem = await getEquipmentItem(key);
+      } else {
+        this.state.selectedItem = await getMagicItem(key);
       }
     } catch (err: unknown) {
       this.state.error = err instanceof Error ? err.message : "Failed to load details";

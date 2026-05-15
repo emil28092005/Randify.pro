@@ -170,3 +170,105 @@ export async function getSpell(key: string): Promise<Spell> {
     throw err;
   }
 }
+
+export interface EquipmentItem {
+  name: string;
+  key: string;
+  category?: string;
+  cost?: string | number | Record<string, unknown>;
+  weight?: string | number;
+  damage?: string | Record<string, unknown>;
+  properties?: string[] | Record<string, unknown>[];
+  desc?: string;
+}
+
+export async function searchEquipment(
+  query: string,
+  filters?: SearchFilters
+): Promise<EquipmentItem[]> {
+  const cacheKey = `open5e:v2:equipment:${query}`;
+  const cached = getCached<EquipmentItem[]>(cacheKey);
+  if (cached) return cached;
+
+  const url = buildUrl("equipment/", query, filters);
+  const urlObj = new URL(url);
+  urlObj.searchParams.set("fields", "name,key,category,cost,weight");
+
+  try {
+    const data = await apiFetch<{ results: EquipmentItem[] }>(urlObj.toString());
+    setCached(cacheKey, data.results);
+    return data.results;
+  } catch (err) {
+    const stale = getCached<EquipmentItem[]>(cacheKey);
+    if (stale) return stale;
+    throw err;
+  }
+}
+
+export async function getEquipmentItem(key: string): Promise<EquipmentItem> {
+  const cacheKey = `open5e:v2:equipment:item:${key}`;
+  const cached = getCached<EquipmentItem>(cacheKey);
+  if (cached) return cached;
+
+  const url = `${API_BASE}equipment/${key}/`;
+
+  try {
+    const data = await apiFetch<EquipmentItem>(url);
+    setCached(cacheKey, data);
+    return data;
+  } catch (err) {
+    const stale = getCached<EquipmentItem>(cacheKey);
+    if (stale) return stale;
+    throw err;
+  }
+}
+
+export interface MagicItem {
+  name: string;
+  key: string;
+  type?: string;
+  rarity?: string;
+  requires_attunement?: string;
+  desc?: string;
+}
+
+export async function searchMagicItems(
+  query: string,
+  filters?: SearchFilters
+): Promise<MagicItem[]> {
+  const cacheKey = `open5e:v2:magicitems:${query}`;
+  const cached = getCached<MagicItem[]>(cacheKey);
+  if (cached) return cached;
+
+  const url = buildUrl("magicitems/", query, filters);
+  const urlObj = new URL(url);
+  urlObj.searchParams.set("fields", "name,key,type,rarity");
+
+  try {
+    const data = await apiFetch<{ results: MagicItem[] }>(urlObj.toString());
+    setCached(cacheKey, data.results);
+    return data.results;
+  } catch (err) {
+    const stale = getCached<MagicItem[]>(cacheKey);
+    if (stale) return stale;
+    throw err;
+  }
+}
+
+export async function getMagicItem(key: string): Promise<MagicItem> {
+  const cacheKey = `open5e:v2:magicitem:${key}`;
+  const cached = getCached<MagicItem>(cacheKey);
+  if (cached) return cached;
+
+  const url = `${API_BASE}magicitems/${key}/`;
+
+  try {
+    const data = await apiFetch<MagicItem>(url);
+    setCached(cacheKey, data);
+    return data;
+  } catch (err) {
+    const stale = getCached<MagicItem>(cacheKey);
+    if (stale) return stale;
+    throw err;
+  }
+}

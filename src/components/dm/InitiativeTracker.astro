@@ -139,8 +139,16 @@ import { dmTranslations as T } from "@/i18n/dm-translations";
         const oldRaw = sessionStorage.getItem("it-combatants");
         if (oldRaw) {
           try {
-            const oldData = JSON.parse(oldRaw) as any[];
-            const migrated = oldData.map((c: any, index: number) => ({
+            const oldData = JSON.parse(oldRaw) as Array<{
+              id?: string;
+              name?: string;
+              modifier?: number;
+              initiative?: number;
+              hp?: number;
+              maxHp?: number;
+              active?: boolean;
+            }>;
+            const migrated = oldData.map((c, index) => ({
               id: c.id || `legacy-${index}-${Date.now()}`,
               name: c.name || 'Unknown',
               modifier: typeof c.modifier === 'number' ? c.modifier : 0,
@@ -156,7 +164,7 @@ import { dmTranslations as T } from "@/i18n/dm-translations";
         }
         return [];
       }
-      const parsed = JSON.parse(raw) as any[];
+      const parsed = JSON.parse(raw) as Array<{ id?: string }>;
 
       let migrated = false;
       const combatants = parsed.map((c) => {

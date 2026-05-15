@@ -172,7 +172,7 @@ if (activeTab && tabs.some((t) => t.id === activeTab)) {
       if (!focused || !focused.hasAttribute("data-tab")) return;
 
       const currentIndex = tabEls.indexOf(focused);
-      let nextIndex = currentIndex;
+      let nextIndex: number;
 
       switch (e.key) {
         case "ArrowRight":

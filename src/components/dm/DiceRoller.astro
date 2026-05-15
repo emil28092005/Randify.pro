@@ -166,7 +166,17 @@ const quickDice = [
       }
 
       if (!raw) return [];
-      const parsed = JSON.parse(raw) as any[];
+      const parsed = JSON.parse(raw) as Array<{
+        result?: number;
+        total?: number;
+        rolls?: unknown[];
+        formula?: string;
+        notation?: string;
+        modifier?: number;
+        status?: "crit" | "fail" | "normal";
+        isCrit?: boolean;
+        isFail?: boolean;
+      }>;
 
       // Migrate old-format entries
       const migrated = parsed.map((entry) => {

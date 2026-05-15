@@ -5,6 +5,11 @@ import { getCached, setCached } from "./cache";
 
 const API_BASE = "https://api.open5e.com/v2/";
 
+export interface MonsterAction {
+  name: string;
+  desc?: string;
+}
+
 export interface Monster {
   name: string;
   key: string;
@@ -12,6 +17,30 @@ export interface Monster {
   type: string;
   hit_points: number;
   armor_class: number;
+  speed?: Record<string, string | number | null>;
+  actions?: MonsterAction[];
+  special_abilities?: MonsterAction[];
+  legendary_actions?: MonsterAction[];
+  senses?: Record<string, string | number | null>;
+  languages?: string;
+  strength?: number;
+  dexterity?: number;
+  constitution?: number;
+  intelligence?: number;
+  wisdom?: number;
+  charisma?: number;
+  size?: string;
+  subtype?: string;
+  alignment?: string;
+  damage_immunities?: string[];
+  damage_resistances?: string[];
+  damage_vulnerabilities?: string[];
+  condition_immunities?: string[];
+}
+
+export interface SpellClass {
+  name: string;
+  slug?: string;
 }
 
 export interface Spell {
@@ -19,6 +48,15 @@ export interface Spell {
   key: string;
   level: number;
   school: string;
+  casting_time?: string;
+  range?: string;
+  components?: string;
+  duration?: string;
+  desc?: string[];
+  higher_level?: string[];
+  ritual?: boolean;
+  concentration?: boolean;
+  classes?: SpellClass[];
 }
 
 interface SearchFilters {
@@ -52,7 +90,7 @@ export async function searchMonsters(
   query: string,
   filters?: SearchFilters
 ): Promise<Monster[]> {
-  const cacheKey = `open5e:monsters:${query}`;
+  const cacheKey = `open5e:v2:monsters:${query}`;
   const cached = getCached<Monster[]>(cacheKey);
   if (cached) return cached;
 
@@ -75,7 +113,7 @@ export async function searchMonsters(
 }
 
 export async function getMonster(key: string): Promise<Monster> {
-  const cacheKey = `open5e:monster:${key}`;
+  const cacheKey = `open5e:v2:monster:${key}`;
   const cached = getCached<Monster>(cacheKey);
   if (cached) return cached;
 
@@ -96,7 +134,7 @@ export async function searchSpells(
   query: string,
   filters?: SearchFilters
 ): Promise<Spell[]> {
-  const cacheKey = `open5e:spells:${query}`;
+  const cacheKey = `open5e:v2:spells:${query}`;
   const cached = getCached<Spell[]>(cacheKey);
   if (cached) return cached;
 
@@ -116,7 +154,7 @@ export async function searchSpells(
 }
 
 export async function getSpell(key: string): Promise<Spell> {
-  const cacheKey = `open5e:spell:${key}`;
+  const cacheKey = `open5e:v2:spell:${key}`;
   const cached = getCached<Spell>(cacheKey);
   if (cached) return cached;
 

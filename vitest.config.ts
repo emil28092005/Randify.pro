@@ -5,6 +5,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "./src"),
+      "astro:middleware": path.resolve(import.meta.dirname, "./tests/mocks/astro-middleware.ts"),
     },
   },
   test: {

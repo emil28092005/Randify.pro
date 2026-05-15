@@ -24,6 +24,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     const session = await getSession(token);
     if (!session) {
       console.log('[Middleware] Session validation failed: no session in DB');
+      context.cookies.delete('auth_token', { path: '/' });
       return next();
     }
 
@@ -41,10 +42,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
       console.log('[Middleware] User attached to locals:', { userId: user.id, name: user.name });
     } else {
       console.log('[Middleware] No user found for session');
+      context.cookies.delete('auth_token', { path: '/' });
     }
   } catch {
     console.log('[Middleware] Session validation failed: invalid token');
-    /* ignore invalid tokens */
+    context.cookies.delete('auth_token', { path: '/' });
   }
 
   return next();

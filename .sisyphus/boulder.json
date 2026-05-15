@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "active_work_id": "dm-dashboard-redesign-a1bfaddc",
+  "active_work_id": "dm-dashboard-ai-c738b11e",
   "works": {
     "critical-refactor-f063daf0": {
       "work_id": "critical-refactor-f063daf0",
@@ -387,19 +387,59 @@
       },
       "agent": "atlas",
       "task_sessions": {}
+    },
+    "dm-dashboard-ai-c738b11e": {
+      "work_id": "dm-dashboard-ai-c738b11e",
+      "active_plan": "/home/emil/Desktop/Coding/AI/Randify.pro/.sisyphus/plans/dm-dashboard-ai.md",
+      "plan_name": "dm-dashboard-ai",
+      "status": "active",
+      "started_at": "2026-05-15T17:58:09.859Z",
+      "updated_at": "2026-05-15T18:24:29.818Z",
+      "session_ids": [
+        "ses_1d3921469ffeQox08ZjNWWJq7u"
+      ],
+      "session_origins": {
+        "ses_1d3921469ffeQox08ZjNWWJq7u": "direct"
+      },
+      "agent": "atlas",
+      "task_sessions": {
+        "final-wave:f1": {
+          "task_key": "final-wave:f1",
+          "task_label": "F1",
+          "task_title": "**Plan Compliance Audit** — `oracle`",
+          "session_id": "ses_1d333a383ffeOqEVZptN3EbGAY",
+          "agent": "Sisyphus-Junior",
+          "category": "quick",
+          "updated_at": "2026-05-15T18:24:29.818Z",
+          "started_at": "2026-05-15T18:24:29.818Z",
+          "status": "running"
+        }
+      }
     }
   },
-  "active_plan": "/home/emil/Desktop/Coding/AI/Randify.pro/.sisyphus/plans/dm-dashboard-redesign.md",
-  "started_at": "2026-05-15T12:32:10.008Z",
+  "active_plan": "/home/emil/Desktop/Coding/AI/Randify.pro/.sisyphus/plans/dm-dashboard-ai.md",
+  "started_at": "2026-05-15T17:58:09.859Z",
   "status": "active",
-  "updated_at": "2026-05-15T12:32:10.008Z",
+  "updated_at": "2026-05-15T18:24:29.818Z",
   "session_ids": [
-    "ses_1d6b615cbffe5pqd0AObdil6OK"
+    "ses_1d3921469ffeQox08ZjNWWJq7u"
   ],
   "session_origins": {
-    "ses_1d6b615cbffe5pqd0AObdil6OK": "direct"
+    "ses_1d3921469ffeQox08ZjNWWJq7u": "direct"
   },
-  "plan_name": "dm-dashboard-redesign",
-  "task_sessions": {},
+  "plan_name": "dm-dashboard-ai",
+  "task_sessions": {
+    "final-wave:f1": {
+      "task_key": "final-wave:f1",
+      "task_label": "F1",
+      "task_title": "**Plan Compliance Audit** — `oracle`",
+      "session_id": "ses_1d333a383ffeOqEVZptN3EbGAY",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-05-15T18:24:29.818Z",
+      "started_at": "2026-05-15T18:24:29.818Z",
+      "status": "running"
+    }
+  },
   "agent": "atlas"
 }

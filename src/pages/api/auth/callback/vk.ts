@@ -9,6 +9,7 @@ import {
   createSessionToken,
   COOKIE_NAME,
 } from '@/lib/auth/oauth';
+import { authEnv } from '@/lib/auth/env';
 
 export const prerender = false;
 
@@ -47,7 +48,7 @@ export const GET: APIRoute = async ({ url, request }) => {
     });
   }
 
-  const redirectUri = `${process.env.PUBLIC_APP_URL || url.origin}/api/auth/callback/vk`;
+  const redirectUri = `${authEnv.PUBLIC_APP_URL}/api/auth/callback/vk`;
 
   const tokenBody = new URLSearchParams({
     client_id: vkOAuthConfig.clientId,

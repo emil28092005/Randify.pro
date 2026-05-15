@@ -1,7 +1,8 @@
 import { SignJWT, jwtVerify } from 'jose';
 import type { APIContext } from 'astro';
+import { authEnv } from './env';
 
-const SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
+const SECRET = new TextEncoder().encode(authEnv.JWT_SECRET);
 
 export async function createToken(userId: string): Promise<string> {
   return new SignJWT({ sub: userId })
@@ -25,7 +26,7 @@ export function setAuthCookie(token: string, context: APIContext): void {
   context.cookies.set('auth_token', token, {
     httpOnly: true,
     secure: true,
-    sameSite: 'strict',
+    sameSite: 'lax',
     maxAge: 60 * 60 * 24 * 7,
     path: '/',
   });

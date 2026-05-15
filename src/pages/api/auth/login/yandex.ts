@@ -1,14 +1,15 @@
 import type { APIRoute } from 'astro';
 import { generateCodeVerifier, generateCodeChallenge, generateState, yandexOAuthConfig, VERIFIER_COOKIE_NAME } from '@/lib/auth/oauth';
+import { authEnv } from '@/lib/auth/env';
 
 export const prerender = false;
 
-export const GET: APIRoute = async ({ url }) => {
+export const GET: APIRoute = async () => {
   const verifier = generateCodeVerifier();
   const challenge = await generateCodeChallenge(verifier);
   const state = generateState();
 
-  const redirectUri = `${process.env.PUBLIC_APP_URL || url.origin}/api/auth/callback/yandex`;
+  const redirectUri = `${authEnv.PUBLIC_APP_URL}/api/auth/callback/yandex`;
 
   const params = new URLSearchParams({
     client_id: yandexOAuthConfig.clientId,

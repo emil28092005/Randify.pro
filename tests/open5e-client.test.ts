@@ -197,7 +197,7 @@ describe("Open5e Client", () => {
         },
       ];
       mockStorage.setItem(
-        "open5e:monsters:dragon",
+        "open5e:v2:monsters:dragon",
         JSON.stringify({ data: cached, timestamp: Date.now() })
       );
 
@@ -230,7 +230,7 @@ describe("Open5e Client", () => {
       ) as unknown as typeof fetch;
 
       await searchMonsters("new");
-      const stored = mockStorage.getItem("open5e:monsters:new");
+      const stored = mockStorage.getItem("open5e:v2:monsters:new");
       expect(stored).not.toBeNull();
       const parsed = JSON.parse(stored!);
       expect(parsed.data).toEqual(mockData.results);
@@ -249,7 +249,7 @@ describe("Open5e Client", () => {
         },
       ];
       mockStorage.setItem(
-        "open5e:monsters:dragon",
+        "open5e:v2:monsters:dragon",
         JSON.stringify({ data: cached, timestamp: Date.now() })
       );
 
@@ -277,7 +277,7 @@ describe("Open5e Client", () => {
         },
       ];
       mockStorage.setItem(
-        "open5e:monsters:dragon",
+        "open5e:v2:monsters:dragon",
         JSON.stringify({ data: staleData, timestamp: Date.now() - 25 * 60 * 60 * 1000 })
       );
 
@@ -318,10 +318,10 @@ describe("Open5e Client", () => {
       await searchSpells("fire");
       await getSpell("fireball");
 
-      expect(mockStorage.getItem("open5e:monsters:dragon")).not.toBeNull();
-      expect(mockStorage.getItem("open5e:monster:goblin")).not.toBeNull();
-      expect(mockStorage.getItem("open5e:spells:fire")).not.toBeNull();
-      expect(mockStorage.getItem("open5e:spell:fireball")).not.toBeNull();
+      expect(mockStorage.getItem("open5e:v2:monsters:dragon")).not.toBeNull();
+      expect(mockStorage.getItem("open5e:v2:monster:goblin")).not.toBeNull();
+      expect(mockStorage.getItem("open5e:v2:spells:fire")).not.toBeNull();
+      expect(mockStorage.getItem("open5e:v2:spell:fireball")).not.toBeNull();
     });
   });
 });

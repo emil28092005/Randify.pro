@@ -77,7 +77,6 @@ export const GET: APIRoute = async ({ url, request }) => {
 
   const tokenData = await tokenRes.json();
   const accessToken = tokenData.access_token;
-  const refreshToken = tokenData.refresh_token;
 
   if (!accessToken) {
     console.error('[OAuth VK] No access_token in response:', tokenData);

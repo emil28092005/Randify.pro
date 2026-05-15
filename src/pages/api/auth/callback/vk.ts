@@ -13,6 +13,9 @@ import {
 export const prerender = false;
 
 export const GET: APIRoute = async ({ url, request }) => {
+  console.log('[OAuth VK] Full callback URL:', url.toString());
+  console.log('[OAuth VK] All query params:', Object.fromEntries(url.searchParams.entries()));
+
   const payloadParam = url.searchParams.get('payload');
   let code: string | null = null;
   let state: string | null = null;
@@ -21,6 +24,7 @@ export const GET: APIRoute = async ({ url, request }) => {
   if (payloadParam) {
     try {
       const payload = JSON.parse(payloadParam);
+      console.log('[OAuth VK] Parsed payload:', payload);
       code = payload.code || null;
       state = payload.state || null;
       deviceId = payload.device_id || null;
@@ -31,6 +35,7 @@ export const GET: APIRoute = async ({ url, request }) => {
 
   if (!code) code = url.searchParams.get('code');
   if (!state) state = url.searchParams.get('state');
+  if (!deviceId) deviceId = url.searchParams.get('device_id');
 
   const cookieHeader = request.headers.get('cookie');
   const verifier = getCookieValue(cookieHeader, VERIFIER_COOKIE_NAME);

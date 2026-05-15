@@ -27,19 +27,22 @@ describe('Auth Environment Validation', () => {
     expect(requireEnv('PUBLIC_APP_URL')).toBe(baseEnv.PUBLIC_APP_URL);
   });
 
-  it('should throw at module load if JWT_SECRET is missing', async () => {
+  it('should throw on first access if JWT_SECRET is missing', async () => {
     delete process.env.JWT_SECRET;
-    await expect(import('./env')).rejects.toThrow('JWT_SECRET');
+    const { authEnv } = await import('./env');
+    expect(() => authEnv.JWT_SECRET).toThrow('JWT_SECRET');
   });
 
-  it('should throw at module load if PUBLIC_APP_URL is invalid', async () => {
+  it('should throw on first access if PUBLIC_APP_URL is invalid', async () => {
     process.env.PUBLIC_APP_URL = 'not-a-url';
-    await expect(import('./env')).rejects.toThrow('PUBLIC_APP_URL');
+    const { authEnv } = await import('./env');
+    expect(() => authEnv.PUBLIC_APP_URL).toThrow('PUBLIC_APP_URL');
   });
 
-  it('should throw at module load if VK_CLIENT_ID is missing', async () => {
+  it('should throw on first access if VK_CLIENT_ID is missing', async () => {
     delete process.env.VK_CLIENT_ID;
-    await expect(import('./env')).rejects.toThrow('VK_CLIENT_ID');
+    const { authEnv } = await import('./env');
+    expect(() => authEnv.VK_CLIENT_ID).toThrow('VK_CLIENT_ID');
   });
 });
 

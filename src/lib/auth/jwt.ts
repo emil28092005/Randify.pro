@@ -2,18 +2,24 @@ import { SignJWT, jwtVerify } from 'jose';
 import type { APIContext } from 'astro';
 import { authEnv } from './env';
 
-const SECRET = new TextEncoder().encode(authEnv.JWT_SECRET);
+let secretCache: Uint8Array | null = null;
+function getSecret(): Uint8Array {
+  if (!secretCache) {
+    secretCache = new TextEncoder().encode(authEnv.JWT_SECRET);
+  }
+  return secretCache;
+}
 
 export async function createToken(userId: string): Promise<string> {
   return new SignJWT({ sub: userId })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('7d')
-    .sign(SECRET);
+    .sign(getSecret());
 }
 
 export async function verifyToken(token: string): Promise<{ sub: string }> {
-  const { payload } = await jwtVerify(token, SECRET, {
+  const { payload } = await jwtVerify(token, getSecret(), {
     clockTolerance: 60,
   });
   if (!payload.sub || typeof payload.sub !== 'string') {

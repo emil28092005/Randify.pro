@@ -1,7 +1,13 @@
 import { SignJWT, jwtVerify } from 'jose';
 import { authEnv } from './env';
 
-const JWT_SECRET = new TextEncoder().encode(authEnv.JWT_SECRET);
+let secretCache: Uint8Array | null = null;
+function getJwtSecret(): Uint8Array {
+  if (!secretCache) {
+    secretCache = new TextEncoder().encode(authEnv.JWT_SECRET);
+  }
+  return secretCache;
+}
 
 export function generateCodeVerifier(): string {
   const array = new Uint8Array(64);
@@ -30,17 +36,19 @@ export function generateState(): string {
   return base64UrlEncode(array);
 }
 
+// Lazy getters so env validation doesn't fire at module import time
+// (which happens during `astro build` when secrets are absent).
 export const vkOAuthConfig = {
-  clientId: authEnv.VK_CLIENT_ID,
-  clientSecret: authEnv.VK_CLIENT_SECRET,
+  get clientId() { return authEnv.VK_CLIENT_ID; },
+  get clientSecret() { return authEnv.VK_CLIENT_SECRET; },
   authUrl: 'https://id.vk.ru/authorize',
   tokenUrl: 'https://id.vk.ru/oauth2/auth',
   scope: 'email phone',
 };
 
 export const yandexOAuthConfig = {
-  clientId: authEnv.YANDEX_CLIENT_ID,
-  clientSecret: authEnv.YANDEX_CLIENT_SECRET,
+  get clientId() { return authEnv.YANDEX_CLIENT_ID; },
+  get clientSecret() { return authEnv.YANDEX_CLIENT_SECRET; },
   authUrl: 'https://oauth.yandex.com/authorize',
   tokenUrl: 'https://oauth.yandex.com/token',
   scope: 'login:email login:info login:avatar',
@@ -51,12 +59,12 @@ export async function createSessionToken(userId: number): Promise<string> {
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('7d')
-    .sign(JWT_SECRET);
+    .sign(getJwtSecret());
 }
 
 export async function verifySessionToken(token: string): Promise<{ userId: number } | null> {
   try {
-    const { payload } = await jwtVerify(token, JWT_SECRET, { clockTolerance: 60 });
+    const { payload } = await jwtVerify(token, getJwtSecret(), { clockTolerance: 60 });
     if (!payload.sub) return null;
     return { userId: Number(payload.sub) };
   } catch {

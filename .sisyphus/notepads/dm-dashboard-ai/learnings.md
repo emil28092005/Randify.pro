@@ -130,3 +130,64 @@ Task: Generate and apply Drizzle migration for updated DB schema (Task 2 complet
 - `\dt` in `randify` DB: 7 tables confirmed
 - Down migration tested manually: all statements executed without error
 
+---
+
+# Notes and Initiative DB API Routes — Learnings
+
+## Date: 2026-05-15
+
+### Patterns Applied
+
+1. **DM API route pattern (`src/pages/api/dm/notes.ts`, `src/pages/api/dm/initiative.ts`)**
+   - Both routes import `APIRoute` from `astro`, CORS helpers from `@/lib/cors`, and use `prerender = false`.
+   - Auth check is centralized in a `requireAuth()` helper that returns a `Response | null`. If `locals.user` is null, returns `jsonResponse({ error: "Unauthorized" }, 401, origin)`.
+   - All mutable methods (POST, PUT, DELETE) validate request body with Zod schemas before touching the DB.
+   - `PUT` and `DELETE` read the resource ID from `url.searchParams.get("id")`, not from the request body. This keeps the REST semantic clean.
+
+2. **Zod validation per route**
+   - `notes.ts`: `createNoteSchema` requires `title` (string, 1-255 chars), `content` is optional. `updateNoteSchema` makes both fields optional.
+   - `initiative.ts`: `createSessionSchema` requires `name` (string, 1-255 chars), `participants` is optional array of `participantSchema` objects.
+   - On validation failure, return `400` with `jsonResponse({ error: "Validation failed", details: parsed.error.format() }, 400, origin)`.
+
+3. **Cross-user access blocking**
+   - Every DB query that targets a single resource uses `and(eq(table.id, id), eq(table.userId, locals.user!.id))`.
+   - If `returning()` yields an empty array, the route returns `404` (not `403`). A 404 leaks less information about whether a resource exists at all.
+   - This was verified with explicit test cases for PUT and DELETE accessing another user's resource.
+
+4. **CORS consistency**
+   - Both routes export `OPTIONS` handler calling `handleCorsPreflight(origin)`.
+   - Every response uses `jsonResponse()` or `createCorsResponse()` to ensure CORS headers are present.
+   - Origin is read from `request.headers.get("origin")` at the start of each handler.
+
+5. **Mocking Drizzle ORM in unit tests**
+   - Mocking the entire `db` chain (`select().from().where().orderBy()`, `insert().values().returning()`, etc.) is fragile because `where` conditions are complex SQL objects.
+   - **Solution**: Mock `drizzle-orm`'s `eq` and `and` functions to return plain objects:
+     ```ts
+     vi.mock("drizzle-orm", async (importOriginal) => {
+       const actual = await importOriginal<typeof import("drizzle-orm")>();
+       return {
+         ...actual,
+         eq: (column: { name: string }, value: unknown) => ({ type: "eq", column: column.name, value }),
+         and: (...conditions: unknown[]) => ({ type: "and", conditions }),
+       };
+     });
+     ```
+   - The mock DB then implements a simple `evaluateCondition()` recursive evaluator that checks `type === "eq"` against item properties (converting snake_case column names to camelCase).
+   - This allows the mock to correctly filter by `userId` and `id`, making cross-user access tests reliable.
+
+6. **Test coverage**
+   - `tests/notes-api.test.ts`: 19 tests covering auth 401s, CORS OPTIONS, GET list, POST create, POST validation errors, PUT update, PUT 404 (missing + cross-user), DELETE remove, DELETE 404 (missing + cross-user), missing/invalid id params.
+   - `tests/initiative-api.test.ts`: 20 tests covering the same patterns plus participant validation (rejecting non-numeric `hp`, etc.).
+
+### Key Findings
+
+- **Do not import from `.d.ts` files in tests**: `import type { User } from "../src/env.d.ts"` fails with "File is not a module". Define mock objects inline with `as const` assertions instead.
+- **Ensure mock user objects match the full `User` interface**: `env.d.ts` includes `boostyVerifiedAt: Date | null`. Missing it causes `TS2741` errors even in tests.
+- **Avoid duplicate variable declarations after edits**: A partial `edit` replacement can leave behind duplicate `const` declarations (e.g., `mockUser2` defined twice), which TypeScript flags as redeclaration errors and vitest fails to transform. Always verify the file after edits.
+
+### Verification
+
+- `npx tsc --noEmit`: 0 errors
+- `npx vitest run`: 271/271 tests passed (19 test files)
+- `npx vitest run tests/notes-api.test.ts`: 19/19 passed
+- `npx vitest run tests/initiative-api.test.ts`: 20/20 passed

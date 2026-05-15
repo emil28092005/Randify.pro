@@ -380,7 +380,7 @@ Max Concurrent: 6 (Wave 6)
   - Message: `feat(db): add AI and PRO tables`
   - Files: `src/db/schema.ts`
 
-- [ ] **3. Generate & Apply Drizzle Migration**
+- [x] **3. Generate & Apply Drizzle Migration**
 
   **What to do**:
   - Run `npm run db:generate` to create migration from updated schema.
@@ -501,7 +501,7 @@ Max Concurrent: 6 (Wave 6)
   - Files: `src/lib/open5e/client.ts`, `src/lib/open5e/cache.ts`
   - Pre-commit: `tsc --noEmit`
 
-- [ ] **5. Build Boosty Verification Service + Tier Assignment**
+- [x] **5. Build Boosty Verification Service + Tier Assignment**
 
   **What to do**:
   - Create `src/lib/boosty.ts`: Service that verifies Boosty subscription token via Boosty API.
@@ -762,7 +762,7 @@ Max Concurrent: 6 (Wave 6)
   - Files: `src/lib/rate-limit.ts`
   - Pre-commit: `npm test src/lib/rate-limit.test.ts`
 
-- [ ] **9. Fix DmSidebar User Prop + Add Tier Badge Support**
+- [x] **9. Fix DmSidebar User Prop + Add Tier Badge Support**
 
   **What to do**:
   - Fix `src/pages/dm/index.astro`: Pass `user={Astro.locals.user}` to `<DmSidebar />`.
@@ -1030,7 +1030,7 @@ Max Concurrent: 6 (Wave 6)
   - Files: `src/pages/api/dm/translate.ts`
   - Pre-commit: `npm test src/pages/api/dm/translate.test.ts`
 
-- [ ] **13. Add CORS Configuration for API Routes**
+- [x] **13. Add CORS Configuration for API Routes**
 
   **What to do**:
   - Add CORS headers to all new DM API routes (`/api/dm/*`).
@@ -1081,7 +1081,7 @@ Max Concurrent: 6 (Wave 6)
 
   **Commit**: YES (grouped with nearest API route commit)
 
-- [ ] **14. Build Notes/Initiative DB API Routes**
+- [x] **14. Build Notes/Initiative DB API Routes**
 
   **What to do**:
   - Create `src/pages/api/dm/notes.ts`: GET/POST/PUT/DELETE for notes.

@@ -10,6 +10,7 @@ import {
   COOKIE_NAME,
 } from '@/lib/auth/oauth';
 import { authEnv } from '@/lib/auth/env';
+import { assignTierFromBoosty } from '@/lib/boosty';
 
 export const prerender = false;
 
@@ -101,6 +102,8 @@ export const GET: APIRoute = async ({ url, request }) => {
   }
 
   console.log('[OAuth Yandex] DB user upserted:', { userId: user.id });
+
+  await assignTierFromBoosty(user.id, email).catch(() => {});
 
   const sessionToken = await createSessionToken(user.id);
   console.log('[OAuth Yandex] Session token created:', sessionToken.slice(0, 10) + '...');

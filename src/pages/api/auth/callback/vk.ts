@@ -10,6 +10,7 @@ import {
   COOKIE_NAME,
 } from '@/lib/auth/oauth';
 import { authEnv } from '@/lib/auth/env';
+import { assignTierFromBoosty } from '@/lib/boosty';
 
 export const prerender = false;
 
@@ -135,6 +136,8 @@ export const GET: APIRoute = async ({ url, request }) => {
       .returning();
     user = inserted[0];
   }
+
+  await assignTierFromBoosty(user.id, email).catch(() => {});
 
   const sessionToken = await createSessionToken(user.id);
   const expiresAt = new Date();

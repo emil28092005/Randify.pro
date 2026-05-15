@@ -8,6 +8,7 @@ interface User {
   name: string;
   avatar: string | null;
   tier: 'free' | 'pro';
+  boostyVerifiedAt: Date | null;
   createdAt: Date;
 }
 

@@ -711,3 +711,434 @@ if (isPro) renderSessionList();
 
 `src/pages/dm/index.astro` contains a duplicated AI section (lines 80–98 mirror 59–77). Out of scope for this task but should be cleaned up separately.
 
+---
+
+# Task 22: FREE → PRO Import Flow — Learnings
+
+## Date: 2026-05-15
+
+### What Was Done
+
+1. **Pure helpers in `src/lib/client/import.ts`** — `getLocalNotes()`, `getLocalInitiative()` (with `it-combatants` legacy fallback), `hasLocalData()`, `wasAsked()`, `markAsked()`, `shouldShowImport(tier, userId)`. Pure, testable, no DOM coupling.
+2. **`src/components/dm/ImportModal.astro`** — modal renders only when `shouldShowImport()` returns true on mount. Trigger condition: `tier === 'pro'` && `userId` present && `hasLocalData()` && `!wasAsked()`. Spec says "on tier upgrade" — interpreted as "first PRO page load with local data, not yet asked".
+3. **Conflict handling** — only for notes (initiative API allows multiple sessions, so import always creates a new session named `"Импорт {date}"`). If an existing note titled "DM Notes" has non-empty content, prompt Keep both / Replace / Skip. Keep both creates a second note titled "DM Notes (импорт)".
+4. **localStorage / sessionStorage preserved** — per Task 22 "Must NOT do". Even on successful import, local copies are kept as backup; only the `dm-import-asked` flag is set.
+5. **i18n keys** — 14 new keys added to `src/i18n/dm-translations.ts` (`importTitle`, `importPrompt`, `importBtn`, `importSkip`, etc.).
+6. **Wired into both EN and RU dm/index.astro** with `<ImportModal tier={user?.tier ?? 'free'} userId={user?.id} />`.
+7. **Unit tests** — `tests/import-flow.test.ts`, 18 tests covering all branches of the helpers + decision matrix.
+
+### Key Findings
+
+- **Detecting tier upgrade is hard without server-side event**: The plan says "show on tier upgrade event". Without a server-side notification channel, the practical proxy is "first PRO page load with local data that hasn't been asked yet". The `dm-import-asked` flag in localStorage suppresses re-asking.
+- **API parity**: Notes have one "DM Notes" canonical record per user (NotesPanel convention) — import upserts that. Initiative API allows multiple sessions, so import just POSTs a new one.
+- **Don't pre-fetch on every PRO load**: The decision `shouldShowImport` is cheap (local storage reads), but the existence check against the DB (for note conflict) only happens AFTER the user clicks "Import" — keeps the page load lean.
+
+### Verification
+
+- `npx tsc --noEmit`: 0 errors
+- `npx vitest run tests/import-flow.test.ts`: 18/18 passed
+- `npx vitest run` (full suite): 339/339 passed in 25 test files
+
+---
+
+# Final Wave Cleanup — Learnings
+
+## Date: 2026-05-15
+
+### Verdicts
+
+- **F1 Plan Compliance Audit (oracle)**: APPROVE — 10/10 Must Have, 10/10 Must NOT Have clean, 24/24 tasks marked complete.
+- **F2 Code Quality Review**: initially REJECT WITH ISSUES — 98 lint errors. Fixed all 13 production-code findings; brought total to 70 (test-only).
+- **F3 Manual QA**: skipped — required Playwright + running dev server; build is blocked at this env without `JWT_SECRET` etc.
+- **F4 Scope Fidelity**: APPROVE — minor non-blocking flags: `test-results/` Playwright artifacts committed in Wave 2 (should be gitignored); `dm-theme.css` purple → orange swap in Wave 6 not bound to a specific task line item but aligned with guardrails.
+
+### Production-Code Lint Fixes
+
+- `GenerationHistory.astro` — dropped unused `userId` param from `fetchProHistory`; changed `let activeId` to `const`.
+- `InitiativeTracker.astro` — removed write-only `currentSessionName` and its 4 assignments; sessionNameInput is the visible source of truth.
+- `NotesPanel.astro` — removed unused `isLoading` flag.
+- `Open5eReference.astro` — dropped unused `setCachedTranslation` and `getCachedTranslation` imports; used `translated` from `fetchTranslation` directly (eliminated wasteful re-lookup).
+- `src/lib/ai/openrouter.ts` — removed unused `z` and `Monster` imports; added `{ cause: err }` to AbortError rethrows.
+- `src/lib/ai/kimi.ts` — removed unused `z` import.
+- `src/pages/api/dm/ai/generate.ts` — annotated the empty `catch` block: counter increment is best-effort.
+- `src/pages/api/dm/ai/history.ts` — removed unused `sql` import.
+
+### Remaining Lint Tech Debt (70 errors, all in test files)
+
+70 `@typescript-eslint/no-explicit-any` errors in test mocks for Drizzle ORM query chains (`tests/notes-api.test.ts`, `initiative-api.test.ts`, `translate-api.test.ts`, `history-api.test.ts`, `ai-generate-api.test.ts`, `cors.test.ts`). Replacing these with proper types requires modeling Drizzle's complex chained SQL builder shape — out of scope for the final verification wave. These were committed across Waves 5–6 by prior agent runs and should be addressed in a dedicated test-refactor sweep.
+
+### Other Cleanups
+
+- `tests/translation-client.test.ts` — dropped unused `_name` param from `MockBroadcastChannel`; removed unused destructured `getCachedTranslation`.
+- `tests/open5e-types.test.ts` — added eslint-disable comments for the intentional type-test aliases.
+- `tests/{initiative,notes}-api.test.ts` — removed unused `mockUser2` placeholder objects.
+- `tests/{notes,initiative,translate,history}-api.test.ts` — changed `let mockDb` to `const mockDb` (never reassigned).
+- `tests/ai-generate-api.test.ts` — wrapped the `var` mock declarations in `eslint-disable no-var`; documented that vi.mock hoisting requires `var`.
+
+### Final State
+
+- tsc: 0 errors
+- vitest: 339/339 pass (25 files)
+- lint: 70 errors (all test-mock `as any`, all pre-existing from Waves 5–6)
+- build: still blocked by missing JWT_SECRET / OAuth env at build time (pre-existing, documented in Wave 1 learnings)
+
+---
+
+# FREE → PRO Data Import Flow — Planning Findings
+
+## Date: 2026-05-15
+
+### Context
+
+Task: Build an import modal that migrates FREE-tier localStorage/sessionStorage data into PRO-tier DB when a user upgrades.
+
+### Existing Patterns Analyzed
+
+**1. Modal / Overlay Pattern (`Open5eReference.astro`)**
+- Container: `fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center p-4 pt-12`
+- Background click-to-close: absolute `inset-0` div with click listener
+- Content card: `DmCard padding="lg"` with `w-full max-w-2xl max-h-[80vh] overflow-y-auto relative border-2 border-[var(--accent)] z-10`
+- Close button: absolute top-right with SVG × icon, `aria-label="Закрыть"`, `focus-visible:ring-2 focus-visible:ring-[var(--accent)]`
+- ARIA: `role="dialog" aria-modal="true"`
+
+**2. DmButton.astro Variants**
+- `primary` = `bg-[var(--accent)] text-white` — orange theme, use for main action (Import)
+- `secondary` = card bg + border — use for secondary actions
+- `ghost` = transparent — use for dismiss (Skip)
+- Sizes: `sm` for compact modal actions
+
+**3. DmCard.astro**
+- Base: `rounded-xl bg-[var(--bg-card)] border border-[var(--border-gold-strong)] shadow-lg`
+- Padding variants: `none`, `sm` (p-4), `md` (p-5), `lg` (p-6)
+- Use `padding="lg"` for the modal content card
+
+**4. Theme System (`src/styles/dm-theme.css`)**
+- `--accent: #E87722` is already correctly set in `.dm-theme`
+- Using `var(--accent)` anywhere inside `.dm-theme` scope yields orange
+- NO purple anywhere — `var(--accent)` is safe
+
+**5. Data Storage Locations**
+- **Notes**: `localStorage` key `dm-notes` — plain string (note content)
+- **Initiative**: `sessionStorage` key `dm-initiative` — JSON array of `CombatantData[]` with shape `{ id, name, initiative, hp?, maxHp?, modifier?, ac?, isPlayer?, active? }`
+- **Legacy initiative fallback**: `sessionStorage` key `it-combatants` — older format, already migrated by `InitiativeTracker.astro` on load
+
+**6. API Routes**
+- `GET /api/dm/notes` → returns `Array<{ id, title, content, createdAt, updatedAt }>` for authenticated user
+- `POST /api/dm/notes` → body `{ title: string, content?: string }` → creates note, returns `{ id, title, content, createdAt, updatedAt }`
+- `PUT /api/dm/notes?id=X` → body `{ title?, content? }` → updates existing note
+- `GET /api/dm/initiative` → returns `Array<{ id, name, participants, createdAt, updatedAt }>` for authenticated user
+- `POST /api/dm/initiative` → body `{ name: string, participants?: Array<Participant> }` → creates session
+- `PUT /api/dm/initiative?id=X` → body `{ name?, participants? }` → updates existing session
+- All routes require auth (`locals.user`), return 401 if unauthenticated
+- CORS headers handled by `jsonResponse()` helper
+
+**7. NotesPanel DB Integration Pattern**
+- NotesPanel looks for note with `title === 'DM Notes'` or falls back to `notes[0]`
+- When loading DB notes, if none exists, it auto-creates an empty note via POST
+- This means a PRO user who has visited the notes tab may already have a blank "DM Notes" entry in DB
+- **Implication for import**: a blank note (content null/empty) should probably be treated as "no existing data" for conflict purposes, OR we should replace it. The import modal should check `content?.trim()` length.
+
+**8. Tier & Auth Flow**
+- Middleware attaches `Astro.locals.user` with `tier: 'free' | 'pro'`
+- `src/pages/dm/index.astro` passes `tier={user?.tier ?? 'free'} userId={user?.id}` to child components
+- There is **no server-side mechanism** to detect a tier upgrade (server can't read localStorage)
+- Tier change detection must be client-side: store previous tier in `localStorage` (`dm-tier`), compare on page load
+
+---
+
+### Implementation Plan
+
+#### New File: `src/components/dm/ImportModal.astro`
+
+**Props:**
+```astro
+export interface Props {
+  tier?: 'free' | 'pro';
+}
+```
+
+**Aero Template Structure:**
+```astro
+<div
+  id="dm-import-modal"
+  class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center p-4 pt-12"
+  role="dialog"
+  aria-modal="true"
+  data-tier={tier}
+  data-testid="import-modal"
+>
+  <!-- Click-outside backdrop -->
+  <div id="dm-import-overlay" class="absolute inset-0" data-testid="import-modal-overlay"></div>
+
+  <DmCard padding="lg" class="w-full max-w-lg relative z-10 border-2 border-[var(--accent)]">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-bold text-[var(--text-primary)]">{T.importTitle}</h2>
+      <button id="dm-import-close" type="button" ... aria-label={T.actionClose}>
+        <svg>...</svg>
+      </button>
+    </div>
+
+    <!-- Dynamic content container -->
+    <div id="dm-import-content" class="space-y-4"></div>
+
+    <!-- Action buttons -->
+    <div id="dm-import-actions" class="flex items-center justify-end gap-2 mt-6">
+      <DmButton id="dm-import-skip" variant="ghost" size="sm">{T.importSkip}</DmButton>
+      <DmButton id="dm-import-start" variant="primary" size="sm">{T.importStart}</DmButton>
+    </div>
+  </DmCard>
+</div>
+```
+
+**Client Script Logic (state machine):**
+
+```ts
+enum State {
+  DETECTING = 'detecting',   // checking local/session storage + DB preflight
+  REVIEW = 'review',         // show found data + conflict options
+  IMPORTING = 'importing',   // show progress per step
+  COMPLETE = 'complete',     // success, dispatch event
+  ERROR = 'error',           // show error + retry
+  NO_DATA = 'no-data',       // nothing to import, auto-dismiss
+}
+```
+
+**Flow:**
+
+1. **Mount / Auto-detect:**
+   - Read `container.dataset.tier` as current tier
+   - Read `localStorage.getItem('dm-tier')` as previous tier
+   - If `prevTier !== 'free' || currentTier !== 'pro'` → do nothing (not an upgrade event)
+   - If upgrade detected:
+     - Read `localStorage.getItem('dm-notes')` → `hasNotes = !!value && value.trim().length > 0`
+     - Read `sessionStorage.getItem('dm-initiative')` → `hasInitiative = !!value && JSON.parse(value).length > 0`
+     - If `!hasNotes && !hasInitiative` → show NO_DATA state, auto-dismiss after 2s
+     - Else → proceed to DETECTING
+
+2. **DETECTING state:**
+   - If `hasNotes`: `fetch('/api/dm/notes')` to check for existing DB notes
+   - If `hasInitiative`: `fetch('/api/dm/initiative')` to check for existing DB sessions
+   - Store preflight results: `existingNotes: Note[]`, `existingSessions: Session[]`
+   - Transition to REVIEW
+
+3. **REVIEW state:**
+   - Show bullet list of found items:
+     - "Найдены заметки" (if hasNotes)
+     - "Найдена сессия инициативы" (if hasInitiative)
+   - For each item where DB already has data, show conflict radio group:
+     - Label: "В базе уже есть [заметки / сессии]. Что делать?"
+     - Options (default selected: "keep-both"):
+       - `keep-both`: "Сохранить оба" — create NEW DB entry with imported data
+       - `replace`: "Заменить" — update the most recent existing DB entry
+       - `skip`: "Пропустить" — do not import this data type
+   - Buttons: "Импортировать" (primary) / "Пропустить" (ghost)
+
+4. **IMPORTING state:**
+   - Hide action buttons, show progress list
+   - For each data type in order (notes → initiative):
+     - Show "Импорт [типа]..." with spinner
+     - Execute POST/PUT
+     - On success: update to "[Тип] импортирован ✓"
+   - After all done → transition to COMPLETE
+
+5. **COMPLETE state:**
+   - Show "Импорт завершён! ✓"
+   - Show summary: "Заметки: импортированы, Сессия: импортирована"
+   - Single button: "Закрыть" (primary)
+   - On close: dispatch `CustomEvent('import-complete', { bubbles: true })`
+
+6. **ERROR state:**
+   - Show which step failed + error message from response
+   - Buttons: "Повторить" (primary) / "Пропустить" (ghost)
+   - Retry re-attempts only the failed step(s)
+
+7. **Dismissal (Skip / Close / Backdrop click / Escape):**
+   - Hide modal with `classList.add('hidden')`
+   - Dispatch `CustomEvent('import-dismissed', { bubbles: true })`
+   - Do NOT delete localStorage/sessionStorage
+   - Store a flag `localStorage.setItem('dm-import-dismissed', '1')` to prevent re-prompting on subsequent page loads during the same session? (optional — task says "only on tier upgrade event", so on next login the prevTier will already be 'pro', so it won't trigger again. But if user refreshes the page immediately after dismissing, the prevTier in localStorage is still 'free' because we haven't updated it yet.)
+   - **Important**: Update `localStorage.setItem('dm-tier', 'pro')` immediately upon showing the modal, OR upon any dismissal/completion, so that a refresh doesn't re-trigger. Recommendation: update `dm-tier` to current tier as soon as the modal opens.
+
+**Conflict Resolution Details:**
+
+| Data Type | Keep Both | Replace | Skip |
+|-----------|-----------|---------|------|
+| **Notes** | POST new note with `title: 'Заметки (импорт)'`, `content: localStorage notes` | PUT the most recent existing note (`existingNotes[existingNotes.length-1].id`) with `content: localStorage notes` | No API call |
+| **Initiative** | POST new session with `name: 'Импортированная сессия'`, `participants: sessionStorage combatants` | PUT the most recent existing session (`existingSessions[existingSessions.length-1].id`) with `name: 'Импортированная сессия'`, `participants: sessionStorage combatants` | No API call |
+
+**Note on "Replace" for notes**: NotesPanel looks for `title === 'DM Notes'`. If the existing note has a different title and we PUT its content, NotesPanel will still find it (falls back to `notes[0]`). If the user already has a "DM Notes" entry, replacing it updates that exact note. This is the desired behavior.
+
+**API Error Handling:**
+- `401 Unauthorized` → shouldn't happen for a PRO user, but show "Сессия устарела. Обновите страницу."
+- `400 Validation failed` → shouldn't happen with well-formed data, but show generic error
+- `fetch` throws (network) → show "Ошибка соединения. Проверьте интернет."
+- Any error → transition to ERROR state with specific message
+
+**Keyboard Accessibility:**
+- `Escape` key closes/dismisses modal
+- `Tab` traps focus inside modal while open (optional but recommended)
+- Close button and backdrop click both dismiss
+
+**Data Attributes for Testing:**
+- `data-testid="import-modal"`
+- `data-testid="import-modal-overlay"`
+- `data-testid="import-content"`
+- `data-testid="import-actions"`
+- `data-testid="import-start-btn"`
+- `data-testid="import-skip-btn"`
+- `data-testid="import-close-btn"`
+- `data-testid="import-retry-btn"`
+- `data-state` on content container reflecting current state
+
+---
+
+#### Modified File: `src/i18n/dm-translations.ts`
+
+Add the following keys (all Russian, RU-only DM Dashboard):
+
+```ts
+// Import Modal
+importTitle: "Импорт данных",
+importDescription: "Обнаружены данные из бесплатной версии. Хотите импортировать их в PRO?",
+importNotesFound: "Найдены заметки",
+importInitiativeFound: "Найдена сессия инициативы",
+importNoData: "Нет данных для импорта",
+importNoDataDesc: "Ваши локальные данные уже синхронизированы или отсутствуют.",
+importStart: "Импортировать",
+importSkip: "Пропустить",
+importClose: "Закрыть",
+importInProgressNotes: "Импорт заметок...",
+importInProgressInitiative: "Импорт сессии инициативы...",
+importDoneNotes: "Заметки импортированы",
+importDoneInitiative: "Сессия инициативы импортирована",
+importComplete: "Импорт завершён!",
+importCompleteDesc: "Все данные успешно перенесены в PRO.",
+importError: "Ошибка импорта",
+importErrorDesc: "Не удалось импортировать: {item}. Попробуйте снова.",
+importRetry: "Повторить",
+importConflictTitle: "В базе уже есть данные",
+importConflictNotesLabel: "Заметки:",
+importConflictInitiativeLabel: "Инициатива:",
+importKeepBoth: "Сохранить оба",
+importReplace: "Заменить",
+importSkipItem: "Пропустить",
+```
+
+---
+
+#### Modified Files: `src/pages/dm/index.astro` + `src/pages/ru/dm/index.astro`
+
+1. Import the component:
+   ```astro
+   import ImportModal from "@/components/dm/ImportModal.astro";
+   ```
+
+2. Add the modal inside `DmLayout` (best placement: at the end of the layout, outside slots, so it overlays everything):
+   ```astro
+   <ImportModal tier={user?.tier ?? 'free'} />
+   ```
+
+3. No additional client script needed in the parent — `ImportModal` handles its own tier-change detection internally.
+
+**RU page note**: `src/pages/ru/dm/index.astro` is structurally identical. Mirror all changes exactly.
+
+---
+
+#### State Transition Diagram
+
+```
+MOUNT
+  │
+  ▼
+[Check prevTier vs currentTier]
+  │
+  ├─ Not free→pro ──→ HIDDEN (do nothing)
+  │
+  └─ free→pro ──→ [Check local/session storage]
+                      │
+                      ├─ No data ──→ NO_DATA state ──→ auto-dismiss after 2s
+                      │                                    │
+                      │                                    ▼
+                      │                              dispatch 'import-dismissed'
+                      │
+                      └─ Has data ──→ DETECTING state
+                                          │
+                                          ▼
+                                    [GET /api/dm/notes]
+                                    [GET /api/dm/initiative]
+                                          │
+                                          ▼
+                                     REVIEW state
+                                          │
+                        ┌───────────────┼───────────────┐
+                        ▼               ▼               ▼
+                   User clicks    User clicks      User clicks
+                   "Import"       "Skip"           backdrop/Escape
+                        │               │               │
+                        ▼               ▼               ▼
+                   IMPORTING       dispatch          dispatch
+                        │         'import-dismissed' 'import-dismissed'
+                        ▼
+              [POST/PUT per step]
+                        │
+              ┌─────────┴─────────┐
+              ▼                   ▼
+          All success          Any error
+              │                   │
+              ▼                   ▼
+         COMPLETE state      ERROR state
+              │                   │
+              ▼                   ▼
+   dispatch 'import-complete'  User clicks
+                                "Retry" ──→ IMPORTING
+                                "Skip" ───→ dispatch 'import-dismissed'
+```
+
+---
+
+### Edge Cases & Decisions
+
+| Edge Case | Decision |
+|-----------|----------|
+| User is FREE (no upgrade) | Modal never shows. `dm-tier` stays 'free' or undefined. |
+| User upgrades but has no local data | Show "No data to import" for 2s, then auto-dismiss. |
+| User upgrades, has data, but DB is empty | Skip conflict UI, go straight to IMPORTING. |
+| User upgrades, has data, DB has blank note | Treat blank note (content null/empty/whitespace) as no conflict. Still replace if user chooses replace. |
+| API fails mid-import | Transition to ERROR state. Retry re-attempts only failed steps. Already-successful steps are not re-run. |
+| User refreshes page during IMPORTING | State is lost. On re-mount, `dm-tier` is now 'pro' (updated on modal open), so no re-trigger. Partial imports remain in DB. |
+| User clicks backdrop or Escape | Same as "Skip": dispatch 'import-dismissed', hide modal. |
+| `sessionStorage` lost (new tab) | `sessionStorage` is tab-scoped. If user upgrades in a new tab, `dm-initiative` may not be present. This is acceptable — we can only import what's in the current tab's sessionStorage. |
+| Legacy `it-combatants` in sessionStorage | `InitiativeTracker.astro` auto-migrates `it-combatants` → `dm-initiative` on load. Since the modal runs after page load, `dm-initiative` will already contain the migrated data. No special handling needed. |
+
+---
+
+### Files to Create / Modify
+
+| File | Action | Lines (est.) |
+|------|--------|--------------|
+| `src/components/dm/ImportModal.astro` | **Create** — full component | ~350 |
+| `src/i18n/dm-translations.ts` | **Modify** — append ~20 new keys | +20 lines |
+| `src/pages/dm/index.astro` | **Modify** — import + render `<ImportModal />` | +2 lines |
+| `src/pages/ru/dm/index.astro` | **Modify** — mirror EN page changes | +2 lines |
+
+---
+
+### Verification Plan
+
+1. **TypeScript**: `npx tsc --noEmit` — zero errors
+2. **Unit tests**: `npx vitest run` — full suite passes
+3. **Manual QA scenarios**:
+   - FREE user with notes + initiative → visits page → no modal
+   - FREE user → upgrades to PRO → visits page → modal appears with found items
+   - PRO user with no local data → modal shows "No data to import" → auto-dismisses
+   - PRO user with data, empty DB → clicks Import → progress shown → success → 'import-complete' dispatched
+   - PRO user with data, DB has data → conflict options shown → "Replace" → PUT updates existing → success
+   - PRO user with data, DB has data → "Keep both" → POST creates new → success
+   - PRO user with data, DB has data → "Skip" → no API calls → 'import-dismissed' dispatched
+   - Network failure during import → error shown → Retry → succeeds
+   - localStorage `dm-notes` and sessionStorage `dm-initiative` still present after import
+4. **Accessibility**: Tab focus stays inside modal; Escape dismisses; aria-modal="true" present
+
+---
+

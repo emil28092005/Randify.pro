@@ -1599,7 +1599,7 @@ Max Concurrent: 6 (Wave 6)
   - Message: `feat(pro): add initiative DB persistence for PRO users`
   - Files: `src/components/dm/InitiativeTracker.astro`, `src/lib/client/initiative.ts`
 
-- [ ] **22. Add FREE → PRO Data Import Flow**
+- [x] **22. Add FREE → PRO Data Import Flow**
 
   **What to do**:
   - Create import modal/dialog: when FREE user subscribes to PRO (tier changes to 'pro'), show "Import existing data?" prompt.

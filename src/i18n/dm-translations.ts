@@ -179,6 +179,26 @@ export const dmTranslations = {
   logout: "Выйти",
   badgeFree: "FREE",
   badgePro: "PRO",
+
+  // FREE → PRO import flow
+  importTitle: "Импортировать локальные данные?",
+  importPrompt:
+    "Вы получили доступ PRO. Хотите перенести существующие заметки и сессии инициативы в облако?",
+  importBtn: "Импортировать",
+  importSkip: "Пропустить",
+  importItemNotes: "Заметки",
+  importItemInitiative: "Участников боя",
+  importChars: "симв.",
+  importNotesProgress: "Перенос заметок…",
+  importInitiativeProgress: "Перенос инициативы…",
+  importInitiativeName: "Импорт",
+  importDone: "Готово",
+  importError: "Ошибка импорта. Локальные данные сохранены.",
+  importNotesConflict:
+    "В облаке уже есть заметки. Что сделать с локальной копией?",
+  importConflictKeepBoth: "Сохранить обе",
+  importConflictReplace: "Заменить",
+  importConflictSkip: "Пропустить заметки",
 } as const;
 
 export type DmT = typeof dmTranslations;

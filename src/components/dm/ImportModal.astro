@@ -1,0 +1,296 @@
+---
+export interface Props {
+  tier?: "free" | "pro";
+  userId?: number;
+}
+
+import DmButton from "./DmButton.astro";
+import { dmTranslations as T } from "@/i18n/dm-translations";
+
+const { tier = "free", userId } = Astro.props;
+---
+
+<div
+  id="dm-import-modal"
+  class="hidden fixed inset-0 z-[100] items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+  data-testid="dm-import-modal"
+  data-tier={tier}
+  data-user-id={userId ?? ""}
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="dm-import-title"
+>
+  <div
+    class="w-full max-w-md rounded-xl bg-[var(--bg-card)] border border-[var(--border-gold-strong)] shadow-2xl shadow-black/40 p-6"
+  >
+    <h2
+      id="dm-import-title"
+      class="text-xl font-bold text-[var(--text-primary)] mb-2"
+    >
+      {T.importTitle}
+    </h2>
+    <p class="text-sm text-[var(--text-secondary)] mb-4" id="dm-import-prompt">
+      {T.importPrompt}
+    </p>
+
+    <ul
+      id="dm-import-summary"
+      class="text-sm text-[var(--text-cream)] mb-4 space-y-1"
+    ></ul>
+
+    <div
+      id="dm-import-progress"
+      class="text-sm text-[var(--text-secondary)] min-h-[1.25rem] mb-4"
+      aria-live="polite"
+      data-testid="dm-import-progress"
+    ></div>
+
+    <div
+      id="dm-import-conflict"
+      class="hidden rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] p-3 mb-4"
+    >
+      <p class="text-sm text-[var(--text-cream)] mb-3" id="dm-import-conflict-text">
+        {T.importNotesConflict}
+      </p>
+      <div class="flex flex-wrap gap-2">
+        <DmButton
+          id="dm-import-conflict-keep"
+          variant="secondary"
+          size="sm"
+          dataTestid="dm-import-conflict-keep"
+        >
+          {T.importConflictKeepBoth}
+        </DmButton>
+        <DmButton
+          id="dm-import-conflict-replace"
+          variant="secondary"
+          size="sm"
+          dataTestid="dm-import-conflict-replace"
+        >
+          {T.importConflictReplace}
+        </DmButton>
+        <DmButton
+          id="dm-import-conflict-skip"
+          variant="ghost"
+          size="sm"
+          dataTestid="dm-import-conflict-skip"
+        >
+          {T.importConflictSkip}
+        </DmButton>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-end gap-2">
+      <DmButton
+        id="dm-import-skip-btn"
+        variant="ghost"
+        size="sm"
+        dataTestid="dm-import-skip-btn"
+      >
+        {T.importSkip}
+      </DmButton>
+      <DmButton
+        id="dm-import-confirm-btn"
+        variant="primary"
+        size="sm"
+        dataTestid="dm-import-confirm-btn"
+      >
+        {T.importBtn}
+      </DmButton>
+    </div>
+  </div>
+</div>
+
+<script>
+  import {
+    getLocalInitiative,
+    getLocalNotes,
+    hasLocalData,
+    markAsked,
+    shouldShowImport,
+    type LocalCombatant,
+  } from "@/lib/client/import";
+  import { dmTranslations as T } from "@/i18n/dm-translations";
+
+  type ConflictChoice = "keep" | "replace" | "skip" | null;
+
+  const modal = document.getElementById("dm-import-modal");
+  if (modal) {
+    const tier = modal.dataset.tier ?? "free";
+    const userIdRaw = modal.dataset.userId ?? "";
+    const userId = userIdRaw ? parseInt(userIdRaw, 10) : undefined;
+
+    const summaryEl = modal.querySelector("#dm-import-summary") as HTMLUListElement;
+    const progressEl = modal.querySelector("#dm-import-progress") as HTMLDivElement;
+    const conflictBlock = modal.querySelector("#dm-import-conflict") as HTMLDivElement;
+    const confirmBtn = modal.querySelector("#dm-import-confirm-btn") as HTMLButtonElement;
+    const skipBtn = modal.querySelector("#dm-import-skip-btn") as HTMLButtonElement;
+    const keepBtn = modal.querySelector("#dm-import-conflict-keep") as HTMLButtonElement;
+    const replaceBtn = modal.querySelector("#dm-import-conflict-replace") as HTMLButtonElement;
+    const skipConflictBtn = modal.querySelector("#dm-import-conflict-skip") as HTMLButtonElement;
+    const promptEl = modal.querySelector("#dm-import-prompt") as HTMLParagraphElement;
+
+    function show() {
+      modal!.classList.remove("hidden");
+      modal!.classList.add("flex");
+    }
+
+    function hide() {
+      modal!.classList.add("hidden");
+      modal!.classList.remove("flex");
+    }
+
+    function renderSummary() {
+      const notes = getLocalNotes();
+      const initiative = getLocalInitiative();
+      summaryEl.innerHTML = "";
+      if (notes.trim().length > 0) {
+        const li = document.createElement("li");
+        li.textContent = `• ${T.importItemNotes}: ${notes.length} ${T.importChars}`;
+        summaryEl.appendChild(li);
+      }
+      if (initiative.length > 0) {
+        const li = document.createElement("li");
+        li.textContent = `• ${T.importItemInitiative}: ${initiative.length}`;
+        summaryEl.appendChild(li);
+      }
+    }
+
+    async function getExistingDmNote(): Promise<{ id: number; content: string | null } | null> {
+      try {
+        const res = await fetch("/api/dm/notes");
+        if (!res.ok) return null;
+        const list = (await res.json()) as Array<{ id: number; title: string; content: string | null }>;
+        return list.find((n) => n.title === "DM Notes") ?? null;
+      } catch {
+        return null;
+      }
+    }
+
+    async function postNote(title: string, content: string): Promise<boolean> {
+      try {
+        const res = await fetch("/api/dm/notes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title, content }),
+        });
+        return res.ok;
+      } catch {
+        return false;
+      }
+    }
+
+    async function putNote(id: number, content: string): Promise<boolean> {
+      try {
+        const res = await fetch(`/api/dm/notes?id=${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content }),
+        });
+        return res.ok;
+      } catch {
+        return false;
+      }
+    }
+
+    async function postInitiative(name: string, participants: LocalCombatant[]): Promise<boolean> {
+      try {
+        const res = await fetch("/api/dm/initiative", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, participants }),
+        });
+        return res.ok;
+      } catch {
+        return false;
+      }
+    }
+
+    function setProgress(text: string, isError = false) {
+      progressEl.textContent = text;
+      progressEl.classList.toggle("text-[var(--danger)]", isError);
+    }
+
+    function askConflict(): Promise<ConflictChoice> {
+      return new Promise((resolve) => {
+        conflictBlock.classList.remove("hidden");
+        const cleanup = (choice: ConflictChoice) => {
+          conflictBlock.classList.add("hidden");
+          keepBtn.removeEventListener("click", onKeep);
+          replaceBtn.removeEventListener("click", onReplace);
+          skipConflictBtn.removeEventListener("click", onSkip);
+          resolve(choice);
+        };
+        const onKeep = () => cleanup("keep");
+        const onReplace = () => cleanup("replace");
+        const onSkip = () => cleanup("skip");
+        keepBtn.addEventListener("click", onKeep);
+        replaceBtn.addEventListener("click", onReplace);
+        skipConflictBtn.addEventListener("click", onSkip);
+      });
+    }
+
+    async function runImport() {
+      confirmBtn.disabled = true;
+      skipBtn.disabled = true;
+      promptEl.classList.add("opacity-60");
+
+      const notes = getLocalNotes();
+      const initiative = getLocalInitiative();
+      let notesOk = true;
+      let initOk = true;
+
+      // Notes
+      if (notes.trim().length > 0) {
+        setProgress(T.importNotesProgress);
+        const existing = await getExistingDmNote();
+        if (existing && existing.content && existing.content.trim().length > 0) {
+          const choice = await askConflict();
+          if (choice === "skip" || choice === null) {
+            notesOk = true;
+          } else if (choice === "replace") {
+            notesOk = await putNote(existing.id, notes);
+          } else {
+            notesOk = await postNote(`DM Notes (импорт)`, notes);
+          }
+        } else if (existing) {
+          notesOk = await putNote(existing.id, notes);
+        } else {
+          notesOk = await postNote("DM Notes", notes);
+        }
+      }
+
+      // Initiative
+      if (initiative.length > 0) {
+        setProgress(T.importInitiativeProgress);
+        const sessionName = `${T.importInitiativeName} ${new Date().toLocaleDateString("ru-RU")}`;
+        initOk = await postInitiative(sessionName, initiative);
+      }
+
+      if (notesOk && initOk) {
+        setProgress(T.importDone);
+        markAsked();
+        setTimeout(() => hide(), 1200);
+      } else {
+        setProgress(T.importError, true);
+        confirmBtn.disabled = false;
+        skipBtn.disabled = false;
+        promptEl.classList.remove("opacity-60");
+      }
+    }
+
+    confirmBtn.addEventListener("click", () => {
+      void runImport();
+    });
+
+    skipBtn.addEventListener("click", () => {
+      markAsked();
+      hide();
+    });
+
+    if (shouldShowImport(tier, userId) && hasLocalData()) {
+      renderSummary();
+      show();
+    }
+  }
+</script>

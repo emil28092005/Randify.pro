@@ -9,6 +9,7 @@ import InitiativeTracker from "@/components/dm/InitiativeTracker.astro";
 import Open5eReference from "@/components/dm/Open5eReference.astro";
 import NotesPanel from "@/components/dm/NotesPanel.astro";
 import AiNpcForm from "@/components/dm/AiNpcForm.astro";
+import ImportModal from "@/components/dm/ImportModal.astro";
 import { dmTranslations as T } from "@/i18n/dm-translations";
 import { getRemainingQuota, TIER_LIMITS } from "@/lib/rate-limit";
 
@@ -103,4 +104,6 @@ if (user) {
       </DmCard>
     </section>
   </div>
+
+  <ImportModal tier={user?.tier ?? 'free'} userId={user?.id} />
 </DmLayout>

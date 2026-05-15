@@ -175,3 +175,16 @@ Must Have [6/7] | Must NOT Have [6/8] | Tasks [19/19] | Evidence [4/4] | VERDICT
    - InitiativeTracker: fallback `"it-combatants"` → migrate to `"dm-initiative"`
 3. Re-run data-migration tests with old-key pre-population
 
+## [2026-05-15T17:51:51+03:00] Blocker: Boulder tracking out of sync
+
+All tasks in dm-dashboard-redesign.md are complete (T0-T18, F1-F4 all marked [x]).
+Build passes, tests pass (Vitest 148/148, Playwright 50/50), code committed (1c38df7).
+F1-F4 Final Verification all APPROVED.
+
+However, boulder.json shows status=active with empty task_sessions (0/0 completed).
+This appears to be due to session compaction wiping task session data.
+The plan file has all checkboxes marked, but the boulder completion hook never fired
+because the checkboxes were already [x] at session start (set in a previous session).
+
+No actual work remains. The boulder needs to be marked completed manually or via
+the completeBoulder() hook, but this requires the system to recognize the plan as done.

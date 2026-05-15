@@ -1,7 +1,7 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 
 test.describe("Data Migration", () => {
-  async function seedStorage(page: any) {
+  async function seedStorage(page: Page) {
     await page.goto("/dm/");
     await page.evaluate(() => {
       sessionStorage.setItem(
@@ -37,9 +37,12 @@ test.describe("Data Migration", () => {
     const migrated = await page.evaluate(() => {
       const raw = sessionStorage.getItem("dm-dice-history");
       if (!raw) return null;
-      const parsed = JSON.parse(raw);
+      const parsed = JSON.parse(raw) as Array<{
+        total?: unknown;
+        rolls?: unknown;
+      }>;
       return parsed.every(
-        (entry: any) =>
+        (entry) =>
           entry.total !== undefined &&
           Array.isArray(entry.rolls)
       );
@@ -73,8 +76,8 @@ test.describe("Data Migration", () => {
     const migrated = await page.evaluate(() => {
       const raw = sessionStorage.getItem("dm-initiative");
       if (!raw) return true;
-      const parsed = JSON.parse(raw);
-      return parsed.length === 0 || parsed.every((c: any) => typeof c.id === "string");
+      const parsed = JSON.parse(raw) as Array<{ id?: unknown }>;
+      return parsed.length === 0 || parsed.every((c) => typeof c.id === "string");
     });
     expect(migrated).toBe(true);
   });

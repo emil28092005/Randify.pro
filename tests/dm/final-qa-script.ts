@@ -2,6 +2,10 @@ import { chromium, type Browser, type Page } from "playwright";
 import * as fs from "fs";
 import * as path from "path";
 
+function errMsg(e: unknown): string {
+  return e instanceof Error ? e.message : String(e);
+}
+
 const BASE_URL = "http://localhost:4322";
 const EVIDENCE_DIR = ".sisyphus/evidence/final-qa";
 
@@ -26,7 +30,9 @@ async function screenshot(name: string) {
   const filePath = path.join(EVIDENCE_DIR, `${name}.png`);
   try {
     await page.screenshot({ path: filePath, fullPage: true });
-  } catch {}
+  } catch {
+    // ignore screenshot errors (e.g., page not ready)
+  }
   return filePath;
 }
 
@@ -78,8 +84,8 @@ async function testTabs() {
     const pass = hasHash && focusedAfterArrow === "initiative";
     log("T2: Tab switching and URL hash", pass ? "PASS" : "FAIL", `hash=${hasHash}, keyboardFocused=${focusedAfterArrow}`);
     await screenshot("t2-tabs-navigation");
-  } catch (e: any) {
-    log("T2: Tab switching and URL hash", "FAIL", e.message);
+  } catch (e) {
+    log("T2: Tab switching and URL hash", "FAIL", errMsg(e));
   }
 
   try {
@@ -101,8 +107,8 @@ async function testTabs() {
 
     log("T2: Mobile scrollable tabs", allInRow && minHeightOk ? "PASS" : "FAIL", `allInRow=${allInRow}, minHeightOk=${minHeightOk}, tabCount=${tabs.length}`);
     await screenshot("t2-tabs-mobile");
-  } catch (e: any) {
-    log("T2: Mobile scrollable tabs", "FAIL", e.message);
+  } catch (e) {
+    log("T2: Mobile scrollable tabs", "FAIL", errMsg(e));
   }
 
   try {
@@ -113,8 +119,8 @@ async function testTabs() {
     const ariaSelected = await page.locator('[data-tab="initiative"]:visible').getAttribute("aria-selected");
     log("T2: Initial tab state", ariaSelected === "true" ? "PASS" : "FAIL", `aria-selected=${ariaSelected}`);
     await screenshot("t2-tabs-initial");
-  } catch (e: any) {
-    log("T2: Initial tab state", "FAIL", e.message);
+  } catch (e) {
+    log("T2: Initial tab state", "FAIL", errMsg(e));
   }
 }
 
@@ -153,8 +159,8 @@ async function testDice() {
     const pass = resultValid && customValid && historyItems >= 2 && emptyVisible;
     log("T9: Dice rolling and history", pass ? "PASS" : "FAIL", `d20=${resultNum}(valid=${resultValid}), 2d6+3=${customNum}(valid=${customValid}), history=${historyItems}, empty=${emptyVisible}`);
     await screenshot("t9-dice-roller");
-  } catch (e: any) {
-    log("T9: Dice rolling and history", "FAIL", e.message);
+  } catch (e) {
+    log("T9: Dice rolling and history", "FAIL", errMsg(e));
   }
 
   try {
@@ -188,8 +194,8 @@ async function testDice() {
     const pass = colorClassesFound;
     log("T9: Critical hit/fail colors", pass ? "PASS" : "FAIL", `foundCrit=${foundCrit}, foundFail=${foundFail}, colorClasses=${colorClassesFound}`);
     await screenshot("t9-dice-crit");
-  } catch (e: any) {
-    log("T9: Critical hit/fail colors", "FAIL", e.message);
+  } catch (e) {
+    log("T9: Critical hit/fail colors", "FAIL", errMsg(e));
   }
 
   try {
@@ -204,8 +210,8 @@ async function testDice() {
     const pass = hoverClassCheck && activeClassCheck;
     log("T9: Hover and active states", pass ? "PASS" : "FAIL", `hoverClass=${hoverClassCheck}, activeClass=${activeClassCheck}`);
     await screenshot("t9-dice-states");
-  } catch (e: any) {
-    log("T9: Hover and active states", "FAIL", e.message);
+  } catch (e) {
+    log("T9: Hover and active states", "FAIL", errMsg(e));
   }
 }
 
@@ -251,8 +257,8 @@ async function testInitiative() {
     const pass = goblinVisible && goblinName?.includes("Гоблин") && sortedCorrectly && turnChanged && countAfterDelete === 1;
     log("T10: Initiative tracking flow", pass ? "PASS" : "FAIL", `goblin=${goblinVisible}, sorted=${sortedCorrectly}, turnChanged=${turnChanged}, afterDelete=${countAfterDelete}`);
     await screenshot("t10-initiative");
-  } catch (e: any) {
-    log("T10: Initiative tracking flow", "FAIL", e.message);
+  } catch (e) {
+    log("T10: Initiative tracking flow", "FAIL", errMsg(e));
   }
 }
 
@@ -292,8 +298,8 @@ async function testOpen5e() {
     const pass = (resultsVisible || emptyVisible) && (searchResults > 0 || emptyVisible);
     log("T11: Open5e search and detail", pass ? "PASS" : "FAIL", `results=${resultsVisible}, empty=${emptyVisible}, searchResults=${searchResults}, modalOpened=${modalOpened}, modalClosed=${modalClosed}`);
     await screenshot("t11-open5e");
-  } catch (e: any) {
-    log("T11: Open5e search and detail", "FAIL", e.message);
+  } catch (e) {
+    log("T11: Open5e search and detail", "FAIL", errMsg(e));
   }
 
   try {
@@ -309,8 +315,8 @@ async function testOpen5e() {
     const noResults = await page.locator("[data-testid='ref-result-card']:visible").count() === 0;
     log("T11: Empty search state", emptyVisible || noResults ? "PASS" : "FAIL", `emptyVisible=${emptyVisible}, noResults=${noResults}`);
     await screenshot("t11-open5e-empty");
-  } catch (e: any) {
-    log("T11: Empty search state", "FAIL", e.message);
+  } catch (e) {
+    log("T11: Empty search state", "FAIL", errMsg(e));
   }
 }
 
@@ -351,8 +357,8 @@ async function testNotes() {
     const pass = savedVisible && parseFloat(savedOpacity) > 0.1 && charCount === "16" && syncWorked && cleared;
     log("T12: Notes auto-save and cross-tab sync", pass ? "PASS" : "FAIL", `savedVisible=${savedVisible}, savedOpacity=${savedOpacity}, chars=${charCount}, sync=${syncWorked}, cleared=${cleared}`);
     await screenshot("t12-notes-sync");
-  } catch (e: any) {
-    log("T12: Notes auto-save and cross-tab sync", "FAIL", e.message);
+  } catch (e) {
+    log("T12: Notes auto-save and cross-tab sync", "FAIL", errMsg(e));
   }
 }
 
@@ -378,8 +384,8 @@ async function testPage() {
 
     log("T6: All sections accessible", allAccessible ? "PASS" : "FAIL", `allAccessible=${allAccessible}`);
     await screenshot("t6-sections");
-  } catch (e: any) {
-    log("T6: All sections accessible", "FAIL", e.message);
+  } catch (e) {
+    log("T6: All sections accessible", "FAIL", errMsg(e));
   }
 }
 
@@ -400,8 +406,8 @@ async function testIntegration() {
       if (!url.includes(`#${tabId}`)) pass = false;
     }
     log("INT-1: Switch between all tabs", pass ? "PASS" : "FAIL", `urlHashOk=${pass}`);
-  } catch (e: any) {
-    log("INT-1: Switch between all tabs", "FAIL", e.message);
+  } catch (e) {
+    log("INT-1: Switch between all tabs", "FAIL", errMsg(e));
   }
 
   try {
@@ -424,8 +430,8 @@ async function testIntegration() {
 
     const pass = historyCount >= 2 && emptyVisible;
     log("INT-2: Roll dice, check history, clear", pass ? "PASS" : "FAIL", `history=${historyCount}, empty=${emptyVisible}`);
-  } catch (e: any) {
-    log("INT-2: Roll dice, check history, clear", "FAIL", e.message);
+  } catch (e) {
+    log("INT-2: Roll dice, check history, clear", "FAIL", errMsg(e));
   }
 
   try {
@@ -461,8 +467,8 @@ async function testIntegration() {
 
     const pass = sorted && turnChanged && countAfterDelete === 1;
     log("INT-3: Initiative flow", pass ? "PASS" : "FAIL", `sorted=${sorted}, turnChanged=${turnChanged}, afterDelete=${countAfterDelete}`);
-  } catch (e: any) {
-    log("INT-3: Initiative flow", "FAIL", e.message);
+  } catch (e) {
+    log("INT-3: Initiative flow", "FAIL", errMsg(e));
   }
 
   try {
@@ -494,8 +500,8 @@ async function testIntegration() {
 
     const pass = cards > 0 && modalOpened && modalClosed;
     log("INT-4: Open5e search and modal", pass ? "PASS" : "FAIL", `cards=${cards}, modalOpened=${modalOpened}, modalClosed=${modalClosed}`);
-  } catch (e: any) {
-    log("INT-4: Open5e search and modal", "FAIL", e.message);
+  } catch (e) {
+    log("INT-4: Open5e search and modal", "FAIL", errMsg(e));
   }
 
   try {
@@ -512,8 +518,8 @@ async function testIntegration() {
     const value = await page.locator("[data-testid='notes-textarea']:visible").inputValue();
     const pass = value === "Persistent note test";
     log("INT-5: Notes persistence", pass ? "PASS" : "FAIL", `value="${value}"`);
-  } catch (e: any) {
-    log("INT-5: Notes persistence", "FAIL", e.message);
+  } catch (e) {
+    log("INT-5: Notes persistence", "FAIL", errMsg(e));
   }
 
   try {
@@ -539,8 +545,8 @@ async function testIntegration() {
     await page.setViewportSize({ width: 375, height: 812 });
     await page.waitForTimeout(300);
     await screenshot("int6-responsive-mobile");
-  } catch (e: any) {
-    log("INT-6: Responsive layout", "FAIL", e.message);
+  } catch (e) {
+    log("INT-6: Responsive layout", "FAIL", errMsg(e));
   }
 }
 
@@ -570,8 +576,8 @@ async function testEdgeCases() {
     const pass = diceEmpty && initEmpty && notesEmpty;
     log("EDGE-1: Empty states", pass ? "PASS" : "FAIL", `dice=${diceEmpty}, init=${initEmpty}, notes=${notesEmpty}`);
     await screenshot("edge1-empty-states");
-  } catch (e: any) {
-    log("EDGE-1: Empty states", "FAIL", e.message);
+  } catch (e) {
+    log("EDGE-1: Empty states", "FAIL", errMsg(e));
   }
 
   try {
@@ -589,8 +595,8 @@ async function testEdgeCases() {
     const url = page.url();
     const hasValidHash = tabs.some((t) => url.includes(`#${t}`));
     log("EDGE-2: Rapid tab switching", hasValidHash ? "PASS" : "FAIL", `url=${url}`);
-  } catch (e: any) {
-    log("EDGE-2: Rapid tab switching", "FAIL", e.message);
+  } catch (e) {
+    log("EDGE-2: Rapid tab switching", "FAIL", errMsg(e));
   }
 
   try {
@@ -606,8 +612,8 @@ async function testEdgeCases() {
     const detailsText = await page.locator("#result-details").first().textContent();
     const pass = resultText === "?" || detailsText?.includes("Invalid");
     log("EDGE-3: Invalid dice notation", pass ? "PASS" : "FAIL", `result="${resultText}", details="${detailsText}"`);
-  } catch (e: any) {
-    log("EDGE-3: Invalid dice notation", "FAIL", e.message);
+  } catch (e) {
+    log("EDGE-3: Invalid dice notation", "FAIL", errMsg(e));
   }
 
   try {
@@ -625,8 +631,8 @@ async function testEdgeCases() {
 
     const pass = (hasResults || hasEmptyState) && noError;
     log("EDGE-4: Empty search in Open5e", pass ? "PASS" : "FAIL", `results=${hasResults}, empty=${hasEmptyState}, noError=${noError}`);
-  } catch (e: any) {
-    log("EDGE-4: Empty search in Open5e", "FAIL", e.message);
+  } catch (e) {
+    log("EDGE-4: Empty search in Open5e", "FAIL", errMsg(e));
   }
 
   try {
@@ -643,8 +649,8 @@ async function testEdgeCases() {
     const charCount = await page.locator("[data-testid='notes-char-count']:visible").first().textContent();
     const pass = value === "" && charCount === "0";
     log("EDGE-5: Clear notes after typing", pass ? "PASS" : "FAIL", `value="${value}", chars=${charCount}`);
-  } catch (e: any) {
-    log("EDGE-5: Clear notes after typing", "FAIL", e.message);
+  } catch (e) {
+    log("EDGE-5: Clear notes after typing", "FAIL", errMsg(e));
   }
 }
 

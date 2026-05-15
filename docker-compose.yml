@@ -9,7 +9,6 @@ services:
       - NODE_ENV=production
       - HOST=0.0.0.0
       - PORT=4321
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/randify
     depends_on:
       postgres:
         condition: service_healthy
@@ -23,11 +22,11 @@ services:
 
   postgres:
     image: postgres:16-alpine
-    ports:
-      - "5432:5432"
+    # No public port mapping: Postgres is reachable only via the internal
+    # docker network. Use an SSH tunnel for ad-hoc admin access.
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
       - POSTGRES_DB=randify
     volumes:
       - postgres_data:/var/lib/postgresql/data

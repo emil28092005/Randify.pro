@@ -37,11 +37,15 @@ function mockRequest(
   } as unknown as Request;
 }
 
+// vi.mock factories are hoisted, so refs they read must use var (not let/const)
+// to be visible at hoist time without ReferenceError.
+/* eslint-disable no-var */
 var mockOpenRouterNPC = vi.fn();
 var mockKimiNPC = vi.fn();
 var mockSearchMonsters = vi.fn();
 var mockCheckRateLimit = vi.fn();
 var mockIncrementCounter = vi.fn();
+/* eslint-enable no-var */
 
 vi.mock("@/lib/ai/openrouter", () => ({
   generateNPC: (...args: unknown[]) => mockOpenRouterNPC(...args),

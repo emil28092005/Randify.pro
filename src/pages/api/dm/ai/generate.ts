@@ -142,6 +142,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   try {
     await incrementGenerationCounter(user.id, modelName);
   } catch {
+    // best-effort: counter increment failures should not block the response
   }
 
   const response: { npc: NPCResult & { id: number }; reference?: Open5eMonster } = {

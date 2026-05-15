@@ -96,7 +96,7 @@ function createMockDb() {
   };
 }
 
-let mockDb = createMockDb();
+const mockDb = createMockDb();
 
 vi.mock("drizzle-orm", async (importOriginal) => {
   const actual = await importOriginal<typeof import("drizzle-orm")>();

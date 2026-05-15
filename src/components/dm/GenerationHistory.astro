@@ -251,7 +251,7 @@ const { tier, userId } = Astro.props;
     );
   }
 
-  async function fetchProHistory(userId: number): Promise<HistoryItem[]> {
+  async function fetchProHistory(): Promise<HistoryItem[]> {
     const response = await fetch(`/api/dm/ai/history?limit=${MAX_HISTORY}`);
     if (!response.ok) {
       if (response.status === 401) {
@@ -269,7 +269,7 @@ const { tier, userId } = Astro.props;
     const loadingEl = container.querySelector<HTMLDivElement>('#history-loading');
 
     let items: HistoryItem[] = [];
-    let activeId: number | null = null;
+    const activeId: number | null = null;
 
     function showLoading() {
       loadingEl?.classList.remove('hidden');
@@ -283,7 +283,7 @@ const { tier, userId } = Astro.props;
       if (tier === 'pro' && userId) {
         showLoading();
         try {
-          items = await fetchProHistory(userId);
+          items = await fetchProHistory();
         } catch {
           items = [];
         } finally {

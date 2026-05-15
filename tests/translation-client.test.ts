@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 const mockPostMessage = vi.fn();
 const mockAddEventListener = vi.fn();
 
-function MockBroadcastChannel(this: unknown, _name: string) {
+function MockBroadcastChannel(this: unknown) {
   return {
     postMessage: mockPostMessage,
     addEventListener: mockAddEventListener,
@@ -75,7 +75,6 @@ describe("translation service", () => {
     global.fetch = mockFetch as unknown as typeof fetch;
 
     const {
-      getCachedTranslation,
       setCachedTranslation,
       fetchTranslation,
       clearTranslationCache,

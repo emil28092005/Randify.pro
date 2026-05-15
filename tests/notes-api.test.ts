@@ -12,18 +12,6 @@ const mockUser = {
   createdAt: new Date("2024-01-01"),
 };
 
-const mockUser2 = {
-  id: 2,
-  vkId: null,
-  yandexId: null,
-  email: null,
-  name: "Other User",
-  avatar: null,
-  tier: "free" as const,
-  boostyVerifiedAt: null,
-  createdAt: new Date("2024-01-01"),
-};
-
 function mockRequest(
   url: string,
   origin: string,
@@ -132,7 +120,7 @@ function createMockDb() {
   };
 }
 
-let mockDb = createMockDb();
+const mockDb = createMockDb();
 
 vi.mock("drizzle-orm", async (importOriginal) => {
   const actual = await importOriginal<typeof import("drizzle-orm")>();

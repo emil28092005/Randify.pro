@@ -184,7 +184,6 @@ const { tier = 'free', userId } = Astro.props;
 
   let activeIndex = 0;
   let currentSessionId: number | null = null;
-  let currentSessionName = '';
 
   interface CombatantData {
     id: string;
@@ -559,7 +558,6 @@ const { tier = 'free', userId } = Astro.props;
       saveCombatants(session.participants);
       activeIndex = 0;
       currentSessionId = session.id;
-      currentSessionName = session.name;
       if (sessionNameInput) sessionNameInput.value = session.name;
       updateVisibility();
       renderList();
@@ -578,7 +576,6 @@ const { tier = 'free', userId } = Astro.props;
     const result = await apiSaveSession(name, participants, currentSessionId ?? undefined);
     if (result) {
       currentSessionId = result.id;
-      currentSessionName = result.name;
       if (sessionNameInput) sessionNameInput.value = result.name;
       showSessionStatus('Сессия сохранена');
       renderSessionList();
@@ -589,7 +586,6 @@ const { tier = 'free', userId } = Astro.props;
 
   async function handleNewSession() {
     currentSessionId = null;
-    currentSessionName = '';
     if (sessionNameInput) sessionNameInput.value = '';
     clearAll();
     showSessionStatus('Новая сессия');
@@ -602,7 +598,6 @@ const { tier = 'free', userId } = Astro.props;
     if (ok) {
       if (currentSessionId === id) {
         currentSessionId = null;
-        currentSessionName = '';
         if (sessionNameInput) sessionNameInput.value = '';
       }
       renderSessionList();

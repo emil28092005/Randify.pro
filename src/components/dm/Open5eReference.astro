@@ -171,11 +171,7 @@ import DmButton from "./DmButton.astro";
 
 <script>
   import { Open5eUIManager } from "@/lib/client/open5e-ui";
-  import {
-    getCachedTranslation,
-    setCachedTranslation,
-    fetchTranslation,
-  } from "@/lib/client/translation";
+  import { fetchTranslation } from "@/lib/client/translation";
 
   const CR_OPTIONS = [
     { value: "", label: "Все ОП" },
@@ -544,12 +540,10 @@ import DmButton from "./DmButton.astro";
         btn.textContent = "Переведено";
         btn.disabled = true;
 
-        // Re-render detail with translation
         const state = manager.state;
         if (state.selectedItem && state.selectedItem.key === slug) {
-          const cached = getCachedTranslation(slug, type);
-          const isTranslated = cached !== null;
-          const item = mergeWithTranslation(state.selectedItem, cached);
+          const isTranslated = translated !== null;
+          const item = mergeWithTranslation(state.selectedItem, translated);
           detailContent.innerHTML = state.tab === "monsters"
             ? renderMonsterDetail(item as Monster, isTranslated)
             : renderSpellDetail(item as Spell, isTranslated);

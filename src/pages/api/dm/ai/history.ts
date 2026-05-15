@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 import { jsonResponse, handleCorsPreflight } from "@/lib/cors";
 import { db } from "@/db/client";
 import { npcs } from "@/db/schema";
-import { eq, desc, sql, count } from "drizzle-orm";
+import { eq, desc, count } from "drizzle-orm";
 
 export const prerender = false;
 

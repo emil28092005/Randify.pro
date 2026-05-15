@@ -5,6 +5,7 @@ import type { Monster, Spell } from "../src/lib/open5e/client";
 // If a listed key is missing from the interface, TypeScript will error at compile time.
 type AssertKeys<T, K extends keyof T> = K;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type _MonsterHasAllFields = AssertKeys<
   Monster,
   | "name"
@@ -34,6 +35,7 @@ type _MonsterHasAllFields = AssertKeys<
   | "condition_immunities"
 >;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type _SpellHasAllFields = AssertKeys<
   Spell,
   | "name"

@@ -49,7 +49,6 @@ const { tier = 'free', userId } = Astro.props;
     let debounceTimer: ReturnType<typeof setTimeout> | null = null;
     let hideIndicatorTimer: ReturnType<typeof setTimeout> | null = null;
     let dbNoteId: number | null = null;
-    let isLoading = false;
 
     function formatTime(date: Date): string {
       return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
@@ -123,23 +122,19 @@ const { tier = 'free', userId } = Astro.props;
 
     async function loadSavedNotes() {
       if (isPro) {
-        isLoading = true;
         const note = await loadDbNotes();
         if (note) {
           dbNoteId = note.id;
           textarea.value = note.content ?? '';
         } else {
-          // Try to create a new note if none exists
           const newId = await createDbNote('');
           if (newId) {
             dbNoteId = newId;
             textarea.value = '';
           } else {
-            // Fallback to localStorage if DB is unavailable
             textarea.value = loadNotes();
           }
         }
-        isLoading = false;
       } else {
         const saved = loadNotes();
         textarea.value = saved;

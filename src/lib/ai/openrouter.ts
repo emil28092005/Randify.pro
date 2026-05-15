@@ -1,6 +1,4 @@
-import { z } from "zod";
 import { npcResultSchema, type NPCResult, type NPCParams, type Open5eMonster } from "@/lib/ai/types";
-import type { Monster } from "@/lib/open5e/client";
 
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
 const DEFAULT_MODEL = "llama-3.3-70b:free";
@@ -121,7 +119,7 @@ export async function translateOpen5eContent(
     return parsed as Record<string, unknown>;
   } catch (err) {
     if (err instanceof Error && err.name === "AbortError") {
-      throw new Error("OpenRouter request timed out after 10s");
+      throw new Error("OpenRouter request timed out after 10s", { cause: err });
     }
     throw err;
   } finally {
@@ -197,7 +195,7 @@ export async function generateNPC(
     return validated.data;
   } catch (err) {
     if (err instanceof Error && err.name === "AbortError") {
-      throw new Error("OpenRouter request timed out after 10s");
+      throw new Error("OpenRouter request timed out after 10s", { cause: err });
     }
     throw err;
   } finally {

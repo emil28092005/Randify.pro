@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- API handlers expect a full Astro APIContext; tests provide only the fields under test and spread `{} as any` for the rest. Typing the remainder would obscure the test intent. */
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 function mockRequest(url: string, origin: string, method = "GET"): Request {

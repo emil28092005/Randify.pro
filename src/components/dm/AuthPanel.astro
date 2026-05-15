@@ -4,61 +4,47 @@ import DmButton from './DmButton.astro';
 const user = Astro.locals.user;
 ---
 
-<!-- DEBUG: user={JSON.stringify(user)} -->
-<div class="border border-dashed border-[var(--accent)] rounded-lg p-2 min-w-[200px]">
-  <div class="text-xs text-[var(--accent)] mb-1 font-mono">AuthPanel: {user ? 'logged-in' : 'logged-out'}</div>
-  
-  {!user ? (
-    <div class="flex flex-col sm:flex-row gap-3" data-auth-state="logged-out">
-      <DmButton
-        href="/api/auth/login/vk"
-        variant="primary"
-        size="md"
-        class="bg-[#4C75A3] hover:bg-[#3d5f85] active:bg-[#2f4a68] shadow-[#4C75A3]/25"
-      >
-        Войти через VK
-      </DmButton>
-      <DmButton
-        href="/api/auth/login/yandex"
-        variant="primary"
-        size="md"
-        class="bg-[#FC3F1D] hover:bg-[#e03518] active:bg-[#c42d14] shadow-[#FC3F1D]/25"
-      >
-        Войти через Яндекс
-      </DmButton>
-    </div>
-  ) : (
-    <div class="flex items-center gap-3 flex-wrap" data-auth-state="logged-in" data-user-name={user.name}>
-      {user.avatar ? (
-        <img
-          src={user.avatar}
-          alt={user.name}
-          class="w-8 h-8 rounded-full object-cover border border-[var(--border-color)]"
-          width="32"
-          height="32"
-        />
-      ) : (
-        <div class="w-8 h-8 rounded-full bg-[var(--bg-secondary)] border border-[var(--border-color)] flex items-center justify-center text-sm font-semibold text-[var(--text-secondary)]">
-          {user.name.charAt(0).toUpperCase()}
-        </div>
-      )}
-      <span class="text-[var(--text-primary)] font-medium">{user.name}</span>
-      <DmButton
-        href="/api/auth/logout"
-        variant="ghost"
-        size="sm"
-      >
-        Выйти
-      </DmButton>
-    </div>
-  )}
-</div>
-
-<script>
-  (function () {
-    const el = document.querySelector('[data-auth-state]');
-    const state = el?.getAttribute('data-auth-state');
-    const userName = el?.getAttribute('data-user-name');
-    console.log('[AuthPanel] Client auth state:', state, userName ? { userName } : '');
-  })();
-</script>
+{!user ? (
+  <div class="flex flex-col sm:flex-row gap-3" data-auth-state="logged-out">
+    <DmButton
+      href="/api/auth/login/vk"
+      variant="primary"
+      size="md"
+      class="bg-[#4C75A3] hover:bg-[#3d5f85] active:bg-[#2f4a68] shadow-[#4C75A3]/25"
+    >
+      Войти через VK
+    </DmButton>
+    <DmButton
+      href="/api/auth/login/yandex"
+      variant="primary"
+      size="md"
+      class="bg-[#FC3F1D] hover:bg-[#e03518] active:bg-[#c42d14] shadow-[#FC3F1D]/25"
+    >
+      Войти через Яндекс
+    </DmButton>
+  </div>
+) : (
+  <div class="flex items-center gap-3 flex-wrap" data-auth-state="logged-in" data-user-name={user.name}>
+    {user.avatar ? (
+      <img
+        src={user.avatar}
+        alt={user.name}
+        class="w-8 h-8 rounded-full object-cover border border-[var(--border-color)]"
+        width="32"
+        height="32"
+      />
+    ) : (
+      <div class="w-8 h-8 rounded-full bg-[var(--bg-secondary)] border border-[var(--border-color)] flex items-center justify-center text-sm font-semibold text-[var(--text-secondary)]">
+        {user.name.charAt(0).toUpperCase()}
+      </div>
+    )}
+    <span class="text-[var(--text-primary)] font-medium">{user.name}</span>
+    <DmButton
+      href="/api/auth/logout"
+      variant="ghost"
+      size="sm"
+    >
+      Выйти
+    </DmButton>
+  </div>
+)}

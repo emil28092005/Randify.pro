@@ -1,50 +1,52 @@
 ---
 import DmButton from './DmButton.astro';
+import { dmTranslations as T } from '../../i18n/dm-translations';
 
 const user = Astro.locals.user;
 ---
 
 {!user ? (
-  <div class="flex flex-col sm:flex-row gap-3" data-auth-state="logged-out">
-    <DmButton
+  <div class="flex flex-row gap-2" data-auth-state="logged-out">
+    <a
       href="/api/auth/login/vk"
-      variant="primary"
-      size="md"
-      class="bg-[#4C75A3] hover:bg-[#3d5f85] active:bg-[#2f4a68] shadow-[#4C75A3]/25"
+      class="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-sm font-medium text-white rounded-full bg-[#4C75A3] hover:bg-[#5a82b0] active:bg-[#2f4a68] shadow-md shadow-black/20 transition-all duration-[var(--transition-base)] active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
+      role="button"
     >
-      Войти через VK
-    </DmButton>
-    <DmButton
+      <span class="font-bold">VK</span>
+      <span>{T.loginVk}</span>
+    </a>
+    <a
       href="/api/auth/login/yandex"
-      variant="primary"
-      size="md"
-      class="bg-[#FC3F1D] hover:bg-[#e03518] active:bg-[#c42d14] shadow-[#FC3F1D]/25"
+      class="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-sm font-medium text-white rounded-full bg-[#FC3F1D] hover:bg-[#ff5733] active:bg-[#c42d14] shadow-md shadow-black/20 transition-all duration-[var(--transition-base)] active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
+      role="button"
     >
-      Войти через Яндекс
-    </DmButton>
+      <span class="font-bold">Y</span>
+      <span>{T.loginYandex}</span>
+    </a>
   </div>
 ) : (
-  <div class="flex items-center gap-3 flex-wrap" data-auth-state="logged-in" data-user-name={user.name}>
+  <div class="flex items-center gap-2" data-auth-state="logged-in" data-user-name={user.name}>
     {user.avatar ? (
       <img
         src={user.avatar}
         alt={user.name}
-        class="w-8 h-8 rounded-full object-cover border border-[var(--border-color)]"
+        class="w-8 h-8 rounded-full object-cover border-2 border-[var(--accent)]"
         width="32"
         height="32"
       />
     ) : (
-      <div class="w-8 h-8 rounded-full bg-[var(--bg-secondary)] border border-[var(--border-color)] flex items-center justify-center text-sm font-semibold text-[var(--text-secondary)]">
+      <div class="w-8 h-8 rounded-full bg-[var(--accent)]/20 flex items-center justify-center text-sm font-semibold text-[var(--accent)]">
         {user.name.charAt(0).toUpperCase()}
       </div>
     )}
-    <span class="text-[var(--text-primary)] font-medium">{user.name}</span>
+    <span class="text-sm font-medium text-[var(--text-cream)] max-w-[120px] truncate">{user.name}</span>
     <DmButton
       href="/api/auth/logout"
       variant="ghost"
       size="sm"
+      class="hover:!text-[var(--gold)]"
     >
-      Выйти
+      {T.logout}
     </DmButton>
   </div>
 )}

@@ -1,27 +1,31 @@
 ---
 export interface Props {
+  id?: string;
   variant?: "primary" | "secondary" | "ghost";
   size?: "sm" | "md" | "lg";
   type?: "button" | "submit" | "reset";
   class?: string;
   disabled?: boolean;
   href?: string;
+  dataTestid?: string;
 }
 
 const {
+  id,
   variant = "primary",
   size = "md",
   type = "button",
   class: className = "",
   disabled = false,
   href,
+  dataTestid,
 } = Astro.props;
 
 const variantClasses: Record<string, string> = {
   primary:
-    "bg-[var(--accent)] text-white hover:bg-[var(--accent-light)] active:bg-[var(--accent-dark)] shadow-lg shadow-[var(--accent)]/25",
+    "bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)] active:bg-[var(--accent-dark)] shadow-lg shadow-[var(--accent)]/25 hover:shadow-[var(--accent)]/40",
   secondary:
-    "bg-[var(--bg-card)] text-[var(--text-primary)] border border-[var(--border-color)] hover:border-[var(--accent)] hover:text-[var(--accent)]",
+    "bg-[var(--bg-card)] text-[var(--text-primary)] border border-[var(--border-color)] hover:border-[var(--gold)] hover:text-[var(--gold)]",
   ghost:
     "bg-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]",
 };
@@ -33,18 +37,18 @@ const sizeClasses: Record<string, string> = {
 };
 
 const baseClasses =
-  "inline-flex items-center justify-center font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] transition-colors duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed";
+  "inline-flex items-center justify-center font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] transition-all duration-[var(--transition-base)] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.97]";
 
 const classes = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
 ---
 
 {
   href ? (
-    <a href={href} class={classes} role="button">
+    <a href={href} class={classes} role="button" data-testid={dataTestid} id={id}>
       <slot />
     </a>
   ) : (
-    <button type={type} class={classes} disabled={disabled}>
+    <button type={type} class={classes} disabled={disabled} data-testid={dataTestid} id={id}>
       <slot />
     </button>
   )

@@ -11,6 +11,7 @@ export interface Props {
   min?: number | string;
   max?: number | string;
   step?: number | string;
+  dataTestid?: string;
 }
 
 const {
@@ -25,10 +26,11 @@ const {
   min,
   max,
   step,
+  dataTestid,
 } = Astro.props;
 
 const inputClasses =
-  "w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg px-3 py-2 text-[var(--text-primary)] text-base placeholder:text-[var(--text-secondary)] hover:border-[var(--text-secondary)] focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] transition-colors";
+  "w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-lg px-3 py-2 text-[var(--text-primary)] text-base placeholder:text-[var(--text-secondary)] hover:border-[var(--text-secondary)] focus:outline-none focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)] focus-visible:ring-2 focus-visible:ring-[var(--gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] transition-all duration-[var(--transition-base)]";
 
 const classes = `${inputClasses} ${className}`;
 ---
@@ -41,7 +43,7 @@ const classes = `${inputClasses} ${className}`;
         class="block text-sm font-medium text-[var(--text-secondary)] mb-1"
       >
         {label}
-        {required && <span class="text-[var(--accent)]">*</span>}
+        {required && <span class="text-[var(--gold)]">*</span>}
       </label>
     )
   }
@@ -56,5 +58,6 @@ const classes = `${inputClasses} ${className}`;
     max={max}
     step={step}
     class={classes}
+    data-testid={dataTestid}
   />
 </div>

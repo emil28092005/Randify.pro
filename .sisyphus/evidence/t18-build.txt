@@ -1,0 +1,605 @@
+
+> randify@0.0.1 build
+> astro build
+
+16:06:25 [types] Generated 474ms
+16:06:25 [build] output: "hybrid"
+16:06:25 [build] directory: /home/emil/Desktop/Coding/AI/Randify.pro/dist/
+16:06:25 [build] adapter: @astrojs/node
+16:06:25 [build] Collecting build info...
+16:06:25 [build] ✓ Completed in 521ms.
+16:06:25 [build] Building hybrid entrypoints...
+16:06:29 [vite] ✓ built in 4.38s
+16:06:29 [build] ✓ Completed in 4.43s.
+
+ building client (vite) 
+16:06:29 [vite] transforming...
+16:06:29 [vite] ✓ 83 modules transformed.
+16:06:29 [vite] rendering chunks...
+16:06:29 [vite] computing gzip size...
+16:06:29 [vite] dist/client/_astro/animations.JKmio82t.js   0.19 kB │ gzip:  0.13 kB
+16:06:29 [vite] dist/client/_astro/validation.plcuGzaj.js   0.20 kB │ gzip:  0.16 kB
+16:06:29 [vite] dist/client/_astro/clipboard.v9BZgIeL.js    0.43 kB │ gzip:  0.22 kB
+16:06:29 [vite] dist/client/_astro/random.PhfdigkC.js       0.50 kB │ gzip:  0.31 kB
+16:06:29 [vite] dist/client/_astro/hoisted.CFrvq8IZ.js      0.87 kB │ gzip:  0.55 kB
+16:06:29 [vite] dist/client/_astro/hoisted.DeuEhRu-.js      1.20 kB │ gzip:  0.60 kB
+16:06:29 [vite] dist/client/_astro/hoisted.CDqNCJbh.js      1.35 kB │ gzip:  0.70 kB
+16:06:29 [vite] dist/client/_astro/hoisted.PmXvumdK.js      1.45 kB │ gzip:  0.82 kB
+16:06:29 [vite] dist/client/_astro/hoisted.D82rtlIG.js      1.54 kB │ gzip:  0.84 kB
+16:06:29 [vite] dist/client/_astro/hoisted.CBL-zfRu.js      1.60 kB │ gzip:  0.80 kB
+16:06:29 [vite] dist/client/_astro/hoisted.ChTmcvxE.js      1.61 kB │ gzip:  0.72 kB
+16:06:29 [vite] dist/client/_astro/hoisted.B3IGpv9b.js      1.62 kB │ gzip:  0.80 kB
+16:06:29 [vite] dist/client/_astro/hoisted.CcnzwbSI.js      1.70 kB │ gzip:  0.90 kB
+16:06:29 [vite] dist/client/_astro/hoisted.Ctqpdo5m.js      1.71 kB │ gzip:  0.85 kB
+16:06:29 [vite] dist/client/_astro/hoisted.Dk2zSKc8.js      1.73 kB │ gzip:  0.98 kB
+16:06:29 [vite] dist/client/_astro/hoisted.C2xv_bfE.js      1.86 kB │ gzip:  1.04 kB
+16:06:29 [vite] dist/client/_astro/hoisted.DEA5quja.js      1.96 kB │ gzip:  0.94 kB
+16:06:29 [vite] dist/client/_astro/hoisted.BFWROTcs.js      2.16 kB │ gzip:  1.06 kB
+16:06:29 [vite] dist/client/_astro/hoisted.D3o68Cb5.js      2.30 kB │ gzip:  1.14 kB
+16:06:29 [vite] dist/client/_astro/hoisted.C2hEIf7W.js      2.85 kB │ gzip:  1.69 kB
+16:06:29 [vite] dist/client/_astro/hoisted.BPWMU8Hf.js      2.88 kB │ gzip:  1.40 kB
+16:06:29 [vite] dist/client/_astro/hoisted.D0K3hqdU.js      3.91 kB │ gzip:  1.94 kB
+16:06:29 [vite] dist/client/_astro/hoisted.BYkrZFZ1.js      4.07 kB │ gzip:  1.69 kB
+16:06:29 [vite] dist/client/_astro/hoisted.Ccfod4c9.js      4.27 kB │ gzip:  1.95 kB
+16:06:29 [vite] dist/client/_astro/hoisted.C3FdK1i-.js      4.50 kB │ gzip:  1.96 kB
+16:06:29 [vite] dist/client/_astro/hoisted.BIopzZUx.js      4.76 kB │ gzip:  1.96 kB
+16:06:29 [vite] dist/client/_astro/hoisted.C4XJaAq2.js      5.24 kB │ gzip:  2.18 kB
+16:06:29 [vite] dist/client/_astro/hoisted.BjwopM0U.js      7.16 kB │ gzip:  2.53 kB
+16:06:29 [vite] dist/client/_astro/hoisted.v_hq36aE.js      9.68 kB │ gzip:  3.83 kB
+16:06:29 [vite] dist/client/_astro/hoisted.iGyTjoKm.js     10.89 kB │ gzip:  3.88 kB
+16:06:29 [vite] dist/client/_astro/hoisted.C_iAN1Og.js     11.80 kB │ gzip:  2.75 kB
+16:06:29 [vite] dist/client/_astro/i18n.ByZTyuwN.js        12.13 kB │ gzip:  6.14 kB
+16:06:29 [vite] dist/client/_astro/hoisted.BI9nWQCa.js     26.98 kB │ gzip:  7.71 kB
+16:06:29 [vite] dist/client/_astro/hoisted.DlpuYXZt.js     35.52 kB │ gzip: 17.44 kB
+16:06:29 [vite] dist/client/_astro/hoisted.DDZr0hhq.js     45.23 kB │ gzip: 14.57 kB
+16:06:29 [vite] ✓ built in 509ms
+
+ prerendering static routes 
+16:06:31 ▶ src/pages/404.astro
+16:06:31   └─ /404.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+21ms)
+16:06:31 ▶ src/pages/about.astro
+16:06:31   └─ /about/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+4ms)
+16:06:31 ▶ src/pages/blog/[slug].astro
+16:06:31   ├─ /blog/uuid-vs-sequential-ids/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+13ms)
+16:06:31   ├─ /blog/color-theory-palettes/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+9ms)
+16:06:31   ├─ /blog/random-team-picker/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+9ms)
+16:06:31   ├─ /blog/rng-in-gaming/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+8ms)
+16:06:31   ├─ /blog/psychology-of-randomness/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+9ms)
+16:06:31   ├─ /blog/dice-notation-explained/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+12ms)
+16:06:31   ├─ /blog/how-to-create-strong-passwords/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+12ms)
+16:06:31   └─ /blog/what-is-cryptographically-secure-randomness/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+8ms)
+16:06:31 ▶ src/pages/blog/index.astro
+16:06:31   └─ /blog/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+6ms)
+16:06:31 ▶ src/pages/generators/cards.astro
+16:06:31   └─ /generators/cards/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+6ms)
+16:06:31 ▶ src/pages/generators/category/[category].astro
+16:06:31   ├─ /generators/category/gaming/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+5ms)
+16:06:31   ├─ /generators/category/security/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+5ms)
+16:06:31   ├─ /generators/category/decision-making/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31   ├─ /generators/category/creative/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+4ms)
+16:06:31   └─ /generators/category/utility/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+4ms)
+16:06:31 ▶ src/pages/generators/coin.astro
+16:06:31   └─ /generators/coin/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+4ms)
+16:06:31 ▶ src/pages/generators/colors.astro
+16:06:31   └─ /generators/colors/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/generators/country.astro
+16:06:31   └─ /generators/country/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+4ms)
+16:06:31 ▶ src/pages/generators/date.astro
+16:06:31   └─ /generators/date/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/generators/dice.astro
+16:06:31   └─ /generators/dice/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+5ms)
+16:06:31 ▶ src/pages/generators/emoji.astro
+16:06:31   └─ /generators/emoji/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/generators/fontpair.astro
+16:06:31   └─ /generators/fontpair/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+5ms)
+16:06:31 ▶ src/pages/generators/gradient.astro
+16:06:31   └─ /generators/gradient/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+4ms)
+16:06:31 ▶ src/pages/generators/hash.astro
+16:06:31   └─ /generators/hash/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/generators/letter.astro
+16:06:31   └─ /generators/letter/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/generators/list.astro
+16:06:31   └─ /generators/list/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+4ms)
+16:06:31 ▶ src/pages/generators/lorem.astro
+16:06:31   └─ /generators/lorem/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/generators/lottery.astro
+16:06:31   └─ /generators/lottery/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+6ms)
+16:06:31 ▶ src/pages/generators/magic8ball.astro
+16:06:31   └─ /generators/magic8ball/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/generators/meal.astro
+16:06:31   └─ /generators/meal/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+5ms)
+16:06:31 ▶ src/pages/generators/names.astro
+16:06:31   └─ /generators/names/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/generators/numbers.astro
+16:06:31   └─ /generators/numbers/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/generators/palette.astro
+16:06:31   └─ /generators/palette/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/generators/password.astro
+16:06:31   └─ /generators/password/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/generators/rps.astro
+16:06:31   └─ /generators/rps/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/generators/shuffler.astro
+16:06:31   └─ /generators/shuffler/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/generators/teams.astro
+16:06:31   └─ /generators/teams/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+5ms)
+16:06:31 ▶ src/pages/generators/time.astro
+16:06:31   └─ /generators/time/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/generators/uuid.astro
+16:06:31   └─ /generators/uuid/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+5ms)
+16:06:31 ▶ src/pages/generators/weighted.astro
+16:06:31   └─ /generators/weighted/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+5ms)
+16:06:31 ▶ src/pages/generators/wheel.astro
+16:06:31   └─ /generators/wheel/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+4ms)
+16:06:31 ▶ src/pages/generators/yesno.astro
+16:06:31   └─ /generators/yesno/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+4ms)
+16:06:31 ▶ src/pages/privacy.astro
+16:06:31   └─ /privacy/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+2ms)
+16:06:31 λ src/pages/rss.xml.ts
+16:06:31   └─ /rss.xml16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+12ms)
+16:06:31 ▶ src/pages/ru/404.astro
+16:06:31   └─ /ru/404/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+4ms)
+16:06:31 ▶ src/pages/ru/about.astro
+16:06:31   └─ /ru/about/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/ru/blog/[slug].astro
+16:06:31   ├─ /ru/blog/uuid-vs-sequential-ids/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+7ms)
+16:06:31   ├─ /ru/blog/color-theory-guide/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+6ms)
+16:06:31   ├─ /ru/blog/random-team-selection/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+7ms)
+16:06:31   ├─ /ru/blog/rng-in-gaming/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+7ms)
+16:06:31   ├─ /ru/blog/psychology-of-randomness/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+6ms)
+16:06:31   ├─ /ru/blog/dice-notation-guide/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+6ms)
+16:06:31   ├─ /ru/blog/how-to-create-strong-passwords/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+8ms)
+16:06:31   └─ /ru/blog/what-is-cryptographically-secure-randomness/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+7ms)
+16:06:31 ▶ src/pages/ru/blog/index.astro
+16:06:31   └─ /ru/blog/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+5ms)
+16:06:31 ▶ src/pages/ru/generators/cards.astro
+16:06:31   └─ /ru/generators/cards/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/ru/generators/category/[category].astro
+16:06:31   ├─ /ru/generators/category/gaming/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31   ├─ /ru/generators/category/security/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31   ├─ /ru/generators/category/decision-making/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31   ├─ /ru/generators/category/creative/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31   └─ /ru/generators/category/utility/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+2ms)
+16:06:31 ▶ src/pages/ru/generators/coin.astro
+16:06:31   └─ /ru/generators/coin/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/ru/generators/colors.astro
+16:06:31   └─ /ru/generators/colors/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/ru/generators/country.astro
+16:06:31   └─ /ru/generators/country/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/ru/generators/date.astro
+16:06:31   └─ /ru/generators/date/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+4ms)
+16:06:31 ▶ src/pages/ru/generators/dice.astro
+16:06:31   └─ /ru/generators/dice/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+4ms)
+16:06:31 ▶ src/pages/ru/generators/emoji.astro
+16:06:31   └─ /ru/generators/emoji/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+12ms)
+16:06:31 ▶ src/pages/ru/generators/fontpair.astro
+16:06:31   └─ /ru/generators/fontpair/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+4ms)
+16:06:31 ▶ src/pages/ru/generators/gradient.astro
+16:06:31   └─ /ru/generators/gradient/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+2ms)
+16:06:31 ▶ src/pages/ru/generators/hash.astro
+16:06:31   └─ /ru/generators/hash/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/ru/generators/letter.astro
+16:06:31   └─ /ru/generators/letter/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/ru/generators/list.astro
+16:06:31   └─ /ru/generators/list/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+4ms)
+16:06:31 ▶ src/pages/ru/generators/lorem.astro
+16:06:31   └─ /ru/generators/lorem/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/ru/generators/lottery.astro
+16:06:31   └─ /ru/generators/lottery/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/ru/generators/magic8ball.astro
+16:06:31   └─ /ru/generators/magic8ball/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/ru/generators/meal.astro
+16:06:31   └─ /ru/generators/meal/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/ru/generators/names.astro
+16:06:31   └─ /ru/generators/names/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+4ms)
+16:06:31 ▶ src/pages/ru/generators/numbers.astro
+16:06:31   └─ /ru/generators/numbers/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/ru/generators/palette.astro
+16:06:31   └─ /ru/generators/palette/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+2ms)
+16:06:31 ▶ src/pages/ru/generators/password.astro
+16:06:31   └─ /ru/generators/password/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+2ms)
+16:06:31 ▶ src/pages/ru/generators/rps.astro
+16:06:31   └─ /ru/generators/rps/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/ru/generators/shuffler.astro
+16:06:31   └─ /ru/generators/shuffler/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/ru/generators/teams.astro
+16:06:31   └─ /ru/generators/teams/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+2ms)
+16:06:31 ▶ src/pages/ru/generators/time.astro
+16:06:31   └─ /ru/generators/time/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+2ms)
+16:06:31 ▶ src/pages/ru/generators/uuid.astro
+16:06:31   └─ /ru/generators/uuid/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/ru/generators/weighted.astro
+16:06:31   └─ /ru/generators/weighted/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/ru/generators/wheel.astro
+16:06:31   └─ /ru/generators/wheel/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+3ms)
+16:06:31 ▶ src/pages/ru/generators/yesno.astro
+16:06:31   └─ /ru/generators/yesno/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+4ms)
+16:06:31 ▶ src/pages/ru/privacy.astro
+16:06:31   └─ /ru/privacy/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+2ms)
+16:06:31 λ src/pages/ru/rss.xml.ts
+16:06:31   └─ /ru/rss.xml16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+5ms)
+16:06:31 ▶ src/pages/ru/index.astro
+16:06:31   └─ /ru/index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+6ms)
+16:06:31 ▶ src/pages/index.astro
+16:06:31   └─ /index.html16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] Cookie header: none
+16:06:31 [WARN] `Astro.request.headers` is unavailable in "static" output mode, and in prerendered pages within "hybrid" and "server" output modes. If you need access to request headers, make sure that `output` is configured as either `"server"` or `output: "hybrid"` in your config file, and that the page accessing the headers is rendered on-demand.
+[Middleware] No auth_token cookie found
+ (+4ms)
+16:06:31 ✓ Completed in 1.89s.
+
+16:06:31 [build] Rearranging server assets...
+16:06:31 [@astrojs/sitemap] `sitemap-index.xml` created at `dist/client`
+16:06:31 [build] Server built in 7.42s
+16:06:31 [build] Complete!

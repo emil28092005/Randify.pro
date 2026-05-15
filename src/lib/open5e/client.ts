@@ -1,6 +1,9 @@
+// BUGFIX: Original code used leading slashes in endpoint paths which caused
+// new URL() to drop the /v2 base path. Fixed by adding trailing slash to
+// API_BASE and using relative paths.
 import { getCached, setCached } from "./cache";
 
-const API_BASE = "https://api.open5e.com/v2";
+const API_BASE = "https://api.open5e.com/v2/";
 
 export interface Monster {
   name: string;
@@ -53,7 +56,7 @@ export async function searchMonsters(
   const cached = getCached<Monster[]>(cacheKey);
   if (cached) return cached;
 
-  const url = buildUrl("/creatures/", query, filters);
+  const url = buildUrl("creatures/", query, filters);
   const urlObj = new URL(url);
   urlObj.searchParams.set(
     "fields",
@@ -76,7 +79,7 @@ export async function getMonster(key: string): Promise<Monster> {
   const cached = getCached<Monster>(cacheKey);
   if (cached) return cached;
 
-  const url = `${API_BASE}/creatures/${key}/`;
+  const url = `${API_BASE}creatures/${key}/`;
 
   try {
     const data = await apiFetch<Monster>(url);
@@ -97,7 +100,7 @@ export async function searchSpells(
   const cached = getCached<Spell[]>(cacheKey);
   if (cached) return cached;
 
-  const url = buildUrl("/spells/", query, filters);
+  const url = buildUrl("spells/", query, filters);
   const urlObj = new URL(url);
   urlObj.searchParams.set("fields", "name,key,level,school");
 
@@ -117,7 +120,7 @@ export async function getSpell(key: string): Promise<Spell> {
   const cached = getCached<Spell>(cacheKey);
   if (cached) return cached;
 
-  const url = `${API_BASE}/spells/${key}/`;
+  const url = `${API_BASE}spells/${key}/`;
 
   try {
     const data = await apiFetch<Spell>(url);

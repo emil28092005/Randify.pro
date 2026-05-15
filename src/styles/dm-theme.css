@@ -1,11 +1,49 @@
 .dm-theme {
-  --accent: #E87722;
-  --accent-light: #FF9F43;
-  --accent-dark: #D35400;
-  --bg-primary: #0f0f0f;
-  --bg-secondary: #1a1a1a;
-  --bg-card: #242424;
+  /* Primary Accents */
+  --accent: #534AB7;
+  --accent-light: #6b5fc7;
+  --accent-dark: #3f3791;
+  --accent-hover: #6b5fc7;
+
+  /* Secondary (Gold) */
+  --gold: #c8a84b;
+  --gold-light: #d4b76a;
+  --gold-dark: #a88a3a;
+  --gold-hover: #d4b76a;
+
+  /* Backgrounds — warm dark tones */
+  --bg-primary: #16120e;
+  --bg-secondary: #1e1912;
+  --bg-card: #221e18;
+  --bg-input: #1a1610;
+
+  /* Text */
   --text-primary: #f4f4f5;
   --text-secondary: #a1a1aa;
-  --border-color: #3f3f46;
+  --text-muted: #71717a;
+  --text-cream: #e8dcc8;
+
+  /* Borders */
+  --border-color: #3a3428;
+  --border-gold: rgba(200, 168, 75, 0.15);
+  --border-gold-strong: rgba(180, 150, 80, 0.1);
+
+  /* Semantic Colors */
+  --success: #6ab04c;
+  --danger: #e06060;
+  --warning: #f0a030;
+
+  /* Transitions */
+  --transition-fast: 150ms;
+  --transition-base: 250ms;
+  --transition-slow: 350ms;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 20px rgba(83, 74, 183, 0.3);
+
+  /* Focus Ring */
+  --focus-ring: 0 0 0 2px var(--bg-primary), 0 0 0 4px var(--accent);
 }

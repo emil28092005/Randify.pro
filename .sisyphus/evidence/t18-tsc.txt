@@ -1,0 +1,4 @@
+src/pages/rss.xml.ts(10,6): error TS7006: Parameter 'post' implicitly has an 'any' type.
+src/pages/rss.xml.ts(18,25): error TS7006: Parameter 'post' implicitly has an 'any' type.
+src/pages/ru/rss.xml.ts(10,6): error TS7006: Parameter 'post' implicitly has an 'any' type.
+src/pages/ru/rss.xml.ts(18,25): error TS7006: Parameter 'post' implicitly has an 'any' type.

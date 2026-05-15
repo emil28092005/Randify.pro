@@ -2,6 +2,7 @@
 import BaseLayout from "./BaseLayout.astro";
 import DmHeader from "../components/dm/DmHeader.astro";
 import AuthPanel from "../components/dm/AuthPanel.astro";
+import DmTabs from "../components/dm/DmTabs.astro";
 import { dmTranslations as T } from "../i18n/dm-translations";
 import "../styles/dm-theme.css";
 
@@ -28,18 +29,55 @@ const {
       <AuthPanel />
     </DmHeader>
 
-    <main class="flex-1">
-      <slot />
-    </main>
+    <!-- Mobile tabs (visible only on small screens) -->
+    <div class="lg:hidden sticky top-16 z-30 bg-[var(--bg-secondary)]/90 backdrop-blur-sm border-b border-[var(--border-color)]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+        <DmTabs />
+      </div>
+    </div>
 
-    <footer class="w-full border-t border-[var(--border-color)] bg-[var(--bg-secondary)]/60 backdrop-blur-sm">
+    <!-- Dashboard grid -->
+    <div class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-[260px_1fr_300px] gap-4">
+
+        <!-- Sidebar (desktop only) -->
+        <aside class="hidden lg:block">
+          <div class="sticky top-20">
+            <slot name="sidebar" />
+          </div>
+        </aside>
+
+        <!-- Main content -->
+        <main class="min-w-0">
+          <!-- Backward compatibility: default slot renders here -->
+          <slot />
+          <slot name="main" />
+
+          <!-- On mobile, context slot content is also rendered in main area -->
+          <div class="lg:hidden">
+            <slot name="context" />
+          </div>
+        </main>
+
+        <!-- Context panel (desktop only) -->
+        <aside class="hidden lg:block">
+          <div class="sticky top-20">
+            <slot name="context" />
+          </div>
+        </aside>
+
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full border-t border-[var(--border-gold)] bg-[var(--bg-secondary)]/60 backdrop-blur-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
         <span class="text-sm text-[var(--text-secondary)]">
           {T.footer}
         </span>
         <a
           href="/"
-          class="text-sm text-[var(--accent)] hover:text-[var(--accent-light)] active:text-[var(--accent-dark)] transition-colors font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] rounded-md px-1 py-0.5"
+          class="text-sm text-[var(--gold)] hover:text-[var(--gold-light)] active:text-[var(--gold-dark)] transition-colors font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] rounded-md px-1 py-0.5"
         >
           {T.backToRandify}
         </a>
@@ -47,3 +85,93 @@ const {
     </footer>
   </div>
 </BaseLayout>
+
+<style>
+  /* Mobile: only show active section (fallback when JS is disabled) */
+  @media (max-width: 1023px) {
+    .dm-tab-section {
+      display: none;
+    }
+    .dm-tab-section:target {
+      display: block;
+    }
+    .dm-tab-section:first-of-type {
+      display: block;
+    }
+    .dm-tab-section:target ~ .dm-tab-section:first-of-type {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    const tabIds = ["dice", "initiative", "reference", "notes"];
+
+    function getHash() {
+      const raw = window.location.hash.replace("#", "");
+      return tabIds.includes(raw) ? raw : tabIds[0];
+    }
+
+    function updateMobileSections() {
+      // Only run on mobile
+      if (window.innerWidth >= 1024) return;
+
+      const activeTab = getHash();
+
+      // Find all sections with matching IDs inside main content
+      const main = document.querySelector("main");
+      if (!main) return;
+
+      tabIds.forEach((id) => {
+        const section = main.querySelector(`section#${id}`);
+        if (!section) return;
+
+        section.classList.add("dm-tab-section");
+        if (id === activeTab) {
+          section.style.display = "block";
+        } else {
+          section.style.display = "none";
+        }
+      });
+    }
+
+    function resetSectionStyles() {
+      const main = document.querySelector("main");
+      if (!main) return;
+
+      tabIds.forEach((id) => {
+        const section = main.querySelector(`section#${id}`);
+        if (section) {
+          section.style.display = "";
+          section.classList.remove("dm-tab-section");
+        }
+      });
+    }
+
+    // Initial run
+    updateMobileSections();
+
+    // On hash change
+    window.addEventListener("hashchange", updateMobileSections);
+
+    // Listen for dm-tab-change custom event from DmTabs
+    window.addEventListener("dm-tab-change", updateMobileSections);
+
+    // On resize (crossing breakpoint)
+    let lastWidth = window.innerWidth;
+    window.addEventListener("resize", () => {
+      const width = window.innerWidth;
+      const crossedBreakpoint = (lastWidth < 1024 && width >= 1024) || (lastWidth >= 1024 && width < 1024);
+      lastWidth = width;
+
+      if (crossedBreakpoint) {
+        if (width >= 1024) {
+          resetSectionStyles();
+        } else {
+          updateMobileSections();
+        }
+      }
+    });
+  })();
+</script>

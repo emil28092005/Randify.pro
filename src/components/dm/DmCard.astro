@@ -2,9 +2,10 @@
 export interface Props {
   class?: string;
   padding?: "none" | "sm" | "md" | "lg";
+  dataTestid?: string;
 }
 
-const { class: className = "", padding = "md" } = Astro.props;
+const { class: className = "", padding = "md", dataTestid } = Astro.props;
 
 const paddingClasses: Record<string, string> = {
   none: "",
@@ -14,11 +15,11 @@ const paddingClasses: Record<string, string> = {
 };
 
 const baseClasses =
-  "rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] shadow-lg shadow-black/20";
+  "rounded-xl bg-[var(--bg-card)] border border-[var(--border-gold-strong)] shadow-lg shadow-black/20 hover:border-[var(--border-gold)] transition-all duration-[var(--transition-base)]";
 
 const classes = `${baseClasses} ${paddingClasses[padding]} ${className}`;
 ---
 
-<div class={classes}>
+<div class={classes} data-testid={dataTestid}>
   <slot />
 </div>

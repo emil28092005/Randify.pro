@@ -1,0 +1,203 @@
+---
+export interface Props {
+  activeTab?: string;
+}
+
+import { dmTranslations as T } from "../../i18n/dm-translations";
+
+const tabs = [
+  { id: "dice", label: T.dice, hash: "#dice" },
+  { id: "initiative", label: T.initiative, hash: "#initiative" },
+  { id: "reference", label: T.reference, hash: "#reference" },
+  { id: "notes", label: T.notes, hash: "#notes" },
+] as const;
+
+const { activeTab } = Astro.props;
+
+// Determine initial active tab from URL hash, props, localStorage hint, or default to first
+let initialTab = tabs[0].id;
+if (activeTab && tabs.some((t) => t.id === activeTab)) {
+  initialTab = activeTab;
+} else if (Astro.url.hash) {
+  const hashId = Astro.url.hash.replace("#", "");
+  if (tabs.some((t) => t.id === hashId)) {
+    initialTab = hashId;
+  }
+}
+---
+
+<nav
+  class="dm-tabs flex flex-row gap-2 overflow-x-auto py-1 scrollbar-hide"
+  role="tablist"
+  aria-label="Навигация по инструментам DM"
+>
+  {
+    tabs.map((tab) => {
+      const isActive = tab.id === initialTab;
+      return (
+        <a
+          href={tab.hash}
+          role="tab"
+          data-tab={tab.id}
+          aria-selected={isActive ? "true" : "false"}
+          class:list={[
+            "dm-tab inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-medium min-h-[44px] min-w-[80px] whitespace-nowrap transition-all duration-[var(--transition-base)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]",
+            isActive
+              ? "bg-[var(--accent)] text-white shadow-md"
+              : "bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-color)] hover:border-[var(--gold)] hover:text-[var(--text-primary)]",
+          ]}
+        >
+          {tab.label}
+        </a>
+      );
+    })
+  }
+</nav>
+
+<style>
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+<script>
+  (function () {
+    const tabs = ["dice", "initiative", "reference", "notes"] as const;
+    type TabId = (typeof tabs)[number];
+
+    const tabList = document.querySelector<HTMLElement>(".dm-tabs");
+    if (!tabList) return;
+
+    const tabEls = Array.from(
+      tabList.querySelectorAll<HTMLElement>("[data-tab]")
+    );
+    if (tabEls.length === 0) return;
+
+    function getHash(): TabId {
+      const raw = window.location.hash.replace("#", "");
+      if (tabs.includes(raw as TabId)) return raw as TabId;
+      return tabs[0];
+    }
+
+    function setActiveTab(tabId: TabId, pushState = true) {
+      tabEls.forEach((el) => {
+        const id = el.getAttribute("data-tab") as TabId;
+        const isActive = id === tabId;
+        el.setAttribute("aria-selected", isActive ? "true" : "false");
+        if (isActive) {
+          el.classList.remove(
+            "bg-[var(--bg-card)]",
+            "text-[var(--text-secondary)]",
+            "border",
+            "border-[var(--border-color)]",
+            "hover:border-[var(--gold)]",
+            "hover:text-[var(--text-primary)]"
+          );
+          el.classList.add("bg-[var(--accent)]", "text-white", "shadow-md");
+        } else {
+          el.classList.remove(
+            "bg-[var(--accent)]",
+            "text-white",
+            "shadow-md"
+          );
+          el.classList.add(
+            "bg-[var(--bg-card)]",
+            "text-[var(--text-secondary)]",
+            "border",
+            "border-[var(--border-color)]",
+            "hover:border-[var(--gold)]",
+            "hover:text-[var(--text-primary)]"
+          );
+        }
+      });
+
+      if (pushState) {
+        const newHash = "#" + tabId;
+        if (window.location.hash !== newHash) {
+          window.history.pushState(null, "", newHash);
+        }
+      }
+
+      try {
+        localStorage.setItem("dm-last-tab", tabId);
+      } catch {
+        // localStorage may be unavailable
+      }
+
+      tabList.dispatchEvent(
+        new CustomEvent("dm-tab-change", {
+          bubbles: true,
+          detail: { tab: tabId },
+        })
+      );
+    }
+
+    // Initialize from hash or localStorage fallback
+    let currentTab = getHash();
+    if (currentTab === tabs[0] && !window.location.hash) {
+      try {
+        const saved = localStorage.getItem("dm-last-tab") as TabId | null;
+        if (saved && tabs.includes(saved)) {
+          currentTab = saved;
+          window.history.replaceState(null, "", "#" + currentTab);
+        }
+      } catch {
+        // ignore
+      }
+    }
+    setActiveTab(currentTab, false);
+
+    // Click handler
+    tabEls.forEach((el) => {
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        const id = el.getAttribute("data-tab") as TabId;
+        if (id) setActiveTab(id);
+      });
+    });
+
+    // Hash change (browser back/forward)
+    window.addEventListener("hashchange", () => {
+      const id = getHash();
+      setActiveTab(id, false);
+    });
+
+    // Keyboard navigation
+    tabList.addEventListener("keydown", (e) => {
+      const focused = document.activeElement as HTMLElement | null;
+      if (!focused || !focused.hasAttribute("data-tab")) return;
+
+      const currentIndex = tabEls.indexOf(focused);
+      let nextIndex = currentIndex;
+
+      switch (e.key) {
+        case "ArrowRight":
+          e.preventDefault();
+          nextIndex = (currentIndex + 1) % tabEls.length;
+          break;
+        case "ArrowLeft":
+          e.preventDefault();
+          nextIndex = (currentIndex - 1 + tabEls.length) % tabEls.length;
+          break;
+        case "Home":
+          e.preventDefault();
+          nextIndex = 0;
+          break;
+        case "End":
+          e.preventDefault();
+          nextIndex = tabEls.length - 1;
+          break;
+        default:
+          return;
+      }
+
+      tabEls[nextIndex].focus();
+      const id = tabEls[nextIndex].getAttribute("data-tab") as TabId;
+      if (id) setActiveTab(id);
+    });
+  })();
+</script>

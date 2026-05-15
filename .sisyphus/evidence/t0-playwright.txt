@@ -1,0 +1,42 @@
+=== Playwright E2E Infrastructure Verification ===
+Date: 2026-05-15
+Task: T0 - Verify and configure Playwright E2E test infrastructure
+
+---
+1. npx playwright test --list
+---
+Listing tests:
+  [chromium] › dm/smoke.spec.ts:4:3 › DM Dashboard Smoke Tests › /dm/ loads without errors
+  [chromium] › dm/smoke.spec.ts:11:3 › DM Dashboard Smoke Tests › /ru/dm/ loads without errors
+  [mobile-chromium] › dm/smoke.spec.ts:4:3 › DM Dashboard Smoke Tests › /dm/ loads without errors
+  [mobile-chromium] › dm/smoke.spec.ts:11:3 › DM Dashboard Smoke Tests › /ru/dm/ loads without errors
+Total: 4 tests in 1 file
+
+---
+2. npx playwright test tests/dm/smoke.spec.ts
+---
+Running 4 tests using 4 workers
+
+  ✓  3 [chromium] › tests/dm/smoke.spec.ts:11:3 › DM Dashboard Smoke Tests › /ru/dm/ loads without errors (2.9s)
+  ✓  4 [mobile-chromium] › tests/dm/smoke.spec.ts:11:3 › DM Dashboard Smoke Tests › /ru/dm/ loads without errors (3.1s)
+  ✓  1 [mobile-chromium] › tests/dm/smoke.spec.ts:4:3 › DM Dashboard Smoke Tests › /dm/ loads without errors (3.1s)
+  ✓  2 [chromium] › tests/dm/smoke.spec.ts:4:3 › DM Dashboard Smoke Tests › /dm/ loads without errors (3.2s)
+
+  4 passed (8.4s)
+
+---
+Summary
+---
+- playwright.config.ts: EXISTING, VALID
+  - testDir: ./tests
+  - baseURL: http://localhost:4321
+  - fullyParallel: true
+  - projects: chromium, mobile-chromium
+  - webServer: npm run dev, reuseExistingServer: !CI
+- package.json scripts:
+  - test:e2e: playwright test  (ADDED)
+  - test:ui: playwright test    (PRESERVED)
+- Smoke test created: tests/dm/smoke.spec.ts
+  - /dm/ loads without errors (title contains "DM Dashboard")
+  - /ru/dm/ loads without errors (title contains "DM Dashboard")
+- Result: ALL TESTS PASS (4/4)

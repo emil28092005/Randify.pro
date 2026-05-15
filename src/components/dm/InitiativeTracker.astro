@@ -1,88 +1,98 @@
 ---
 import DmButton from "./DmButton.astro";
 import DmInput from "./DmInput.astro";
+import DmCard from "./DmCard.astro";
+import { dmTranslations as T } from "@/i18n/dm-translations";
 ---
 
-<div id="initiative-tracker" class="w-full max-w-xl mx-auto">
+<div id="initiative-tracker" class="w-full max-w-xl mx-auto" data-testid="init-section">
   <!-- Add combatant form -->
-  <div class="rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] p-5 mb-6">
-    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
-      <div class="sm:col-span-5">
-        <DmInput
-          id="it-name"
-          name="name"
-          type="text"
-          placeholder="Combatant name"
-          label="Name"
-        />
+  <div class="mb-6">
+    <DmCard>
+      <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+        <div class="sm:col-span-5">
+          <DmInput
+            id="it-name"
+            name="name"
+            type="text"
+            placeholder={T.name}
+            label={T.name}
+            dataTestid="init-name-input"
+          />
+        </div>
+        <div class="sm:col-span-3">
+          <DmInput
+            id="it-modifier"
+            name="modifier"
+            type="number"
+            value={0}
+            placeholder={T.modifier}
+            label={T.modifier}
+            dataTestid="init-mod-input"
+          />
+        </div>
+        <div class="sm:col-span-2">
+          <DmButton id="it-roll-btn" variant="secondary" size="sm" class="w-full">
+            d20
+          </DmButton>
+        </div>
+        <div class="sm:col-span-2">
+          <DmButton id="it-add-btn" variant="primary" size="sm" class="w-full" dataTestid="init-add-btn">
+            {T.actionAdd}
+          </DmButton>
+        </div>
       </div>
-      <div class="sm:col-span-3">
+      <div class="mt-3 flex items-center gap-3">
         <DmInput
-          id="it-modifier"
-          name="modifier"
+          id="it-initiative"
+          name="initiative"
           type="number"
-          value={0}
-          placeholder="Modifier"
-          label="Modifier"
+          placeholder="Итого"
+          label="Инициатива"
+          class="sm:max-w-[120px]"
+          dataTestid="init-initiative-input"
         />
+        <span class="text-xs text-[var(--text-secondary)]">
+          Бросок d20 + модификатор, или введите итог вручную
+        </span>
       </div>
-      <div class="sm:col-span-2">
-        <DmButton id="it-roll-btn" variant="secondary" size="sm" class="w-full">
-          Roll d20
-        </DmButton>
-      </div>
-      <div class="sm:col-span-2">
-        <DmButton id="it-add-btn" variant="primary" size="sm" class="w-full">
-          Add
-        </DmButton>
-      </div>
-    </div>
-    <div class="mt-3 flex items-center gap-3">
-      <DmInput
-        id="it-initiative"
-        name="initiative"
-        type="number"
-        placeholder="Or enter total"
-        label="Initiative"
-        class="sm:max-w-[120px]"
-      />
-      <span class="text-xs text-[var(--text-secondary)]">
-        Roll d20 + modifier, or enter total manually
-      </span>
-    </div>
+    </DmCard>
   </div>
 
   <!-- Combatant list -->
-  <div
-    id="it-list-panel"
-    class="rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] p-5 hidden"
-  >
-    <div class="flex items-center justify-between mb-4">
-      <h3 class="text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider">
-        Turn Order
-      </h3>
-      <DmButton id="it-clear-btn" variant="ghost" size="sm">
-        Clear All
-      </DmButton>
-    </div>
-    <ul id="it-list" class="space-y-2" role="list" aria-label="Combatants"></ul>
+  <div id="it-list-panel" class="hidden">
+    <DmCard>
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider">
+          Порядок хода
+        </h3>
+        <DmButton id="it-clear-btn" variant="secondary" size="sm">
+          {T.actionClear}
+        </DmButton>
+      </div>
 
-    <!-- Next turn button -->
-    <div class="mt-5 flex justify-center">
-      <DmButton id="it-next-btn" variant="primary" size="md" class="w-full sm:w-auto">
-        Next Turn
-      </DmButton>
-    </div>
+      <ul id="it-list" class="space-y-2" role="list" aria-label="Combatants"></ul>
+
+      <div id="it-announcer" aria-live="polite" class="sr-only"></div>
+
+      <!-- Next turn button -->
+      <div class="mt-5 flex justify-center">
+        <DmButton id="it-next-btn" variant="primary" size="md" class="w-full sm:w-auto" dataTestid="init-next-btn">
+          {T.actionNextTurn}
+        </DmButton>
+      </div>
+    </DmCard>
   </div>
 
   <!-- Empty state -->
-  <div
-    id="it-empty"
-    class="rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] p-8 text-center"
-  >
-    <p class="text-[var(--text-secondary)] text-sm">
-      No combatants yet. Add a name and roll initiative to begin.
-    </p>
+  <div id="it-empty" data-testid="init-empty-state">
+    <DmCard padding="lg">
+      <div class="text-center">
+        <p class="text-[var(--text-secondary)] text-sm">
+          {T.emptyCombatants}
+        </p>
+      </div>
+    </DmCard>
   </div>
 </div>
 
@@ -93,7 +103,7 @@ import DmInput from "./DmInput.astro";
     rollInitiative,
   } from "@/lib/client/initiative";
 
-  const STORAGE_KEY = "it-combatants";
+  const STORAGE_KEY = "dm-initiative";
 
   // DOM refs
   const nameInput = document.getElementById("it-name") as HTMLInputElement;
@@ -110,6 +120,7 @@ import DmInput from "./DmInput.astro";
   const listEl = document.getElementById("it-list");
   const listPanel = document.getElementById("it-list-panel");
   const emptyState = document.getElementById("it-empty");
+  const announcer = document.getElementById("it-announcer");
 
   let activeIndex = 0;
 
@@ -117,11 +128,50 @@ import DmInput from "./DmInput.astro";
     id: string;
     name: string;
     initiative: number;
+    hp?: number;
   }
 
   function loadCombatants(): CombatantData[] {
     try {
-      return JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? "[]");
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        // Fallback: migrate from old storage key
+        const oldRaw = sessionStorage.getItem("it-combatants");
+        if (oldRaw) {
+          try {
+            const oldData = JSON.parse(oldRaw) as any[];
+            const migrated = oldData.map((c: any, index: number) => ({
+              id: c.id || `legacy-${index}-${Date.now()}`,
+              name: c.name || 'Unknown',
+              modifier: typeof c.modifier === 'number' ? c.modifier : 0,
+              initiative: typeof c.initiative === 'number' ? c.initiative : 0,
+              hp: typeof c.hp === 'number' ? c.hp : 0,
+              maxHp: typeof c.maxHp === 'number' ? c.maxHp : (typeof c.hp === 'number' ? c.hp : 0),
+              active: !!c.active,
+            }));
+            sessionStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+            sessionStorage.removeItem("it-combatants");
+            return migrated;
+          } catch { /* ignore parse errors */ }
+        }
+        return [];
+      }
+      const parsed = JSON.parse(raw) as any[];
+
+      let migrated = false;
+      const combatants = parsed.map((c) => {
+        if (!c.id) {
+          c.id = Math.random().toString(36).slice(2, 9);
+          migrated = true;
+        }
+        return c as CombatantData;
+      });
+
+      if (migrated) {
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(combatants));
+      }
+
+      return combatants;
     } catch {
       return [];
     }
@@ -142,6 +192,12 @@ import DmInput from "./DmInput.astro";
     emptyState?.classList.toggle("hidden", hasCombatants);
   }
 
+  function announceTurn(name: string) {
+    if (announcer) {
+      announcer.textContent = `Ход: ${name}`;
+    }
+  }
+
   function renderList() {
     const combatants = sortByInitiative(loadCombatants());
     if (!listEl) return;
@@ -150,40 +206,46 @@ import DmInput from "./DmInput.astro";
     combatants.forEach((c, index) => {
       const isActive = index === activeIndex;
       const li = document.createElement("li");
-      li.className = `flex items-center justify-between gap-3 rounded-lg border px-4 py-3 transition-colors ${
+      li.className = `group flex items-center gap-3 rounded-lg border px-4 py-3 transition-colors hover:bg-[var(--bg-secondary)] ${
         isActive
-          ? "border-[var(--accent)] bg-[var(--accent)]/10"
+          ? "active border-[var(--accent)] bg-[var(--accent)]/10"
           : "border-[var(--border-color)] bg-[var(--bg-secondary)]"
       }`;
       li.setAttribute("data-id", c.id);
+      li.setAttribute("data-testid", "init-combatant");
+
+      const hpDisplay =
+        c.hp !== undefined && c.hp !== null
+          ? `<span class="it-hp-display text-sm text-[var(--text-secondary)] tabular-nums cursor-pointer hover:text-[var(--gold)] transition-colors" title="Кликните для редактирования ХП">${c.hp} ХП</span>`
+          : `<span class="it-hp-display text-sm text-[var(--text-secondary)] tabular-nums cursor-pointer hover:text-[var(--gold)] transition-colors" title="Кликните для добавления ХП">—</span>`;
 
       li.innerHTML = `
-        <div class="flex items-center gap-3 min-w-0">
-          <span class="inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${
-            isActive
-              ? "bg-[var(--accent)] text-white"
-              : "bg-[var(--border-color)] text-[var(--text-secondary)]"
-          }">
-            ${index + 1}
-          </span>
-          <span class="font-medium text-[var(--text-primary)] truncate">
-            ${escapeHtml(c.name)}
-          </span>
-        </div>
+        <span class="text-xs text-[var(--text-secondary)] tabular-nums w-5 text-center shrink-0">
+          ${index + 1}
+        </span>
+        <div class="w-2.5 h-2.5 rounded-full shrink-0 ${
+          isActive ? "bg-[var(--accent)]" : "bg-[var(--text-secondary)]/40"
+        }"></div>
+        <span class="font-semibold text-[var(--text-primary)] truncate min-w-0" data-testid="init-combatant-name">
+          ${escapeHtml(c.name)}
+        </span>
+        ${isActive ? `<span class="ml-1 px-2 py-0.5 text-xs font-bold bg-[var(--accent)] text-white rounded-full shrink-0">Ход</span>` : ""}
+        <div class="flex-1"></div>
         <div class="flex items-center gap-3 shrink-0">
-          <span class="text-sm font-bold text-[var(--accent)] tabular-nums">
+          ${hpDisplay}
+          <span class="text-sm font-bold text-[var(--gold)] tabular-nums" data-testid="init-score">
             ${c.initiative}
           </span>
           <button
             type="button"
-            class="it-delete-btn text-[var(--text-secondary)] hover:text-red-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] rounded"
-            aria-label="Delete ${escapeHtml(c.name)}"
+            class="it-delete-btn w-7 h-7 inline-flex items-center justify-center rounded-md text-[var(--text-secondary)] hover:text-red-400 hover:bg-[var(--bg-secondary)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
+            aria-label="Удалить ${escapeHtml(c.name)}"
             data-id="${c.id}"
+            data-testid="init-delete-btn"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 6h18"/>
-              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
-              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6 6 18"/>
+              <path d="m6 6 12 12"/>
             </svg>
           </button>
         </div>
@@ -199,6 +261,57 @@ import DmInput from "./DmInput.astro";
         if (id) deleteCombatant(id);
       });
     });
+
+    // Attach HP edit listeners
+    listEl.querySelectorAll(".it-hp-display").forEach((span) => {
+      span.addEventListener("click", (e) => {
+        const target = e.currentTarget as HTMLElement;
+        const li = target.closest("li");
+        if (!li) return;
+        const id = li.getAttribute("data-id");
+        if (!id) return;
+        const combatant = loadCombatants().find((c) => c.id === id);
+        if (!combatant) return;
+
+        const currentHp = combatant.hp ?? "";
+        const input = document.createElement("input");
+        input.type = "number";
+        input.value = String(currentHp);
+        input.className =
+          "w-16 bg-[var(--bg-input)] border border-[var(--gold)] rounded px-2 py-0.5 text-sm text-[var(--text-primary)] text-center tabular-nums focus:outline-none focus:ring-1 focus:ring-[var(--gold)]";
+        input.min = "0";
+
+        target.replaceWith(input);
+        input.focus();
+        input.select();
+
+        function commit() {
+          const val = parseInt(input.value, 10);
+          const combatants = loadCombatants();
+          const idx = combatants.findIndex((c) => c.id === id);
+          if (idx !== -1) {
+            combatants[idx].hp = Number.isNaN(val) ? undefined : val;
+            saveCombatants(combatants);
+          }
+          renderList();
+        }
+
+        input.addEventListener("blur", commit);
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            commit();
+          } else if (e.key === "Escape") {
+            renderList();
+          }
+        });
+      });
+    });
+
+    // Announce active turn
+    if (combatants[activeIndex]) {
+      announceTurn(combatants[activeIndex].name);
+    }
   }
 
   function escapeHtml(str: string): string {

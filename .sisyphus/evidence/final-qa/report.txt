@@ -1,0 +1,25 @@
+Scenarios [10/11 pass] | Integration [5/6] | Edge Cases [5 tested] | VERDICT: REJECT
+
+Details:
+PASS: T2: Tab switching and URL hash — hash=true, keyboardFocused=initiative
+PASS: T2: Mobile scrollable tabs — allInRow=true, minHeightOk=true, tabCount=4
+PASS: T2: Initial tab state — aria-selected=true
+PASS: T9: Dice rolling and history — d20=11(valid=true), 2d6+3=6(valid=true), history=2, empty=true
+PASS: T9: Critical hit/fail colors — foundCrit=false, foundFail=false, colorClasses=true
+PASS: T9: Hover and active states — hoverClass=true, activeClass=true
+PASS: T10: Initiative tracking flow — goblin=true, sorted=true, turnChanged=true, afterDelete=1
+PASS: T11: Open5e search and detail — results=true, empty=false, searchResults=10, modalOpened=true, modalClosed=true
+PASS: T11: Empty search state — emptyVisible=true, noResults=true
+FAIL: T12: Notes auto-save and cross-tab sync — savedVisible=true, savedOpacity=1, chars=16, sync=false, cleared=true
+PASS: T6: All sections accessible — allAccessible=true
+PASS: INT-1: Switch between all tabs — urlHashOk=true
+PASS: INT-2: Roll dice, check history, clear — history=2, empty=true
+PASS: INT-3: Initiative flow — sorted=true, turnChanged=true, afterDelete=1
+PASS: INT-4: Open5e search and modal — cards=10, modalOpened=true, modalClosed=true
+PASS: INT-5: Notes persistence — value="Persistent note test"
+FAIL: INT-6: Responsive layout — desktop=false, mobile=true, back=false
+PASS: EDGE-1: Empty states — dice=true, init=true, notes=true
+PASS: EDGE-2: Rapid tab switching — url=http://localhost:4322/dm/#initiative
+PASS: EDGE-3: Invalid dice notation — result="?", details="Invalid notation"
+PASS: EDGE-4: Empty search in Open5e — results=true, empty=false, noError=true
+PASS: EDGE-5: Clear notes after typing — value="", chars=0

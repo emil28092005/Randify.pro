@@ -3,6 +3,7 @@ export const prerender = false;
 
 import DmLayout from "@/layouts/DmLayout.astro";
 import DmCard from "@/components/dm/DmCard.astro";
+import DmSidebar from "@/components/dm/DmSidebar.astro";
 import DiceRoller from "@/components/dm/DiceRoller.astro";
 import InitiativeTracker from "@/components/dm/InitiativeTracker.astro";
 import Open5eReference from "@/components/dm/Open5eReference.astro";
@@ -11,82 +12,62 @@ import { dmTranslations as T } from "@/i18n/dm-translations";
 ---
 
 <DmLayout>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-    <!-- Subtitle -->
-    <p class="text-[var(--text-secondary)] text-base mb-4">
-      {T.subtitle}
-    </p>
+  <!-- Sidebar slot (desktop only) -->
+  <div slot="sidebar">
+    <DmSidebar />
+  </div>
 
-    <!-- Anchor Navigation -->
-    <nav aria-label="Инструменты" class="mb-6">
-      <ul class="flex flex-wrap gap-2">
-        {[
-          { id: "dice", label: T.anchorDice },
-          { id: "initiative", label: T.anchorInitiative },
-          { id: "reference", label: T.anchorReference },
-          { id: "notes", label: T.anchorNotes },
-        ].map((item) => (
-          <li>
-        <a
-          href={`#${item.id}`}
-          class="inline-flex items-center px-3 py-1.5 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/30 text-[var(--accent)] text-sm font-medium hover:bg-[var(--accent)]/20 active:bg-[var(--accent)]/30 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
-        >
-              {item.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
+  <!-- Main slot (dice + initiative) -->
+  <div slot="main" class="space-y-6">
+    <!-- Dice Roller -->
+    <section id="dice" class="dm-tab-section">
+      <div class="flex items-center gap-3 mb-3">
+        <span class="w-1 h-6 bg-[var(--accent)] rounded-full" aria-hidden="true"></span>
+        <h2 class="text-lg font-bold text-[var(--text-primary)]">
+          {T.dice}
+        </h2>
+      </div>
+      <DiceRoller />
+    </section>
 
-    <!-- Dashboard Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <!-- Dice Roller -->
-      <section id="dice" aria-labelledby="dice-heading">
-        <div class="flex items-center gap-3 mb-2">
-          <span class="w-1 h-6 bg-[var(--accent)] rounded-full" aria-hidden="true"></span>
-          <h2 id="dice-heading" class="text-lg font-bold text-[var(--text-primary)]">
-            {T.dice}
-          </h2>
-        </div>
-        <DiceRoller />
-      </section>
+    <!-- Initiative Tracker -->
+    <section id="initiative" class="dm-tab-section">
+      <div class="flex items-center gap-3 mb-3">
+        <span class="w-1 h-6 bg-[var(--accent)] rounded-full" aria-hidden="true"></span>
+        <h2 class="text-lg font-bold text-[var(--text-primary)]">
+          {T.initiative}
+        </h2>
+      </div>
+      <InitiativeTracker />
+    </section>
+  </div>
 
-      <!-- Initiative Tracker -->
-      <section id="initiative" aria-labelledby="initiative-heading">
-        <div class="flex items-center gap-3 mb-2">
-          <span class="w-1 h-6 bg-[var(--accent)] rounded-full" aria-hidden="true"></span>
-          <h2 id="initiative-heading" class="text-lg font-bold text-[var(--text-primary)]">
-            {T.initiative}
-          </h2>
-        </div>
-        <InitiativeTracker />
-      </section>
+  <!-- Context slot (reference + notes, desktop only) -->
+  <div slot="context" class="space-y-6">
+    <!-- Open5e Reference -->
+    <section id="reference" class="dm-tab-section">
+      <div class="flex items-center gap-3 mb-3">
+        <span class="w-1 h-6 bg-[var(--gold)] rounded-full" aria-hidden="true"></span>
+        <h2 class="text-lg font-bold text-[var(--text-primary)]">
+          {T.reference}
+        </h2>
+      </div>
+      <DmCard>
+        <Open5eReference />
+      </DmCard>
+    </section>
 
-      <!-- Open5e Reference -->
-      <section id="reference" aria-labelledby="reference-heading">
-        <div class="flex items-center gap-3 mb-2">
-          <span class="w-1 h-6 bg-[var(--accent)] rounded-full" aria-hidden="true"></span>
-          <h2 id="reference-heading" class="text-lg font-bold text-[var(--text-primary)]">
-            {T.reference}
-          </h2>
-        </div>
-        <DmCard>
-          <Open5eReference />
-        </DmCard>
-      </section>
-
-      <!-- Notes Panel -->
-      <section id="notes" aria-labelledby="notes-heading">
-        <div class="flex items-center gap-3 mb-2">
-          <span class="w-1 h-6 bg-[var(--accent)] rounded-full" aria-hidden="true"></span>
-          <h2 id="notes-heading" class="text-lg font-bold text-[var(--text-primary)]">
-            {T.notes}
-          </h2>
-        </div>
-        <DmCard>
-          <NotesPanel />
-        </DmCard>
-      </section>
-    </div>
+    <!-- Notes Panel -->
+    <section id="notes" class="dm-tab-section">
+      <div class="flex items-center gap-3 mb-3">
+        <span class="w-1 h-6 bg-[var(--gold)] rounded-full" aria-hidden="true"></span>
+        <h2 class="text-lg font-bold text-[var(--text-primary)]">
+          {T.notes}
+        </h2>
+      </div>
+      <DmCard>
+        <NotesPanel />
+      </DmCard>
+    </section>
   </div>
 </DmLayout>

@@ -5,6 +5,7 @@ export interface Props {
   user?: {
     name?: string;
     avatar?: string;
+    tier?: 'free' | 'pro';
   } | null;
 }
 
@@ -14,7 +15,7 @@ const { user } = Astro.props;
 <aside class="w-full">
   <!-- User info (if logged in) -->
   {user && (
-    <div class="flex items-center gap-3 mb-6 px-3 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-gold-strong)]">
+    <div data-testid="sidebar-user-block" class="flex items-center gap-3 mb-6 px-3 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-gold-strong)]">
       {user.avatar ? (
         <img src={user.avatar} alt="" class="w-8 h-8 rounded-full border-2 border-[var(--accent)]" />
       ) : (
@@ -22,9 +23,20 @@ const { user } = Astro.props;
           {user.name?.charAt(0).toUpperCase() || "?"}
         </div>
       )}
-      <span class="text-sm font-medium text-[var(--text-primary)] truncate">
-        {user.name || "Пользователь"}
-      </span>
+      <div class="flex items-center gap-2 min-w-0">
+        <span class="text-sm font-medium text-[var(--text-primary)] truncate">
+          {user.name || "Пользователь"}
+        </span>
+        {user.tier === 'pro' ? (
+          <span data-testid="tier-badge" data-tier="pro" class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-[var(--accent)] text-white">
+            {T.badgePro}
+          </span>
+        ) : (
+          <span data-testid="tier-badge" data-tier="free" class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide border border-[var(--text-muted)] text-[var(--text-muted)]">
+            {T.badgeFree}
+          </span>
+        )}
+      </div>
     </div>
   )}
 

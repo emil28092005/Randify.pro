@@ -14,7 +14,7 @@ import { dmTranslations as T } from "@/i18n/dm-translations";
 <DmLayout>
   <!-- Sidebar slot (desktop only) -->
   <div slot="sidebar">
-    <DmSidebar />
+    <DmSidebar user={Astro.locals.user} />
   </div>
 
   <!-- Main slot (dice + initiative) -->

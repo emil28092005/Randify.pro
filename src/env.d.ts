@@ -7,6 +7,7 @@ interface User {
   email: string | null;
   name: string;
   avatar: string | null;
+  tier: 'free' | 'pro';
   createdAt: Date;
 }
 

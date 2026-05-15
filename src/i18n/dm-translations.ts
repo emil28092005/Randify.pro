@@ -79,6 +79,8 @@ export const dmTranslations = {
   loginVk: "Войти через VK",
   loginYandex: "Войти через Яндекс",
   logout: "Выйти",
+  badgeFree: "FREE",
+  badgePro: "PRO",
 } as const;
 
 export type DmT = typeof dmTranslations;

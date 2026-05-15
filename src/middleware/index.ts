@@ -38,7 +38,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
     const user = userResult[0];
     if (user) {
-      context.locals.user = user;
+      context.locals.user = {
+        ...user,
+        tier: (user.tier ?? 'free') as 'free' | 'pro',
+      };
       console.log('[Middleware] User attached to locals:', { userId: user.id, name: user.name });
     } else {
       console.log('[Middleware] No user found for session');

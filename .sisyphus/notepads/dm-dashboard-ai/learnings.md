@@ -43,3 +43,90 @@
 
 - `npx tsc --noEmit`: 0 errors
 - `npx vitest run src/lib/auth/`: 18/18 tests passed
+
+---
+
+# CORS Configuration for DM API Routes — Learnings
+
+## Date: 2026-05-15
+
+### Patterns Applied
+
+1. **Reusable CORS utility (`src/lib/cors.ts`)**
+   - Created `getCorsHeaders()`, `createCorsResponse()`, `handleCorsPreflight()`, and `jsonResponse()` helpers.
+   - Allowed origins are validated by hostname using `URL` parsing: `randify.pro`, `dm.randify.pro`, `localhost:4321`.
+   - Disallowed origins receive an empty `Access-Control-Allow-Origin` header (no wildcard).
+   - `Vary: Origin` header is included to prevent CDN caching issues with CORS.
+
+2. **DM API route pattern (`src/pages/api/dm/health.ts`)**
+   - New DM API routes should import helpers from `@/lib/cors`.
+   - Every route must export an `OPTIONS` handler that calls `handleCorsPreflight(origin)`.
+   - Every response should be created via `jsonResponse()` or `createCorsResponse()` to ensure CORS headers are present.
+   - `export const prerender = false` is required for API routes.
+
+3. **Allowed origins**
+   - `https://randify.pro`
+   - `https://dm.randify.pro`
+   - `http://localhost:4321`
+   - Any protocol is accepted as long as the hostname matches.
+
+4. **happy-dom `Request` limitation**
+   - `new Request(url, { headers: { origin: '...' } })` strips the `origin` header in happy-dom (vitest environment).
+   - Tests that call Astro API routes must construct a mock request object with a custom `headers.get()` method instead of relying on the global `Request` class for origin propagation.
+   - Example pattern in `tests/cors.test.ts` (`mockRequest` helper).
+
+### Verification
+
+- `npx vitest run tests/cors.test.ts`: 12/12 passed
+- `npx vitest run` (full suite): 218/218 passed
+
+---
+
+# Drizzle Migration Generation — Learnings
+
+## Date: 2026-05-15
+
+### Context
+
+Task: Generate and apply Drizzle migration for updated DB schema (Task 2 completed).
+
+### What Was Done
+
+1. **Generated migration via `drizzle-kit generate`**
+   - Command: `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/randify npx drizzle-kit generate`
+   - Generated file: `drizzle/0001_curved_black_panther.sql`
+   - Journal updated: `drizzle/meta/_journal.json`
+
+2. **Reviewed generated SQL for correctness**
+   - New tables created: `npcs`, `generation_counters`, `translations`, `notes`, `initiative_sessions`
+   - Existing table altered: `users` — added `tier` (varchar(20), default 'free') and `boosty_verified_at` (timestamp)
+   - All FK constraints use `ON DELETE cascade` as specified in schema
+   - Indexes match schema definitions:
+     - `generation_counters_user_window_model_idx` (unique)
+     - `translations_slug_type_language_idx`
+   - CHECK constraint added: `users_tier_check` enforcing `('free', 'pro')`
+   - `translations.slug` correctly marked as `UNIQUE`
+
+3. **Verified migration applies cleanly**
+   - Command: `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/randify npm run db:migrate`
+   - Result: Migrations completed successfully (exit 0)
+   - Verified tables in DB: 7 tables present (`users`, `sessions`, `npcs`, `generation_counters`, `translations`, `notes`, `initiative_sessions`)
+
+4. **Created down migration for reversibility**
+   - File: `drizzle/0001_curved_black_panther.down.sql`
+   - Operations: drop new tables, remove added columns/constraints from `users`
+   - Tested down migration against local DB: executed cleanly
+   - Re-applied up migration after test to restore expected state
+
+### Key Findings
+
+- **`.env` DATABASE_URL mismatch**: `.env` points to `dmuser:dmpass@localhost:5432/dmdashboard`, but the docker-compose PostgreSQL uses `postgres:postgres@localhost:5432/randify`. For DB commands to work locally, `DATABASE_URL` must be overridden inline or `.env` must be updated.
+- **Drizzle-kit does not auto-generate `.down.sql` files**. Reversibility must be handled manually. The down migration should drop tables in reverse dependency order and remove columns after dropping their constraints.
+- **Testing down migrations**: After testing a down migration, reset `drizzle.__drizzle_migrations` and re-run the official `db:migrate` script rather than applying raw SQL, to keep Drizzle's internal tracking consistent.
+
+### Verification
+
+- `npm run db:migrate` with correct `DATABASE_URL`: exit 0
+- `\dt` in `randify` DB: 7 tables confirmed
+- Down migration tested manually: all statements executed without error
+

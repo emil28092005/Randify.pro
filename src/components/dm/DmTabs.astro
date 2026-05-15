@@ -10,6 +10,7 @@ const tabs = [
   { id: "initiative", label: T.initiative, hash: "#initiative" },
   { id: "reference", label: T.reference, hash: "#reference" },
   { id: "notes", label: T.notes, hash: "#notes" },
+  { id: "ai", label: T.ai, hash: "#ai" },
 ] as const;
 
 const { activeTab } = Astro.props;
@@ -66,7 +67,7 @@ if (activeTab && tabs.some((t) => t.id === activeTab)) {
 
 <script>
   (function () {
-    const tabs = ["dice", "initiative", "reference", "notes"] as const;
+    const tabs = ["dice", "initiative", "reference", "notes", "ai"] as const;
     type TabId = (typeof tabs)[number];
 
     const tabList = document.querySelector<HTMLElement>(".dm-tabs");

@@ -191,3 +191,137 @@ Task: Generate and apply Drizzle migration for updated DB schema (Task 2 complet
 - `npx vitest run`: 271/271 tests passed (19 test files)
 - `npx vitest run tests/notes-api.test.ts`: 19/19 passed
 - `npx vitest run tests/initiative-api.test.ts`: 20/20 passed
+
+---
+
+# Rate Limiting Service for AI Generation — Learnings
+
+## Date: 2026-05-15
+
+### What Was Done
+
+1. **Created `src/lib/rate-limit.ts`**
+   - `checkRateLimit(userId, tier)` — aggregates `sum(count)` across ALL models for the user's current hour window (`date_trunc('hour', now())`). Returns `{ allowed, remaining, resetAt }`.
+   - `getRemainingQuota(userId, tier)` — same aggregation logic, lightweight query for UI badges.
+   - `incrementGenerationCounter(userId, model)` — upserts per-model counter row using `onConflictDoUpdate` with composite unique target `(userId, hourWindow, model)`.
+   - `getRetryAfterSeconds()` — computes seconds until next hour boundary for 429 `Retry-After` header.
+   - FREE tier hard limit: 7/hour. PRO tier: 100/hour advisory (not hard-blocked, allows minor burst).
+
+2. **Created `src/pages/api/dm/quota.ts`**
+   - `GET` returns `{ remaining, resetAt, limit, tier }` for authenticated user.
+   - `OPTIONS` handler for CORS preflight.
+   - `prerender = false` required for middleware auth to populate `locals.user`.
+
+3. **CORS fix (`src/lib/cors.ts`)**
+   - Added `PUT` and `DELETE` to `Access-Control-Allow-Methods`. Already verified in existing `tests/cors.test.ts`.
+
+4. **Tests (`tests/rate-limit.test.ts`)**
+   - 14 tests covering: within limit, at limit, over limit, pro advisory behavior, resetAt correctness, tier differentiation, increment upsert, Retry-After logic.
+   - Mock DB pattern: mock `@/db/client` with `select` returning configurable total, `insert` capturing values and resolving `onConflictDoUpdate`.
+   - `vi.mock("drizzle-orm", ...)` needed to mock `eq`, `and`, and `sql` template tag so Drizzle query chains don't crash in vitest.
+
+### Key Findings
+
+- **Aggregating vs per-model limits**: The `generationCounters` schema has a composite unique index on `(userId, hourWindow, model)`, so counters are stored per-model. The rate limit check must `sum(count)` across all models to enforce a per-user total limit, while `incrementGenerationCounter` still tracks per-model for analytics.
+- **`sql` template tag mocking**: In vitest, `` sql`expr` `` is a template tag function. The mock must accept `(strings: TemplateStringsArray, ...values)` and return a serializable object, otherwise Drizzle's internal SQL object breaks mocked query chains.
+- **File write stability**: The `write` tool occasionally fails or reverts for existing files in this workspace. Using `bash` with `cat > file << 'EOF'` is more reliable for overwriting.
+- **`getRetryAfterSeconds` at hour boundary**: At exactly 00:00 of an hour, the "next hour" is 3600 seconds away, not 0. This is correct behavior for `Retry-After` since the new hour window just started.
+
+### Verification
+
+- `npx tsc --noEmit`: 0 errors
+- `npx vitest run tests/rate-limit.test.ts`: 14/14 passed
+- `npx vitest run` (full suite): 285/285 passed (20 test files)
+
+---
+
+# Rate Limiting Service for AI Generation Routes — Learnings
+
+## Date: 2026-05-15
+
+### Patterns Applied
+
+1. **Rate limiting service (`src/lib/rate-limit.ts`)**
+   - `checkRateLimit(userId, tier)` queries the current hour's generation count BEFORE the AI API call to avoid wasting provider quota.
+   - `incrementGenerationCounter(userId, model)` upserts the counter AFTER a successful AI response using PostgreSQL `ON CONFLICT DO UPDATE`.
+   - `getRemainingQuota(userId, tier)` provides a lightweight query for UI badges.
+   - `getRetryAfterSeconds()` computes seconds until the next hour for 429 `Retry-After` headers.
+   - Tier limits are exported as `TIER_LIMITS` (`free: 7`, `pro: 100`).
+
+2. **Hourly reset via `date_trunc('hour', now())`**
+   - The `hourWindow` column uses `sql`date_trunc('hour', now())`` in both SELECT and INSERT/UPSERT queries.
+   - This ensures counters reset at the top of each hour, not on a rolling window.
+
+3. **FREE hard-block vs PRO advisory**
+   - FREE tier: `allowed = count < limit` — hard-blocked at the limit.
+   - PRO tier: `allowed = true` always — advisory only, allows minor burst over 100/hour.
+   - The `remaining` value can go negative for PRO to signal advisory overage.
+
+4. **Race-safe upsert with Drizzle `onConflictDoUpdate`**
+   - Instead of read-then-write (race-prone), the insert uses `onConflictDoUpdate` with the unique index columns as target.
+   - The `set` clause increments `count` atomically: `sql`${generationCounters.count} + 1``.
+
+5. **Quota API route (`src/pages/api/dm/quota.ts`)**
+   - Exposes `GET /api/dm/quota` returning `{ remaining, resetAt, limit, tier }`.
+   - Requires auth (`locals.user`).
+   - Follows DM API route pattern: CORS headers, `prerender = false`, `OPTIONS` preflight handler.
+
+6. **CORS methods fix**
+   - Added `PUT` and `DELETE` to `Access-Control-Allow-Methods` in `src/lib/cors.ts`.
+   - Updated `tests/cors.test.ts` assertions to match.
+   - Required for notes/initiative API routes that use PUT/DELETE.
+
+### Testing Notes
+
+- Mocking `drizzle-orm` in vitest: mocking `eq`, `and`, and `sql` to return plain objects allows the mock DB to evaluate `where` conditions without complex SQL parsing.
+- Dynamic imports inside tests (`await import("@/lib/rate-limit")`) avoid vitest module caching issues when combined with `vi.mock`.
+- The `getRetryAfterSeconds` test uses `vi.useFakeTimers()` to verify exact hour-boundary behavior.
+
+### Verification
+
+- `npx vitest run tests/rate-limit.test.ts`: 14/14 passed
+- `npx vitest run tests/cors.test.ts`: 12/12 passed
+- `npx vitest run` (full suite): 285/285 passed (20 test files)
+- `npx tsc --noEmit`: 0 errors
+- `npm run build`: fails due to pre-existing auth env validation (`JWT_SECRET` etc. missing in build env) — not related to rate-limiting changes
+
+### Key Findings
+
+- **Concurrent agent modification**: During implementation, `src/lib/rate-limit.ts` and `tests/rate-limit.test.ts` were repeatedly overwritten by another concurrent agent. The final accepted implementation aggregates counts across all models per user/hour (using `coalesce(sum(count), 0)`) rather than per-model. This aligns with the task requirement `checkRateLimit(userId, tier)` which does not accept a model parameter.
+- **Do not use `vi.mock` factory with top-level variables**: The factory is hoisted before variable initialization, causing `ReferenceError` for `const`/`let` bindings. Use dynamic imports for the module under test, or define mock objects inside the factory.
+
+---
+
+# DM Dashboard AI Tab Navigation — Learnings
+
+## Date: 2026-05-15
+
+### What Was Done
+
+1. **Added AI ("ИИ") tab to DM Dashboard navigation**
+   - Updated `src/i18n/dm-translations.ts` with new keys:
+     - `ai`, `anchorAi`, `tabAi` — tab/anchor labels
+     - `aiSignInCta: "Войдите, чтобы использовать ИИ"` — unauthenticated CTA message
+     - `aiPlaceholder: "Генератор контента с помощью ИИ"` — authenticated placeholder
+   - Updated `src/components/dm/DmTabs.astro` — added `{ id: "ai", label: T.ai, hash: "#ai" }` as 5th tab in both server-rendered array and client-side script array.
+   - Updated `src/components/dm/DmSidebar.astro` — added `{ id: "ai", label: T.ai, icon: "✦" }` to the tools navigation list.
+   - Updated `src/layouts/DmLayout.astro` — extended `tabIds` array in mobile visibility script from `["dice", "initiative", "reference", "notes"]` to include `"ai"`.
+
+2. **Added AI section to DM index pages**
+   - `src/pages/dm/index.astro` — added `<section id="ai" class="dm-tab-section">` inside the `main` slot, after initiative.
+   - `src/pages/ru/dm/index.astro` — mirrored the same section.
+   - Section uses `Astro.locals.user` to conditionally render:
+     - Authenticated: placeholder text inside `DmCard`
+     - Unauthenticated: sign-in CTA text inside `DmCard`
+   - Section follows the exact same heading pattern (orange `bg-[var(--accent)]` bar + `<h2>`) as dice and initiative.
+
+### Key Findings
+
+- **DmTabs client-side array must stay in sync with server-side array.** The `<script>` block in `DmTabs.astro` has a hardcoded `tabs` array that drives hash validation, keyboard navigation, and event dispatching. Adding the server tab without updating the client array breaks mobile tab switching.
+- **DmLayout mobile visibility script must include the new tab ID.** The `tabIds` array in `DmLayout.astro` controls which sections are shown/hidden on mobile via `updateMobileSections()`. Missing `"ai"` here would cause the section to never appear on mobile, even when the tab is active.
+- **Both EN and RU DM index pages must be updated.** `src/pages/dm/index.astro` and `src/pages/ru/dm/index.astro` are separate files with identical structure. Changes must be mirrored.
+- **RU page pre-existing inconsistency:** `ru/dm/index.astro` passes no `user` prop to `DmSidebar` (pre-existing). I left it untouched per scope discipline, but `Astro.locals.user` is still available for the AI section conditional.
+
+### Verification
+
+- `npx tsc --noEmit`: 0 errors

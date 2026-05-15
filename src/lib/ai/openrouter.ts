@@ -85,6 +85,88 @@ function buildUserPrompt(params: NPCParams, reference?: Monster): string {
   return prompt;
 }
 
+export async function translateOpen5eContent(
+  content: Record<string, unknown>,
+  type: "creature" | "spell",
+  model: string = DEFAULT_MODEL
+): Promise<Record<string, unknown>> {
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  if (!apiKey) {
+    throw new Error("OPENROUTER_API_KEY is not set");
+  }
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+  const systemPrompt =
+    "You are a D&D content translator. Translate the provided JSON object into Russian. " +
+    "Preserve the exact JSON structure and all keys. " +
+    "Translate only human-readable text fields (names, descriptions, labels, etc.). " +
+    "Keep numeric values, slugs, URLs, and mechanical identifiers unchanged. " +
+    "Respond with valid JSON only, no markdown, no code fences, no explanatory text.";
+
+  const userPrompt = `Translate this D&D ${type} into Russian. Preserve JSON structure exactly. Only translate text values.\n\n${JSON.stringify(content, null, 2)}`;
+
+  try {
+    const response = await fetch(OPENROUTER_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+        "HTTP-Referer": process.env.PUBLIC_APP_URL || "https://randify.pro",
+        "X-Title": "Randify.pro DM Dashboard",
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt },
+        ],
+        temperature: 0.3,
+      }),
+      signal: controller.signal,
+    });
+
+    if (response.status === 429) {
+      throw new Error("Rate limited by OpenRouter (429)");
+    }
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`OpenRouter API error ${response.status}: ${text}`);
+    }
+
+    const data = (await response.json()) as {
+      choices?: Array<{ message?: { content?: string } }>;
+    };
+
+    const responseContent = data.choices?.[0]?.message?.content;
+    if (!responseContent) {
+      throw new Error("Empty response from OpenRouter");
+    }
+
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(responseContent);
+    } catch {
+      throw new Error(`Invalid JSON in OpenRouter response: ${responseContent}`);
+    }
+
+    if (typeof parsed !== "object" || parsed === null) {
+      throw new Error("OpenRouter response is not a JSON object");
+    }
+
+    return parsed as Record<string, unknown>;
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new Error("OpenRouter request timed out after 10s");
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
 export async function generateNPC(
   params: NPCParams,
   reference?: Monster,

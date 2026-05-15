@@ -40,6 +40,56 @@ import { dmTranslations as T } from "@/i18n/dm-translations";
       </div>
       <InitiativeTracker />
     </section>
+
+    <!-- AI Generator -->
+    <section id="ai" class="dm-tab-section">
+      <div class="flex items-center gap-3 mb-3">
+        <span class="w-1 h-6 bg-[var(--accent)] rounded-full" aria-hidden="true"></span>
+        <h2 class="text-lg font-bold text-[var(--text-primary)]">
+          {T.ai}
+        </h2>
+      </div>
+      {Astro.locals.user ? (
+        <DmCard>
+          <div class="p-6 text-center text-[var(--text-secondary)]">
+            <p>{T.aiPlaceholder}</p>
+          </div>
+        </DmCard>
+      ) : (
+        <DmCard>
+          <div class="p-6 text-center">
+            <p class="text-[var(--text-secondary)] mb-4">{T.aiSignInCta}</p>
+            <a
+              href="/api/auth/login/vk"
+              class="inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-sm font-medium bg-[#0077FF] text-white hover:bg-[#0066CC] transition-colors"
+            >
+              {T.loginVk}
+            </a>
+          </div>
+        </DmCard>
+      )}
+    </section>
+  </div>
+      {Astro.locals.user ? (
+        <DmCard>
+          <div class="p-6 text-center text-[var(--text-secondary)]">
+            <p>{T.aiPlaceholder}</p>
+          </div>
+        </DmCard>
+      ) : (
+        <DmCard>
+          <div class="p-6 text-center">
+            <p class="text-[var(--text-secondary)] mb-4">{T.aiSignInCta}</p>
+            <a
+              href="/api/auth/login/vk"
+              class="inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-sm font-medium bg-[#0077FF] text-white hover:bg-[#0066CC] transition-colors"
+            >
+              {T.loginVk}
+            </a>
+          </div>
+        </DmCard>
+      )}
+    </section>
   </div>
 
   <!-- Context slot (reference + notes, desktop only) -->

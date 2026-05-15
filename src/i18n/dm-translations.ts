@@ -10,16 +10,19 @@ export const dmTranslations = {
   initiative: "Инициатива",
   reference: "Справочник",
   notes: "Заметки",
+  ai: "ИИ",
   anchorDice: "Кубики",
   anchorInitiative: "Инициатива",
   anchorReference: "Справочник",
   anchorNotes: "Заметки",
+  anchorAi: "ИИ",
 
   // Tab labels
   tabDice: "Кубики",
   tabInitiative: "Инициатива",
   tabReference: "Справочник",
   tabNotes: "Заметки",
+  tabAi: "✦ ИИ",
 
   // Sidebar sections
   sidebarTools: "ИНСТРУМЕНТЫ",
@@ -74,6 +77,11 @@ export const dmTranslations = {
   initiativeTotal: "Итого",
   initiativeHelp: "Бросок d20 + модификатор, или введите итог вручную",
   ariaCombatants: "Участники боя",
+
+  // AI
+  aiTitle: "Генератор ИИ",
+  aiSignInCta: "Войдите, чтобы использовать ИИ",
+  aiPlaceholder: "Генератор ИИ появится здесь",
 
   // Auth
   loginVk: "Войти через VK",

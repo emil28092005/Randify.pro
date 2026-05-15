@@ -11,7 +11,7 @@ describe("CORS utility", () => {
     it("returns headers for allowed origin randify.pro", () => {
       const headers = getCorsHeaders("https://randify.pro");
       expect(headers["Access-Control-Allow-Origin"]).toBe("https://randify.pro");
-      expect(headers["Access-Control-Allow-Methods"]).toBe("GET, POST, OPTIONS");
+      expect(headers["Access-Control-Allow-Methods"]).toBe("GET, POST, PUT, DELETE, OPTIONS");
       expect(headers["Access-Control-Allow-Headers"]).toBe("Content-Type, Authorization");
       expect(headers["Access-Control-Allow-Credentials"]).toBe("true");
       expect(headers["Vary"]).toBe("Origin");
@@ -48,7 +48,7 @@ describe("CORS utility", () => {
       const response = handleCorsPreflight("https://randify.pro");
       expect(response.status).toBe(204);
       expect(response.headers.get("Access-Control-Allow-Origin")).toBe("https://randify.pro");
-      expect(response.headers.get("Access-Control-Allow-Methods")).toBe("GET, POST, OPTIONS");
+      expect(response.headers.get("Access-Control-Allow-Methods")).toBe("GET, POST, PUT, DELETE, OPTIONS");
       expect(response.headers.get("Access-Control-Allow-Credentials")).toBe("true");
     });
 

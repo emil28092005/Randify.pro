@@ -690,7 +690,7 @@ Max Concurrent: 6 (Wave 6)
   - Files: `src/lib/ai/kimi.ts`
   - Pre-commit: `npm test src/lib/ai/`
 
-- [ ] **8. Build Rate Limiting Service/Middleware**
+- [x] **8. Build Rate Limiting Service/Middleware**
 
   **What to do**:
   - Create `src/lib/rate-limit.ts`: Service for per-user generation counters.
@@ -968,7 +968,7 @@ Max Concurrent: 6 (Wave 6)
   - Files: `src/pages/api/dm/ai/history.ts`
   - Pre-commit: `npm test src/pages/api/dm/ai/history.test.ts`
 
-- [ ] **12. Build Translation API Route**
+- [x] **12. Build Translation API Route**
 
   **What to do**:
   - Create `src/pages/api/dm/translate.ts`: GET endpoint for Open5e content translation.
@@ -1143,7 +1143,7 @@ Max Concurrent: 6 (Wave 6)
   - Files: `src/pages/api/dm/notes.ts`, `src/pages/api/dm/initiative.ts`
   - Pre-commit: `npm test src/pages/api/dm/notes.test.ts src/pages/api/dm/initiative.test.ts`
 
-- [ ] **15. Add AI Tab to Navigation**
+- [x] **15. Add AI Tab to Navigation**
 
   **What to do**:
   - Update `src/components/dm/DmTabs.astro`: Add "ИИ" tab with icon (✦) as 5th tab after dice, initiative, reference, notes.

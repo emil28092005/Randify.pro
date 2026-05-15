@@ -50,9 +50,11 @@ jobs:
 
       - name: Deploy Node.js app
         run: |
+          # drizzle/ and src/db/migrate.mjs are needed inside the Docker
+          # build context so the image can apply pending migrations on startup.
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/deploy_key" \
-            dist package*.json docker-compose.yml Dockerfile \
+            dist drizzle src package*.json docker-compose.yml Dockerfile \
             ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:~/www/randify.pro/
 
       - name: Restart app

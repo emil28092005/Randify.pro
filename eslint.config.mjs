@@ -19,4 +19,12 @@ export default [
       "@typescript-eslint/no-unused-vars": "off",
     },
   },
+  {
+    files: ["src/db/migrate.mjs"],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
 ];

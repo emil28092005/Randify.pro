@@ -1,15 +1,13 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import {
-  generateNPC,
-  type NPCParams,
-  type NPCResult,
-} from "./openrouter";
+import { generateNPC } from "./openrouter";
+import { type NPCParams, type NPCResult, type Open5eMonster } from "@/lib/ai/types";
 
 describe("generateNPC", () => {
   const validNPCResponse: NPCResult = {
     name: "Gorath the Grim",
     race: "Half-Orc",
     role: "Mercenary Captain",
+    level: 5,
     hp: 45,
     ac: 16,
     cr: "2",
@@ -48,7 +46,7 @@ describe("generateNPC", () => {
       })
     ) as unknown as typeof fetch;
 
-    const params: NPCParams = { theme: "dark fantasy", role: "villain" };
+    const params: NPCParams = { theme: "dark fantasy", role: "villain", level: 5, race: "human", tone: "dark" };
     const result = await generateNPC(params);
 
     expect(result).toEqual(validNPCResponse);
@@ -88,16 +86,14 @@ describe("generateNPC", () => {
       })
     ) as unknown as typeof fetch;
 
-    const reference = {
+    const reference: Open5eMonster = {
       name: "Goblin",
-      key: "goblin",
-      challenge_rating_decimal: "0.25",
-      type: "humanoid",
+      challenge_rating_decimal: 0.25,
       hit_points: 7,
       armor_class: 15,
     };
 
-    await generateNPC({ role: "minion" }, reference);
+    await generateNPC({ role: "minion" } as NPCParams, reference);
 
     const body = JSON.parse(
       (global.fetch as ReturnType<typeof vi.fn>).mock.calls[0][1].body
@@ -112,7 +108,7 @@ describe("generateNPC", () => {
     vi.unstubAllEnvs();
     vi.stubEnv("OPENROUTER_API_KEY", "");
 
-    await expect(generateNPC({})).rejects.toThrow(
+    await expect(generateNPC({} as NPCParams)).rejects.toThrow(
       "OPENROUTER_API_KEY is not set"
     );
   });
@@ -127,7 +123,7 @@ describe("generateNPC", () => {
       })
     ) as unknown as typeof fetch;
 
-    await expect(generateNPC({})).rejects.toThrow(
+    await expect(generateNPC({} as NPCParams)).rejects.toThrow(
       "Rate limited by OpenRouter (429)"
     );
   });
@@ -142,7 +138,7 @@ describe("generateNPC", () => {
       })
     ) as unknown as typeof fetch;
 
-    await expect(generateNPC({})).rejects.toThrow(
+    await expect(generateNPC({} as NPCParams)).rejects.toThrow(
       "OpenRouter API error 500"
     );
   });
@@ -165,7 +161,7 @@ describe("generateNPC", () => {
       })
     ) as unknown as typeof fetch;
 
-    await expect(generateNPC({})).rejects.toThrow(
+    await expect(generateNPC({} as NPCParams)).rejects.toThrow(
       "Invalid JSON in OpenRouter response"
     );
   });
@@ -190,7 +186,7 @@ describe("generateNPC", () => {
       })
     ) as unknown as typeof fetch;
 
-    await expect(generateNPC({})).rejects.toThrow(
+    await expect(generateNPC({} as NPCParams)).rejects.toThrow(
       "NPC schema validation failed"
     );
   });
@@ -215,7 +211,7 @@ describe("generateNPC", () => {
       });
     }) as unknown as typeof fetch;
 
-    const promise = generateNPC({});
+    const promise = generateNPC({} as NPCParams);
     vi.advanceTimersByTime(11_000);
 
     await expect(promise).rejects.toThrow(
@@ -242,7 +238,7 @@ describe("generateNPC", () => {
       })
     ) as unknown as typeof fetch;
 
-    await generateNPC({}, undefined, "custom-model:free");
+    await generateNPC({} as NPCParams, undefined, "custom-model:free");
 
     const body = JSON.parse(
       (global.fetch as ReturnType<typeof vi.fn>).mock.calls[0][1].body

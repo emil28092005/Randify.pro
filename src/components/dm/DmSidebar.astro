@@ -1,11 +1,15 @@
 ---
 import { dmTranslations as T } from "../../i18n/dm-translations";
+import TierBadge from "./TierBadge.astro";
+import QuotaBadge from "./QuotaBadge.astro";
 
 export interface Props {
   user?: {
     name?: string;
     avatar?: string;
     tier?: 'free' | 'pro';
+    remaining?: number;
+    limit?: number;
   } | null;
 }
 
@@ -27,14 +31,9 @@ const { user } = Astro.props;
         <span class="text-sm font-medium text-[var(--text-primary)] truncate">
           {user.name || "Пользователь"}
         </span>
-        {user.tier === 'pro' ? (
-          <span data-testid="tier-badge" data-tier="pro" class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-[var(--accent)] text-white">
-            {T.badgePro}
-          </span>
-        ) : (
-          <span data-testid="tier-badge" data-tier="free" class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide border border-[var(--text-muted)] text-[var(--text-muted)]">
-            {T.badgeFree}
-          </span>
+        <TierBadge tier={user.tier ?? 'free'} />
+        {typeof user.remaining === 'number' && typeof user.limit === 'number' && (
+          <QuotaBadge remaining={user.remaining} limit={user.limit} />
         )}
       </div>
     </div>

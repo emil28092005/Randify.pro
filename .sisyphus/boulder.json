@@ -394,7 +394,7 @@
       "plan_name": "dm-dashboard-ai",
       "status": "active",
       "started_at": "2026-05-15T17:58:09.859Z",
-      "updated_at": "2026-05-15T19:25:18.776Z",
+      "updated_at": "2026-05-15T19:37:40.096Z",
       "session_ids": [
         "ses_1d3921469ffeQox08ZjNWWJq7u"
       ],
@@ -407,12 +407,12 @@
           "task_key": "final-wave:f1",
           "task_label": "F1",
           "task_title": "**Plan Compliance Audit** — `oracle`",
-          "session_id": "ses_1d2eae77effe0UMe22r0JJWWK1",
+          "session_id": "ses_1d2e49248ffelY8jx06oXxpWMG",
           "agent": "Sisyphus-Junior",
-          "category": "quick",
+          "category": "deep",
           "started_at": "2026-05-15T18:24:29.818Z",
           "status": "running",
-          "updated_at": "2026-05-15T19:25:18.777Z"
+          "updated_at": "2026-05-15T19:37:40.097Z"
         }
       }
     }
@@ -420,7 +420,7 @@
   "active_plan": "/home/emil/Desktop/Coding/AI/Randify.pro/.sisyphus/plans/dm-dashboard-ai.md",
   "started_at": "2026-05-15T17:58:09.859Z",
   "status": "active",
-  "updated_at": "2026-05-15T19:25:18.776Z",
+  "updated_at": "2026-05-15T19:37:40.096Z",
   "session_ids": [
     "ses_1d3921469ffeQox08ZjNWWJq7u"
   ],
@@ -433,12 +433,12 @@
       "task_key": "final-wave:f1",
       "task_label": "F1",
       "task_title": "**Plan Compliance Audit** — `oracle`",
-      "session_id": "ses_1d2eae77effe0UMe22r0JJWWK1",
+      "session_id": "ses_1d2e49248ffelY8jx06oXxpWMG",
       "agent": "Sisyphus-Junior",
-      "category": "quick",
+      "category": "deep",
       "started_at": "2026-05-15T18:24:29.818Z",
       "status": "running",
-      "updated_at": "2026-05-15T19:25:18.777Z"
+      "updated_at": "2026-05-15T19:37:40.097Z"
     }
   },
   "agent": "atlas"

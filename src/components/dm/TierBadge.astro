@@ -1,0 +1,19 @@
+---
+import { dmTranslations as T } from "../../i18n/dm-translations";
+
+export interface Props {
+  tier: 'free' | 'pro';
+}
+
+const { tier } = Astro.props;
+---
+
+{tier === 'pro' ? (
+  <span data-testid="tier-badge" data-tier="pro" class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-[var(--accent)] text-white">
+    {T.badgePro}
+  </span>
+) : (
+  <span data-testid="tier-badge" data-tier="free" class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide border border-[var(--text-muted)] text-[var(--text-muted)]">
+    {T.badgeFree}
+  </span>
+)}

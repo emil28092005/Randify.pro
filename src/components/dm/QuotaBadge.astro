@@ -1,0 +1,27 @@
+---
+export interface Props {
+  remaining: number;
+  limit: number;
+}
+
+const { remaining, limit } = Astro.props;
+
+const percentage = limit > 0 ? remaining / limit : 0;
+
+let textColor = "text-[var(--text-secondary)]";
+if (remaining === 0) {
+  textColor = "text-[var(--danger)]";
+} else if (percentage < 0.25) {
+  textColor = "text-[var(--accent)]";
+} else if (percentage > 0.5) {
+  textColor = "text-[var(--success)]";
+}
+---
+
+<span
+  data-testid="quota-badge"
+  class={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-[var(--bg-card)] border border-[var(--border-gold-strong)] ${textColor}`}
+  title={`${remaining} / ${limit} осталось в этом часе`}
+>
+  {remaining} / {limit}
+</span>

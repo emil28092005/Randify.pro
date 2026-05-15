@@ -820,7 +820,7 @@ Max Concurrent: 6 (Wave 6)
   - Files: `src/pages/dm/index.astro`, `src/components/dm/DmSidebar.astro`, `src/i18n/dm-translations.ts`
   - Pre-commit: `npm run build`
 
-- [ ] **10. Build NPC Generation API Route**
+- [x] **10. Build NPC Generation API Route**
 
   **What to do**:
   - Create `src/pages/api/dm/ai/generate.ts`: POST endpoint for NPC generation.
@@ -911,7 +911,7 @@ Max Concurrent: 6 (Wave 6)
   - Files: `src/pages/api/dm/ai/generate.ts`
   - Pre-commit: `npm test src/pages/api/dm/ai/generate.test.ts`
 
-- [ ] **11. Build Generation History API Route**
+- [x] **11. Build Generation History API Route**
 
   **What to do**:
   - Create `src/pages/api/dm/ai/history.ts`: GET endpoint for user's generation history.
@@ -1414,7 +1414,7 @@ Max Concurrent: 6 (Wave 6)
   - Message: `feat(ui): add generation history panel`
   - Files: `src/components/dm/GenerationHistory.astro`
 
-- [ ] **19. Build Quota/Tier Badge Header Components**
+- [x] **19. Build Quota/Tier Badge Header Components**
 
   **What to do**:
   - Create `src/components/dm/QuotaBadge.astro`: Shows remaining generations this hour (e.g., "5 / 7").
@@ -1657,7 +1657,7 @@ Max Concurrent: 6 (Wave 6)
   - Message: `feat(pro): add FREE to PRO data import flow`
   - Files: `src/components/dm/ImportModal.astro` (new), related updates
 
-- [ ] **23. Add Translate Button to Open5e Reference Cards**
+- [x] **23. Add Translate Button to Open5e Reference Cards**
 
   **What to do**:
   - Update `src/components/dm/Open5eReference.astro`: Add "Перевести" button to monster/spell/item detail cards.

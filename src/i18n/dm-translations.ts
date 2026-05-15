@@ -51,6 +51,12 @@ export const dmTranslations = {
   loading: "Загрузка...",
   searching: "Поиск...",
 
+  // Translation
+  translate: "Перевести",
+  translating: "Перевод...",
+  translated: "Переведено",
+  translateError: "Ошибка перевода",
+
   // Open5e tabs
   monsters: "Монстры",
   spells: "Заклинания",

@@ -5,6 +5,8 @@ export const npcParamsSchema = z.object({
   role: z.string(),
   level: z.number().int().min(1).max(20),
   tone: z.string(),
+  theme: z.string().optional(),
+  setting: z.string().optional(),
 });
 
 export type NPCParams = z.infer<typeof npcParamsSchema>;
@@ -35,7 +37,7 @@ export interface Open5eMonster {
   alignment?: string;
   armor_class?: number;
   hit_points?: number;
-  speed?: Record<string, string> | string;
+  speed?: Record<string, string | number | null> | string;
   strength?: number;
   dexterity?: number;
   constitution?: number;

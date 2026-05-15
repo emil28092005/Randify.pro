@@ -9,12 +9,19 @@ import InitiativeTracker from "@/components/dm/InitiativeTracker.astro";
 import Open5eReference from "@/components/dm/Open5eReference.astro";
 import NotesPanel from "@/components/dm/NotesPanel.astro";
 import { dmTranslations as T } from "@/i18n/dm-translations";
+import { getRemainingQuota, TIER_LIMITS } from "@/lib/rate-limit";
+
+const user = Astro.locals.user;
+let quota = null;
+if (user) {
+  quota = await getRemainingQuota(user.id, user.tier);
+}
 ---
 
 <DmLayout>
   <!-- Sidebar slot (desktop only) -->
   <div slot="sidebar">
-    <DmSidebar user={Astro.locals.user} />
+    <DmSidebar user={user ? { ...user, remaining: quota?.remaining ?? undefined, limit: quota ? TIER_LIMITS[user.tier] : undefined } : null} />
   </div>
 
   <!-- Main slot (dice + initiative) -->

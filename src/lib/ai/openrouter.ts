@@ -1,45 +1,6 @@
 import { z } from "zod";
+import { npcResultSchema, type NPCResult, type NPCParams, type Open5eMonster } from "@/lib/ai/types";
 import type { Monster } from "@/lib/open5e/client";
-
-export type Open5eMonster = Monster;
-
-export interface NPCParams {
-  theme?: string;
-  setting?: string;
-  role?: string;
-  level?: number;
-  race?: string;
-}
-
-export interface NPCResult {
-  name: string;
-  race: string;
-  role: string;
-  hp: number;
-  ac: number;
-  cr: string;
-  speed: string;
-  appearance: string;
-  trait: string;
-  motivation: string;
-  secret: string;
-  history: string;
-}
-
-const npcResultSchema = z.object({
-  name: z.string(),
-  race: z.string(),
-  role: z.string(),
-  hp: z.number(),
-  ac: z.number(),
-  cr: z.string(),
-  speed: z.string(),
-  appearance: z.string(),
-  trait: z.string(),
-  motivation: z.string(),
-  secret: z.string(),
-  history: z.string(),
-});
 
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
 const DEFAULT_MODEL = "llama-3.3-70b:free";
@@ -49,11 +10,12 @@ function buildSystemPrompt(): string {
   return "You are a creative D&D NPC generator. Respond with valid JSON only, no markdown, no code fences, no explanatory text.";
 }
 
-function buildUserPrompt(params: NPCParams, reference?: Monster): string {
+function buildUserPrompt(params: NPCParams, reference?: Open5eMonster): string {
   const schema = JSON.stringify({
     name: "string (unique name)",
     race: "string (e.g. Human, Elf, Orc)",
     role: "string (e.g. Merchant, Bandit, Wizard)",
+    level: "number (party level)",
     hp: "number (hit points)",
     ac: "number (armor class)",
     cr: "string (challenge rating, e.g. '1/4', '5')",
@@ -169,7 +131,7 @@ export async function translateOpen5eContent(
 
 export async function generateNPC(
   params: NPCParams,
-  reference?: Monster,
+  reference?: Open5eMonster,
   model: string = DEFAULT_MODEL
 ): Promise<NPCResult> {
   const apiKey = process.env.OPENROUTER_API_KEY;

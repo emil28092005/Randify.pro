@@ -91,7 +91,7 @@ export const GET: APIRoute = async ({ url, request }) => {
     });
   }
 
-  const userInfoRes = await fetch('https://id.vk.ru/oauth2/user_info', {
+  const userInfoRes = await fetch(`https://id.vk.ru/oauth2/user_info?client_id=${vkOAuthConfig.clientId}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 

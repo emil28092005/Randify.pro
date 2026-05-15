@@ -40,7 +40,7 @@ export const dmTranslations = {
 
   // Empty states
   emptyDiceHistory: "Нет истории бросков",
-  emptyCombatants: "Нет combatантов",
+  emptyCombatants: "Нет участников боя",
   emptySearchResults: "Ничего не найдено",
   emptyNotesPlaceholder: "Начните писать заметки...",
 
@@ -63,6 +63,17 @@ export const dmTranslations = {
   rollHistory: "История бросков",
   criticalHit: "Критический успех!",
   criticalFail: "Критический провал!",
+  resultLabel: "Результат",
+  rollsLabel: "Броски",
+  invalidNotation: "Неверная нотация",
+  ariaQuickDice: "Быстрый выбор кубика",
+  ariaRollHistory: "История бросков",
+
+  // Initiative
+  turnOrder: "Порядок хода",
+  initiativeTotal: "Итого",
+  initiativeHelp: "Бросок d20 + модификатор, или введите итог вручную",
+  ariaCombatants: "Участники боя",
 
   // Auth
   loginVk: "Войти через VK",

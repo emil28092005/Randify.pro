@@ -28,7 +28,7 @@ const quickDice = [
       class="grid grid-cols-4 sm:grid-cols-7 gap-2"
       id="quick-dice-grid"
       role="group"
-      aria-label="Quick dice selectors"
+      aria-label={T.ariaQuickDice}
     >
       {
         quickDice.map((d) => (
@@ -64,7 +64,7 @@ const quickDice = [
       aria-live="polite"
     >
       <div class="text-sm text-[var(--text-secondary)] mb-1" id="result-label">
-        Result
+        {T.resultLabel}
       </div>
       <div
         class="text-5xl font-bold text-[var(--gold)]"
@@ -126,7 +126,7 @@ const quickDice = [
         id="history-list"
         class="space-y-1 max-h-40 overflow-y-auto hidden"
         role="list"
-        aria-label="Roll history"
+        aria-label={T.ariaRollHistory}
       >
       </ul>
     </div>
@@ -315,9 +315,9 @@ const quickDice = [
     const rolls = result.rolls.join(", ");
     if (result.modifier !== 0) {
       const sign = result.modifier > 0 ? "+" : "";
-      detailsEl.textContent = `Rolls: ${rolls} ${sign}${result.modifier}`;
+      detailsEl.textContent = `${T.rollsLabel}: ${rolls} ${sign}${result.modifier}`;
     } else {
-      detailsEl.textContent = `Rolls: ${rolls}`;
+      detailsEl.textContent = `${T.rollsLabel}: ${rolls}`;
     }
 
     totalEl.className = `text-5xl font-bold ${
@@ -373,7 +373,7 @@ const quickDice = [
       totalEl.textContent = "?";
       totalEl.className = "text-5xl font-bold text-[var(--gold)]";
       labelEl.textContent = trimmed;
-      detailsEl.textContent = "Invalid notation";
+      detailsEl.textContent = T.invalidNotation;
       if (critMsg) {
         critMsg.className = "text-sm font-semibold mt-1 hidden";
       }

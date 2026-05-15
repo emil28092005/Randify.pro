@@ -47,13 +47,13 @@ import { dmTranslations as T } from "@/i18n/dm-translations";
           id="it-initiative"
           name="initiative"
           type="number"
-          placeholder="Итого"
-          label="Инициатива"
+          placeholder={T.initiativeTotal}
+          label={T.initiative}
           class="sm:max-w-[120px]"
           dataTestid="init-initiative-input"
         />
         <span class="text-xs text-[var(--text-secondary)]">
-          Бросок d20 + модификатор, или введите итог вручную
+          {T.initiativeHelp}
         </span>
       </div>
     </DmCard>
@@ -64,14 +64,14 @@ import { dmTranslations as T } from "@/i18n/dm-translations";
     <DmCard>
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider">
-          Порядок хода
+          {T.turnOrder}
         </h3>
         <DmButton id="it-clear-btn" variant="secondary" size="sm">
           {T.actionClear}
         </DmButton>
       </div>
 
-      <ul id="it-list" class="space-y-2" role="list" aria-label="Combatants"></ul>
+      <ul id="it-list" class="space-y-2" role="list" aria-label={T.ariaCombatants}></ul>
 
       <div id="it-announcer" aria-live="polite" class="sr-only"></div>
 

@@ -13,11 +13,30 @@ import {
 export const prerender = false;
 
 export const GET: APIRoute = async ({ url, request }) => {
-  const code = url.searchParams.get('code');
-  const state = url.searchParams.get('state');
+  const payloadParam = url.searchParams.get('payload');
+  let code: string | null = null;
+  let state: string | null = null;
+  let deviceId: string | null = null;
+
+  if (payloadParam) {
+    try {
+      const payload = JSON.parse(payloadParam);
+      code = payload.code || null;
+      state = payload.state || null;
+      deviceId = payload.device_id || null;
+    } catch {
+      console.error('[OAuth VK] Failed to parse payload:', payloadParam);
+    }
+  }
+
+  if (!code) code = url.searchParams.get('code');
+  if (!state) state = url.searchParams.get('state');
+
   const cookieHeader = request.headers.get('cookie');
   const verifier = getCookieValue(cookieHeader, VERIFIER_COOKIE_NAME);
   const storedState = getCookieValue(cookieHeader, 'oauth_state');
+
+  console.log('[OAuth VK] Callback received:', { hasCode: !!code, hasState: !!state, hasDeviceId: !!deviceId, hasVerifier: !!verifier, stateMatch: state === storedState });
 
   if (!code || !state || !verifier || state !== storedState) {
     console.error('[OAuth VK] Validation failed:', { hasCode: !!code, hasState: !!state, hasVerifier: !!verifier, stateMatch: state === storedState });
@@ -29,17 +48,22 @@ export const GET: APIRoute = async ({ url, request }) => {
 
   const redirectUri = `${process.env.PUBLIC_APP_URL || url.origin}/api/auth/callback/vk`;
 
+  const tokenBody = new URLSearchParams({
+    client_id: vkOAuthConfig.clientId,
+    grant_type: 'authorization_code',
+    code,
+    redirect_uri: redirectUri,
+    code_verifier: verifier,
+  });
+
+  if (deviceId) {
+    tokenBody.append('device_id', deviceId);
+  }
+
   const tokenRes = await fetch(vkOAuthConfig.tokenUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({
-      client_id: vkOAuthConfig.clientId,
-      client_secret: vkOAuthConfig.clientSecret,
-      grant_type: 'authorization_code',
-      code,
-      redirect_uri: redirectUri,
-      code_verifier: verifier,
-    }),
+    body: tokenBody,
   });
 
   if (!tokenRes.ok) {
@@ -53,33 +77,48 @@ export const GET: APIRoute = async ({ url, request }) => {
 
   const tokenData = await tokenRes.json();
   const accessToken = tokenData.access_token;
-  const userIdStr = tokenData.user_id || tokenData.user?.user_id;
+  const refreshToken = tokenData.refresh_token;
 
-  if (!accessToken || !userIdStr) {
+  if (!accessToken) {
+    console.error('[OAuth VK] No access_token in response:', tokenData);
     return new Response(JSON.stringify({ error: 'Invalid token response' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  const userInfoRes = await fetch(
-    `https://api.vk.com/method/users.get?user_ids=${userIdStr}&fields=photo_200,email&access_token=${accessToken}&v=5.199`
-  );
-  const userInfoData = await userInfoRes.json();
-  const vkUser = userInfoData.response?.[0];
+  const userInfoRes = await fetch('https://id.vk.ru/oauth2/user_info', {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
 
-  if (!vkUser) {
+  if (!userInfoRes.ok) {
+    const errorText = await userInfoRes.text();
+    console.error('[OAuth VK] User info failed:', userInfoRes.status, errorText);
     return new Response(JSON.stringify({ error: 'Failed to fetch user info' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  const email = tokenData.email || null;
-  const name = `${vkUser.first_name || ''} ${vkUser.last_name || ''}`.trim();
-  const avatar = vkUser.photo_200 || null;
+  const userInfoData = await userInfoRes.json();
+  const vkUser = userInfoData.user;
 
-  const existingUsers = await db.select().from(users).where(eq(users.vkId, String(userIdStr)));
+  if (!vkUser) {
+    console.error('[OAuth VK] No user in user_info response:', userInfoData);
+    return new Response(JSON.stringify({ error: 'Failed to fetch user info' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const userIdStr = String(vkUser.user_id || vkUser.id);
+  const email = vkUser.email || tokenData.email || null;
+  const name = `${vkUser.first_name || ''} ${vkUser.last_name || ''}`.trim() || vkUser.email || 'VK User';
+  const avatar = vkUser.avatar || null;
+
+  console.log('[OAuth VK] User info:', { id: userIdStr, email, name });
+
+  const existingUsers = await db.select().from(users).where(eq(users.vkId, userIdStr));
   let user;
 
   if (existingUsers.length > 0) {
@@ -91,7 +130,7 @@ export const GET: APIRoute = async ({ url, request }) => {
   } else {
     const inserted = await db
       .insert(users)
-      .values({ vkId: String(userIdStr), email, name, avatar })
+      .values({ vkId: userIdStr, email, name, avatar })
       .returning();
     user = inserted[0];
   }

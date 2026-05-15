@@ -1198,7 +1198,7 @@ Max Concurrent: 6 (Wave 6)
   - Message: `feat(ui): add AI tab to DM navigation`
   - Files: `src/components/dm/DmTabs.astro`, `src/components/dm/DmSidebar.astro`, `src/pages/dm/index.astro`, `src/i18n/dm-translations.ts`
 
-- [ ] **16. Build NPC Generator Form Component**
+- [x] **16. Build NPC Generator Form Component**
 
   **What to do**:
   - Create `src/components/dm/AiNpcForm.astro`: Form for NPC generation parameters.
@@ -1274,7 +1274,7 @@ Max Concurrent: 6 (Wave 6)
   - Message: `feat(ui): add NPC generator form component`
   - Files: `src/components/dm/AiNpcForm.astro`
 
-- [ ] **17. Build NPC Result Card Component**
+- [x] **17. Build NPC Result Card Component**
 
   **What to do**:
   - Create `src/components/dm/AiNpcResult.astro`: Rich card displaying generated NPC.
@@ -1349,7 +1349,7 @@ Max Concurrent: 6 (Wave 6)
   - Message: `feat(ui): add NPC result card component`
   - Files: `src/components/dm/AiNpcResult.astro`
 
-- [ ] **18. Build Generation History Panel Component**
+- [x] **18. Build Generation History Panel Component**
 
   **What to do**:
   - Create `src/components/dm/GenerationHistory.astro`: Right-panel list of generated NPCs.
@@ -1468,7 +1468,7 @@ Max Concurrent: 6 (Wave 6)
   - Message: `feat(ui): add quota and tier badge components`
   - Files: `src/components/dm/QuotaBadge.astro`, `src/components/dm/TierBadge.astro`, `src/components/dm/AuthPanel.astro`
 
-- [ ] **20. Migrate Notes to DB for PRO + localStorage Fallback**
+- [x] **20. Migrate Notes to DB for PRO + localStorage Fallback**
 
   **What to do**:
   - Update `src/components/dm/NotesPanel.astro`: Add tier-aware persistence.
@@ -1538,7 +1538,7 @@ Max Concurrent: 6 (Wave 6)
   - Message: `feat(pro): add notes DB persistence for PRO users`
   - Files: `src/components/dm/NotesPanel.astro`, `src/lib/client/notes.ts`
 
-- [ ] **21. Migrate Initiative to DB for PRO + sessionStorage Fallback**
+- [x] **21. Migrate Initiative to DB for PRO + sessionStorage Fallback**
 
   **What to do**:
   - Update `src/components/dm/InitiativeTracker.astro`: Add tier-aware persistence.
@@ -1726,7 +1726,7 @@ Max Concurrent: 6 (Wave 6)
   - Message: `feat(ui): add translate button to Open5e reference cards`
   - Files: `src/components/dm/Open5eReference.astro`
 
-- [ ] **24. Wire Translation Service to UI**
+- [x] **24. Wire Translation Service to UI**
 
   **What to do**:
   - Create `src/lib/client/translation.ts`: Client-side translation cache and API caller.

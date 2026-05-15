@@ -1,0 +1,335 @@
+---
+export interface Props {
+  tier: 'free' | 'pro';
+  userId?: number;
+}
+
+import DmCard from './DmCard.astro';
+import { dmTranslations as T } from '@/i18n/dm-translations';
+
+const { tier, userId } = Astro.props;
+---
+
+<div
+  class="generation-history"
+  data-tier={tier}
+  data-user-id={userId}
+  data-testid="generation-history"
+>
+  <DmCard padding="md">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wide">
+        {T.historyTitle}
+      </h3>
+      <span
+        id="history-count"
+        class="text-xs text-[var(--text-muted)]"
+        data-testid="history-count"
+      >
+        0
+      </span>
+    </div>
+
+    <div id="history-loading" class="hidden py-4 text-center text-[var(--text-muted)] text-sm">
+      {T.loading}
+    </div>
+
+    <div
+      id="history-empty-pro"
+      class="hidden flex flex-col items-center justify-center py-6 text-[var(--text-muted)]"
+      data-testid="history-empty-pro"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="28"
+        height="28"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="mb-2 opacity-40"
+      >
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+        <polyline points="10 9 9 9 8 9" />
+      </svg>
+      <span class="text-sm">{T.historyEmptyPro}</span>
+    </div>
+
+    <div
+      id="history-empty-free"
+      class="hidden flex flex-col items-center justify-center py-6 px-4 rounded-lg border-2 border-dashed border-[var(--border-color)] text-center"
+      data-testid="history-empty-free"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="28"
+        height="28"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="mb-2 text-[var(--accent)] opacity-60"
+      >
+        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+        <path d="M2 17l10 5 10-5" />
+        <path d="M2 12l10 5 10-5" />
+      </svg>
+      <p class="text-sm text-[var(--text-secondary)] mb-2">{T.historyEmptyFree}</p>
+      <a
+        href="/dm/upgrade"
+        class="inline-flex items-center justify-center rounded-lg px-4 py-1.5 text-sm font-medium bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)] transition-colors"
+      >
+        {T.historyUpgradeCta}
+      </a>
+    </div>
+
+    <ul
+      id="history-list"
+      class="space-y-1 max-h-60 overflow-y-auto hidden"
+      role="list"
+      aria-label={T.historyTitle}
+      data-testid="history-list"
+    >
+    </ul>
+  </DmCard>
+</div>
+
+<script>
+  import type { NPCResult } from '@/lib/ai/types';
+
+  interface HistoryItem {
+    id: number;
+    name: string;
+    race: string | null;
+    role: string | null;
+    level: number | null;
+    content: Record<string, unknown>;
+    createdAt: string;
+  }
+
+  const FREE_STORAGE_KEY = 'dm-ai-history-free';
+  const MAX_HISTORY = 20;
+
+  function loadFreeHistory(): HistoryItem[] {
+    try {
+      const raw = sessionStorage.getItem(FREE_STORAGE_KEY);
+      if (!raw) return [];
+      return JSON.parse(raw) as HistoryItem[];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveFreeHistory(items: HistoryItem[]) {
+    try {
+      sessionStorage.setItem(FREE_STORAGE_KEY, JSON.stringify(items.slice(0, MAX_HISTORY)));
+    } catch {
+      // sessionStorage may be unavailable
+    }
+  }
+
+  function formatTime(dateStr: string): string {
+    const date = new Date(dateStr);
+    return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function formatDate(dateStr: string): string {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+  }
+
+  function renderHistory(container: HTMLElement, items: HistoryItem[], activeId: number | null) {
+    const list = container.querySelector<HTMLUListElement>('#history-list');
+    const emptyPro = container.querySelector<HTMLDivElement>('#history-empty-pro');
+    const emptyFree = container.querySelector<HTMLDivElement>('#history-empty-free');
+    const countEl = container.querySelector<HTMLSpanElement>('#history-count');
+
+    if (!list || !emptyPro || !emptyFree || !countEl) return;
+
+    countEl.textContent = String(items.length);
+
+    if (items.length === 0) {
+      list.classList.add('hidden');
+      list.innerHTML = '';
+
+      const tier = container.dataset.tier;
+      if (tier === 'pro') {
+        emptyPro.classList.remove('hidden');
+        emptyFree.classList.add('hidden');
+      } else {
+        emptyPro.classList.add('hidden');
+        emptyFree.classList.remove('hidden');
+      }
+      return;
+    }
+
+    emptyPro.classList.add('hidden');
+    emptyFree.classList.add('hidden');
+    list.classList.remove('hidden');
+
+    list.innerHTML = items
+      .map((item) => {
+        const isActive = item.id === activeId;
+        const raceRole = [item.race, item.role].filter(Boolean).join(' · ');
+        const levelText = item.level ? `Ур. ${item.level}` : '';
+        const meta = [raceRole, levelText].filter(Boolean).join(' · ');
+        const dateText = formatDate(item.createdAt);
+        const timeText = formatTime(item.createdAt);
+
+        return `
+          <li
+            data-history-id="${item.id}"
+            class="group cursor-pointer rounded-lg px-3 py-2.5 text-sm transition-all duration-[var(--transition-base)] border ${isActive
+              ? 'bg-[var(--accent)]/10 border-[var(--accent)]/40'
+              : 'bg-[var(--bg-secondary)] border-transparent hover:bg-[var(--bg-secondary)] hover:border-[var(--border-color)]'
+            }"
+            role="button"
+            tabindex="0"
+            aria-pressed="${isActive}"
+          >
+            <div class="flex items-center justify-between">
+              <span class="font-medium ${isActive ? 'text-[var(--accent)]' : 'text-[var(--text-primary)]'} truncate pr-2">
+                ${escapeHtml(item.name)}
+              </span>
+              <span class="text-xs text-[var(--text-muted)] shrink-0">
+                ${escapeHtml(dateText)} ${escapeHtml(timeText)}
+              </span>
+            </div>
+            ${meta ? `<div class="text-xs text-[var(--text-secondary)] mt-0.5 truncate">${escapeHtml(meta)}</div>` : ''}
+          </li>
+        `;
+      })
+      .join('');
+
+    list.querySelectorAll<HTMLLIElement>('li[data-history-id]').forEach((li) => {
+      li.addEventListener('click', () => {
+        const id = Number(li.dataset.historyId);
+        selectItem(container, items, id);
+      });
+      li.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const id = Number(li.dataset.historyId);
+          selectItem(container, items, id);
+        }
+      });
+    });
+  }
+
+  function escapeHtml(str: string): string {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function selectItem(container: HTMLElement, items: HistoryItem[], id: number) {
+    const item = items.find((i) => i.id === id);
+    if (!item) return;
+
+    renderHistory(container, items, id);
+
+    const npcData: NPCResult & { id: number } = {
+      ...(item.content as unknown as NPCResult),
+      id: item.id,
+    };
+
+    container.dispatchEvent(
+      new CustomEvent('npc-selected', {
+        detail: npcData,
+        bubbles: true,
+      })
+    );
+  }
+
+  async function fetchProHistory(userId: number): Promise<HistoryItem[]> {
+    const response = await fetch(`/api/dm/ai/history?limit=${MAX_HISTORY}`);
+    if (!response.ok) {
+      if (response.status === 401) {
+        return [];
+      }
+      throw new Error(`Failed to fetch history: ${response.status}`);
+    }
+    const data = (await response.json()) as { items: HistoryItem[]; total: number };
+    return data.items;
+  }
+
+  function initGenerationHistory(container: HTMLElement) {
+    const tier = container.dataset.tier as 'free' | 'pro' | undefined;
+    const userId = container.dataset.userId ? Number(container.dataset.userId) : undefined;
+    const loadingEl = container.querySelector<HTMLDivElement>('#history-loading');
+
+    let items: HistoryItem[] = [];
+    let activeId: number | null = null;
+
+    function showLoading() {
+      loadingEl?.classList.remove('hidden');
+    }
+
+    function hideLoading() {
+      loadingEl?.classList.add('hidden');
+    }
+
+    async function loadHistory() {
+      if (tier === 'pro' && userId) {
+        showLoading();
+        try {
+          items = await fetchProHistory(userId);
+        } catch {
+          items = [];
+        } finally {
+          hideLoading();
+        }
+      } else {
+        items = loadFreeHistory();
+      }
+      renderHistory(container, items, activeId);
+    }
+
+    function handleNpcGenerated(e: Event) {
+      const event = e as CustomEvent<NPCResult & { id: number }>;
+      const npc = event.detail;
+      if (!npc || !npc.id) return;
+
+      const newItem: HistoryItem = {
+        id: npc.id,
+        name: npc.name,
+        race: npc.race ?? null,
+        role: npc.role ?? null,
+        level: npc.level ?? null,
+        content: npc as unknown as Record<string, unknown>,
+        createdAt: new Date().toISOString(),
+      };
+
+      items = items.filter((i) => i.id !== newItem.id);
+      items.unshift(newItem);
+      if (items.length > MAX_HISTORY) {
+        items.length = MAX_HISTORY;
+      }
+
+      if (tier !== 'pro') {
+        saveFreeHistory(items);
+      }
+
+      renderHistory(container, items, activeId);
+    }
+
+    container.addEventListener('npc-generated', handleNpcGenerated);
+    window.addEventListener('npc-generated', handleNpcGenerated);
+
+    loadHistory();
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-testid="generation-history"]').forEach((el) => {
+    initGenerationHistory(el);
+  });
+</script>

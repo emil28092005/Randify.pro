@@ -1,0 +1,172 @@
+---
+import DmCard from "./DmCard.astro";
+import DmButton from "./DmButton.astro";
+import { dmTranslations as T } from "@/i18n/dm-translations";
+import type { NPCResult } from "@/lib/ai/types";
+
+export interface Props {
+  npc: NPCResult;
+  onRegenerate?: () => void;
+}
+
+const { npc, onRegenerate } = Astro.props;
+---
+
+<DmCard padding="lg" dataTestid="ai-npc-result">
+  <div class="flex items-start justify-between gap-4 mb-5">
+    <div class="min-w-0">
+      <h3 class="text-xl font-bold text-[var(--text-primary)] truncate">
+        {npc.name}
+      </h3>
+      <p class="text-sm text-[var(--text-secondary)] mt-1">
+        {npc.race} · {npc.role} · {T.npcLevel} {npc.level} · {T.npcCr} {npc.cr}
+      </p>
+    </div>
+    <div class="flex items-center gap-2 shrink-0">
+      <DmButton
+        variant="secondary"
+        size="sm"
+        id="npc-copy-btn"
+        dataTestid="npc-copy-btn"
+      >
+        {T.npcCopyJson}
+      </DmButton>
+      {
+        onRegenerate && (
+          <DmButton
+            variant="primary"
+            size="sm"
+            id="npc-regen-btn"
+            dataTestid="npc-regen-btn"
+          >
+            {T.npcRegenerate}
+          </DmButton>
+        )
+      }
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+    <div
+      class="rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] p-3 text-center"
+      data-testid="npc-stat-hp"
+    >
+      <div class="text-xs text-[var(--text-muted)] uppercase tracking-wider">
+        {T.npcHp}
+      </div>
+      <div class="text-lg font-bold text-[var(--accent)]">{npc.hp}</div>
+    </div>
+    <div
+      class="rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] p-3 text-center"
+      data-testid="npc-stat-ac"
+    >
+      <div class="text-xs text-[var(--text-muted)] uppercase tracking-wider">
+        {T.npcAc}
+      </div>
+      <div class="text-lg font-bold text-[var(--accent)]">{npc.ac}</div>
+    </div>
+    <div
+      class="rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] p-3 text-center"
+      data-testid="npc-stat-speed"
+    >
+      <div class="text-xs text-[var(--text-muted)] uppercase tracking-wider">
+        {T.npcSpeed}
+      </div>
+      <div class="text-lg font-bold text-[var(--accent)]">{npc.speed}</div>
+    </div>
+    <div
+      class="rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] p-3 text-center"
+      data-testid="npc-stat-cr"
+    >
+      <div class="text-xs text-[var(--text-muted)] uppercase tracking-wider">
+        {T.npcCr}
+      </div>
+      <div class="text-lg font-bold text-[var(--accent)]">{npc.cr}</div>
+    </div>
+  </div>
+
+  <div class="space-y-3 mb-5">
+    <div data-testid="npc-appearance">
+      <div class="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-0.5">
+        {T.npcAppearance}
+      </div>
+      <p class="text-sm text-[var(--text-primary)] leading-relaxed">
+        {npc.appearance}
+      </p>
+    </div>
+    <div data-testid="npc-trait">
+      <div class="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-0.5">
+        {T.npcTrait}
+      </div>
+      <p class="text-sm text-[var(--text-primary)] leading-relaxed">
+        {npc.trait}
+      </p>
+    </div>
+    <div data-testid="npc-motivation">
+      <div class="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-0.5">
+        {T.npcMotivation}
+      </div>
+      <p class="text-sm text-[var(--text-primary)] leading-relaxed">
+        {npc.motivation}
+      </p>
+    </div>
+    <div data-testid="npc-secret">
+      <div class="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-0.5">
+        {T.npcSecret}
+      </div>
+      <p class="text-sm text-[var(--text-primary)] leading-relaxed">
+        {npc.secret}
+      </p>
+    </div>
+  </div>
+
+  <div
+    class="border-l-4 border-[var(--accent)] pl-4 py-2 italic text-[var(--text-cream)] bg-[var(--bg-secondary)]/50 rounded-r-lg mb-5"
+    data-testid="npc-history"
+  >
+    <p class="text-sm leading-relaxed">{npc.history}</p>
+  </div>
+
+  <div class="flex flex-wrap gap-2">
+    <span
+      class="px-3 py-1 text-xs font-medium rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20"
+    >
+      {npc.race}
+    </span>
+    <span
+      class="px-3 py-1 text-xs font-medium rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20"
+    >
+      {npc.role}
+    </span>
+  </div>
+</DmCard>
+
+<script is:inline define:vars={{ npcJson: JSON.stringify(npc), copiedLabel: T.npcCopied, hasRegenerate: !!onRegenerate }}>
+  (function () {
+    const copyBtn = document.getElementById("npc-copy-btn");
+    const regenBtn = document.getElementById("npc-regen-btn");
+
+    if (copyBtn) {
+      copyBtn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(npcJson);
+          const originalText = copyBtn.textContent || "";
+          copyBtn.textContent = copiedLabel;
+          setTimeout(() => {
+            copyBtn.textContent = originalText;
+          }, 1500);
+        } catch {
+          /* ignore clipboard errors */
+        }
+      });
+    }
+
+    if (regenBtn && hasRegenerate) {
+      regenBtn.addEventListener("click", () => {
+        regenBtn.dispatchEvent(
+          new CustomEvent("npc-regenerate", { bubbles: true })
+        );
+      });
+    }
+  })();
+</script>

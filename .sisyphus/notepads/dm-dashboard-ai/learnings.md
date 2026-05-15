@@ -172,8 +172,8 @@ Task: Generate and apply Drizzle migration for updated DB schema (Task 2 complet
        };
      });
      ```
-   - The mock DB then implements a simple `evaluateCondition()` recursive evaluator that checks `type === "eq"` against item properties (converting snake_case column names to camelCase).
-   - This allows the mock to correctly filter by `userId` and `id`, making cross-user access tests reliable.
+    - The mock DB then implements a simple `evaluateCondition()` recursive evaluator that checks `type === "eq"` against item properties (converting snake_case column names to camelCase).
+    - This allows the mock to correctly filter by `userId` and `id`, making cross-user access tests reliable.
 
 6. **Test coverage**
    - `tests/notes-api.test.ts`: 19 tests covering auth 401s, CORS OPTIONS, GET list, POST create, POST validation errors, PUT update, PUT 404 (missing + cross-user), DELETE remove, DELETE 404 (missing + cross-user), missing/invalid id params.
@@ -381,4 +381,333 @@ Task: Generate and apply Drizzle migration for updated DB schema (Task 2 complet
 - `npx vitest run` (full suite): 306/306 passed in 22 test files (1 pre-existing broken test file `tests/history-api.test.ts` with parse error, unrelated)
 - `npx tsc --noEmit`: 0 errors in project code (1 pre-existing parse error in `tests/history-api.test.ts`)
 - `npm run build`: fails due to pre-existing auth env validation at build-time (`JWT_SECRET` missing) — unrelated to this change
+
+---
+
+# NPC Result Card Component — Planning Findings
+
+## Date: 2026-05-15
+
+### Existing Patterns Analyzed
+
+**DmCard.astro** (`src/components/dm/DmCard.astro`):
+- Base classes: `rounded-xl bg-[var(--bg-card)] border border-[var(--border-gold-strong)] shadow-lg shadow-black/20 hover:border-[var(--border-gold)] transition-all duration-[var(--transition-base)]`
+- Padding variants: `none` (""), `sm` (p-4), `md` (p-5), `lg` (p-6)
+- Props: `class?: string`, `padding?: "none" | "sm" | "md" | "lg"`, `dataTestid?: string`
+- Use `padding="lg"` for the NPC card to match the spacious feel of DM cards.
+
+**DmButton.astro** (`src/components/dm/DmButton.astro`):
+- Variants: `primary` (accent bg, white text), `secondary` (card bg + border), `ghost`
+- Sizes: `sm` (px-4 py-1.5 text-sm rounded-lg), `md` (px-6 py-2.5 text-base rounded-xl), `lg`
+- For action buttons, use `variant="secondary" size="sm"` for "Copy JSON" and `variant="primary" size="sm"` for "Regenerate".
+
+**DM Theme CSS (`src/styles/dm-theme.css`)**:
+- Backgrounds: `--bg-primary: #16120e`, `--bg-card: #221e18`, `--bg-secondary: #1e1912`
+- Text: `--text-primary: #f4f4f5`, `--text-secondary: #a1a1aa`, `--text-muted: #71717a`, `--text-cream: #e8dcc8`
+- Borders: `--border-color: #3a3428`, `--border-gold: rgba(200,168,75,0.15)`, `--border-gold-strong: rgba(180,150,80,0.1)`
+- Gold accents: `--gold: #c8a84b`, `--gold-light: #d4b76a`, `--gold-dark: #a88a3a`
+
+**⚠️ CRITICAL: Theme Discrepancy — Purple vs Orange**
+- `src/styles/dm-theme.css` sets `--accent: #534AB7` (purple), but AGENTS.md claims DM overrides to `#E87722` (orange).
+- The task mandates: "Orange theme (#E87722), NO purple".
+- **Recommendation**: Update `dm-theme.css` line 3 from `--accent: #534AB7` to `--accent: #E87722` and update `--accent-light`, `--accent-dark`, `--accent-hover` accordingly. This fixes the theme for ALL DM components at once (DmButton primary, focus rings, etc.). Then the NPC card can safely use `var(--accent)`.
+- If modifying the theme CSS is out of scope, hardcode `#E87722` in the NPC card for all accent usage (stat values, story border, tags, buttons).
+
+### NPCResult Schema (`src/lib/ai/types.ts`)
+
+Available fields:
+- `name: string`, `race: string`, `role: string`, `level: number`
+- `hp: number`, `ac: number`, `cr: string`, `speed: string`
+- `appearance: string`, `trait: string`, `motivation: string`, `secret: string`, `history: string`
+
+**Missing fields for tags**: There is **no `tags`, `skills`, or `abilities` array** in `NPCResult`. The requirement asks for "Tags: skills, abilities (pill chips)". 
+- **Decision**: Derive pseudo-tags from `race` and `role` (display both as chips), OR omit the tags section entirely since the data model doesn't support it. Recommending the pseudo-tag approach for visual completeness.
+
+### Sanitization Strategy
+
+**Astro auto-escapes server-rendered expressions** — `{npc.name}`, `{npc.appearance}`, etc. are safe by default. No manual escaping needed in the `.astro` template.
+
+**No `innerHTML` usage**: The card can be fully static markup. Interactivity (copy JSON, regenerate) uses `addEventListener` on existing DOM nodes. Copy JSON does `navigator.clipboard.writeText(JSON.stringify(npc))`. Regenerate calls the passed callback.
+
+**No shared `escapeHtml` utility** exists in `src/lib/client/`. It is duplicated in 3 files. For this component, since it's pure Astro template with no dynamic HTML injection, `escapeHtml` is unnecessary. But if future iterations add client-side NPC rendering, consolidate `escapeHtml` into `src/lib/client/escape-html.ts`.
+
+### i18n Gaps
+
+`src/i18n/dm-translations.ts` has **no NPC-specific labels**. Must add:
+```ts
+// NPC labels
+npcName: "Имя",
+npcRace: "Раса",
+npcRole: "Класс",
+npcLevel: "Уровень",
+npcHp: "ХП",
+npcAc: "КЗ",
+npcCr: "ОП",
+npcSpeed: "Скорость",
+npcAppearance: "Внешность",
+npcTrait: "Черта",
+npcMotivation: "Мотивация",
+npcSecret: "Тайна",
+npcHistory: "История",
+npcCopyJson: "Копировать JSON",
+npcCopied: "Скопировано",
+npcRegenerate: "Перегенерировать",
+```
+
+### Clipboard Utility
+
+`src/lib/client/clipboard.ts` exports `CopyFeedback` class for copy → checkmark icon swap animation. Can be used for the "Copy JSON" button if implementing a visual feedback state.
+
+### Recommended Component Structure
+
+```astro
+---
+import DmCard from "./DmCard.astro";
+import DmButton from "./DmButton.astro";
+import { dmTranslations as T } from "@/i18n/dm-translations";
+import type { NPCResult } from "@/lib/ai/types";
+
+export interface Props {
+  npc: NPCResult;
+  onRegenerate?: () => void;
+}
+
+const { npc, onRegenerate } = Astro.props;
+---
+
+<DmCard padding="lg" dataTestid="ai-npc-result">
+  <!-- Header: Name + Meta + Actions -->
+  <div class="flex items-start justify-between gap-4 mb-5">
+    <div class="min-w-0">
+      <h3 class="text-xl font-bold text-[var(--text-primary)] truncate">{npc.name}</h3>
+      <p class="text-sm text-[var(--text-secondary)] mt-1">
+        {npc.race} · {npc.role} · Ур. {npc.level} · ОП {npc.cr}
+      </p>
+    </div>
+    <div class="flex items-center gap-2 shrink-0">
+      <DmButton variant="secondary" size="sm" id="npc-copy-btn" dataTestid="npc-copy-btn">
+        {T.npcCopyJson}
+      </DmButton>
+      {onRegenerate && (
+        <DmButton variant="primary" size="sm" id="npc-regen-btn" dataTestid="npc-regen-btn">
+          {T.npcRegenerate}
+        </DmButton>
+      )}
+    </div>
+  </div>
+
+  <!-- Stats Row: HP, AC, Speed, CR (4-col grid) -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+    <StatBox label={T.npcHp} value={String(npc.hp)} />
+    <StatBox label={T.npcAc} value={String(npc.ac)} />
+    <StatBox label={T.npcSpeed} value={npc.speed} />
+    <StatBox label={T.npcCr} value={npc.cr} />
+  </div>
+
+  <!-- Attributes: Appearance, Trait, Motivation, Secret -->
+  <div class="space-y-3 mb-5">
+    <AttributeRow label={T.npcAppearance} value={npc.appearance} />
+    <AttributeRow label={T.npcTrait} value={npc.trait} />
+    <AttributeRow label={T.npcMotivation} value={npc.motivation} />
+    <AttributeRow label={T.npcSecret} value={npc.secret} />
+  </div>
+
+  <!-- Story Block: History/Backstory -->
+  <div class="border-l-4 border-[#E87722] pl-4 py-2 italic text-[var(--text-cream)] bg-[var(--bg-secondary)]/50 rounded-r-lg">
+    <p class="text-sm leading-relaxed">{npc.history}</p>
+  </div>
+
+  <!-- Tags (pseudo-tags from race + role) -->
+  <div class="flex flex-wrap gap-2 mt-5">
+    <span class="px-3 py-1 text-xs font-medium rounded-full bg-[#E87722]/10 text-[#E87722] border border-[#E87722]/20">
+      {npc.race}
+    </span>
+    <span class="px-3 py-1 text-xs font-medium rounded-full bg-[#E87722]/10 text-[#E87722] border border-[#E87722]/20">
+      {npc.role}
+    </span>
+  </div>
+</DmCard>
+
+<script>
+  // Client-side: copy JSON + regenerate handler
+  document.addEventListener("DOMContentLoaded", () => {
+    const copyBtn = document.getElementById("npc-copy-btn");
+    const regenBtn = document.getElementById("npc-regen-btn");
+
+    if (copyBtn) {
+      copyBtn.addEventListener("click", async () => {
+        const card = copyBtn.closest('[data-testid="ai-npc-result"]');
+        const npcData = card?.getAttribute("data-npc");
+        if (!npcData) return;
+        try {
+          await navigator.clipboard.writeText(npcData);
+          const originalText = copyBtn.textContent;
+          copyBtn.textContent = "Скопировано";
+          setTimeout(() => { copyBtn.textContent = originalText; }, 1500);
+        } catch {
+          /* ignore clipboard errors */
+        }
+      });
+    }
+
+    if (regenBtn) {
+      regenBtn.addEventListener("click", () => {
+        regenBtn.dispatchEvent(new CustomEvent("npc-regenerate", { bubbles: true }));
+      });
+    }
+  });
+</script>
+```
+
+**Note on data passing to client script**: Astro components cannot directly pass objects to `<script>` blocks. Options:
+1. Serialize NPC as `data-npc` JSON attribute on the card container (`data-npc={JSON.stringify(npc)}`). The script reads it via `getAttribute` + `JSON.parse`. This is safe since Astro auto-escapes attribute values.
+2. Have the parent page manage the copy/regenerate logic and dispatch custom events.
+3. Use `is:inline` script with `define:vars` (Astro feature) to pass the npc object directly to the script.
+
+**Recommended**: Use `define:vars` with `is:inline` script for clean data passing without DOM attribute parsing.
+
+### Checklist for Implementation
+
+- [ ] Add NPC i18n keys to `src/i18n/dm-translations.ts`
+- [ ] Fix `dm-theme.css` `--accent` to `#E87722` (or hardcode orange in component)
+- [ ] Create `src/components/dm/AiNpcResult.astro`
+- [ ] Props: `npc: NPCResult`, `onRegenerate?: () => void`
+- [ ] Use `DmCard` with `padding="lg"`
+- [ ] Header: Name (bold, truncate), meta line (race · role · level · CR), Copy + Regenerate buttons
+- [ ] Stats: 4-col grid (HP, AC, Speed, CR) with `bg-[var(--bg-secondary)]` boxes
+- [ ] Attributes: 4 rows with label (muted, uppercase) + value
+- [ ] Story block: left orange border (`border-l-4 border-[#E87722]`), italic, cream text, subtle bg
+- [ ] Tags: pill chips for race + role (or omit if out of scope)
+- [ ] Copy JSON: `navigator.clipboard.writeText(JSON.stringify(npc))` with brief "Скопировано" feedback
+- [ ] Regenerate: dispatch custom event or call callback
+- [ ] Zero `innerHTML` usage — pure Astro template + event listeners
+- [ ] No favorite button
+- [ ] Add `dataTestid` attributes for testing
+
+---
+
+# InitiativeTracker DB Persistence Migration — Learnings
+
+## Date: 2026-05-15
+
+### Context
+
+Task: Migrate InitiativeTracker to use DB persistence for PRO users, keep sessionStorage for FREE.
+
+### Current State Analysis
+
+1. **`src/components/dm/InitiativeTracker.astro`** — Pure client-side component (418 lines).
+   - Uses `sessionStorage` key `"dm-initiative"` with legacy `"it-combatants"` fallback migration.
+   - `activeIndex` is a module-level variable — never persisted to any storage.
+   - No Astro props accepted. Duplicated inline `escapeHtml()` (pre-existing anti-pattern).
+
+2. **`src/pages/api/dm/initiative.ts`** — Full CRUD API already exists.
+   - `GET` returns `[{ id, name, participants, createdAt, updatedAt }]` for authenticated user.
+   - `POST` creates session with `{ name, participants? }`.
+   - `PUT` updates by `?id=` with `{ name?, participants? }`.
+   - `DELETE` removes by `?id=`.
+   - Auth via `locals.user`; CORS via `jsonResponse()` helper.
+
+3. **DB Schema** (`initiative_sessions`): `id`, `userId`, `name`, `participants` (JSONB), `createdAt`, `updatedAt`.
+
+4. **Data model compatibility**: Client `CombatantData = { id, name, initiative, hp? }` maps cleanly into API `participantSchema`. The schema is **not** `.strict()`, so extra fields are stripped and optional fields are tolerated. Sending `{ id, name, initiative, hp }` from client is fully valid.
+
+5. **Parent pages**: `src/pages/dm/index.astro` and `src/pages/ru/dm/index.astro` use `<InitiativeTracker />` with no props. `Astro.locals.user` provides `tier` and `id`.
+
+### Implementation Plan
+
+#### Props
+```astro
+export interface Props {
+  tier?: 'free' | 'pro';
+  userId?: number;
+}
+```
+Parent pages pass: `<InitiativeTracker tier={user?.tier ?? 'free'} userId={user?.id} />`
+
+#### Server-to-Client Bridge
+Add `data-tier={tier}` and `data-user-id={userId ?? ''}` to root `<div>`. Client script reads:
+```ts
+const tier = (trackerEl?.dataset.tier as 'free' | 'pro') || 'free';
+const userId = trackerEl?.dataset.userId ? parseInt(trackerEl.dataset.userId, 10) : undefined;
+const isPro = tier === 'pro' && !!userId;
+```
+
+#### PRO-Only UI Panel (Astro template, conditional `{tier === 'pro'}`)
+Rendered above add-combatant form inside a `DmCard`:
+- `DmInput id="it-session-name"` — session name input.
+- `DmButton id="it-save-session-btn"` — manual save trigger.
+- `DmButton id="it-new-session-btn"` — clears current session state.
+- `#it-session-list` — scrollable list of saved sessions (name + date + delete button).
+- `#it-session-status` — transient success/error message.
+
+#### New Translation Keys Needed
+- `saveSession`, `newSession`, `sessionNamePlaceholder`, `noSavedSessions`, `sessionSaved`, `saveError`, `loadSessionError`, `deleteSessionConfirm`.
+
+#### Client Script Additions
+
+**State**:
+```ts
+let currentSessionId: number | null = null;
+let currentSessionName = '';
+```
+
+**API wrappers**:
+- `apiFetchSessions()` → GET /api/dm/initiative
+- `apiSaveSession(name, participants, id?)` → POST (new) or PUT (update existing)
+- `apiDeleteSession(id)` → DELETE /api/dm/initiative?id=X
+
+**Core functions**:
+- `renderSessionList()` — async fetch, renders rows with click-to-load and delete. Highlights current session.
+- `loadDbSession(id)` — fetches sessions, maps `participants` → `CombatantData[]`, calls `saveCombatants()` to sessionStorage (graceful fallback), resets `activeIndex = 0`, re-renders.
+- `handleSaveSession()` — reads name input (defaults to timestamp), POST or PUT, updates `currentSessionId`, shows status, refreshes list. On error: shows red status, **does not touch sessionStorage**.
+- `handleNewSession()` — clears `currentSessionId/name/input`, calls `clearAll()`.
+- `deleteDbSession(id)` — confirm dialog, DELETE, re-renders list.
+
+**Event listeners** (attached defensively with `?.`):
+```ts
+document.getElementById('it-save-session-btn')?.addEventListener('click', handleSaveSession);
+document.getElementById('it-new-session-btn')?.addEventListener('click', handleNewSession);
+```
+
+**Init**:
+```ts
+updateVisibility();
+renderList();
+if (isPro) renderSessionList();
+```
+
+### Key Design Decisions
+
+| Decision | Rationale |
+|----------|-----------|
+| **Manual save only** | Requirement explicitly forbids auto-save. |
+| **sessionStorage always kept** | `saveCombatants()` still writes to `dm-initiative`. On API failure, user loses nothing. On PRO save, sessionStorage is **not** deleted. |
+| **activeIndex never in API payload** | It stays a pure in-memory var. Loading a DB session always resets it to 0. |
+| **Data attributes for props** | Cleanest bridge for a module `<script>` without inlining vars via `define:vars`. |
+| **Zod compatibility** | API schema is not `.strict()`. Client sends minimal payload; server accepts silently. |
+| **Session name required** | API `createSessionSchema` requires `name`. Client defaults to `"Сессия {localeDate}"` if empty. |
+| **Escape user content** | Session names rendered via existing `escapeHtml()` to prevent XSS in `innerHTML`. |
+| **Missing userId fallback** | If `tier === 'pro'` but `userId` is missing, `isPro = false` and behavior falls back to FREE. |
+
+### Files to Modify
+
+1. `src/components/dm/InitiativeTracker.astro` — add props, conditional PRO UI, API integration, session management.
+2. `src/i18n/dm-translations.ts` — add 8 new keys.
+3. `src/pages/dm/index.astro` — pass `tier` and `userId` props.
+4. `src/pages/ru/dm/index.astro` — mirror prop changes.
+
+### Verification Steps
+
+- `npx tsc --noEmit` — zero errors.
+- `npx vitest run` — full suite passes (271+ tests).
+- Manual QA:
+  - FREE user: sessionStorage works exactly as before.
+  - PRO user: add combatants → Save → reload → Load → combatants restored.
+  - PRO user: `activeIndex` resets to 0 on every session load.
+  - PRO user: offline/API failure → error shown, sessionStorage intact.
+
+### Pre-existing Bug Note
+
+`src/pages/dm/index.astro` contains a duplicated AI section (lines 80–98 mirror 59–77). Out of scope for this task but should be cleaned up separately.
 

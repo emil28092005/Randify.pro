@@ -8,6 +8,7 @@ import DiceRoller from "@/components/dm/DiceRoller.astro";
 import InitiativeTracker from "@/components/dm/InitiativeTracker.astro";
 import Open5eReference from "@/components/dm/Open5eReference.astro";
 import NotesPanel from "@/components/dm/NotesPanel.astro";
+import AiNpcForm from "@/components/dm/AiNpcForm.astro";
 import { dmTranslations as T } from "@/i18n/dm-translations";
 import { getRemainingQuota, TIER_LIMITS } from "@/lib/rate-limit";
 
@@ -45,7 +46,7 @@ if (user) {
           {T.initiative}
         </h2>
       </div>
-      <InitiativeTracker />
+      <InitiativeTracker tier={user?.tier ?? 'free'} userId={user?.id} />
     </section>
 
     <!-- AI Generator -->
@@ -56,17 +57,15 @@ if (user) {
           {T.ai}
         </h2>
       </div>
-      <DmCard>
-        {Astro.locals.user ? (
-          <div class="p-6 text-center text-[var(--text-secondary)]">
-            <p>{T.aiPlaceholder}</p>
-          </div>
-        ) : (
+      {Astro.locals.user ? (
+        <AiNpcForm />
+      ) : (
+        <DmCard>
           <div class="p-6 text-center">
             <p class="text-[var(--text-secondary)]">{T.aiSignInCta}</p>
           </div>
-        )}
-      </DmCard>
+        </DmCard>
+      )}
     </section>
   </div>
 
@@ -94,7 +93,7 @@ if (user) {
         </h2>
       </div>
       <DmCard>
-        <NotesPanel />
+        <NotesPanel tier={user?.tier ?? 'free'} userId={user?.id} />
       </DmCard>
     </section>
   </div>

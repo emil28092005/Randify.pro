@@ -1,0 +1,218 @@
+---
+import DmCard from "./DmCard.astro";
+import DmButton from "./DmButton.astro";
+import { dmTranslations as T } from "@/i18n/dm-translations";
+
+export interface Props {
+  disabled?: boolean;
+}
+
+const { disabled = false } = Astro.props;
+
+const selectClasses =
+  "w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-lg px-3 py-2 text-[var(--text-primary)] text-base hover:border-[var(--text-secondary)] focus:outline-none focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)] focus-visible:ring-2 focus-visible:ring-[var(--gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] transition-all duration-[var(--transition-base)] appearance-none cursor-pointer";
+
+const labelClasses = "block text-sm font-medium text-[var(--text-secondary)] mb-1";
+---
+
+<DmCard dataTestid="ai-npc-form-card">
+  <form
+    id="ai-npc-form"
+    class="space-y-4"
+    data-testid="ai-npc-form"
+  >
+    <!-- Race -->
+    <div>
+      <label for="npc-race" class={labelClasses}>
+        {T.aiFormRace}
+      </label>
+      <select id="npc-race" name="race" class={selectClasses} required disabled={disabled}>
+        <option value="" disabled selected>{T.aiFormSelectOption}</option>
+        <option value="Human">{T.raceHuman}</option>
+        <option value="Elf">{T.raceElf}</option>
+        <option value="Dwarf">{T.raceDwarf}</option>
+        <option value="Halfling">{T.raceHalfling}</option>
+        <option value="Orc">{T.raceOrc}</option>
+        <option value="Tiefling">{T.raceTiefling}</option>
+        <option value="Dragonborn">{T.raceDragonborn}</option>
+        <option value="Gnome">{T.raceGnome}</option>
+        <option value="Half-Elf">{T.raceHalfElf}</option>
+        <option value="Half-Orc">{T.raceHalfOrc}</option>
+      </select>
+    </div>
+
+    <!-- Role -->
+    <div>
+      <label for="npc-role" class={labelClasses}>
+        {T.aiFormRole}
+      </label>
+      <select id="npc-role" name="role" class={selectClasses} required disabled={disabled}>
+        <option value="" disabled selected>{T.aiFormSelectOption}</option>
+        <option value="Warrior">{T.roleWarrior}</option>
+        <option value="Mage">{T.roleMage}</option>
+        <option value="Rogue">{T.roleRogue}</option>
+        <option value="Cleric">{T.roleCleric}</option>
+        <option value="Ranger">{T.roleRanger}</option>
+        <option value="Paladin">{T.rolePaladin}</option>
+        <option value="Bard">{T.roleBard}</option>
+        <option value="Barbarian">{T.roleBarbarian}</option>
+        <option value="Druid">{T.roleDruid}</option>
+        <option value="Warlock">{T.roleWarlock}</option>
+      </select>
+    </div>
+
+    <!-- Level -->
+    <div>
+      <label for="npc-level" class={labelClasses}>
+        {T.aiFormLevel}
+      </label>
+      <input
+        id="npc-level"
+        name="level"
+        type="number"
+        min="1"
+        max="20"
+        value="1"
+        class="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-lg px-3 py-2 text-[var(--text-primary)] text-base placeholder:text-[var(--text-secondary)] hover:border-[var(--text-secondary)] focus:outline-none focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)] focus-visible:ring-2 focus-visible:ring-[var(--gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] transition-all duration-[var(--transition-base)]"
+        required
+        disabled={disabled}
+      />
+    </div>
+
+    <!-- Tone -->
+    <div>
+      <label for="npc-tone" class={labelClasses}>
+        {T.aiFormTone}
+      </label>
+      <select id="npc-tone" name="tone" class={selectClasses} required disabled={disabled}>
+        <option value="" disabled selected>{T.aiFormSelectOption}</option>
+        <option value="Serious">{T.toneSerious}</option>
+        <option value="Humorous">{T.toneHumorous}</option>
+        <option value="Dark">{T.toneDark}</option>
+        <option value="Heroic">{T.toneHeroic}</option>
+        <option value="Mysterious">{T.toneMysterious}</option>
+      </select>
+    </div>
+
+    <!-- Open5e Reference Toggle -->
+    <div class="flex items-center gap-3">
+      <input
+        id="npc-use-reference"
+        name="useOpen5eReference"
+        type="checkbox"
+        class="w-5 h-5 rounded border-[var(--border-color)] bg-[var(--bg-input)] text-[var(--accent)] accent-[var(--accent)] focus:ring-[var(--gold)] focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--bg-primary)] cursor-pointer"
+        disabled={disabled}
+      />
+      <label for="npc-use-reference" class="text-sm text-[var(--text-secondary)] cursor-pointer">
+        {T.aiFormUseReference}
+      </label>
+    </div>
+
+    <!-- Submit -->
+    <div class="pt-2">
+      <DmButton
+        id="ai-npc-submit"
+        type="submit"
+        variant="primary"
+        size="md"
+        class="w-full"
+        disabled={disabled}
+        dataTestid="ai-npc-submit"
+      >
+        {T.aiFormSubmit}
+      </DmButton>
+    </div>
+
+    <!-- Status -->
+    <div
+      id="ai-npc-status"
+      class="text-sm text-center min-h-[1.5rem]"
+      aria-live="polite"
+      data-testid="ai-npc-status"
+    ></div>
+  </form>
+</DmCard>
+
+<script is:inline define:vars={{ generatingLabel: T.npcGenerating, submitLabel: T.npcGenerate, rateLimitTemplate: T.npcErrorRateLimit, genericError: T.npcErrorGeneric }}>
+  (function () {
+    const form = document.getElementById("ai-npc-form") as HTMLFormElement | null;
+    const submitBtn = document.getElementById("ai-npc-submit") as HTMLButtonElement | null;
+    const statusEl = document.getElementById("ai-npc-status");
+
+    if (!form || !submitBtn || !statusEl) return;
+
+    let isSubmitting = false;
+
+    function setStatus(message: string, type: "error" | "info" = "info") {
+      statusEl.textContent = message;
+      statusEl.className =
+        "text-sm text-center min-h-[1.5rem] " +
+        (type === "error" ? "text-[var(--danger)]" : "text-[var(--text-secondary)]");
+    }
+
+    function setLoading(loading: boolean) {
+      isSubmitting = loading;
+      submitBtn.disabled = loading;
+      submitBtn.textContent = loading ? generatingLabel : submitLabel;
+      submitBtn.setAttribute("aria-busy", loading ? "true" : "false");
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (isSubmitting) return;
+
+      const formData = new FormData(form);
+      const body = {
+        race: String(formData.get("race")),
+        role: String(formData.get("role")),
+        level: parseInt(String(formData.get("level")), 10),
+        tone: String(formData.get("tone")),
+        useOpen5eReference: formData.get("useOpen5eReference") === "on",
+      };
+
+      setLoading(true);
+      setStatus("");
+
+      try {
+        const response = await fetch("/api/dm/ai/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+
+        if (response.status === 429) {
+          const retryAfter = response.headers.get("Retry-After");
+          const minutes = retryAfter ? Math.ceil(parseInt(retryAfter, 10) / 60) : 60;
+          setStatus(rateLimitTemplate.replace("{minutes}", String(minutes)), "error");
+          setLoading(false);
+          return;
+        }
+
+        if (!response.ok) {
+          setStatus(genericError, "error");
+          setLoading(false);
+          return;
+        }
+
+        const result = await response.json();
+        if (!result.npc) {
+          setStatus(genericError, "error");
+          setLoading(false);
+          return;
+        }
+
+        setStatus("");
+        window.dispatchEvent(
+          new CustomEvent("npc-generated", {
+            detail: result.npc,
+            bubbles: true,
+          })
+        );
+      } catch {
+        setStatus(genericError, "error");
+      } finally {
+        setLoading(false);
+      }
+    });
+  })();
+</script>

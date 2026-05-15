@@ -171,6 +171,11 @@ import DmButton from "./DmButton.astro";
 
 <script>
   import { Open5eUIManager } from "@/lib/client/open5e-ui";
+  import {
+    getCachedTranslation,
+    setCachedTranslation,
+    fetchTranslation,
+  } from "@/lib/client/translation";
 
   const CR_OPTIONS = [
     { value: "", label: "Все ОП" },
@@ -230,39 +235,9 @@ import DmButton from "./DmButton.astro";
     return div.innerHTML;
   }
 
-  const TRANSLATION_CACHE_KEY = "o5-translations";
-
-  function loadTranslationCache(): Record<string, Monster | Spell> {
-    try {
-      const raw = localStorage.getItem(TRANSLATION_CACHE_KEY);
-      return raw ? JSON.parse(raw) : {};
-    } catch {
-      return {};
-    }
-  }
-
-  function saveTranslationCache(cache: Record<string, Monster | Spell>) {
-    try {
-      localStorage.setItem(TRANSLATION_CACHE_KEY, JSON.stringify(cache));
-    } catch {
-      /* ignore quota errors */
-    }
-  }
-
-  function getCachedTranslation(key: string, type: "creature" | "spell"): Monster | Spell | null {
-    const cache = loadTranslationCache();
-    return cache[`${type}:${key}`] ?? null;
-  }
-
-  function setCachedTranslation(key: string, type: "creature" | "spell", data: Monster | Spell) {
-    const cache = loadTranslationCache();
-    cache[`${type}:${key}`] = data;
-    saveTranslationCache(cache);
-  }
-
-  function mergeWithTranslation<T extends Monster | Spell>(item: T, translated: T | null): T {
+  function mergeWithTranslation<T extends Monster | Spell>(item: T, translated: Record<string, unknown> | null): T {
     if (!translated) return item;
-    return { ...item, ...translated };
+    return { ...item, ...translated } as T;
   }
 
   function translateButtonHtml(key: string, type: "creature" | "spell", isTranslated: boolean): string {
@@ -564,15 +539,7 @@ import DmButton from "./DmButton.astro";
       btn.disabled = true;
 
       try {
-        const res = await fetch(`/api/dm/translate?slug=${encodeURIComponent(slug)}&type=${type}`);
-        const data = await res.json().catch(() => ({}));
-
-        if (!res.ok || data.error) {
-          throw new Error(data.error || "Ошибка перевода");
-        }
-
-        const translated = data.translated as Monster | Spell;
-        setCachedTranslation(slug, type, translated);
+        const translated = await fetchTranslation(slug, type);
 
         btn.textContent = "Переведено";
         btn.disabled = true;

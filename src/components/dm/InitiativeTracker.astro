@@ -1,11 +1,59 @@
 ---
+export interface Props {
+  tier?: 'free' | 'pro';
+  userId?: number;
+}
+
 import DmButton from "./DmButton.astro";
 import DmInput from "./DmInput.astro";
 import DmCard from "./DmCard.astro";
 import { dmTranslations as T } from "@/i18n/dm-translations";
+
+const { tier = 'free', userId } = Astro.props;
 ---
 
-<div id="initiative-tracker" class="w-full max-w-xl mx-auto" data-testid="init-section">
+<div
+  id="initiative-tracker"
+  class="w-full max-w-xl mx-auto"
+  data-testid="init-section"
+  data-tier={tier}
+  data-user-id={userId}
+>
+  <!-- PRO session management -->
+  {tier === 'pro' && (
+    <div class="mb-6">
+      <DmCard>
+        <div class="flex flex-col sm:flex-row items-end gap-2 mb-2">
+          <div class="flex-1 w-full">
+            <DmInput
+              id="it-session-name"
+              type="text"
+              placeholder={T.sessionNamePlaceholder}
+              label=""
+              dataTestid="it-session-name"
+            />
+          </div>
+          <DmButton id="it-save-session-btn" variant="primary" size="sm" dataTestid="it-save-session-btn">
+            {T.saveSession}
+          </DmButton>
+          <DmButton id="it-new-session-btn" variant="secondary" size="sm" dataTestid="it-new-session-btn">
+            {T.newSession}
+          </DmButton>
+        </div>
+        <div
+          id="it-session-status"
+          class="text-sm min-h-[1.25rem] text-[var(--text-secondary)]"
+          data-testid="it-session-status"
+        ></div>
+        <div
+          id="it-session-list"
+          class="mt-2 max-h-40 overflow-y-auto space-y-1"
+          data-testid="it-session-list"
+        ></div>
+      </DmCard>
+    </div>
+  )}
+
   <!-- Add combatant form -->
   <div class="mb-6">
     <DmCard>
@@ -106,6 +154,7 @@ import { dmTranslations as T } from "@/i18n/dm-translations";
   const STORAGE_KEY = "dm-initiative";
 
   // DOM refs
+  const trackerEl = document.getElementById("initiative-tracker");
   const nameInput = document.getElementById("it-name") as HTMLInputElement;
   const modifierInput = document.getElementById(
     "it-modifier",
@@ -122,7 +171,20 @@ import { dmTranslations as T } from "@/i18n/dm-translations";
   const emptyState = document.getElementById("it-empty");
   const announcer = document.getElementById("it-announcer");
 
+  // PRO refs
+  const sessionNameInput = document.getElementById("it-session-name") as HTMLInputElement | null;
+  const saveSessionBtn = document.getElementById("it-save-session-btn");
+  const newSessionBtn = document.getElementById("it-new-session-btn");
+  const sessionStatusEl = document.getElementById("it-session-status");
+  const sessionListEl = document.getElementById("it-session-list");
+
+  const tier = (trackerEl?.dataset.tier as 'free' | 'pro') || 'free';
+  const userId = trackerEl?.dataset.userId ? parseInt(trackerEl.dataset.userId, 10) : undefined;
+  const isPro = tier === 'pro' && !!userId;
+
   let activeIndex = 0;
+  let currentSessionId: number | null = null;
+  let currentSessionName = '';
 
   interface CombatantData {
     id: string;
@@ -392,6 +454,163 @@ import { dmTranslations as T } from "@/i18n/dm-translations";
     initiativeInput.value = String(result);
   }
 
+  // --- PRO Session Management ---
+
+  interface DbSession {
+    id: number;
+    name: string;
+    participants: CombatantData[];
+    createdAt: string;
+    updatedAt: string;
+  }
+
+  async function apiFetchSessions(): Promise<DbSession[]> {
+    const res = await fetch('/api/dm/initiative');
+    if (!res.ok) return [];
+    return res.json() as Promise<DbSession[]>;
+  }
+
+  async function apiSaveSession(name: string, participants: CombatantData[], id?: number): Promise<DbSession | null> {
+    if (id) {
+      const res = await fetch(`/api/dm/initiative?id=${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, participants }),
+      });
+      if (!res.ok) return null;
+      return res.json() as Promise<DbSession>;
+    } else {
+      const res = await fetch('/api/dm/initiative', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, participants }),
+      });
+      if (!res.ok) return null;
+      return res.json() as Promise<DbSession>;
+    }
+  }
+
+  async function apiDeleteSession(id: number): Promise<boolean> {
+    const res = await fetch(`/api/dm/initiative?id=${id}`, { method: 'DELETE' });
+    return res.ok;
+  }
+
+  function showSessionStatus(message: string, isError = false) {
+    if (!sessionStatusEl) return;
+    sessionStatusEl.textContent = message;
+    sessionStatusEl.className = `text-sm min-h-[1.25rem] ${isError ? 'text-[var(--danger)]' : 'text-[var(--text-secondary)]'}`;
+    setTimeout(() => {
+      if (sessionStatusEl) {
+        sessionStatusEl.textContent = '';
+        sessionStatusEl.className = 'text-sm min-h-[1.25rem] text-[var(--text-secondary)]';
+      }
+    }, 3000);
+  }
+
+  async function renderSessionList() {
+    if (!sessionListEl) return;
+    const sessions = await apiFetchSessions();
+
+    if (sessions.length === 0) {
+      sessionListEl.innerHTML = `<p class="text-xs text-[var(--text-muted)] py-2">Нет сохранённых сессий</p>`;
+      return;
+    }
+
+    sessionListEl.innerHTML = sessions.map((s) => {
+      const date = new Date(s.updatedAt).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+      const isActive = s.id === currentSessionId;
+      return `
+        <div class="flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 text-sm ${isActive ? 'bg-[var(--accent)]/10 border border-[var(--accent)]/30' : 'bg-[var(--bg-secondary)] border border-transparent hover:border-[var(--border-color)]'} transition-colors">
+          <button type="button" class="it-load-session flex-1 text-left truncate ${isActive ? 'text-[var(--accent)] font-medium' : 'text-[var(--text-primary)]'}" data-id="${s.id}">
+            ${escapeHtml(s.name)} <span class="text-[var(--text-muted)] text-xs">${date}</span>
+          </button>
+          <button type="button" class="it-delete-session w-6 h-6 inline-flex items-center justify-center rounded text-[var(--text-secondary)] hover:text-red-400 transition-colors" data-id="${s.id}" aria-label="Удалить ${escapeHtml(s.name)}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
+        </div>
+      `;
+    }).join('');
+
+    sessionListEl.querySelectorAll('.it-load-session').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = (btn as HTMLElement).dataset.id;
+        if (id) loadDbSession(parseInt(id, 10));
+      });
+    });
+
+    sessionListEl.querySelectorAll('.it-delete-session').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = (btn as HTMLElement).dataset.id;
+        if (id) deleteDbSession(parseInt(id, 10));
+      });
+    });
+  }
+
+  async function loadDbSession(id: number) {
+    try {
+      const sessions = await apiFetchSessions();
+      const session = sessions.find((s) => s.id === id);
+      if (!session) {
+        showSessionStatus('Ошибка загрузки сессии', true);
+        return;
+      }
+      saveCombatants(session.participants);
+      activeIndex = 0;
+      currentSessionId = session.id;
+      currentSessionName = session.name;
+      if (sessionNameInput) sessionNameInput.value = session.name;
+      updateVisibility();
+      renderList();
+      renderSessionList();
+      showSessionStatus('Сессия загружена');
+    } catch {
+      showSessionStatus('Ошибка загрузки сессии', true);
+    }
+  }
+
+  async function handleSaveSession() {
+    if (!isPro) return;
+    const name = sessionNameInput?.value.trim() || `Сессия ${new Date().toLocaleDateString('ru-RU')}`;
+    const participants = loadCombatants();
+
+    const result = await apiSaveSession(name, participants, currentSessionId ?? undefined);
+    if (result) {
+      currentSessionId = result.id;
+      currentSessionName = result.name;
+      if (sessionNameInput) sessionNameInput.value = result.name;
+      showSessionStatus('Сессия сохранена');
+      renderSessionList();
+    } else {
+      showSessionStatus('Ошибка сохранения', true);
+    }
+  }
+
+  async function handleNewSession() {
+    currentSessionId = null;
+    currentSessionName = '';
+    if (sessionNameInput) sessionNameInput.value = '';
+    clearAll();
+    showSessionStatus('Новая сессия');
+    renderSessionList();
+  }
+
+  async function deleteDbSession(id: number) {
+    if (!confirm('Удалить сессию?')) return;
+    const ok = await apiDeleteSession(id);
+    if (ok) {
+      if (currentSessionId === id) {
+        currentSessionId = null;
+        currentSessionName = '';
+        if (sessionNameInput) sessionNameInput.value = '';
+      }
+      renderSessionList();
+    } else {
+      showSessionStatus('Ошибка удаления', true);
+    }
+  }
+
   // Event listeners
   rollBtn?.addEventListener("click", handleRoll);
   addBtn?.addEventListener("click", addCombatant);
@@ -412,7 +631,11 @@ import { dmTranslations as T } from "@/i18n/dm-translations";
     }
   });
 
+  saveSessionBtn?.addEventListener('click', handleSaveSession);
+  newSessionBtn?.addEventListener('click', handleNewSession);
+
   // Init
   updateVisibility();
   renderList();
+  if (isPro) renderSessionList();
 </script>

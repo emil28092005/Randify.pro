@@ -1,10 +1,17 @@
 ---
+export interface Props {
+  tier?: 'free' | 'pro';
+  userId?: number;
+}
+
 import DmCard from './DmCard.astro';
 import DmButton from './DmButton.astro';
 import { dmTranslations as T } from '../../i18n/dm-translations';
+
+const { tier = 'free', userId } = Astro.props;
 ---
 
-<DmCard padding="md" dataTestid="notes-section">
+<DmCard padding="md" dataTestid="notes-section" data-tier={tier} data-user-id={userId}>
   <textarea
     id="notes-textarea"
     class="w-full h-64 xl:h-80 2xl:h-96 bg-[var(--bg-input)] border border-[var(--border-color)] rounded-lg p-4 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)] transition-all resize-none"
@@ -35,15 +42,21 @@ import { dmTranslations as T } from '../../i18n/dm-translations';
     const clearBtn = container.querySelector('[data-testid="notes-clear-btn"]') as HTMLButtonElement;
     const copyBtn = container.querySelector('#notes-copy-btn') as HTMLButtonElement;
 
+    const tier = (container.dataset.tier as 'free' | 'pro') || 'free';
+    const userId = container.dataset.userId ? parseInt(container.dataset.userId, 10) : undefined;
+    const isPro = tier === 'pro' && !!userId;
+
     let debounceTimer: ReturnType<typeof setTimeout> | null = null;
     let hideIndicatorTimer: ReturnType<typeof setTimeout> | null = null;
+    let dbNoteId: number | null = null;
+    let isLoading = false;
 
     function formatTime(date: Date): string {
       return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
     }
 
     function showSavedIndicator(message?: string) {
-      const text = message || `Сохранено · ${formatTime(new Date())}`;
+      const text = message || `Сохранено \u00b7 ${formatTime(new Date())}`;
       savedIndicator.textContent = text;
       savedIndicator.classList.remove('opacity-0');
       if (hideIndicatorTimer) clearTimeout(hideIndicatorTimer);
@@ -52,29 +65,128 @@ import { dmTranslations as T } from '../../i18n/dm-translations';
       }, 1500);
     }
 
+    function showErrorIndicator(message: string) {
+      savedIndicator.textContent = message;
+      savedIndicator.classList.remove('opacity-0');
+      savedIndicator.classList.add('text-[var(--danger)]');
+      if (hideIndicatorTimer) clearTimeout(hideIndicatorTimer);
+      hideIndicatorTimer = setTimeout(() => {
+        savedIndicator.classList.add('opacity-0');
+        savedIndicator.classList.remove('text-[var(--danger)]');
+      }, 3000);
+    }
+
     function updateCharCount() {
       const count = textarea.value.length;
       charCount.textContent = String(count);
     }
 
-    function loadSavedNotes() {
-      const saved = loadNotes();
-      textarea.value = saved;
+    async function loadDbNotes(): Promise<{ id: number; content: string | null } | null> {
+      try {
+        const res = await fetch('/api/dm/notes');
+        if (!res.ok) return null;
+        const notes = await res.json() as Array<{ id: number; title: string; content: string | null }>;
+        const note = notes.find(n => n.title === 'DM Notes') || notes[0];
+        return note ?? null;
+      } catch {
+        return null;
+      }
+    }
+
+    async function createDbNote(content: string): Promise<number | null> {
+      try {
+        const res = await fetch('/api/dm/notes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title: 'DM Notes', content }),
+        });
+        if (!res.ok) return null;
+        const data = await res.json() as { id: number };
+        return data.id;
+      } catch {
+        return null;
+      }
+    }
+
+    async function updateDbNote(id: number, content: string): Promise<boolean> {
+      try {
+        const res = await fetch(`/api/dm/notes?id=${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content }),
+        });
+        return res.ok;
+      } catch {
+        return false;
+      }
+    }
+
+    async function loadSavedNotes() {
+      if (isPro) {
+        isLoading = true;
+        const note = await loadDbNotes();
+        if (note) {
+          dbNoteId = note.id;
+          textarea.value = note.content ?? '';
+        } else {
+          // Try to create a new note if none exists
+          const newId = await createDbNote('');
+          if (newId) {
+            dbNoteId = newId;
+            textarea.value = '';
+          } else {
+            // Fallback to localStorage if DB is unavailable
+            textarea.value = loadNotes();
+          }
+        }
+        isLoading = false;
+      } else {
+        const saved = loadNotes();
+        textarea.value = saved;
+      }
       updateCharCount();
     }
 
-    function handleInput() {
+    async function handleInput() {
       updateCharCount();
       if (debounceTimer) clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-        saveNotes(textarea.value);
-        showSavedIndicator();
+      debounceTimer = setTimeout(async () => {
+        if (isPro) {
+          if (dbNoteId) {
+            const ok = await updateDbNote(dbNoteId, textarea.value);
+            if (ok) {
+              showSavedIndicator();
+            } else {
+              saveNotes(textarea.value);
+              showErrorIndicator('Ошибка сохранения');
+            }
+          } else {
+            const newId = await createDbNote(textarea.value);
+            if (newId) {
+              dbNoteId = newId;
+              showSavedIndicator();
+            } else {
+              saveNotes(textarea.value);
+              showErrorIndicator('Ошибка сохранения');
+            }
+          }
+        } else {
+          saveNotes(textarea.value);
+          showSavedIndicator();
+        }
       }, 500);
     }
 
-    function handleClear() {
+    async function handleClear() {
       textarea.value = '';
-      clearNotes();
+      if (isPro && dbNoteId) {
+        const ok = await updateDbNote(dbNoteId, '');
+        if (!ok) {
+          clearNotes();
+        }
+      } else {
+        clearNotes();
+      }
       updateCharCount();
       savedIndicator.classList.add('opacity-0');
       if (hideIndicatorTimer) clearTimeout(hideIndicatorTimer);
@@ -99,9 +211,12 @@ import { dmTranslations as T } from '../../i18n/dm-translations';
 
     function handleStorageChange(e: StorageEvent) {
       if (e.key === 'dm-notes' && e.newValue !== null) {
-        textarea.value = e.newValue;
-        updateCharCount();
-        showSavedIndicator('Обновлено');
+        // Only apply localStorage changes if not PRO (or if PRO but DB failed)
+        if (!isPro) {
+          textarea.value = e.newValue;
+          updateCharCount();
+          showSavedIndicator('Обновлено');
+        }
       }
     }
 

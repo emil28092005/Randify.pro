@@ -1,9 +1,9 @@
 .dm-theme {
-  /* Primary Accents */
-  --accent: #534AB7;
-  --accent-light: #6b5fc7;
-  --accent-dark: #3f3791;
-  --accent-hover: #6b5fc7;
+  /* Primary Accents — Orange for DM Dashboard */
+  --accent: #E87722;
+  --accent-light: #f08a3e;
+  --accent-dark: #c45f18;
+  --accent-hover: #f08a3e;
 
   /* Secondary (Gold) */
   --gold: #c8a84b;
@@ -42,7 +42,7 @@
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
-  --shadow-glow: 0 0 20px rgba(83, 74, 183, 0.3);
+  --shadow-glow: 0 0 20px rgba(232, 119, 34, 0.3);
 
   /* Focus Ring */
   --focus-ring: 0 0 0 2px var(--bg-primary), 0 0 0 4px var(--accent);

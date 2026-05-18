@@ -6,6 +6,8 @@ import { generators } from "@/data/generators";
 import { useT } from "@/i18n/translations";
 import type { Lang } from "@/i18n/translations";
 
+export const prerender = true;
+
 const lang = (Astro.currentLocale as Lang) || "en";
 const T = useT(lang);
 
@@ -18,7 +20,6 @@ const webSiteSchema = {
   inLanguage: lang,
 };
 ---
-export const prerender = true;
 
 <BaseLayout>
   <script

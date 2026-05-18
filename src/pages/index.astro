@@ -100,9 +100,16 @@ const webSiteSchema = {
           </svg>
         </div>
         <div>
-          <span class="text-sm font-semibold text-[#E87722] group-hover:text-[#F09040] transition-colors">
-            {T.dmDashboard}
-          </span>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-sm font-semibold text-[#E87722] group-hover:text-[#F09040] transition-colors">
+              {T.dmDashboard}
+            </span>
+            <span
+              class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide bg-amber-500/15 text-amber-300 border border-amber-500/30"
+            >
+              {T.wip}
+            </span>
+          </div>
           <p class="text-sm text-zinc-400 mt-0.5">
             {T.dmDashboardDesc}
           </p>

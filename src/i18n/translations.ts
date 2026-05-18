@@ -83,6 +83,7 @@ export const translations = {
     catUtility: "Utility",
     dmDashboard: "DM Dashboard",
     dmDashboardDesc: "Tools for dungeon masters — dice, initiative, reference, and notes.",
+    wip: "Work in progress",
 
     notFoundTitle: "Page Not Found",
     notFoundMessage:
@@ -196,6 +197,7 @@ export const translations = {
     catUtility: "Утилиты",
     dmDashboard: "Для мастера",
     dmDashboardDesc: "Инструменты для мастера подземелий — кубики, инициатива, справочник и заметки.",
+    wip: "В разработке",
 
     notFoundTitle: "Страница не найдена",
     notFoundMessage:
